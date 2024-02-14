@@ -17,7 +17,7 @@ local u8 = encoding.UTF8
 local new = imgui.new
 
 
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Скрипт успешно загрузился", 0x8B00FF)
+sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Скрипт успешно загрузиаался", 0x8B00FF)
 sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Авторы:t.me/Sashe4ka_ReZoN",0x8B00FF)
 sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Чтобы посмотреть комманды,введите /mvd and /mvds ",0x8B00FF)
 
