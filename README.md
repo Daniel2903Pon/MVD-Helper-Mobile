@@ -6,7 +6,8 @@ Installation instructions:
 3.Unpack the archive along the path Android/data/com.arizona.games/monetloader/lib (if there are no such folders, then log in to the game after installing the launcher).
 4. Download the desired version. The current version is MVD Helper.lua
 5.Move the script along the path of Android/data/com.arizona.games/monetloader
-6. Log into the game and register /mvds for the command list. /mvd for the window.
+6. Download the smartUk file.json and move along the path of Android/data/com.arizona.games/monetloader
+7. Log into the game and register /mvds for the command list. /mvd for the window.
 
 --Russian
 Репозиторий МВД хелпера, где вы можете найти старые версии МВД хелпера, дополнительные файлы, а также инструкции по установке.
