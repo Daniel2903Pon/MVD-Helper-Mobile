@@ -1,5 +1,5 @@
 script_name("MVD Helper Mobile")
-script_version("4.9")
+script_version("4.8")
 script_author("@Sashe4ka_ReZoN @daniel29032012")
 
 local http = require("socket.http")
@@ -18,9 +18,9 @@ local u8 = encoding.UTF8
 local new = imgui.new
 
 
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ñêğèïò óñïåøíî çàãğóçèëñÿ", 0x8B00FF)
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Àâòîğû:t.me/Sashe4ka_ReZoN and t.me/daniel29032012",0x8B00FF)
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}×òîáû ïîñìîòğåòü êîììàíäû,ââåäèòå /mvd and /mvds ",0x8B00FF)
+sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ã‘ÃªÃ°Ã¨Ã¯Ã² Ã³Ã±Ã¯Ã¥Ã¸Ã­Ã® Ã§Ã Ã£Ã°Ã³Ã§Ã¨Ã«Ã±Ã¿", 0x8B00FF)
+sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ã€Ã¢Ã²Ã®Ã°Ã»:t.me/Sashe4ka_ReZoN and t.me/daniel29032012",0x8B00FF)
+sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ã—Ã²Ã®Ã¡Ã» Ã¯Ã®Ã±Ã¬Ã®Ã²Ã°Ã¥Ã²Ã¼ ÃªÃ®Ã¬Ã¬Ã Ã­Ã¤Ã»,Ã¢Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ /mvd and /mvds ",0x8B00FF)
 
 local renderWindow = new.bool()
 local sizeX, sizeY = getScreenResolution()
@@ -73,23 +73,23 @@ local function downloadFile(url, path)
 end
 
 local function updateScript(scriptUrl, scriptPath)
-  print("Ïğîâåğêà íàëè÷èÿ îáíîâëåíèé...")
+  print("ÃÃ°Ã®Ã¢Ã¥Ã°ÃªÃ  Ã­Ã Ã«Ã¨Ã·Ã¨Ã¿ Ã®Ã¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã©...")
   local currentVersionFile = io.open(scriptPath, "r")
   local currentVersion = currentVersionFile:read("*a")
   currentVersionFile:close()
 
   local response = http.request(scriptUrl)
   if response and response ~= currentVersion then
-    -- Îáíîâëÿåì ñêğèïò
-    sampAddChatMessage("Äîñòóïíà íîâàÿ âåğñèÿ ñêğèïòà! Îáíîâëåíèå...", -1)
+    -- ÃÃ¡Ã­Ã®Ã¢Ã«Ã¿Ã¥Ã¬ Ã±ÃªÃ°Ã¨Ã¯Ã²
+    sampAddChatMessage("Ã„Ã®Ã±Ã²Ã³Ã¯Ã­Ã  Ã­Ã®Ã¢Ã Ã¿ Ã¢Ã¥Ã°Ã±Ã¨Ã¿ Ã±ÃªÃ°Ã¨Ã¯Ã²Ã ! ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥...", -1)
     local success = downloadFile(scriptUrl, scriptPath)
     if success then
-      sampAddChatMessage("Ñêğèïò óñïåøíî îáíîâëåí.", -1)
+      sampAddChatMessage("Ã‘ÃªÃ°Ã¨Ã¯Ã² Ã³Ã±Ã¯Ã¥Ã¸Ã­Ã® Ã®Ã¡Ã­Ã®Ã¢Ã«Ã¥Ã­.", -1)
     else
-      sampAddChatMessage("Íå óäàëîñü îáíîâèòü ñêğèïò.", -1)
+      sampAddChatMessage("ÃÃ¥ Ã³Ã¤Ã Ã«Ã®Ã±Ã¼ Ã®Ã¡Ã­Ã®Ã¢Ã¨Ã²Ã¼ Ã±ÃªÃ°Ã¨Ã¯Ã².", -1)
     end
   else
-    sampAddChatMessage("Ñêğèïò óæå ÿâëÿåòñÿ ïîñëåäíåé âåğñèåé.", -1)
+    sampAddChatMessage("Ã‘ÃªÃ°Ã¨Ã¯Ã² Ã³Ã¦Ã¥ Ã¿Ã¢Ã«Ã¿Ã¥Ã²Ã±Ã¿ Ã¯Ã®Ã±Ã«Ã¥Ã¤Ã­Ã¥Ã© Ã¢Ã¥Ã°Ã±Ã¨Ã¥Ã©.", -1)
   end
 end
 local scriptUrl = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/MVDHelper.lua"
@@ -97,12 +97,12 @@ local scriptPath = "MVDHelper.lua"
 
 local mainIni = inicfg.load({
     Accent = {
-        accent = '[Ìîëäàâñêèé àêöåíò]: ',
+        accent = '[ÃŒÃ®Ã«Ã¤Ã Ã¢Ã±ÃªÃ¨Ã© Ã ÃªÃ¶Ã¥Ã­Ã²]: ',
         autoAccent = false
     },
     Info = {
-        org = 'Âû íå ñîñòîèòå â ÏÄ',
-        dl = 'Âû íå ñîñòîèòå â ÏÄ',
+        org = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„',
+        dl = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„',
         rang_n = 0
     },
     theme = {
@@ -111,30 +111,30 @@ local mainIni = inicfg.load({
         moonmonet = 759410733
     }
 }, "mvdhelper.ini")
-local file = io.open("smartUk.json", "r") -- Îòêğûâàåì ôàéë â ğåæèìå ÷òåíèÿ
-a = file:read("*a") -- ×èòàåì ôàéë, òàì ó íàñ òàáëèöà
-file:close() -- Çàêğûâàåì
-tableUk = decodeJson(a) -- ×èòàåì íàøó JSON-Òàáëèöó
+local file = io.open("smartUk.json", "r") -- ÃÃ²ÃªÃ°Ã»Ã¢Ã Ã¥Ã¬ Ã´Ã Ã©Ã« Ã¢ Ã°Ã¥Ã¦Ã¨Ã¬Ã¥ Ã·Ã²Ã¥Ã­Ã¨Ã¿
+a = file:read("*a") -- Ã—Ã¨Ã²Ã Ã¥Ã¬ Ã´Ã Ã©Ã«, Ã²Ã Ã¬ Ã³ Ã­Ã Ã± Ã²Ã Ã¡Ã«Ã¨Ã¶Ã 
+file:close() -- Ã‡Ã ÃªÃ°Ã»Ã¢Ã Ã¥Ã¬
+tableUk = decodeJson(a) -- Ã—Ã¨Ã²Ã Ã¥Ã¬ Ã­Ã Ã¸Ã³ JSON-Ã’Ã Ã¡Ã«Ã¨Ã¶Ã³
 
 local statsCheck = false
 
 local AutoAccentBool = new.bool(mainIni.Accent.autoAccent)
 local AutoAccentInput = new.char[255](u8(mainIni.Accent.accent))
-local org = u8'Âû íå ñîñòîèòå â ÏÄ'
-local org_g = u8'Âû íå ñîñòîèòå â ÏÄ'
-local ccity = u8'Âû íå ñîñòîèòå â ÏÄ'
-local org_tag = u8'Âû íå ñîñòîèòå â ÏÄ'
-local dol = 'Âû íå ñîñòîèòå â ÏÄ'
-local dl = u8'Âû íå ñîñòîèòå â ÏÄ'
+local org = u8'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+local org_g = u8'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+local ccity = u8'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+local org_tag = u8'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+local dol = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+local dl = u8'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
 local rang_n = 0
 local selected_theme = imgui.new.int(mainIni.theme.selected)
-local theme_a = {u8'Ñòàíäàğòíàÿ', u8'Êğàñíàÿ', u8'Çåë¸íàÿ',u8'Ñèíÿÿ', u8'Ôèîëåòîâàÿ', 'MoonMonet'}
+local theme_a = {u8'Ã‘Ã²Ã Ã­Ã¤Ã Ã°Ã²Ã­Ã Ã¿', u8'ÃŠÃ°Ã Ã±Ã­Ã Ã¿', u8'Ã‡Ã¥Ã«Â¸Ã­Ã Ã¿',u8'Ã‘Ã¨Ã­Ã¿Ã¿', u8'Ã”Ã¨Ã®Ã«Ã¥Ã²Ã®Ã¢Ã Ã¿', 'MoonMonet'}
 local theme_t = {u8'standart', u8'red', u8'green', u8'blue', 'purple', 'moonmonet'}
 local items = imgui.new['const char*'][#theme_a](theme_a)
 local nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))
 local autoScrinArest = new.bool()
 
-local sliderBuf = new.int() -- áóôåğ äëÿ òåñòîâîãî ñëàéäåğà
+local sliderBuf = new.int() -- Ã¡Ã³Ã´Ã¥Ã° Ã¤Ã«Ã¿ Ã²Ã¥Ã±Ã²Ã®Ã¢Ã®Ã£Ã® Ã±Ã«Ã Ã©Ã¤Ã¥Ã°Ã 
 
 local function join_argb(a, r, g, b)
     local argb = b  -- b
@@ -527,41 +527,41 @@ imgui.OnFrame(
         imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
         apply_n_t()
         imgui.SetCursorPosY(50)
-        imgui.Text(u8'MVD Helper 4.8 \n äëÿ Arizona Mobile', imgui.SetCursorPosX(50))
-        if imgui.Button(settings .. u8' Íàñòğîéêè', imgui.ImVec2(280, 50)) then
+        imgui.Text(u8'MVD Helper 4.8 \n Ã¤Ã«Ã¿ Arizona Mobile', imgui.SetCursorPosX(50))
+        if imgui.Button(settings .. u8' ÃÃ Ã±Ã²Ã°Ã®Ã©ÃªÃ¨', imgui.ImVec2(280, 50)) then
             tab = 1
-        elseif imgui.Button(list .. u8' Îñíîâíîå', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(list .. u8' ÃÃ±Ã­Ã®Ã¢Ã­Ã®Ã¥', imgui.ImVec2(280, 50)) then
             tab = 2
 
-        elseif imgui.Button(radio .. u8' Ğàöèÿ äåïîğòàìåíòà', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(radio .. u8' ÃÃ Ã¶Ã¨Ã¿ Ã¤Ã¥Ã¯Ã®Ã°Ã²Ã Ã¬Ã¥Ã­Ã²Ã ', imgui.ImVec2(280, 50)) then
             tab = 3
 
-        elseif imgui.Button(userSecret .. u8' Äëÿ ÑÑ', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(userSecret .. u8' Ã„Ã«Ã¿ Ã‘Ã‘', imgui.ImVec2(280, 50)) then
             tab = 4
 
-        elseif imgui.Button(pen .. u8' Øïàğãàëêè', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(pen .. u8' Ã˜Ã¯Ã Ã°Ã£Ã Ã«ÃªÃ¨', imgui.ImVec2(280, 50)) then
             tab = 5
 
-        elseif imgui.Button(sliders .. u8' Äîïîëíèòåëüíî', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(sliders .. u8' Ã„Ã®Ã¯Ã®Ã«Ã­Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã®', imgui.ImVec2(280, 50)) then
             tab = 6
 
-        elseif imgui.Button(info .. u8' Èíôà', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(info .. u8' ÃˆÃ­Ã´Ã ', imgui.ImVec2(280, 50)) then
             tab = 7
         end
         imgui.SetCursorPos(imgui.ImVec2(300, 50))
-        if imgui.BeginChild('Name##'..tab, imgui.ImVec2(), true) then -- [Äëÿ äåêîğà] Ñîçäà¸ì ÷àéëä â êîòîğûé ïîìåñòèì ñîäåğæèìîå
-            -- == [Îñíîâíîå] Ñîäåğæèìîå âêëàäîê == --
-            if tab == 1 then -- åñëè çíà÷åíèå tab == 1
-                imgui.Text(u8'Âàø íèê: '.. nickname)
-                imgui.Text(u8'Âàøà îğãàíèçàöèÿ: '.. mainIni.Info.org)
-                imgui.Text(u8'Âàøà äîëæíîñòü: '.. mainIni.Info.dl)
-                if imgui.Combo(u8'Òåìû', selected_theme, items, #theme_a) then
+        if imgui.BeginChild('Name##'..tab, imgui.ImVec2(), true) then -- [Ã„Ã«Ã¿ Ã¤Ã¥ÃªÃ®Ã°Ã ] Ã‘Ã®Ã§Ã¤Ã Â¸Ã¬ Ã·Ã Ã©Ã«Ã¤ Ã¢ ÃªÃ®Ã²Ã®Ã°Ã»Ã© Ã¯Ã®Ã¬Ã¥Ã±Ã²Ã¨Ã¬ Ã±Ã®Ã¤Ã¥Ã°Ã¦Ã¨Ã¬Ã®Ã¥
+            -- == [ÃÃ±Ã­Ã®Ã¢Ã­Ã®Ã¥] Ã‘Ã®Ã¤Ã¥Ã°Ã¦Ã¨Ã¬Ã®Ã¥ Ã¢ÃªÃ«Ã Ã¤Ã®Ãª == --
+            if tab == 1 then -- Ã¥Ã±Ã«Ã¨ Ã§Ã­Ã Ã·Ã¥Ã­Ã¨Ã¥ tab == 1
+                imgui.Text(u8'Ã‚Ã Ã¸ Ã­Ã¨Ãª: '.. nickname)
+                imgui.Text(u8'Ã‚Ã Ã¸Ã  Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: '.. mainIni.Info.org)
+                imgui.Text(u8'Ã‚Ã Ã¸Ã  Ã¤Ã®Ã«Ã¦Ã­Ã®Ã±Ã²Ã¼: '.. mainIni.Info.dl)
+                if imgui.Combo(u8'Ã’Ã¥Ã¬Ã»', selected_theme, items, #theme_a) then
                 	themeta = theme_t[selected_theme[0]+1]
 	            	mainIni.theme.theme = themeta
 	            	mainIni.theme.selected = selected_theme[0]
 		            inicfg.save(mainIni, 'mvdhelper.ini')
 	            end
-            	imgui.Text('Öâåò MoonMonet  -')
+            	imgui.Text('Ã–Ã¢Ã¥Ã² MoonMonet  -')
 				imgui.SameLine()
         		if imgui.ColorEdit3('## COLOR', mmcolor, imgui.ColorEditFlags.NoInputs) then
                     r,g,b = mmcolor[0] * 255, mmcolor[1] * 255, mmcolor[2] * 255
@@ -570,428 +570,428 @@ imgui.OnFrame(
                     inicfg.save(mainIni, 'mvdhelper.ini')
 			    	apply_n_t()
 		    	end
-                if imgui.Button(u8'ÓÊ') then
+                if imgui.Button(u8'Ã“ÃŠ') then
                     setUkWindow[0] = not setUkWindow[0]
                 end
-            elseif tab == 2 then -- åñëè çíà÷åíèå tab == 2
-                imgui.InputInt(u8 'ID èãğîêà ñ êîòîğûì áóäåòå âçàèìîäåéñòâîâàòü', id, 10)
-                if imgui.Button(u8 'Ïğèâåòñòâèå') then
+            elseif tab == 2 then -- Ã¥Ã±Ã«Ã¨ Ã§Ã­Ã Ã·Ã¥Ã­Ã¨Ã¥ tab == 2
+                imgui.InputInt(u8 'ID Ã¨Ã£Ã°Ã®ÃªÃ  Ã± ÃªÃ®Ã²Ã®Ã°Ã»Ã¬ Ã¡Ã³Ã¤Ã¥Ã²Ã¥ Ã¢Ã§Ã Ã¨Ã¬Ã®Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã®Ã¢Ã Ã²Ã¼', id, 10)
+                if imgui.Button(u8 'ÃÃ°Ã¨Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã¨Ã¥') then
                     lua_thread.create(function()
-                        sampSendChat("Äîáğîãî âğåìåíè ñóòîê, ÿ «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
+                        sampSendChat("Ã„Ã®Ã¡Ã°Ã®Ã£Ã® Ã¢Ã°Ã¥Ã¬Ã¥Ã­Ã¨ Ã±Ã³Ã²Ã®Ãª, Ã¿ Â«" .. nickname .. "Â» Â«" ..  u8:decode(mainIni.Info.dl) .."Â».")
                         wait(1500)
-                        sampSendChat("/do Óäîñòîâåğåíèå â ğóêàõ.")
+                        sampSendChat("/do Ã“Ã¤Ã®Ã±Ã²Ã®Ã¢Ã¥Ã°Ã¥Ã­Ã¨Ã¥ Ã¢ Ã°Ã³ÃªÃ Ãµ.")
                         wait(1500)
-                        sampSendChat("/me ïîêàçàë ñâî¸ óäîñòîâåğåíèå ÷åëîâåêó íà ïğîòèâ")
+                        sampSendChat("/me Ã¯Ã®ÃªÃ Ã§Ã Ã« Ã±Ã¢Ã®Â¸ Ã³Ã¤Ã®Ã±Ã²Ã®Ã¢Ã¥Ã°Ã¥Ã­Ã¨Ã¥ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã  Ã¯Ã°Ã®Ã²Ã¨Ã¢")
                         wait(1500)
-                        sampSendChat("/do «" .. nickname .. "».")
+                        sampSendChat("/do Â«" .. nickname .. "Â».")
                         wait(1500)
-                        sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
+                        sampSendChat("/do Â«" .. u8:decode(mainIni.Info.dl) .. "Â» " .. mainIni.Info.org .. ".")
                         wait(1500)
-                        sampSendChat("Ïğåäúÿâèòå âàøè äîêóìåíòû, à èìåííî ïàñïîğò. Íå áåñïîêîéòåñü, ıòî âñåãî ëèøü ïğîâåğêà.")
+                        sampSendChat("ÃÃ°Ã¥Ã¤ÃºÃ¿Ã¢Ã¨Ã²Ã¥ Ã¢Ã Ã¸Ã¨ Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã», Ã  Ã¨Ã¬Ã¥Ã­Ã­Ã® Ã¯Ã Ã±Ã¯Ã®Ã°Ã². ÃÃ¥ Ã¡Ã¥Ã±Ã¯Ã®ÃªÃ®Ã©Ã²Ã¥Ã±Ã¼, Ã½Ã²Ã® Ã¢Ã±Ã¥Ã£Ã® Ã«Ã¨Ã¸Ã¼ Ã¯Ã°Ã®Ã¢Ã¥Ã°ÃªÃ .")
                     end)
                 end
-                if imgui.Button(u8 'Íàéòè èãğîêà') then
+                if imgui.Button(u8 'ÃÃ Ã©Ã²Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ ') then
                     lua_thread.create(function()
-                        sampSendChat("/do ÊÏÊ â ëåâîì êàğìàíå.")
+                        sampSendChat("/do ÃŠÃÃŠ Ã¢ Ã«Ã¥Ã¢Ã®Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
                         wait(1500)
-                        sampSendChat("/me äîñòàë ëåâîé ğóêîé ÊÏÊ èç êàğìàíà")
+                        sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã«Ã¥Ã¢Ã®Ã© Ã°Ã³ÃªÃ®Ã© ÃŠÃÃŠ Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã ")
                         wait(1500)
-                        sampSendChat("/do ÊÏÊ â ëåâîé ğóêå.")
+                        sampSendChat("/do ÃŠÃÃŠ Ã¢ Ã«Ã¥Ã¢Ã®Ã© Ã°Ã³ÃªÃ¥.")
                         wait(1500)
-                        sampSendChat("/me âêëş÷èë ÊÏÊ è çàøåë â áàçó äàííûõ Ïîëèöèè")
+                        sampSendChat("/me Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¡Ã Ã§Ã³ Ã¤Ã Ã­Ã­Ã»Ãµ ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¨")
                         wait(1500)
-                        sampSendChat("/me îòêğûë äåëî íîìåğ " .. id[0] .. " ïğåñòóïíèêà")
+                        sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¤Ã¥Ã«Ã® Ã­Ã®Ã¬Ã¥Ã° " .. id[0] .. " Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
                         wait(1500)
-                        sampSendChat("/do Äàííûå ïğåñòóïíèêà ïîëó÷åíû.")
+                        sampSendChat("/do Ã„Ã Ã­Ã­Ã»Ã¥ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¯Ã®Ã«Ã³Ã·Ã¥Ã­Ã».")
                         wait(1500)
-                        sampSendChat("/me ïîäêëş÷èëñÿ ê êàìåğàì ñëåæåíèÿ øòàòà")
+                        sampSendChat("/me Ã¯Ã®Ã¤ÃªÃ«Ã¾Ã·Ã¨Ã«Ã±Ã¿ Ãª ÃªÃ Ã¬Ã¥Ã°Ã Ã¬ Ã±Ã«Ã¥Ã¦Ã¥Ã­Ã¨Ã¿ Ã¸Ã²Ã Ã²Ã ")
                         wait(1500)
-                        sampSendChat("/do Íà íàâèãàòîğå ïîÿâèëñÿ ìàğøğóò.")
+                        sampSendChat("/do ÃÃ  Ã­Ã Ã¢Ã¨Ã£Ã Ã²Ã®Ã°Ã¥ Ã¯Ã®Ã¿Ã¢Ã¨Ã«Ã±Ã¿ Ã¬Ã Ã°Ã¸Ã°Ã³Ã².")
                         wait(1500)
                         sampSendChat("/pursuit " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Àğåñò') then
+                if imgui.Button(u8 'Ã€Ã°Ã¥Ã±Ã²') then
                     lua_thread.create(function()
-                        sampSendChat("/me âçÿë ğó÷êó èç êàğìàíà ğóáàøêè, çàòåì îòêğûë áàğäà÷îê è âçÿë îòòóäà áëàíê ïğîòîêîëà")
+                        sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã°Ã³Ã·ÃªÃ³ Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã  Ã°Ã³Ã¡Ã Ã¸ÃªÃ¨, Ã§Ã Ã²Ã¥Ã¬ Ã®Ã²ÃªÃ°Ã»Ã« Ã¡Ã Ã°Ã¤Ã Ã·Ã®Ãª Ã¨ Ã¢Ã§Ã¿Ã« Ã®Ã²Ã²Ã³Ã¤Ã  Ã¡Ã«Ã Ã­Ãª Ã¯Ã°Ã®Ã²Ã®ÃªÃ®Ã«Ã ")
                         wait(1500)
-                        sampSendChat("/do Áëàíê ïğîòîêîëà è ğó÷êà â ğóêàõ.")
+                        sampSendChat("/do ÃÃ«Ã Ã­Ãª Ã¯Ã°Ã®Ã²Ã®ÃªÃ®Ã«Ã  Ã¨ Ã°Ã³Ã·ÃªÃ  Ã¢ Ã°Ã³ÃªÃ Ãµ.")
                         wait(1500)
-                        sampSendChat("/me çàïîëíÿåò îïèñàíèå âíåøíîñòè íàğóøèòåëÿ")
+                        sampSendChat("/me Ã§Ã Ã¯Ã®Ã«Ã­Ã¿Ã¥Ã² Ã®Ã¯Ã¨Ã±Ã Ã­Ã¨Ã¥ Ã¢Ã­Ã¥Ã¸Ã­Ã®Ã±Ã²Ã¨ Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¿")
                         wait(1500)
-                        sampSendChat("/me çàïîëíÿåò õàğàêòåğèñòèêó î íàğóøèòåëå")
+                        sampSendChat("/me Ã§Ã Ã¯Ã®Ã«Ã­Ã¿Ã¥Ã² ÃµÃ Ã°Ã ÃªÃ²Ã¥Ã°Ã¨Ã±Ã²Ã¨ÃªÃ³ Ã® Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¥")
                         wait(1500)
-                        sampSendChat("/me çàïîëíÿåò äàííûå î íàğóøåíèè")
+                        sampSendChat("/me Ã§Ã Ã¯Ã®Ã«Ã­Ã¿Ã¥Ã² Ã¤Ã Ã­Ã­Ã»Ã¥ Ã® Ã­Ã Ã°Ã³Ã¸Ã¥Ã­Ã¨Ã¨")
                         wait(1500)
-                        sampSendChat("/me ïğîñòàâèë äàòó è ïîäïèñü")
+                        sampSendChat("/me Ã¯Ã°Ã®Ã±Ã²Ã Ã¢Ã¨Ã« Ã¤Ã Ã²Ã³ Ã¨ Ã¯Ã®Ã¤Ã¯Ã¨Ã±Ã¼")
                         wait(1500)
-                        sampSendChat("/me ïîëîæèë ğó÷êó â êàğìàí ğóáàøêè")
+                        sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã°Ã³Ã·ÃªÃ³ Ã¢ ÃªÃ Ã°Ã¬Ã Ã­ Ã°Ã³Ã¡Ã Ã¸ÃªÃ¨")
                         wait(1500)
-                        sampSendChat("/do Ğó÷êà â êàğìàíå ğóáàøêè.")
+                        sampSendChat("/do ÃÃ³Ã·ÃªÃ  Ã¢ ÃªÃ Ã°Ã¬Ã Ã­Ã¥ Ã°Ã³Ã¡Ã Ã¸ÃªÃ¨.")
                         wait(1500)
-                        sampSendChat("/me ïåğåäàë áëàíê ñîñòàâëåííîãî ïğîòîêîëà â ó÷àñòîê")
+                        sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã« Ã¡Ã«Ã Ã­Ãª Ã±Ã®Ã±Ã²Ã Ã¢Ã«Ã¥Ã­Ã­Ã®Ã£Ã® Ã¯Ã°Ã®Ã²Ã®ÃªÃ®Ã«Ã  Ã¢ Ã³Ã·Ã Ã±Ã²Ã®Ãª")
                         wait(1500)
-                        sampSendChat("/me ïåğåäàë ïğåñòóïíèêà â Óïğàâëåíèå Ïîëèöèè ïîä ñòğàæó")
+                        sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã« Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¢ Ã“Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¨ Ã¯Ã®Ã¤ Ã±Ã²Ã°Ã Ã¦Ã³")
                         wait(1500)
                         sampSendChat("/arrest")
-                        sampAddChatMessage("Âñòàíüòå íà ÷åêïîèíò",0x8B00FF)
+                        sampAddChatMessage("Ã‚Ã±Ã²Ã Ã­Ã¼Ã²Ã¥ Ã­Ã  Ã·Ã¥ÃªÃ¯Ã®Ã¨Ã­Ã²",0x8B00FF)
                     end)
                 end
-                if imgui.Button(u8 'Íàäåòü íàğó÷íèêè') then
+                if imgui.Button(u8 'ÃÃ Ã¤Ã¥Ã²Ã¼ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨') then
                     lua_thread.create(function()
-                        sampSendChat("/do Íàğó÷íèêè âèñÿò íà ïîÿñå.")
+                        sampSendChat("/do ÃÃ Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã¢Ã¨Ã±Ã¿Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
                         wait(1500)
-                        sampSendChat("/me ñíÿë ñ äåğæàòåëÿ íàğó÷íèêè")
+                        sampSendChat("/me Ã±Ã­Ã¿Ã« Ã± Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨")
                         wait(1500)
-                        sampSendChat("/do Íàğó÷íèêè â ğóêàõ.")
+                        sampSendChat("/do ÃÃ Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã¢ Ã°Ã³ÃªÃ Ãµ.")
                         wait(1500)
-                        sampSendChat("/me ğåçêèì äâèæåíèåì îáåèõ ğóê, íàäåë íàğó÷íèêè íà ïğåñòóïíèêà")
+                        sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã¡Ã¥Ã¨Ãµ Ã°Ã³Ãª, Ã­Ã Ã¤Ã¥Ã« Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã­Ã  Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
                         wait(1500)
-                        sampSendChat("/do Ïğåñòóïíèê ñêîâàí.")
+                        sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã±ÃªÃ®Ã¢Ã Ã­.")
                         wait(1500)
                         sampSendChat("/cuff " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Ñíÿòü íàğó÷íèêè') then
+                if imgui.Button(u8 'Ã‘Ã­Ã¿Ã²Ã¼ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨') then
                     lua_thread.create(function()
-                        sampSendChat("/do Êëş÷ îò íàğó÷íèêîâ â êàğìàíå.")
+                        sampSendChat("/do ÃŠÃ«Ã¾Ã· Ã®Ã² Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ®Ã¢ Ã¢ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
                         wait(1500)
-                        sampSendChat("/me äâèæåíèåì ïğàâîé ğóêè äîñòàë èç êàğìàíà êëş÷ è îòêğûë íàğó÷íèêè")
+                        sampSendChat("/me Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã¯Ã°Ã Ã¢Ã®Ã© Ã°Ã³ÃªÃ¨ Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã  ÃªÃ«Ã¾Ã· Ã¨ Ã®Ã²ÃªÃ°Ã»Ã« Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨")
                         wait(1500)
-                        sampSendChat("/do Ïğåñòóïíèê ğàñêîâàí.")
+                        sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã°Ã Ã±ÃªÃ®Ã¢Ã Ã­.")
                         wait(1500)
                         sampSendChat("/uncuff " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Âåñòè çà ñîáîé') then
+                if imgui.Button(u8 'Ã‚Ã¥Ã±Ã²Ã¨ Ã§Ã  Ã±Ã®Ã¡Ã®Ã©') then
                     lua_thread.create(function()
-                        ampSendsChat("/me çàëîìèë ïğàâóş ğóêó íàğóøèòåëş")
+                        ampSendsChat("/me Ã§Ã Ã«Ã®Ã¬Ã¨Ã« Ã¯Ã°Ã Ã¢Ã³Ã¾ Ã°Ã³ÃªÃ³ Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¾")
                         wait(1500)
-                        sampSendChat("/me âåäåò íàğóøèòåëÿ çà ñîáîé")
+                        sampSendChat("/me Ã¢Ã¥Ã¤Ã¥Ã² Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¿ Ã§Ã  Ã±Ã®Ã¡Ã®Ã©")
                         wait(1500)
                         sampSendChat("/gotome " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Ïåğåñòàòü âåñòè çà ñîáîé') then
+                if imgui.Button(u8 'ÃÃ¥Ã°Ã¥Ã±Ã²Ã Ã²Ã¼ Ã¢Ã¥Ã±Ã²Ã¨ Ã§Ã  Ã±Ã®Ã¡Ã®Ã©') then
                     lua_thread.create(function()
-                        sampSendChat("/me îòïóñòèë ïğàâóş ğóêó ïğåñòóïíèêà")
+                        sampSendChat("/me Ã®Ã²Ã¯Ã³Ã±Ã²Ã¨Ã« Ã¯Ã°Ã Ã¢Ã³Ã¾ Ã°Ã³ÃªÃ³ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
                         wait(1500)
-                        sampSendChat("/do Ïğåñòóïíèê ñâîáîäåí.")
+                        sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã±Ã¢Ã®Ã¡Ã®Ã¤Ã¥Ã­.")
                         wait(1500)
                         sampSendChat("/ungotome " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Â ìàøèíó(àâòîìàòè÷åñêè íà 3-å ìåñòî)') then
+                if imgui.Button(u8 'Ã‚ Ã¬Ã Ã¸Ã¨Ã­Ã³(Ã Ã¢Ã²Ã®Ã¬Ã Ã²Ã¨Ã·Ã¥Ã±ÃªÃ¨ Ã­Ã  3-Ã¥ Ã¬Ã¥Ã±Ã²Ã®)') then
                     lua_thread.create(function()
-                        sampSendChat("/do Äâåğè â ìàøèíå çàêğûòû.")
+                        sampSendChat("/do Ã„Ã¢Ã¥Ã°Ã¨ Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã¥ Ã§Ã ÃªÃ°Ã»Ã²Ã».")
                         wait(1500)
-                        sampSendChat("/me îòêğûë çàäíşş äâåğü â ìàøèíå")
+                        sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã§Ã Ã¤Ã­Ã¾Ã¾ Ã¤Ã¢Ã¥Ã°Ã¼ Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã¥")
                         wait(1500)
-                        sampSendChat("/me ïîñàäèë ïğåñòóïíèêà â ìàøèíó")
+                        sampSendChat("/me Ã¯Ã®Ã±Ã Ã¤Ã¨Ã« Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã³")
                         wait(1500)
-                        sampSendChat("/me çàáëîêèğîâàë äâåğè")
+                        sampSendChat("/me Ã§Ã Ã¡Ã«Ã®ÃªÃ¨Ã°Ã®Ã¢Ã Ã« Ã¤Ã¢Ã¥Ã°Ã¨")
                         wait(1500)
-                        sampSendChat("/do Äâåğè çàáëîêèğîâàíû.")
+                        sampSendChat("/do Ã„Ã¢Ã¥Ã°Ã¨ Ã§Ã Ã¡Ã«Ã®ÃªÃ¨Ã°Ã®Ã¢Ã Ã­Ã».")
                         wait(1500)
                         sampSendChat("/incar " .. id[0] .. "3")
                     end)
                 end
-                if imgui.Button(u8 'Îáûñê') then
+                if imgui.Button(u8 'ÃÃ¡Ã»Ã±Ãª') then
                     lua_thread.create(function()
-                        sampSendChat("/me íûğíóâ ğóêàìè â êàğìàíû, âûòÿíóë îòòóäà áåëûå ïåğ÷àòêè è íàòÿíóë èõ íà ğóêè")
+                        sampSendChat("/me Ã­Ã»Ã°Ã­Ã³Ã¢ Ã°Ã³ÃªÃ Ã¬Ã¨ Ã¢ ÃªÃ Ã°Ã¬Ã Ã­Ã», Ã¢Ã»Ã²Ã¿Ã­Ã³Ã« Ã®Ã²Ã²Ã³Ã¤Ã  Ã¡Ã¥Ã«Ã»Ã¥ Ã¯Ã¥Ã°Ã·Ã Ã²ÃªÃ¨ Ã¨ Ã­Ã Ã²Ã¿Ã­Ã³Ã« Ã¨Ãµ Ã­Ã  Ã°Ã³ÃªÃ¨")
                         wait(1500)
-                        sampSendChat("/do Ïåğ÷àòêè íàäåòû.")
+                        sampSendChat("/do ÃÃ¥Ã°Ã·Ã Ã²ÃªÃ¨ Ã­Ã Ã¤Ã¥Ã²Ã».")
                         wait(1500)
-                        sampSendChat("/me ïğîâîäèò ğóêàìè ïî âåğõíåé ÷àñòè òåëà")
+                        sampSendChat("/me Ã¯Ã°Ã®Ã¢Ã®Ã¤Ã¨Ã² Ã°Ã³ÃªÃ Ã¬Ã¨ Ã¯Ã® Ã¢Ã¥Ã°ÃµÃ­Ã¥Ã© Ã·Ã Ã±Ã²Ã¨ Ã²Ã¥Ã«Ã ")
                         wait(1500)
-                        sampSendChat("/me ïğîâåğÿåò êàğìàíû/me ïğîâîäèò ğóêàìè ïî íîãàì")
+                        sampSendChat("/me Ã¯Ã°Ã®Ã¢Ã¥Ã°Ã¿Ã¥Ã² ÃªÃ Ã°Ã¬Ã Ã­Ã»/me Ã¯Ã°Ã®Ã¢Ã®Ã¤Ã¨Ã² Ã°Ã³ÃªÃ Ã¬Ã¨ Ã¯Ã® Ã­Ã®Ã£Ã Ã¬")
                         wait(1500)
                         sampSendChat("/frisk " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Ìåãàôîí') then
+                if imgui.Button(u8 'ÃŒÃ¥Ã£Ã Ã´Ã®Ã­') then
                     lua_thread.create(function()
-                        sampSendChat("/do Ìåãàôîí â áàğäà÷êå.")
+                        sampSendChat("/do ÃŒÃ¥Ã£Ã Ã´Ã®Ã­ Ã¢ Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ¥.")
                         wait(1500)
-                        sampSendChat("/me äîñòàë ìåãàôîí ñ áàğäà÷êà ïîñëå ÷åãî âêëş÷èë åãî")
+                        sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¬Ã¥Ã£Ã Ã´Ã®Ã­ Ã± Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ  Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« Ã¥Ã£Ã®")
                         wait(1500)
-                        sampSendChat("/m Âîäèòåëü àâòî, îñòàíîâèòåñü è çàãëóøèòå äâèãàòåëü, äåğæèòå ğóêè íà ğóëå.")
+                        sampSendChat("/m Ã‚Ã®Ã¤Ã¨Ã²Ã¥Ã«Ã¼ Ã Ã¢Ã²Ã®, Ã®Ã±Ã²Ã Ã­Ã®Ã¢Ã¨Ã²Ã¥Ã±Ã¼ Ã¨ Ã§Ã Ã£Ã«Ã³Ã¸Ã¨Ã²Ã¥ Ã¤Ã¢Ã¨Ã£Ã Ã²Ã¥Ã«Ã¼, Ã¤Ã¥Ã°Ã¦Ã¨Ã²Ã¥ Ã°Ã³ÃªÃ¨ Ã­Ã  Ã°Ã³Ã«Ã¥.")
                     end)
                 end
-                if imgui.Button(u8 'Âûòàùèòü èç àâòî') then
+                if imgui.Button(u8 'Ã‚Ã»Ã²Ã Ã¹Ã¨Ã²Ã¼ Ã¨Ã§ Ã Ã¢Ã²Ã®') then
                     lua_thread.create(function()
-                        sampSendChat("/me ñíÿâ äóáèíêó ñ ïîÿñíîãî äåğæàòåëÿ ğàçáèë ñòåêëî â òğàíñïîğòå")
+                        sampSendChat("/me Ã±Ã­Ã¿Ã¢ Ã¤Ã³Ã¡Ã¨Ã­ÃªÃ³ Ã± Ã¯Ã®Ã¿Ã±Ã­Ã®Ã£Ã® Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿ Ã°Ã Ã§Ã¡Ã¨Ã« Ã±Ã²Ã¥ÃªÃ«Ã® Ã¢ Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã¥")
                         wait(1500)
-                        sampSendChat("/do Ñòåêëî ğàçáèòî.")
+                        sampSendChat("/do Ã‘Ã²Ã¥ÃªÃ«Ã® Ã°Ã Ã§Ã¡Ã¨Ã²Ã®.")
                         wait(1500)
-                        sampSendChat("/me ñõâàòèâ çà ïëå÷è ÷åëîâåêà óäàğèë åãî ïîñëå ÷åãî íàäåë íàğó÷íèêè")
+                        sampSendChat("/me Ã±ÃµÃ¢Ã Ã²Ã¨Ã¢ Ã§Ã  Ã¯Ã«Ã¥Ã·Ã¨ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã³Ã¤Ã Ã°Ã¨Ã« Ã¥Ã£Ã® Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã­Ã Ã¤Ã¥Ã« Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨")
                         wait(1500)
                         sampSendChat("/pull " .. id[0])
                         wait(1500)
                         sampSendChat("/cuff " .. id[0])
                     end)
                 end
-                if imgui.Button(u8 'Âûäà÷à ğîçûñêà') then
+                if imgui.Button(u8 'Ã‚Ã»Ã¤Ã Ã·Ã  Ã°Ã®Ã§Ã»Ã±ÃªÃ ') then
                     windowTwo[0] = not windowTwo[0]
                 end
 
-            elseif tab == 3 then -- åñëè çíà÷åíèå tab == 3
-                imgui.InputText(u8 'Ôğàêöèÿ ñ êîòîğîé áóäåòå âçàèìîäåéñòâîâàòü', otherorg, 255)
+            elseif tab == 3 then -- Ã¥Ã±Ã«Ã¨ Ã§Ã­Ã Ã·Ã¥Ã­Ã¨Ã¥ tab == 3
+                imgui.InputText(u8 'Ã”Ã°Ã ÃªÃ¶Ã¨Ã¿ Ã± ÃªÃ®Ã²Ã®Ã°Ã®Ã© Ã¡Ã³Ã¤Ã¥Ã²Ã¥ Ã¢Ã§Ã Ã¨Ã¬Ã®Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã®Ã¢Ã Ã²Ã¼', otherorg, 255)
                 otherdeporg = u8:decode(ffi.string(otherorg))
-                imgui.Checkbox(u8 'Çàêğûòûé êàíàë', zk)
-                if imgui.Button(u8 'Âûçîâ íà ñâÿçü') then
+                imgui.Checkbox(u8 'Ã‡Ã ÃªÃ°Ã»Ã²Ã»Ã© ÃªÃ Ã­Ã Ã«', zk)
+                if imgui.Button(u8 'Ã‚Ã»Ã§Ã®Ã¢ Ã­Ã  Ã±Ã¢Ã¿Ã§Ã¼') then
                     if zk[0] then
-                        sampSendChat("/d [" .. mainIni.Info.org .. "] ç.ê [" .. otherdeporg .. "] Íà ñâÿçü!")
+                        sampSendChat("/d [" .. mainIni.Info.org .. "] Ã§.Ãª [" .. otherdeporg .. "] ÃÃ  Ã±Ã¢Ã¿Ã§Ã¼!")
                     else
-                        sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [" .. otherdeporg .. "] Íà ñâÿçü!")
+                        sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [" .. otherdeporg .. "] ÃÃ  Ã±Ã¢Ã¿Ã§Ã¼!")
                     end
                 end
-                if imgui.Button(u8 'Îòêàò') then
-                    sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [Èíôîğìàöèÿ] Òåõ. Íåïîëàäêè!")
+                if imgui.Button(u8 'ÃÃ²ÃªÃ Ã²') then
+                    sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [ÃˆÃ­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¿] Ã’Ã¥Ãµ. ÃÃ¥Ã¯Ã®Ã«Ã Ã¤ÃªÃ¨!")
                 end
             elseif tab == 4 then
-                if imgui.CollapsingHeader(u8'Áèíäåğ') then
-                    if imgui.CollapsingHeader(u8'Ëåêöèè') then
-                        if imgui.Button(u8'Àğåñò è çàäåğæàíèå') then
+                if imgui.CollapsingHeader(u8'ÃÃ¨Ã­Ã¤Ã¥Ã°') then
+                    if imgui.CollapsingHeader(u8'Ã‹Ã¥ÃªÃ¶Ã¨Ã¨') then
+                        if imgui.Button(u8'Ã€Ã°Ã¥Ã±Ã² Ã¨ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¥') then
                             lua_thread.create(function()
-                                sampSendChat("Çäğàâñòâóéòå óâàæàåìûå ñîòğóäíèêè íàøåãî äåïàğòàìåíòà!")
+                                sampSendChat("Ã‡Ã¤Ã°Ã Ã¢Ã±Ã²Ã¢Ã³Ã©Ã²Ã¥ Ã³Ã¢Ã Ã¦Ã Ã¥Ã¬Ã»Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ Ã­Ã Ã¸Ã¥Ã£Ã® Ã¤Ã¥Ã¯Ã Ã°Ã²Ã Ã¬Ã¥Ã­Ã²Ã !")
                                 wait(1500)
-                                sampSendChat("Ñåé÷àñ áóäåò ïğîâåäåíà ëåêöèÿ íà òåìó àğåñò è çàäåğæàíèå ïğåñòóïíèêîâ.")
+                                sampSendChat("Ã‘Ã¥Ã©Ã·Ã Ã± Ã¡Ã³Ã¤Ã¥Ã² Ã¯Ã°Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã  Ã«Ã¥ÃªÃ¶Ã¨Ã¿ Ã­Ã  Ã²Ã¥Ã¬Ã³ Ã Ã°Ã¥Ã±Ã² Ã¨ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¥ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ®Ã¢.")
                                 wait(1500)
-                                sampSendChat("Äëÿ íà÷àëà îáúÿñíş ğàçëè÷èå ìåæäó çàäåğæàíèåì è àğåñòîì.")
+                                sampSendChat("Ã„Ã«Ã¿ Ã­Ã Ã·Ã Ã«Ã  Ã®Ã¡ÃºÃ¿Ã±Ã­Ã¾ Ã°Ã Ã§Ã«Ã¨Ã·Ã¨Ã¥ Ã¬Ã¥Ã¦Ã¤Ã³ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¥Ã¬ Ã¨ Ã Ã°Ã¥Ã±Ã²Ã®Ã¬.")
                                 wait(1500)
-                                sampSendChat("Çàäåğæàíèå - ıòî êğàòêîâğåìåííîå ëèøåíèå ñâîáîäû ëèöà, ïîäîçğåâàåìîãî â ñîâåğøåíèè ïğåñòóïëåíèÿ.")
+                                sampSendChat("Ã‡Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¥ - Ã½Ã²Ã® ÃªÃ°Ã Ã²ÃªÃ®Ã¢Ã°Ã¥Ã¬Ã¥Ã­Ã­Ã®Ã¥ Ã«Ã¨Ã¸Ã¥Ã­Ã¨Ã¥ Ã±Ã¢Ã®Ã¡Ã®Ã¤Ã» Ã«Ã¨Ã¶Ã , Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã®Ã£Ã® Ã¢ Ã±Ã®Ã¢Ã¥Ã°Ã¸Ã¥Ã­Ã¨Ã¨ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã«Ã¥Ã­Ã¨Ã¿.")
                                 wait(1500)
-                                sampSendChat("Â ñâîş î÷åğåäü, àğåñò - ıòî âèä óãîëîâíîãî íàêàçàíèÿ, çàêëş÷àşùåãîñÿ â ñîäåğæàíèè ñîâåğøèâøåãî ïğåñòóïëåíèå..")
+                                sampSendChat("Ã‚ Ã±Ã¢Ã®Ã¾ Ã®Ã·Ã¥Ã°Ã¥Ã¤Ã¼, Ã Ã°Ã¥Ã±Ã² - Ã½Ã²Ã® Ã¢Ã¨Ã¤ Ã³Ã£Ã®Ã«Ã®Ã¢Ã­Ã®Ã£Ã® Ã­Ã ÃªÃ Ã§Ã Ã­Ã¨Ã¿, Ã§Ã ÃªÃ«Ã¾Ã·Ã Ã¾Ã¹Ã¥Ã£Ã®Ã±Ã¿ Ã¢ Ã±Ã®Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¨ Ã±Ã®Ã¢Ã¥Ã°Ã¸Ã¨Ã¢Ã¸Ã¥Ã£Ã® Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã«Ã¥Ã­Ã¨Ã¥..")
                                 wait(1500)
-                                sampSendChat("..è îñóæä¸ííîãî ïî ïğèãîâîğó ñóäà â óñëîâèÿõ ñòğîãîé èçîëÿöèè îò îáùåñòâà.")
+                                sampSendChat("..Ã¨ Ã®Ã±Ã³Ã¦Ã¤Â¸Ã­Ã­Ã®Ã£Ã® Ã¯Ã® Ã¯Ã°Ã¨Ã£Ã®Ã¢Ã®Ã°Ã³ Ã±Ã³Ã¤Ã  Ã¢ Ã³Ã±Ã«Ã®Ã¢Ã¨Ã¿Ãµ Ã±Ã²Ã°Ã®Ã£Ã®Ã© Ã¨Ã§Ã®Ã«Ã¿Ã¶Ã¨Ã¨ Ã®Ã² Ã®Ã¡Ã¹Ã¥Ã±Ã²Ã¢Ã .")
                                 wait(1500)
-                                sampSendChat("Âàì ğàçğåøåíî çàäåğæèâàòü ëèöà íà ïåğèîä 48 ÷àñîâ ñ ìîìåíòà èõ çàäåğæàíèÿ.")
+                                sampSendChat("Ã‚Ã Ã¬ Ã°Ã Ã§Ã°Ã¥Ã¸Ã¥Ã­Ã® Ã§Ã Ã¤Ã¥Ã°Ã¦Ã¨Ã¢Ã Ã²Ã¼ Ã«Ã¨Ã¶Ã  Ã­Ã  Ã¯Ã¥Ã°Ã¨Ã®Ã¤ 48 Ã·Ã Ã±Ã®Ã¢ Ã± Ã¬Ã®Ã¬Ã¥Ã­Ã²Ã  Ã¨Ãµ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¿.")
                                 wait(1500)
-                                sampSendChat("Åñëè â òå÷åíèå 48 ÷àñîâ âû íå ïğåäúÿâèòå äîêàçàòåëüñòâà âèíû, âû îáÿçàíû îòïóñòèòü ãğàæäàíèíà.")
+                                sampSendChat("Ã…Ã±Ã«Ã¨ Ã¢ Ã²Ã¥Ã·Ã¥Ã­Ã¨Ã¥ 48 Ã·Ã Ã±Ã®Ã¢ Ã¢Ã» Ã­Ã¥ Ã¯Ã°Ã¥Ã¤ÃºÃ¿Ã¢Ã¨Ã²Ã¥ Ã¤Ã®ÃªÃ Ã§Ã Ã²Ã¥Ã«Ã¼Ã±Ã²Ã¢Ã  Ã¢Ã¨Ã­Ã», Ã¢Ã» Ã®Ã¡Ã¿Ã§Ã Ã­Ã» Ã®Ã²Ã¯Ã³Ã±Ã²Ã¨Ã²Ã¼ Ã£Ã°Ã Ã¦Ã¤Ã Ã­Ã¨Ã­Ã .")
                                 wait(1500)
-                                sampSendChat("Îáğàòèòå âíèìàíèå, ãğàæäàíèí ìîæåò ïîäàòü íà âàñ èñê çà íåçàêîííîå çàäåğæàíèå.")
+                                sampSendChat("ÃÃ¡Ã°Ã Ã²Ã¨Ã²Ã¥ Ã¢Ã­Ã¨Ã¬Ã Ã­Ã¨Ã¥, Ã£Ã°Ã Ã¦Ã¤Ã Ã­Ã¨Ã­ Ã¬Ã®Ã¦Ã¥Ã² Ã¯Ã®Ã¤Ã Ã²Ã¼ Ã­Ã  Ã¢Ã Ã± Ã¨Ã±Ãª Ã§Ã  Ã­Ã¥Ã§Ã ÃªÃ®Ã­Ã­Ã®Ã¥ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¥.")
                                 wait(1500)
-                                sampSendChat("Âî âğåìÿ çàäåğæàíèÿ âû îáÿçàíû ïğîâåñòè ïåğâè÷íûé îáûñê íà ìåñòå çàäåğæàíèÿ è âòîğè÷íûé ó êàïîòà ñâîåãî àâòîìîáèëÿ.")
+                                sampSendChat("Ã‚Ã® Ã¢Ã°Ã¥Ã¬Ã¿ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¿ Ã¢Ã» Ã®Ã¡Ã¿Ã§Ã Ã­Ã» Ã¯Ã°Ã®Ã¢Ã¥Ã±Ã²Ã¨ Ã¯Ã¥Ã°Ã¢Ã¨Ã·Ã­Ã»Ã© Ã®Ã¡Ã»Ã±Ãª Ã­Ã  Ã¬Ã¥Ã±Ã²Ã¥ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¿ Ã¨ Ã¢Ã²Ã®Ã°Ã¨Ã·Ã­Ã»Ã© Ã³ ÃªÃ Ã¯Ã®Ã²Ã  Ã±Ã¢Ã®Ã¥Ã£Ã® Ã Ã¢Ã²Ã®Ã¬Ã®Ã¡Ã¨Ã«Ã¿.")
                                 wait(1500)
-                                sampSendChat("Âñå íàéäåííûå âåùè ïîëîæèòü â 'ZIP-lock', èëè â êîíòåéíåğ äëÿ âåù. äîêîâ, Âñå ëè÷íûå âåùè ïğåñòóïíèêà êëàäóòñÿ â ìåøîê äëÿ ëè÷íûõ âåùåé çàäåğæàííîãî")
+                                sampSendChat("Ã‚Ã±Ã¥ Ã­Ã Ã©Ã¤Ã¥Ã­Ã­Ã»Ã¥ Ã¢Ã¥Ã¹Ã¨ Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã²Ã¼ Ã¢ 'ZIP-lock', Ã¨Ã«Ã¨ Ã¢ ÃªÃ®Ã­Ã²Ã¥Ã©Ã­Ã¥Ã° Ã¤Ã«Ã¿ Ã¢Ã¥Ã¹. Ã¤Ã®ÃªÃ®Ã¢, Ã‚Ã±Ã¥ Ã«Ã¨Ã·Ã­Ã»Ã¥ Ã¢Ã¥Ã¹Ã¨ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  ÃªÃ«Ã Ã¤Ã³Ã²Ã±Ã¿ Ã¢ Ã¬Ã¥Ã¸Ã®Ãª Ã¤Ã«Ã¿ Ã«Ã¨Ã·Ã­Ã»Ãµ Ã¢Ã¥Ã¹Ã¥Ã© Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã­Ã®Ã£Ã®")
                                 wait(1500)
-                                sampSendChat("Íà ıòîì äàííàÿ ëåêöèÿ ïîäõîäèò ê êîíöó. Ó êîãî-òî èìåşòñÿ âîïğîñû?")
+                                sampSendChat("ÃÃ  Ã½Ã²Ã®Ã¬ Ã¤Ã Ã­Ã­Ã Ã¿ Ã«Ã¥ÃªÃ¶Ã¨Ã¿ Ã¯Ã®Ã¤ÃµÃ®Ã¤Ã¨Ã² Ãª ÃªÃ®Ã­Ã¶Ã³. Ã“ ÃªÃ®Ã£Ã®-Ã²Ã® Ã¨Ã¬Ã¥Ã¾Ã²Ã±Ã¿ Ã¢Ã®Ã¯Ã°Ã®Ã±Ã»?")
                             end)
                         end
-                        if imgui.Button("Ñóááîğäèíàöèÿ") then
+                        if imgui.Button("Ã‘Ã³Ã¡Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¿") then
                             lua_thread.create(function()
-                                sampSendChat(" Óâàæàåìûå ñîòğóäíèêè Ïîëèöåéñêîãî Äåïàğòàìåíòà!")
+                                sampSendChat(" Ã“Ã¢Ã Ã¦Ã Ã¥Ã¬Ã»Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ ÃÃ®Ã«Ã¨Ã¶Ã¥Ã©Ã±ÃªÃ®Ã£Ã® Ã„Ã¥Ã¯Ã Ã°Ã²Ã Ã¬Ã¥Ã­Ã²Ã !")
                                 wait(1500)
-                                sampSendChat(" Ïğèâåòñòâóş âàñ íà ëåêöèè î ñóáîğäèíàöèè")
+                                sampSendChat(" ÃÃ°Ã¨Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã³Ã¾ Ã¢Ã Ã± Ã­Ã  Ã«Ã¥ÃªÃ¶Ã¨Ã¨ Ã® Ã±Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¨")
                                 wait(1500)
-                                sampSendChat(" Äëÿ íà÷àëà ğàññêàæó, ÷òî òàêîå ñóáîğäèíàöèÿ")
+                                sampSendChat(" Ã„Ã«Ã¿ Ã­Ã Ã·Ã Ã«Ã  Ã°Ã Ã±Ã±ÃªÃ Ã¦Ã³, Ã·Ã²Ã® Ã²Ã ÃªÃ®Ã¥ Ã±Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¿")
                                 wait(1500)
-                                sampSendChat(" Ñóáîğäèíàöèÿ - ïğàâèëà ïîä÷èíåíèÿ ìëàäøèõ ïî çâàíèş ê ñòàğøèì ïî çâàíèş, óâàæåíèå, îòíîøåíèå ê íèì")
+                                sampSendChat(" Ã‘Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¿ - Ã¯Ã°Ã Ã¢Ã¨Ã«Ã  Ã¯Ã®Ã¤Ã·Ã¨Ã­Ã¥Ã­Ã¨Ã¿ Ã¬Ã«Ã Ã¤Ã¸Ã¨Ãµ Ã¯Ã® Ã§Ã¢Ã Ã­Ã¨Ã¾ Ãª Ã±Ã²Ã Ã°Ã¸Ã¨Ã¬ Ã¯Ã® Ã§Ã¢Ã Ã­Ã¨Ã¾, Ã³Ã¢Ã Ã¦Ã¥Ã­Ã¨Ã¥, Ã®Ã²Ã­Ã®Ã¸Ã¥Ã­Ã¨Ã¥ Ãª Ã­Ã¨Ã¬")
                                 wait(1500)
-                                sampSendChat(" Òî åñòü ìëàäøèå ñîòğóäíèêè äîëæíû âûïîëíÿòü ïğèêàçû íà÷àëüñòâà")
+                                sampSendChat(" Ã’Ã® Ã¥Ã±Ã²Ã¼ Ã¬Ã«Ã Ã¤Ã¸Ã¨Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ Ã¤Ã®Ã«Ã¦Ã­Ã» Ã¢Ã»Ã¯Ã®Ã«Ã­Ã¿Ã²Ã¼ Ã¯Ã°Ã¨ÃªÃ Ã§Ã» Ã­Ã Ã·Ã Ã«Ã¼Ã±Ã²Ã¢Ã ")
                                 wait(1500)
-                                sampSendChat(" Êòî îñëóøàåòñÿ  ïîëó÷èò âûãîâîğ, ñïåğâà óñòíûé")
+                                sampSendChat(" ÃŠÃ²Ã® Ã®Ã±Ã«Ã³Ã¸Ã Ã¥Ã²Ã±Ã¿  Ã¯Ã®Ã«Ã³Ã·Ã¨Ã² Ã¢Ã»Ã£Ã®Ã¢Ã®Ã°, Ã±Ã¯Ã¥Ã°Ã¢Ã  Ã³Ã±Ã²Ã­Ã»Ã©")
                                 wait(1500)
-                                sampSendChat(" Âû äîëæíû ñ óâàæåíèåì îòíîñèòñÿ ê íà÷àëüñòâó íà 'Âû'")
+                                sampSendChat(" Ã‚Ã» Ã¤Ã®Ã«Ã¦Ã­Ã» Ã± Ã³Ã¢Ã Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã²Ã­Ã®Ã±Ã¨Ã²Ã±Ã¿ Ãª Ã­Ã Ã·Ã Ã«Ã¼Ã±Ã²Ã¢Ã³ Ã­Ã  'Ã‚Ã»'")
                                 wait(1500)
-                                sampSendChat(" Íå íàğóøàéòå ïğàâèëà è íå íàğóøàéòå ñóáîğäèíàöèş äàáû íå ïîëó÷èòü íàêàçàíèå")
+                                sampSendChat(" ÃÃ¥ Ã­Ã Ã°Ã³Ã¸Ã Ã©Ã²Ã¥ Ã¯Ã°Ã Ã¢Ã¨Ã«Ã  Ã¨ Ã­Ã¥ Ã­Ã Ã°Ã³Ã¸Ã Ã©Ã²Ã¥ Ã±Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¾ Ã¤Ã Ã¡Ã» Ã­Ã¥ Ã¯Ã®Ã«Ã³Ã·Ã¨Ã²Ã¼ Ã­Ã ÃªÃ Ã§Ã Ã­Ã¨Ã¥")
                                 wait(1500)
-                                sampSendChat(" Ëåêöèÿ îêîí÷åíà ñïàñèáî çà âíèìàíèå!")
+                                sampSendChat(" Ã‹Ã¥ÃªÃ¶Ã¨Ã¿ Ã®ÃªÃ®Ã­Ã·Ã¥Ã­Ã  Ã±Ã¯Ã Ã±Ã¨Ã¡Ã® Ã§Ã  Ã¢Ã­Ã¨Ã¬Ã Ã­Ã¨Ã¥!")
                             end)
                         end
-                        if imgui.Button(u8"Ñóááîğäèíàöèÿ") then
+                        if imgui.Button(u8"Ã‘Ã³Ã¡Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¿") then
                             lua_thread.create(function()
-                                sampSendChat(" Óâàæàåìûå ñîòğóäíèêè Ïîëèöåéñêîãî Äåïàğòàìåíòà!")
+                                sampSendChat(" Ã“Ã¢Ã Ã¦Ã Ã¥Ã¬Ã»Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ ÃÃ®Ã«Ã¨Ã¶Ã¥Ã©Ã±ÃªÃ®Ã£Ã® Ã„Ã¥Ã¯Ã Ã°Ã²Ã Ã¬Ã¥Ã­Ã²Ã !")
                                 wait(1500)
-                                sampSendChat(" Ïğèâåòñòâóş âàñ íà ëåêöèè î ñóáîğäèíàöèè")
+                                sampSendChat(" ÃÃ°Ã¨Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã³Ã¾ Ã¢Ã Ã± Ã­Ã  Ã«Ã¥ÃªÃ¶Ã¨Ã¨ Ã® Ã±Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¨")
                                 wait(1500)
-                                sampSendChat(" Äëÿ íà÷àëà ğàññêàæó, ÷òî òàêîå ñóáîğäèíàöèÿ")
+                                sampSendChat(" Ã„Ã«Ã¿ Ã­Ã Ã·Ã Ã«Ã  Ã°Ã Ã±Ã±ÃªÃ Ã¦Ã³, Ã·Ã²Ã® Ã²Ã ÃªÃ®Ã¥ Ã±Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¿")
                                 wait(1500)
-                                sampSendChat(" Ñóáîğäèíàöèÿ - ïğàâèëà ïîä÷èíåíèÿ ìëàäøèõ ïî çâàíèş ê ñòàğøèì ïî çâàíèş, óâàæåíèå, îòíîøåíèå ê íèì")
+                                sampSendChat(" Ã‘Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¿ - Ã¯Ã°Ã Ã¢Ã¨Ã«Ã  Ã¯Ã®Ã¤Ã·Ã¨Ã­Ã¥Ã­Ã¨Ã¿ Ã¬Ã«Ã Ã¤Ã¸Ã¨Ãµ Ã¯Ã® Ã§Ã¢Ã Ã­Ã¨Ã¾ Ãª Ã±Ã²Ã Ã°Ã¸Ã¨Ã¬ Ã¯Ã® Ã§Ã¢Ã Ã­Ã¨Ã¾, Ã³Ã¢Ã Ã¦Ã¥Ã­Ã¨Ã¥, Ã®Ã²Ã­Ã®Ã¸Ã¥Ã­Ã¨Ã¥ Ãª Ã­Ã¨Ã¬")
                                 wait(1500)
-                                sampSendChat(" Òî åñòü ìëàäøèå ñîòğóäíèêè äîëæíû âûïîëíÿòü ïğèêàçû íà÷àëüñòâà")
+                                sampSendChat(" Ã’Ã® Ã¥Ã±Ã²Ã¼ Ã¬Ã«Ã Ã¤Ã¸Ã¨Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ Ã¤Ã®Ã«Ã¦Ã­Ã» Ã¢Ã»Ã¯Ã®Ã«Ã­Ã¿Ã²Ã¼ Ã¯Ã°Ã¨ÃªÃ Ã§Ã» Ã­Ã Ã·Ã Ã«Ã¼Ã±Ã²Ã¢Ã ")
                                 wait(1500)
-                                sampSendChat(" Êòî îñëóøàåòñÿ  ïîëó÷èò âûãîâîğ, ñïåğâà óñòíûé")
+                                sampSendChat(" ÃŠÃ²Ã® Ã®Ã±Ã«Ã³Ã¸Ã Ã¥Ã²Ã±Ã¿  Ã¯Ã®Ã«Ã³Ã·Ã¨Ã² Ã¢Ã»Ã£Ã®Ã¢Ã®Ã°, Ã±Ã¯Ã¥Ã°Ã¢Ã  Ã³Ã±Ã²Ã­Ã»Ã©")
                                 wait(1500)
-                                sampSendChat(" Âû äîëæíû ñ óâàæåíèåì îòíîñèòñÿ ê íà÷àëüñòâó íà 'Âû'")
+                                sampSendChat(" Ã‚Ã» Ã¤Ã®Ã«Ã¦Ã­Ã» Ã± Ã³Ã¢Ã Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã²Ã­Ã®Ã±Ã¨Ã²Ã±Ã¿ Ãª Ã­Ã Ã·Ã Ã«Ã¼Ã±Ã²Ã¢Ã³ Ã­Ã  'Ã‚Ã»'")
                                 wait(1500)
-                                sampSendChat(" Íå íàğóøàéòå ïğàâèëà è íå íàğóøàéòå ñóáîğäèíàöèş äàáû íå ïîëó÷èòü íàêàçàíèå")
+                                sampSendChat(" ÃÃ¥ Ã­Ã Ã°Ã³Ã¸Ã Ã©Ã²Ã¥ Ã¯Ã°Ã Ã¢Ã¨Ã«Ã  Ã¨ Ã­Ã¥ Ã­Ã Ã°Ã³Ã¸Ã Ã©Ã²Ã¥ Ã±Ã³Ã¡Ã®Ã°Ã¤Ã¨Ã­Ã Ã¶Ã¨Ã¾ Ã¤Ã Ã¡Ã» Ã­Ã¥ Ã¯Ã®Ã«Ã³Ã·Ã¨Ã²Ã¼ Ã­Ã ÃªÃ Ã§Ã Ã­Ã¨Ã¥")
                                 wait(1500)
-                                sampSendChat(" Ëåêöèÿ îêîí÷åíà ñïàñèáî çà âíèìàíèå!")
+                                sampSendChat(" Ã‹Ã¥ÃªÃ¶Ã¨Ã¿ Ã®ÃªÃ®Ã­Ã·Ã¥Ã­Ã  Ã±Ã¯Ã Ã±Ã¨Ã¡Ã® Ã§Ã  Ã¢Ã­Ã¨Ã¬Ã Ã­Ã¨Ã¥!")
                             end)
                         end
-                        if imgui.Button(u8"Ïğàâèëà ïîâåäåíèÿ â ñòğîş.") then
+                        if imgui.Button(u8"ÃÃ°Ã Ã¢Ã¨Ã«Ã  Ã¯Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã¨Ã¿ Ã¢ Ã±Ã²Ã°Ã®Ã¾.") then
                             lua_thread.create(function()
-                                sampSendChat(" Óâàæàåìûå ñîòğóäíèêè Ïîëèöåéñêîãî Äåïàğòàìåíòà!")
+                                sampSendChat(" Ã“Ã¢Ã Ã¦Ã Ã¥Ã¬Ã»Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ ÃÃ®Ã«Ã¨Ã¶Ã¥Ã©Ã±ÃªÃ®Ã£Ã® Ã„Ã¥Ã¯Ã Ã°Ã²Ã Ã¬Ã¥Ã­Ã²Ã !")
                                 wait(1500)
-                                sampSendChat(" Ïğèâåòñòâóş âàñ íà ëåêöèè ïğàâèëà ïîâåäåíèÿ â ñòğîş")
+                                sampSendChat(" ÃÃ°Ã¨Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã³Ã¾ Ã¢Ã Ã± Ã­Ã  Ã«Ã¥ÃªÃ¶Ã¨Ã¨ Ã¯Ã°Ã Ã¢Ã¨Ã«Ã  Ã¯Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã¨Ã¿ Ã¢ Ã±Ã²Ã°Ã®Ã¾")
                                 wait(1500)
-                                sampSendChat(" /b Çàïğåùåíû ğàçãîâîğû â ëşáûå ÷àòû (in ic, /r, /n, /fam, /sms,)")
+                                sampSendChat(" /b Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã» Ã°Ã Ã§Ã£Ã®Ã¢Ã®Ã°Ã» Ã¢ Ã«Ã¾Ã¡Ã»Ã¥ Ã·Ã Ã²Ã» (in ic, /r, /n, /fam, /sms,)")
                                 wait(1500)
-                                sampSendChat(" Çàïğåùåíî ïîëüçîâàòüñÿ ìîáèëüíûìè òåëåôîíàìè")
+                                sampSendChat(" Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã²Ã¼Ã±Ã¿ Ã¬Ã®Ã¡Ã¨Ã«Ã¼Ã­Ã»Ã¬Ã¨ Ã²Ã¥Ã«Ã¥Ã´Ã®Ã­Ã Ã¬Ã¨")
                                 wait(1500)
-                                sampSendChat(" Çàïğåùåíî äîñòàâàòü îğóæèå")
+                                sampSendChat(" Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã¤Ã®Ã±Ã²Ã Ã¢Ã Ã²Ã¼ Ã®Ã°Ã³Ã¦Ã¨Ã¥")
                                 wait(1500)
-                                sampSendChat(" Çàïğåùåíî îòêğûâàòü îãîíü áåç ïğèêàçà")
+                                sampSendChat(" Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã®Ã²ÃªÃ°Ã»Ã¢Ã Ã²Ã¼ Ã®Ã£Ã®Ã­Ã¼ Ã¡Ã¥Ã§ Ã¯Ã°Ã¨ÃªÃ Ã§Ã ")
                                 wait(1500)
-                                sampSendChat(" /b Çàïğåùåíî óõîäèòü â AFK áîëåå ÷åì íà 30 ñåêóíä")
+                                sampSendChat(" /b Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã³ÃµÃ®Ã¤Ã¨Ã²Ã¼ Ã¢ AFK Ã¡Ã®Ã«Ã¥Ã¥ Ã·Ã¥Ã¬ Ã­Ã  30 Ã±Ã¥ÃªÃ³Ã­Ã¤")
                                 wait(1500)
-                                sampSendChat(" Çàïğåùåíî ñàìîâîëüíî ïîêèäàòü ñòğîé íå ïğåäóïğåäèâ îá ıòîì ñòàğøèé ñîñòàâ")
+                                sampSendChat(" Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã±Ã Ã¬Ã®Ã¢Ã®Ã«Ã¼Ã­Ã® Ã¯Ã®ÃªÃ¨Ã¤Ã Ã²Ã¼ Ã±Ã²Ã°Ã®Ã© Ã­Ã¥ Ã¯Ã°Ã¥Ã¤Ã³Ã¯Ã°Ã¥Ã¤Ã¨Ã¢ Ã®Ã¡ Ã½Ã²Ã®Ã¬ Ã±Ã²Ã Ã°Ã¸Ã¨Ã© Ã±Ã®Ã±Ã²Ã Ã¢")
                                 wait(1500)
-                                sampSendChat(" /b Çàïğåùåíû ëşáûå äâèæåíèÿ â ñòğîş (/anim) Èñêëş÷åíèå: ñò. ñîñòàâ")
+                                sampSendChat(" /b Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã» Ã«Ã¾Ã¡Ã»Ã¥ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¿ Ã¢ Ã±Ã²Ã°Ã®Ã¾ (/anim) ÃˆÃ±ÃªÃ«Ã¾Ã·Ã¥Ã­Ã¨Ã¥: Ã±Ã². Ã±Ã®Ã±Ã²Ã Ã¢")
                                 wait(1500)
-                                sampSendChat(" /b Çàïğåùåíî èñïîëüçîâàíèå ñèãàğåò [/smoke â ñòğîş]")
+                                sampSendChat(" /b Ã‡Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã­Ã¨Ã¥ Ã±Ã¨Ã£Ã Ã°Ã¥Ã² [/smoke Ã¢ Ã±Ã²Ã°Ã®Ã¾]")
                             end)
                         end
-                        if imgui.Button(u8'Äîïğîñ') then
+                        if imgui.Button(u8'Ã„Ã®Ã¯Ã°Ã®Ã±') then
                             lua_thread.create(function()
-                                sampSendChat(" Çäğàâñòâóéòå óâàæàåìûå ñîòğóäíèêè äåïàğòàìåíòà ñåãîäíÿ, ÿ ïğîâåäó ëåêöèş íà òåìó Äîïğîñ ïîäîçğåâàåìîãî.")
+                                sampSendChat(" Ã‡Ã¤Ã°Ã Ã¢Ã±Ã²Ã¢Ã³Ã©Ã²Ã¥ Ã³Ã¢Ã Ã¦Ã Ã¥Ã¬Ã»Ã¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨ Ã¤Ã¥Ã¯Ã Ã°Ã²Ã Ã¬Ã¥Ã­Ã²Ã  Ã±Ã¥Ã£Ã®Ã¤Ã­Ã¿, Ã¿ Ã¯Ã°Ã®Ã¢Ã¥Ã¤Ã³ Ã«Ã¥ÃªÃ¶Ã¨Ã¾ Ã­Ã  Ã²Ã¥Ã¬Ã³ Ã„Ã®Ã¯Ã°Ã®Ã± Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã®Ã£Ã®.")
                                 wait(1500)
-                                sampSendChat(" Ñîòğóäíèê ÏÄ îáÿçàí ñíà÷àëà ïîïğèâåòñòâîâàòü, ïğåäñòàâèòüñÿ;")
+                                sampSendChat(" Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª ÃÃ„ Ã®Ã¡Ã¿Ã§Ã Ã­ Ã±Ã­Ã Ã·Ã Ã«Ã  Ã¯Ã®Ã¯Ã°Ã¨Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã®Ã¢Ã Ã²Ã¼, Ã¯Ã°Ã¥Ã¤Ã±Ã²Ã Ã¢Ã¨Ã²Ã¼Ã±Ã¿;")
                                 wait(1500)
-                                sampSendChat(" Ñîòğóäíèê ÏÄ îáÿçàí ïîïğîñèòü äîêóìåíòû âûçâàííîãî, ñïğîñèòü, ãäå ğàáîòàåò, çâàíèå, äîëæíîñòü, ìåñòî æèòåëüñòâà;")
+                                sampSendChat(" Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª ÃÃ„ Ã®Ã¡Ã¿Ã§Ã Ã­ Ã¯Ã®Ã¯Ã°Ã®Ã±Ã¨Ã²Ã¼ Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã» Ã¢Ã»Ã§Ã¢Ã Ã­Ã­Ã®Ã£Ã®, Ã±Ã¯Ã°Ã®Ã±Ã¨Ã²Ã¼, Ã£Ã¤Ã¥ Ã°Ã Ã¡Ã®Ã²Ã Ã¥Ã², Ã§Ã¢Ã Ã­Ã¨Ã¥, Ã¤Ã®Ã«Ã¦Ã­Ã®Ã±Ã²Ã¼, Ã¬Ã¥Ã±Ã²Ã® Ã¦Ã¨Ã²Ã¥Ã«Ã¼Ã±Ã²Ã¢Ã ;")
                                 wait(1500)
-                                sampSendChat(" Ñîòğóäíèê ÏÄ îáÿçàí ñïğîñèòü, ÷òî îí äåëàë (íàçâàòü ïğîìåæóòîê âğåìåíè, ãäå îí ÷òî-òî íàğóøèë, ïî êîòîğîìó îí áûë âûçâàí);")
+                                sampSendChat(" Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª ÃÃ„ Ã®Ã¡Ã¿Ã§Ã Ã­ Ã±Ã¯Ã°Ã®Ã±Ã¨Ã²Ã¼, Ã·Ã²Ã® Ã®Ã­ Ã¤Ã¥Ã«Ã Ã« (Ã­Ã Ã§Ã¢Ã Ã²Ã¼ Ã¯Ã°Ã®Ã¬Ã¥Ã¦Ã³Ã²Ã®Ãª Ã¢Ã°Ã¥Ã¬Ã¥Ã­Ã¨, Ã£Ã¤Ã¥ Ã®Ã­ Ã·Ã²Ã®-Ã²Ã® Ã­Ã Ã°Ã³Ã¸Ã¨Ã«, Ã¯Ã® ÃªÃ®Ã²Ã®Ã°Ã®Ã¬Ã³ Ã®Ã­ Ã¡Ã»Ã« Ã¢Ã»Ã§Ã¢Ã Ã­);")
                                 wait(1500)
-                                sampSendChat(" Åñëè ïîäîçğåâàåìûé áûë çàäåğæàí çà ğîçûñê, ñòàğàéòåñü óçíàòü çà ÷òî îí ïîëó÷èë ğîçûñê;")
+                                sampSendChat(" Ã…Ã±Ã«Ã¨ Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã»Ã© Ã¡Ã»Ã« Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­ Ã§Ã  Ã°Ã®Ã§Ã»Ã±Ãª, Ã±Ã²Ã Ã°Ã Ã©Ã²Ã¥Ã±Ã¼ Ã³Ã§Ã­Ã Ã²Ã¼ Ã§Ã  Ã·Ã²Ã® Ã®Ã­ Ã¯Ã®Ã«Ã³Ã·Ã¨Ã« Ã°Ã®Ã§Ã»Ã±Ãª;")
                                 wait(1500)
-                                sampSendChat(" Â êîíöå äîïğîñà ïîëèöåéñêèé âûíîñèò âåğäèêò âûçâàííîìó.")
+                                sampSendChat(" Ã‚ ÃªÃ®Ã­Ã¶Ã¥ Ã¤Ã®Ã¯Ã°Ã®Ã±Ã  Ã¯Ã®Ã«Ã¨Ã¶Ã¥Ã©Ã±ÃªÃ¨Ã© Ã¢Ã»Ã­Ã®Ã±Ã¨Ã² Ã¢Ã¥Ã°Ã¤Ã¨ÃªÃ² Ã¢Ã»Ã§Ã¢Ã Ã­Ã­Ã®Ã¬Ã³.")
                                 wait(1500)
-                                sampSendChat(" Ïğè îãëàøåíèè âåğäèêòà, íåîáõîäèìî ïğåäåëüíî òî÷íî îãëàñèòü âèíó äîïğàøèâàåìîãî (Ğàññêàçàòü åìó ïğè÷èíó, çà ÷òî îí áóäåò ïîñàæåí);")
+                                sampSendChat(" ÃÃ°Ã¨ Ã®Ã£Ã«Ã Ã¸Ã¥Ã­Ã¨Ã¨ Ã¢Ã¥Ã°Ã¤Ã¨ÃªÃ²Ã , Ã­Ã¥Ã®Ã¡ÃµÃ®Ã¤Ã¨Ã¬Ã® Ã¯Ã°Ã¥Ã¤Ã¥Ã«Ã¼Ã­Ã® Ã²Ã®Ã·Ã­Ã® Ã®Ã£Ã«Ã Ã±Ã¨Ã²Ã¼ Ã¢Ã¨Ã­Ã³ Ã¤Ã®Ã¯Ã°Ã Ã¸Ã¨Ã¢Ã Ã¥Ã¬Ã®Ã£Ã® (ÃÃ Ã±Ã±ÃªÃ Ã§Ã Ã²Ã¼ Ã¥Ã¬Ã³ Ã¯Ã°Ã¨Ã·Ã¨Ã­Ã³, Ã§Ã  Ã·Ã²Ã® Ã®Ã­ Ã¡Ã³Ã¤Ã¥Ã² Ã¯Ã®Ã±Ã Ã¦Ã¥Ã­);")
                                 wait(1500)
-                                sampSendChat(" Ïğè âûíåñåíèè âåğäèêòà, íå ñòîèò çàáûâàòü î îòÿã÷àşùèõ è ñìÿã÷àşùèõ ôàêòîğàõ (Ğàñêàÿíèå, àäåêâàòíîå ïîâåäåíèå, ïğèçíàíèå âèíû èëè ëîæü, íåàäåêâàòíîå ïîâåäåíèå, ïğîâîêàöèè, ïğåäñòàâëåíèå ïîëåçíîé èíôîğìàöèè è òîìó ïîäîáíîå).")
+                                sampSendChat(" ÃÃ°Ã¨ Ã¢Ã»Ã­Ã¥Ã±Ã¥Ã­Ã¨Ã¨ Ã¢Ã¥Ã°Ã¤Ã¨ÃªÃ²Ã , Ã­Ã¥ Ã±Ã²Ã®Ã¨Ã² Ã§Ã Ã¡Ã»Ã¢Ã Ã²Ã¼ Ã® Ã®Ã²Ã¿Ã£Ã·Ã Ã¾Ã¹Ã¨Ãµ Ã¨ Ã±Ã¬Ã¿Ã£Ã·Ã Ã¾Ã¹Ã¨Ãµ Ã´Ã ÃªÃ²Ã®Ã°Ã Ãµ (ÃÃ Ã±ÃªÃ Ã¿Ã­Ã¨Ã¥, Ã Ã¤Ã¥ÃªÃ¢Ã Ã²Ã­Ã®Ã¥ Ã¯Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã¨Ã¥, Ã¯Ã°Ã¨Ã§Ã­Ã Ã­Ã¨Ã¥ Ã¢Ã¨Ã­Ã» Ã¨Ã«Ã¨ Ã«Ã®Ã¦Ã¼, Ã­Ã¥Ã Ã¤Ã¥ÃªÃ¢Ã Ã²Ã­Ã®Ã¥ Ã¯Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã¨Ã¥, Ã¯Ã°Ã®Ã¢Ã®ÃªÃ Ã¶Ã¨Ã¨, Ã¯Ã°Ã¥Ã¤Ã±Ã²Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¯Ã®Ã«Ã¥Ã§Ã­Ã®Ã© Ã¨Ã­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¨ Ã¨ Ã²Ã®Ã¬Ã³ Ã¯Ã®Ã¤Ã®Ã¡Ã­Ã®Ã¥).")
                                 wait(1500)
-                                sampSendChat(" Íà ıòîì ëåêöèÿ ïîäîøëà ê êîíöó, åñëè ó êîãî-òî åñòü âîïğîñû, îòâå÷ó íà ëşáîé ïî äàííîé ëåêöèè (Åñëè çàäàëè âîïğîñ, òî íóæíî îòâåòèòü íà íåãî)")
+                                sampSendChat(" ÃÃ  Ã½Ã²Ã®Ã¬ Ã«Ã¥ÃªÃ¶Ã¨Ã¿ Ã¯Ã®Ã¤Ã®Ã¸Ã«Ã  Ãª ÃªÃ®Ã­Ã¶Ã³, Ã¥Ã±Ã«Ã¨ Ã³ ÃªÃ®Ã£Ã®-Ã²Ã® Ã¥Ã±Ã²Ã¼ Ã¢Ã®Ã¯Ã°Ã®Ã±Ã», Ã®Ã²Ã¢Ã¥Ã·Ã³ Ã­Ã  Ã«Ã¾Ã¡Ã®Ã© Ã¯Ã® Ã¤Ã Ã­Ã­Ã®Ã© Ã«Ã¥ÃªÃ¶Ã¨Ã¨ (Ã…Ã±Ã«Ã¨ Ã§Ã Ã¤Ã Ã«Ã¨ Ã¢Ã®Ã¯Ã°Ã®Ã±, Ã²Ã® Ã­Ã³Ã¦Ã­Ã® Ã®Ã²Ã¢Ã¥Ã²Ã¨Ã²Ã¼ Ã­Ã  Ã­Ã¥Ã£Ã®)")
                             end)
                         end
-                        if imgui.Button(u8"Ïğàâèëà ïîâåäåíèÿ äî è âî âğåìÿ îáëàâû íà íàğêîïğèòîí.") then
+                        if imgui.Button(u8"ÃÃ°Ã Ã¢Ã¨Ã«Ã  Ã¯Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã¨Ã¿ Ã¤Ã® Ã¨ Ã¢Ã® Ã¢Ã°Ã¥Ã¬Ã¿ Ã®Ã¡Ã«Ã Ã¢Ã» Ã­Ã  Ã­Ã Ã°ÃªÃ®Ã¯Ã°Ã¨Ã²Ã®Ã­.") then
                             lua_thread.create(function()
-                                sampSendChat(" Äîáğûé äåíü, ñåé÷àñ ÿ ïğîâåäó âàì ëåêöèş íà òåìó Ïğàâèëà ïîâåäåíèÿ äî è âî âğåìÿ îáëàâû íà íàğêîïğèòîí")
+                                sampSendChat(" Ã„Ã®Ã¡Ã°Ã»Ã© Ã¤Ã¥Ã­Ã¼, Ã±Ã¥Ã©Ã·Ã Ã± Ã¿ Ã¯Ã°Ã®Ã¢Ã¥Ã¤Ã³ Ã¢Ã Ã¬ Ã«Ã¥ÃªÃ¶Ã¨Ã¾ Ã­Ã  Ã²Ã¥Ã¬Ã³ ÃÃ°Ã Ã¢Ã¨Ã«Ã  Ã¯Ã®Ã¢Ã¥Ã¤Ã¥Ã­Ã¨Ã¿ Ã¤Ã® Ã¨ Ã¢Ã® Ã¢Ã°Ã¥Ã¬Ã¿ Ã®Ã¡Ã«Ã Ã¢Ã» Ã­Ã  Ã­Ã Ã°ÃªÃ®Ã¯Ã°Ã¨Ã²Ã®Ã­")
                                 wait(1500)
-                                sampSendChat(" Â ñòğîş, ïåğåä îáëàâîé, âû äîëæíû âíèìàòåëüíî ñëóøàòü òî, ÷òî ãîâîğÿò âàì Àãåíòû")
+                                sampSendChat(" Ã‚ Ã±Ã²Ã°Ã®Ã¾, Ã¯Ã¥Ã°Ã¥Ã¤ Ã®Ã¡Ã«Ã Ã¢Ã®Ã©, Ã¢Ã» Ã¤Ã®Ã«Ã¦Ã­Ã» Ã¢Ã­Ã¨Ã¬Ã Ã²Ã¥Ã«Ã¼Ã­Ã® Ã±Ã«Ã³Ã¸Ã Ã²Ã¼ Ã²Ã®, Ã·Ã²Ã® Ã£Ã®Ã¢Ã®Ã°Ã¿Ã² Ã¢Ã Ã¬ Ã€Ã£Ã¥Ã­Ã²Ã»")
                                 wait(1500)
-                                sampSendChat(" Óáåäèòåëüíàÿ ïğîñüáà, çàğàíåå óáåäèòüñÿ, ÷òî ïğè ñåáå ó âàñ èìåşòñÿ áàëàêëàâû")
+                                sampSendChat(" Ã“Ã¡Ã¥Ã¤Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã Ã¿ Ã¯Ã°Ã®Ã±Ã¼Ã¡Ã , Ã§Ã Ã°Ã Ã­Ã¥Ã¥ Ã³Ã¡Ã¥Ã¤Ã¨Ã²Ã¼Ã±Ã¿, Ã·Ã²Ã® Ã¯Ã°Ã¨ Ã±Ã¥Ã¡Ã¥ Ã³ Ã¢Ã Ã± Ã¨Ã¬Ã¥Ã¾Ã²Ã±Ã¿ Ã¡Ã Ã«Ã ÃªÃ«Ã Ã¢Ã»")
                                 wait(1500)
-                                sampSendChat(" Ïî ïóòè ê íàğêîïğèòîíó, ïîäúåçæàÿ ê îïàñíîìó ğàéîíó, âñå îáÿçàíû èõ îäåòü")
+                                sampSendChat(" ÃÃ® Ã¯Ã³Ã²Ã¨ Ãª Ã­Ã Ã°ÃªÃ®Ã¯Ã°Ã¨Ã²Ã®Ã­Ã³, Ã¯Ã®Ã¤ÃºÃ¥Ã§Ã¦Ã Ã¿ Ãª Ã®Ã¯Ã Ã±Ã­Ã®Ã¬Ã³ Ã°Ã Ã©Ã®Ã­Ã³, Ã¢Ã±Ã¥ Ã®Ã¡Ã¿Ã§Ã Ã­Ã» Ã¨Ãµ Ã®Ã¤Ã¥Ã²Ã¼")
                                 wait(1500)
-                                sampSendChat(" Ïğèåõàâ íà òåğğèòîğèş ïğèòîíà, íóæíî ïîñòàâèòü îöåïëåíèå òàê, ÷òîáû çàãîğîäèòü âñå âîçìîæíûå ïóòè ê ñîçğåâàşùèì êóñòàì Êîíîïëè")
+                                sampSendChat(" ÃÃ°Ã¨Ã¥ÃµÃ Ã¢ Ã­Ã  Ã²Ã¥Ã°Ã°Ã¨Ã²Ã®Ã°Ã¨Ã¾ Ã¯Ã°Ã¨Ã²Ã®Ã­Ã , Ã­Ã³Ã¦Ã­Ã® Ã¯Ã®Ã±Ã²Ã Ã¢Ã¨Ã²Ã¼ Ã®Ã¶Ã¥Ã¯Ã«Ã¥Ã­Ã¨Ã¥ Ã²Ã Ãª, Ã·Ã²Ã®Ã¡Ã» Ã§Ã Ã£Ã®Ã°Ã®Ã¤Ã¨Ã²Ã¼ Ã¢Ã±Ã¥ Ã¢Ã®Ã§Ã¬Ã®Ã¦Ã­Ã»Ã¥ Ã¯Ã³Ã²Ã¨ Ãª Ã±Ã®Ã§Ã°Ã¥Ã¢Ã Ã¾Ã¹Ã¨Ã¬ ÃªÃ³Ã±Ã²Ã Ã¬ ÃŠÃ®Ã­Ã®Ã¯Ã«Ã¨")
                                 wait(1500)
-                                sampSendChat(" Î÷åíü âàæíûì çàìå÷àíèåì ÿâëÿåòñÿ òî, ÷òî íèêîìó, êğîìå àãåíòîâ, çàïğåùåíî ïîäõîäèòü ê êóñòàì, à òåì áîëåå èõ ñîáèğàòü")
+                                sampSendChat(" ÃÃ·Ã¥Ã­Ã¼ Ã¢Ã Ã¦Ã­Ã»Ã¬ Ã§Ã Ã¬Ã¥Ã·Ã Ã­Ã¨Ã¥Ã¬ Ã¿Ã¢Ã«Ã¿Ã¥Ã²Ã±Ã¿ Ã²Ã®, Ã·Ã²Ã® Ã­Ã¨ÃªÃ®Ã¬Ã³, ÃªÃ°Ã®Ã¬Ã¥ Ã Ã£Ã¥Ã­Ã²Ã®Ã¢, Ã§Ã Ã¯Ã°Ã¥Ã¹Ã¥Ã­Ã® Ã¯Ã®Ã¤ÃµÃ®Ã¤Ã¨Ã²Ã¼ Ãª ÃªÃ³Ã±Ã²Ã Ã¬, Ã  Ã²Ã¥Ã¬ Ã¡Ã®Ã«Ã¥Ã¥ Ã¨Ãµ Ã±Ã®Ã¡Ã¨Ã°Ã Ã²Ã¼")
                                 wait(1500)
-                                sampSendChat(" Íàğóøåíèå äàííîãî ïóíêòà ñòğîãî íàêàçûâàåòñÿ, âïëîòü äî óâîëüíåíèå")
+                                sampSendChat(" ÃÃ Ã°Ã³Ã¸Ã¥Ã­Ã¨Ã¥ Ã¤Ã Ã­Ã­Ã®Ã£Ã® Ã¯Ã³Ã­ÃªÃ²Ã  Ã±Ã²Ã°Ã®Ã£Ã® Ã­Ã ÃªÃ Ã§Ã»Ã¢Ã Ã¥Ã²Ã±Ã¿, Ã¢Ã¯Ã«Ã®Ã²Ã¼ Ã¤Ã® Ã³Ã¢Ã®Ã«Ã¼Ã­Ã¥Ã­Ã¨Ã¥")
                                 wait(1500)
-                                sampSendChat(" Òàê æå ïğèåõàâ íà ìåñòî, ìû íå óñòğàèâàåì ïàëüáó ïî âñåì, êîãî âèäèì")
+                                sampSendChat(" Ã’Ã Ãª Ã¦Ã¥ Ã¯Ã°Ã¨Ã¥ÃµÃ Ã¢ Ã­Ã  Ã¬Ã¥Ã±Ã²Ã®, Ã¬Ã» Ã­Ã¥ Ã³Ã±Ã²Ã°Ã Ã¨Ã¢Ã Ã¥Ã¬ Ã¯Ã Ã«Ã¼Ã¡Ã³ Ã¯Ã® Ã¢Ã±Ã¥Ã¬, ÃªÃ®Ã£Ã® Ã¢Ã¨Ã¤Ã¨Ã¬")
                                 wait(1500)
-                                sampSendChat(" Îòêğûâàòü îãîíü ïî ïîñòîğîííåìó ğàçğåøàåòñÿ òîëüêî â òîì ñëó÷àå, åñëè îí íàöåëèëñÿ íà âàñ îğóæèåì, íà÷àë àòàêîâàòü âàñ èëè ñîáèğàòü ñîçğåâøèå êóñòû")
+                                sampSendChat(" ÃÃ²ÃªÃ°Ã»Ã¢Ã Ã²Ã¼ Ã®Ã£Ã®Ã­Ã¼ Ã¯Ã® Ã¯Ã®Ã±Ã²Ã®Ã°Ã®Ã­Ã­Ã¥Ã¬Ã³ Ã°Ã Ã§Ã°Ã¥Ã¸Ã Ã¥Ã²Ã±Ã¿ Ã²Ã®Ã«Ã¼ÃªÃ® Ã¢ Ã²Ã®Ã¬ Ã±Ã«Ã³Ã·Ã Ã¥, Ã¥Ã±Ã«Ã¨ Ã®Ã­ Ã­Ã Ã¶Ã¥Ã«Ã¨Ã«Ã±Ã¿ Ã­Ã  Ã¢Ã Ã± Ã®Ã°Ã³Ã¦Ã¨Ã¥Ã¬, Ã­Ã Ã·Ã Ã« Ã Ã²Ã ÃªÃ®Ã¢Ã Ã²Ã¼ Ã¢Ã Ã± Ã¨Ã«Ã¨ Ã±Ã®Ã¡Ã¨Ã°Ã Ã²Ã¼ Ã±Ã®Ã§Ã°Ã¥Ã¢Ã¸Ã¨Ã¥ ÃªÃ³Ã±Ã²Ã»")
                                 wait(1500)
-                                sampSendChat(" Êàê òîëüêî ñïåö. îïåğàöèÿ çàêàí÷èâàåòñÿ, âñå îöåïëåíèå óáèğàåòñÿ")
+                                sampSendChat(" ÃŠÃ Ãª Ã²Ã®Ã«Ã¼ÃªÃ® Ã±Ã¯Ã¥Ã¶. Ã®Ã¯Ã¥Ã°Ã Ã¶Ã¨Ã¿ Ã§Ã ÃªÃ Ã­Ã·Ã¨Ã¢Ã Ã¥Ã²Ã±Ã¿, Ã¢Ã±Ã¥ Ã®Ã¶Ã¥Ã¯Ã«Ã¥Ã­Ã¨Ã¥ Ã³Ã¡Ã¨Ã°Ã Ã¥Ã²Ã±Ã¿")
                                 wait(1500)
-                                sampSendChat(" Íà ıòîì ëåêöèÿ îêîí÷åíà, âñåì ñïàñèáî")
+                                sampSendChat(" ÃÃ  Ã½Ã²Ã®Ã¬ Ã«Ã¥ÃªÃ¶Ã¨Ã¿ Ã®ÃªÃ®Ã­Ã·Ã¥Ã­Ã , Ã¢Ã±Ã¥Ã¬ Ã±Ã¯Ã Ã±Ã¨Ã¡Ã®")
                             end)
                         end
-                        if imgui.Button(u8"Ïğàâèëî ìèğàíäû.") then
+                        if imgui.Button(u8"ÃÃ°Ã Ã¢Ã¨Ã«Ã® Ã¬Ã¨Ã°Ã Ã­Ã¤Ã».") then
                             lua_thread.create(function()
-                                sampSendChat("Ïğàâèëî Ìèğàíäû — şğèäè÷åñêîå òğåáîâàíèå â ÑØÀ")
+                                sampSendChat("ÃÃ°Ã Ã¢Ã¨Ã«Ã® ÃŒÃ¨Ã°Ã Ã­Ã¤Ã» Â— Ã¾Ã°Ã¨Ã¤Ã¨Ã·Ã¥Ã±ÃªÃ®Ã¥ Ã²Ã°Ã¥Ã¡Ã®Ã¢Ã Ã­Ã¨Ã¥ Ã¢ Ã‘Ã˜Ã€")
                                 wait(1500)
-                                sampSendChat("Ñîãëàñíî êîòîğîìó âî âğåìÿ çàäåğæàíèÿ çàäåğæèâàåìûé äîëæåí áûòü óâåäîìëåí î ñâîèõ ïğàâàõ.")
+                                sampSendChat("Ã‘Ã®Ã£Ã«Ã Ã±Ã­Ã® ÃªÃ®Ã²Ã®Ã°Ã®Ã¬Ã³ Ã¢Ã® Ã¢Ã°Ã¥Ã¬Ã¿ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã¨Ã¿ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã¨Ã¢Ã Ã¥Ã¬Ã»Ã© Ã¤Ã®Ã«Ã¦Ã¥Ã­ Ã¡Ã»Ã²Ã¼ Ã³Ã¢Ã¥Ã¤Ã®Ã¬Ã«Ã¥Ã­ Ã® Ã±Ã¢Ã®Ã¨Ãµ Ã¯Ã°Ã Ã¢Ã Ãµ.")
                                 wait(1500)
-                                sampSendChat("İòî ïğàâèëî çà÷èòûâàşòñÿ çàäåğæàííîìó, à ÷èòàåò å¸ êòî ñàì çàäåğæàë åãî.")
+                                sampSendChat("ÃÃ²Ã® Ã¯Ã°Ã Ã¢Ã¨Ã«Ã® Ã§Ã Ã·Ã¨Ã²Ã»Ã¢Ã Ã¾Ã²Ã±Ã¿ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã­Ã®Ã¬Ã³, Ã  Ã·Ã¨Ã²Ã Ã¥Ã² Ã¥Â¸ ÃªÃ²Ã® Ã±Ã Ã¬ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã« Ã¥Ã£Ã®.")
                                 wait(1500)
-                                sampSendChat("İòî ôğàçà ãîâîğèòñÿ, êîãäà âû íàäåëè íà çàäåğæàííîãî íàğó÷íèêè.")
+                                sampSendChat("ÃÃ²Ã® Ã´Ã°Ã Ã§Ã  Ã£Ã®Ã¢Ã®Ã°Ã¨Ã²Ã±Ã¿, ÃªÃ®Ã£Ã¤Ã  Ã¢Ã» Ã­Ã Ã¤Ã¥Ã«Ã¨ Ã­Ã  Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã­Ã®Ã£Ã® Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨.")
                                 wait(1500)
-                                sampSendChat("Öèòèğóş ñàìó ôğàçó:")
+                                sampSendChat("Ã–Ã¨Ã²Ã¨Ã°Ã³Ã¾ Ã±Ã Ã¬Ã³ Ã´Ã°Ã Ã§Ã³:")
                                 wait(1500)
-                                sampSendChat("- Âû èìååòå ïğàâî õğàíèòü ìîë÷àíèå.")
+                                sampSendChat("- Ã‚Ã» Ã¨Ã¬Ã¥Ã¥Ã²Ã¥ Ã¯Ã°Ã Ã¢Ã® ÃµÃ°Ã Ã­Ã¨Ã²Ã¼ Ã¬Ã®Ã«Ã·Ã Ã­Ã¨Ã¥.")
                                 wait(1500)
-                                sampSendChat("- Âñ¸, ÷òî âû ñêàæåòå, ìîæåò è áóäåò èñïîëüçîâàíî ïğîòèâ âàñ â ñóäå.")
+                                sampSendChat("- Ã‚Ã±Â¸, Ã·Ã²Ã® Ã¢Ã» Ã±ÃªÃ Ã¦Ã¥Ã²Ã¥, Ã¬Ã®Ã¦Ã¥Ã² Ã¨ Ã¡Ã³Ã¤Ã¥Ã² Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã­Ã® Ã¯Ã°Ã®Ã²Ã¨Ã¢ Ã¢Ã Ã± Ã¢ Ã±Ã³Ã¤Ã¥.")
                                 wait(1500)
-                                sampSendChat("- Âàø àäâîêàò ìîæåò ïğèñóòñòâîâàòü ïğè äîïğîñå.")
+                                sampSendChat("- Ã‚Ã Ã¸ Ã Ã¤Ã¢Ã®ÃªÃ Ã² Ã¬Ã®Ã¦Ã¥Ã² Ã¯Ã°Ã¨Ã±Ã³Ã²Ã±Ã²Ã¢Ã®Ã¢Ã Ã²Ã¼ Ã¯Ã°Ã¨ Ã¤Ã®Ã¯Ã°Ã®Ã±Ã¥.")
                                 wait(1500)
-                                sampSendChat("- Åñëè âû íå ìîæåòå îïëàòèòü óñëóãè àäâîêàòà, îí áóäåò ïğåäîñòàâëåí âàì ãîñóäàğñòâîì.")
+                                sampSendChat("- Ã…Ã±Ã«Ã¨ Ã¢Ã» Ã­Ã¥ Ã¬Ã®Ã¦Ã¥Ã²Ã¥ Ã®Ã¯Ã«Ã Ã²Ã¨Ã²Ã¼ Ã³Ã±Ã«Ã³Ã£Ã¨ Ã Ã¤Ã¢Ã®ÃªÃ Ã²Ã , Ã®Ã­ Ã¡Ã³Ã¤Ã¥Ã² Ã¯Ã°Ã¥Ã¤Ã®Ã±Ã²Ã Ã¢Ã«Ã¥Ã­ Ã¢Ã Ã¬ Ã£Ã®Ã±Ã³Ã¤Ã Ã°Ã±Ã²Ã¢Ã®Ã¬.")
                                 wait(1500)
-                                sampSendChat("- Âû ïîíèìàåòå ñâîè ïğàâà?")
+                                sampSendChat("- Ã‚Ã» Ã¯Ã®Ã­Ã¨Ã¬Ã Ã¥Ã²Ã¥ Ã±Ã¢Ã®Ã¨ Ã¯Ã°Ã Ã¢Ã ?")
                             end)
                         end
-                        if imgui.Button(u8"Ïåğâàÿ Ïîìîùü.") then
+                        if imgui.Button(u8"ÃÃ¥Ã°Ã¢Ã Ã¿ ÃÃ®Ã¬Ã®Ã¹Ã¼.") then
                             lua_thread.create(function()
-                                sampSendChat("Äëÿ íà÷àëà îïğåäåëèìñÿ ÷òî ñ ïîñòğàäàâøèì")
+                                sampSendChat("Ã„Ã«Ã¿ Ã­Ã Ã·Ã Ã«Ã  Ã®Ã¯Ã°Ã¥Ã¤Ã¥Ã«Ã¨Ã¬Ã±Ã¿ Ã·Ã²Ã® Ã± Ã¯Ã®Ã±Ã²Ã°Ã Ã¤Ã Ã¢Ã¸Ã¨Ã¬")
                                 wait(1500)
-                                sampSendChat("Åñëè, ó ïîñòğàäàâøåãî êğîâîòå÷åíèå, òî íåîáõîäèìî îñòàíîâèòü ïîòîê êğîâè æãóòîì")
+                                sampSendChat("Ã…Ã±Ã«Ã¨, Ã³ Ã¯Ã®Ã±Ã²Ã°Ã Ã¤Ã Ã¢Ã¸Ã¥Ã£Ã® ÃªÃ°Ã®Ã¢Ã®Ã²Ã¥Ã·Ã¥Ã­Ã¨Ã¥, Ã²Ã® Ã­Ã¥Ã®Ã¡ÃµÃ®Ã¤Ã¨Ã¬Ã® Ã®Ã±Ã²Ã Ã­Ã®Ã¢Ã¨Ã²Ã¼ Ã¯Ã®Ã²Ã®Ãª ÃªÃ°Ã®Ã¢Ã¨ Ã¦Ã£Ã³Ã²Ã®Ã¬")
                                 wait(1500)
-                                sampSendChat("Åñëè ğàíåíèå íåáîëüøîå äîñòàòî÷íî äîñòàòü íàáîğ ïåğâîé ïîìîùè è ïåğåâÿçàòü ğàíó áèíòîì")
+                                sampSendChat("Ã…Ã±Ã«Ã¨ Ã°Ã Ã­Ã¥Ã­Ã¨Ã¥ Ã­Ã¥Ã¡Ã®Ã«Ã¼Ã¸Ã®Ã¥ Ã¤Ã®Ã±Ã²Ã Ã²Ã®Ã·Ã­Ã® Ã¤Ã®Ã±Ã²Ã Ã²Ã¼ Ã­Ã Ã¡Ã®Ã° Ã¯Ã¥Ã°Ã¢Ã®Ã© Ã¯Ã®Ã¬Ã®Ã¹Ã¨ Ã¨ Ã¯Ã¥Ã°Ã¥Ã¢Ã¿Ã§Ã Ã²Ã¼ Ã°Ã Ã­Ã³ Ã¡Ã¨Ã­Ã²Ã®Ã¬")
                                 wait(1500)
-                                sampSendChat("Åñëè â ğàíå ïóëÿ, è ğàíà íå ãëóáîêàÿ, Âû äîëæíû âûçâàòü ñêîğóş ëèáî âûòàùèòü åå ñêàëüïåëåì, ñêàëüïåëü òàêæå íàõîäèòñÿ â àïòå÷êå ïåğâîé ïîìîùè")
+                                sampSendChat("Ã…Ã±Ã«Ã¨ Ã¢ Ã°Ã Ã­Ã¥ Ã¯Ã³Ã«Ã¿, Ã¨ Ã°Ã Ã­Ã  Ã­Ã¥ Ã£Ã«Ã³Ã¡Ã®ÃªÃ Ã¿, Ã‚Ã» Ã¤Ã®Ã«Ã¦Ã­Ã» Ã¢Ã»Ã§Ã¢Ã Ã²Ã¼ Ã±ÃªÃ®Ã°Ã³Ã¾ Ã«Ã¨Ã¡Ã® Ã¢Ã»Ã²Ã Ã¹Ã¨Ã²Ã¼ Ã¥Ã¥ Ã±ÃªÃ Ã«Ã¼Ã¯Ã¥Ã«Ã¥Ã¬, Ã±ÃªÃ Ã«Ã¼Ã¯Ã¥Ã«Ã¼ Ã²Ã ÃªÃ¦Ã¥ Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ Ã¢ Ã Ã¯Ã²Ã¥Ã·ÃªÃ¥ Ã¯Ã¥Ã°Ã¢Ã®Ã© Ã¯Ã®Ã¬Ã®Ã¹Ã¨")
                                 wait(1500)
-                                sampSendChat("Åñëè ÷åëîâåê áåç ñîçíàíèÿ âàì íóæíî ... ")
+                                sampSendChat("Ã…Ã±Ã«Ã¨ Ã·Ã¥Ã«Ã®Ã¢Ã¥Ãª Ã¡Ã¥Ã§ Ã±Ã®Ã§Ã­Ã Ã­Ã¨Ã¿ Ã¢Ã Ã¬ Ã­Ã³Ã¦Ã­Ã® ... ")
                                 wait(1500)
-                                sampSendChat(" ... äîñòàòü èç íàáîğ ïåğâîé ïîìîùè âàòó è ñïèğò, çàòåì íàìî÷èòü âàòó ñïèğòîì ... ")
+                                sampSendChat(" ... Ã¤Ã®Ã±Ã²Ã Ã²Ã¼ Ã¨Ã§ Ã­Ã Ã¡Ã®Ã° Ã¯Ã¥Ã°Ã¢Ã®Ã© Ã¯Ã®Ã¬Ã®Ã¹Ã¨ Ã¢Ã Ã²Ã³ Ã¨ Ã±Ã¯Ã¨Ã°Ã², Ã§Ã Ã²Ã¥Ã¬ Ã­Ã Ã¬Ã®Ã·Ã¨Ã²Ã¼ Ã¢Ã Ã²Ã³ Ã±Ã¯Ã¨Ã°Ã²Ã®Ã¬ ... ")
                                 wait(1500)
-                                sampSendChat(" ... è ïğîâåñòè âàòêîé ñî ñïèğòîì îêîëî íîñà ïîñòğàäàâøåãî, â ıòîì ñëó÷àå, îí äîëæåí î÷íóòüñÿ")
+                                sampSendChat(" ... Ã¨ Ã¯Ã°Ã®Ã¢Ã¥Ã±Ã²Ã¨ Ã¢Ã Ã²ÃªÃ®Ã© Ã±Ã® Ã±Ã¯Ã¨Ã°Ã²Ã®Ã¬ Ã®ÃªÃ®Ã«Ã® Ã­Ã®Ã±Ã  Ã¯Ã®Ã±Ã²Ã°Ã Ã¤Ã Ã¢Ã¸Ã¥Ã£Ã®, Ã¢ Ã½Ã²Ã®Ã¬ Ã±Ã«Ã³Ã·Ã Ã¥, Ã®Ã­ Ã¤Ã®Ã«Ã¦Ã¥Ã­ Ã®Ã·Ã­Ã³Ã²Ã¼Ã±Ã¿")
                                 wait(1500)
-                                sampSendChat("Íà ıòîì ëåêöèÿ îêîí÷åíà. Ó êîãî-òî åñòü âîïğîñû ïî äàííîé ëåêöèè?") wait(1500)
+                                sampSendChat("ÃÃ  Ã½Ã²Ã®Ã¬ Ã«Ã¥ÃªÃ¶Ã¨Ã¿ Ã®ÃªÃ®Ã­Ã·Ã¥Ã­Ã . Ã“ ÃªÃ®Ã£Ã®-Ã²Ã® Ã¥Ã±Ã²Ã¼ Ã¢Ã®Ã¯Ã°Ã®Ã±Ã» Ã¯Ã® Ã¤Ã Ã­Ã­Ã®Ã© Ã«Ã¥ÃªÃ¶Ã¨Ã¨?") wait(1500)
                             end)
                         end
                     end
                 end
                 if rang_n > 8 then
-                    if imgui.Button(u8'Ïàíåëü ëèäåğà/çàìåñòèòåëÿ') then
+                    if imgui.Button(u8'ÃÃ Ã­Ã¥Ã«Ã¼ Ã«Ã¨Ã¤Ã¥Ã°Ã /Ã§Ã Ã¬Ã¥Ã±Ã²Ã¨Ã²Ã¥Ã«Ã¿') then
                         leaderPanel[0] = not leaderPanel[0]
                     end
                 end
             elseif tab == 5 then
-                if imgui.CollapsingHeader(u8 'ÓÊ') then
+                if imgui.CollapsingHeader(u8 'Ã“ÃŠ') then
                     for i = 1, #tableUk["Text"] do
-                        imgui.Text(u8(tableUk["Text"][i] .. ' Óğîâåíü ğîçûñêà: ' .. tableUk["Text"][i]))
+                        imgui.Text(u8(tableUk["Text"][i] .. ' Ã“Ã°Ã®Ã¢Ã¥Ã­Ã¼ Ã°Ã®Ã§Ã»Ã±ÃªÃ : ' .. tableUk["Text"][i]))
                     end
                 end
-                if imgui.CollapsingHeader(u8 'Òåí-êîäû') then
-                    imgui.Text(u8"10-1 - Âñòğå÷à âñåõ îôèöåğîâ íà äåæóğñòâå (óêàçûâàÿ ëîêàöèş è êîä).")
-                    imgui.Text(u8"10-2 - Âûøåë â ïàòğóëü.")
-                    imgui.Text(u8"10-2R: Çàêîí÷èë ïàòğóëü.")
-                    imgui.Text(u8"10-3 - Ğàäèîìîë÷àíèå (óêàçûâàÿ äëèòåëüíîñòü).")
-                    imgui.Text(u8"10-4 - Ïğèíÿòî.")
-                    imgui.Text(u8"10-5 - Ïîâòîğèòå.")
-                    imgui.Text(u8"10-6 - Íå ïğèíÿòî/íåâåğíî/íåò.")
-                    imgui.Text(u8"10-7 - Îæèäàéòå.")
-                    imgui.Text(u8"10-8 - Íåäîñòóïåí.")
-                    imgui.Text(u8"10-14 - Çàïğîñ òğàíñïîğòèğîâêè (óêàçûâàÿ ëîêàöèş è öåëü òğàíñïîğòèğîâêè).")
-                    imgui.Text(u8"10-15 - Ïîäîçğåâàåìûå àğåñòîâàíû (óêàçûâàÿ êîëè÷åñòâî ïîäîçğåâàåìûõ è ëîêàöèş).")
-                    imgui.Text(u8"10-18 - Òğåáóåòñÿ ïîääåğæêà äîïîëíèòåëüíûõ şíèòîâ.")
-                    imgui.Text(u8"10-20 - Ëîêàöèÿ.")
-                    imgui.Text(u8"10-21 - Îïèñàíèå ñèòóàöèè.")
-                    imgui.Text(u8"10-22 - Íàïğàâëÿşñü â ....")
-                    imgui.Text(u8"10-27 - Ñìåíà ìàğêèğîâêè ïàòğóëÿ (óêàçûâàÿ ñòàğóş ìàğêèğîâêó è íîâóş).")
-                    imgui.Text(u8"10-30 - Äîğîæíî-òğàíñïîğòíîå ïğîèñøåñòâèå.")
-                    imgui.Text(u8"10-40 - Áîëüøîå ñêîïëåíèå ëşäåé (áîëåå 4).")
-                    imgui.Text(u8"10-41 - Íåëåãàëüíàÿ àêòèâíîñòü.")
-                    imgui.Text(u8"10-46 - Ïğîâîæó îáûñê.")
-                    imgui.Text(u8"10-55 - Îáû÷íûé Òğàôôèê Ñòîï.")
-                    imgui.Text(u8"10-57 VICTOR - Ïîãîíÿ çà àâòîìîáèëåì (óêàçûâàÿ ìîäåëü àâòî, öâåò àâòî, êîëè÷åñòâî ÷åëîâåê âíóòğè, ëîêàöèş, íàïğàâëåíèå äâèæåíèÿ).")
-                    imgui.Text(u8"10-57 FOXTROT - Ïåøàÿ ïîãîíÿ (óêàçûâàÿ âíåøíîñòü ïîäîçğåâàåìîãî, îğóæèå (ïğè íàëè÷èè èíôîğìàöèè î âîîğóæåíèè), ëîêàöèÿ, íàïğàâëåíèå äâèæåíèÿ).")
-                    imgui.Text(u8"10-60 - Èíôîğìàöèÿ îá àâòîìîáèëå (óêàçûâàÿ ìîäåëü àâòî, öâåò, êîëè÷åñòâî ÷åëîâåê âíóòğè).")
-                    imgui.Text(u8"10-61 - Èíôîğìàöèÿ î ïåøåì ïîäîçğåâàåìîì (óêàçûâàÿ ğàñó, îäåæäó).")
-                    imgui.Text(u8"10-66 - Òğàôôèê Ñòîï ïîâûøåíîãî ğèñêà.")
-                    imgui.Text(u8"10-70 - Çàïğîñ ïîääåğæêè (â îòëè÷èè îò 10-18 íåîáõîäèìî óêàçàòü êîëè÷åñòâî şíèòîâ è êîä).")
-                    imgui.Text(u8"10-71 - Çàïğîñ ìåäèöèíñêîé ïîääåğæêè.")
-                    imgui.Text(u8"10-99 - Ñèòóàöèÿ óğåãóëèğîâàíà.")
-                    imgui.Text(u8"10-100 - Íàğóøåíèå şğèñäèêöèè ")
+                if imgui.CollapsingHeader(u8 'Ã’Ã¥Ã­-ÃªÃ®Ã¤Ã»') then
+                    imgui.Text(u8"10-1 - Ã‚Ã±Ã²Ã°Ã¥Ã·Ã  Ã¢Ã±Ã¥Ãµ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¢ Ã­Ã  Ã¤Ã¥Ã¦Ã³Ã°Ã±Ã²Ã¢Ã¥ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾ Ã¨ ÃªÃ®Ã¤).")
+                    imgui.Text(u8"10-2 - Ã‚Ã»Ã¸Ã¥Ã« Ã¢ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼.")
+                    imgui.Text(u8"10-2R: Ã‡Ã ÃªÃ®Ã­Ã·Ã¨Ã« Ã¯Ã Ã²Ã°Ã³Ã«Ã¼.")
+                    imgui.Text(u8"10-3 - ÃÃ Ã¤Ã¨Ã®Ã¬Ã®Ã«Ã·Ã Ã­Ã¨Ã¥ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã¤Ã«Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã®Ã±Ã²Ã¼).")
+                    imgui.Text(u8"10-4 - ÃÃ°Ã¨Ã­Ã¿Ã²Ã®.")
+                    imgui.Text(u8"10-5 - ÃÃ®Ã¢Ã²Ã®Ã°Ã¨Ã²Ã¥.")
+                    imgui.Text(u8"10-6 - ÃÃ¥ Ã¯Ã°Ã¨Ã­Ã¿Ã²Ã®/Ã­Ã¥Ã¢Ã¥Ã°Ã­Ã®/Ã­Ã¥Ã².")
+                    imgui.Text(u8"10-7 - ÃÃ¦Ã¨Ã¤Ã Ã©Ã²Ã¥.")
+                    imgui.Text(u8"10-8 - ÃÃ¥Ã¤Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­.")
+                    imgui.Text(u8"10-14 - Ã‡Ã Ã¯Ã°Ã®Ã± Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã¨Ã°Ã®Ã¢ÃªÃ¨ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾ Ã¨ Ã¶Ã¥Ã«Ã¼ Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã¨Ã°Ã®Ã¢ÃªÃ¨).")
+                    imgui.Text(u8"10-15 - ÃÃ®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã»Ã¥ Ã Ã°Ã¥Ã±Ã²Ã®Ã¢Ã Ã­Ã» (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã® Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã»Ãµ Ã¨ Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾).")
+                    imgui.Text(u8"10-18 - Ã’Ã°Ã¥Ã¡Ã³Ã¥Ã²Ã±Ã¿ Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦ÃªÃ  Ã¤Ã®Ã¯Ã®Ã«Ã­Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã»Ãµ Ã¾Ã­Ã¨Ã²Ã®Ã¢.")
+                    imgui.Text(u8"10-20 - Ã‹Ã®ÃªÃ Ã¶Ã¨Ã¿.")
+                    imgui.Text(u8"10-21 - ÃÃ¯Ã¨Ã±Ã Ã­Ã¨Ã¥ Ã±Ã¨Ã²Ã³Ã Ã¶Ã¨Ã¨.")
+                    imgui.Text(u8"10-22 - ÃÃ Ã¯Ã°Ã Ã¢Ã«Ã¿Ã¾Ã±Ã¼ Ã¢ ....")
+                    imgui.Text(u8"10-27 - Ã‘Ã¬Ã¥Ã­Ã  Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ¨ Ã¯Ã Ã²Ã°Ã³Ã«Ã¿ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã±Ã²Ã Ã°Ã³Ã¾ Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ³ Ã¨ Ã­Ã®Ã¢Ã³Ã¾).")
+                    imgui.Text(u8"10-30 - Ã„Ã®Ã°Ã®Ã¦Ã­Ã®-Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã­Ã®Ã¥ Ã¯Ã°Ã®Ã¨Ã±Ã¸Ã¥Ã±Ã²Ã¢Ã¨Ã¥.")
+                    imgui.Text(u8"10-40 - ÃÃ®Ã«Ã¼Ã¸Ã®Ã¥ Ã±ÃªÃ®Ã¯Ã«Ã¥Ã­Ã¨Ã¥ Ã«Ã¾Ã¤Ã¥Ã© (Ã¡Ã®Ã«Ã¥Ã¥ 4).")
+                    imgui.Text(u8"10-41 - ÃÃ¥Ã«Ã¥Ã£Ã Ã«Ã¼Ã­Ã Ã¿ Ã ÃªÃ²Ã¨Ã¢Ã­Ã®Ã±Ã²Ã¼.")
+                    imgui.Text(u8"10-46 - ÃÃ°Ã®Ã¢Ã®Ã¦Ã³ Ã®Ã¡Ã»Ã±Ãª.")
+                    imgui.Text(u8"10-55 - ÃÃ¡Ã»Ã·Ã­Ã»Ã© Ã’Ã°Ã Ã´Ã´Ã¨Ãª Ã‘Ã²Ã®Ã¯.")
+                    imgui.Text(u8"10-57 VICTOR - ÃÃ®Ã£Ã®Ã­Ã¿ Ã§Ã  Ã Ã¢Ã²Ã®Ã¬Ã®Ã¡Ã¨Ã«Ã¥Ã¬ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã¬Ã®Ã¤Ã¥Ã«Ã¼ Ã Ã¢Ã²Ã®, Ã¶Ã¢Ã¥Ã² Ã Ã¢Ã²Ã®, ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã® Ã·Ã¥Ã«Ã®Ã¢Ã¥Ãª Ã¢Ã­Ã³Ã²Ã°Ã¨, Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾, Ã­Ã Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¿).")
+                    imgui.Text(u8"10-57 FOXTROT - ÃÃ¥Ã¸Ã Ã¿ Ã¯Ã®Ã£Ã®Ã­Ã¿ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã¢Ã­Ã¥Ã¸Ã­Ã®Ã±Ã²Ã¼ Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã®Ã£Ã®, Ã®Ã°Ã³Ã¦Ã¨Ã¥ (Ã¯Ã°Ã¨ Ã­Ã Ã«Ã¨Ã·Ã¨Ã¨ Ã¨Ã­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¨ Ã® Ã¢Ã®Ã®Ã°Ã³Ã¦Ã¥Ã­Ã¨Ã¨), Ã«Ã®ÃªÃ Ã¶Ã¨Ã¿, Ã­Ã Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¿).")
+                    imgui.Text(u8"10-60 - ÃˆÃ­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¿ Ã®Ã¡ Ã Ã¢Ã²Ã®Ã¬Ã®Ã¡Ã¨Ã«Ã¥ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã¬Ã®Ã¤Ã¥Ã«Ã¼ Ã Ã¢Ã²Ã®, Ã¶Ã¢Ã¥Ã², ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã® Ã·Ã¥Ã«Ã®Ã¢Ã¥Ãª Ã¢Ã­Ã³Ã²Ã°Ã¨).")
+                    imgui.Text(u8"10-61 - ÃˆÃ­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¿ Ã® Ã¯Ã¥Ã¸Ã¥Ã¬ Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã®Ã¬ (Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã°Ã Ã±Ã³, Ã®Ã¤Ã¥Ã¦Ã¤Ã³).")
+                    imgui.Text(u8"10-66 - Ã’Ã°Ã Ã´Ã´Ã¨Ãª Ã‘Ã²Ã®Ã¯ Ã¯Ã®Ã¢Ã»Ã¸Ã¥Ã­Ã®Ã£Ã® Ã°Ã¨Ã±ÃªÃ .")
+                    imgui.Text(u8"10-70 - Ã‡Ã Ã¯Ã°Ã®Ã± Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦ÃªÃ¨ (Ã¢ Ã®Ã²Ã«Ã¨Ã·Ã¨Ã¨ Ã®Ã² 10-18 Ã­Ã¥Ã®Ã¡ÃµÃ®Ã¤Ã¨Ã¬Ã® Ã³ÃªÃ Ã§Ã Ã²Ã¼ ÃªÃ®Ã«Ã¨Ã·Ã¥Ã±Ã²Ã¢Ã® Ã¾Ã­Ã¨Ã²Ã®Ã¢ Ã¨ ÃªÃ®Ã¤).")
+                    imgui.Text(u8"10-71 - Ã‡Ã Ã¯Ã°Ã®Ã± Ã¬Ã¥Ã¤Ã¨Ã¶Ã¨Ã­Ã±ÃªÃ®Ã© Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦ÃªÃ¨.")
+                    imgui.Text(u8"10-99 - Ã‘Ã¨Ã²Ã³Ã Ã¶Ã¨Ã¿ Ã³Ã°Ã¥Ã£Ã³Ã«Ã¨Ã°Ã®Ã¢Ã Ã­Ã .")
+                    imgui.Text(u8"10-100 - ÃÃ Ã°Ã³Ã¸Ã¥Ã­Ã¨Ã¥ Ã¾Ã°Ã¨Ã±Ã¤Ã¨ÃªÃ¶Ã¨Ã¨ ")
                 end
-                if imgui.CollapsingHeader(u8 'Ìàğêèğîâêè ïàòğóëåé') then
-                    imgui.CenterText('Ìàğêèğîâêè ïàòğóëüíûõ àâòîìîáèëåé')
-                    imgui.Text(u8"* ADAM (A) - ìàğêèğîâêà ïàòğóëÿ ñ äâóìÿ îôèöåğàìè íà êğóçåğ")
-                    imgui.Text(u8"* LINCOLN (L) - ìàğêèğîâêè ïàòğóëÿ ñ îäíèì îôèöåğîì íà êğóçåğ")
-                    imgui.Text(u8"* LINCOLN 10/20/30/40/50/60 - ìàğêèğîâêà ñóïåğâàéçåğà")
-                    imgui.CenterText('Ìàğêèğîâêè äğóãèõ òğàíñïîğòíûõ ñğåäñòâ')
-                    imgui.Text(u8"* MARY (M) - ìàğêèğîâêà ìîòîöèêëåòíîãî ïàòğóëÿ")
-                    imgui.Text(u8"* AIR (AIR) - ìàğêèğîâêà şíèòà Air Support Division")
-                    imgui.Text(u8"* AIR-100 - ìàğêèğîâêà ñóïåğâàéçåğà Air Support Division")
-                    imgui.Text(u8"* AIR-10 - ìàğêèğîâêà ñïàñàòåëüíîãî şíèòà Air Support Division")
-                    imgui.Text(u8"* EDWARD (E) - ìàğêèğîâêà Tow Unit")
+                if imgui.CollapsingHeader(u8 'ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ¨ Ã¯Ã Ã²Ã°Ã³Ã«Ã¥Ã©') then
+                    imgui.CenterText('ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ¨ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼Ã­Ã»Ãµ Ã Ã¢Ã²Ã®Ã¬Ã®Ã¡Ã¨Ã«Ã¥Ã©')
+                    imgui.Text(u8"* ADAM (A) - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¯Ã Ã²Ã°Ã³Ã«Ã¿ Ã± Ã¤Ã¢Ã³Ã¬Ã¿ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã Ã¬Ã¨ Ã­Ã  ÃªÃ°Ã³Ã§Ã¥Ã°")
+                    imgui.Text(u8"* LINCOLN (L) - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ¨ Ã¯Ã Ã²Ã°Ã³Ã«Ã¿ Ã± Ã®Ã¤Ã­Ã¨Ã¬ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¬ Ã­Ã  ÃªÃ°Ã³Ã§Ã¥Ã°")
+                    imgui.Text(u8"* LINCOLN 10/20/30/40/50/60 - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã±Ã³Ã¯Ã¥Ã°Ã¢Ã Ã©Ã§Ã¥Ã°Ã ")
+                    imgui.CenterText('ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ¨ Ã¤Ã°Ã³Ã£Ã¨Ãµ Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã­Ã»Ãµ Ã±Ã°Ã¥Ã¤Ã±Ã²Ã¢')
+                    imgui.Text(u8"* MARY (M) - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¬Ã®Ã²Ã®Ã¶Ã¨ÃªÃ«Ã¥Ã²Ã­Ã®Ã£Ã® Ã¯Ã Ã²Ã°Ã³Ã«Ã¿")
+                    imgui.Text(u8"* AIR (AIR) - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¾Ã­Ã¨Ã²Ã  Air Support Division")
+                    imgui.Text(u8"* AIR-100 - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã±Ã³Ã¯Ã¥Ã°Ã¢Ã Ã©Ã§Ã¥Ã°Ã  Air Support Division")
+                    imgui.Text(u8"* AIR-10 - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã±Ã¯Ã Ã±Ã Ã²Ã¥Ã«Ã¼Ã­Ã®Ã£Ã® Ã¾Ã­Ã¨Ã²Ã  Air Support Division")
+                    imgui.Text(u8"* EDWARD (E) - Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Tow Unit")
                 end
 
             elseif tab == 6 then
-                imgui.Checkbox(u8 'Àâòî îòûãğîâêà îğóæèÿ', autogun)
+                imgui.Checkbox(u8 'Ã€Ã¢Ã²Ã® Ã®Ã²Ã»Ã£Ã°Ã®Ã¢ÃªÃ  Ã®Ã°Ã³Ã¦Ã¨Ã¿', autogun)
                 if autogun[0] then
                     lua_thread.create(function()
                         while true do
@@ -999,79 +999,79 @@ imgui.OnFrame(
                             if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
                                 local gun = getCurrentCharWeapon(PLAYER_PED)
                                 if gun == 3 then
-                                    sampSendChat("/me äîñòàë äóáèíêó ñ ïîÿñíîãî äåğæàòåëÿ")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¤Ã³Ã¡Ã¨Ã­ÃªÃ³ Ã± Ã¯Ã®Ã¿Ã±Ã­Ã®Ã£Ã® Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿")
                                 elseif gun == 16 then
-                                    sampSendChat("/me âçÿë ñ ïîÿñà ãğàíàòó")
+                                    sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã± Ã¯Ã®Ã¿Ã±Ã  Ã£Ã°Ã Ã­Ã Ã²Ã³")
                                 elseif gun == 17 then
-                                    sampSendChat("/me âçÿë ãğàíàòó ñëåçîòî÷èâîãî ãàçà ñ ïîÿñà")
+                                    sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã£Ã°Ã Ã­Ã Ã²Ã³ Ã±Ã«Ã¥Ã§Ã®Ã²Ã®Ã·Ã¨Ã¢Ã®Ã£Ã® Ã£Ã Ã§Ã  Ã± Ã¯Ã®Ã¿Ã±Ã ")
                                 elseif gun == 23 then
-                                    sampSendChat("/me äîñòàë òàéçåğ ñ êîáóğû, óáğàë ïğåäîõğàíèòåëü")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã²Ã Ã©Ã§Ã¥Ã° Ã± ÃªÃ®Ã¡Ã³Ã°Ã», Ã³Ã¡Ã°Ã Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼")
                                 elseif gun == 22 then
-                                    sampSendChat("/me äîñòàë ïèñòîëåò Colt-45, ñíÿë ïğåäîõğàíèòåëü")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã¨Ã±Ã²Ã®Ã«Ã¥Ã² Colt-45, Ã±Ã­Ã¿Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼")
                                 elseif gun == 24 then
-                                    sampSendChat("/me äîñòàë Desert Eagle ñ êîáóğû, óáğàë ïğåäîõğàíèòåëü")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Desert Eagle Ã± ÃªÃ®Ã¡Ã³Ã°Ã», Ã³Ã¡Ã°Ã Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼")
                                 elseif gun == 25 then
-                                    sampSendChat("/me äîñòàë ÷åõîë ñî ñïèíû, âçÿë äğîáîâèê è óáğàë ïğåäîõğàíèòåëü")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã·Ã¥ÃµÃ®Ã« Ã±Ã® Ã±Ã¯Ã¨Ã­Ã», Ã¢Ã§Ã¿Ã« Ã¤Ã°Ã®Ã¡Ã®Ã¢Ã¨Ãª Ã¨ Ã³Ã¡Ã°Ã Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼")
                                 elseif gun == 26 then
-                                    sampSendChat("/me ğåçêèì äâèæåíèåì îáîèõ ğóê, ñíÿë âîåííûé ğşêçàê ñ ïëå÷ è äîñòàë Îáğåçû")
+                                    sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã¡Ã®Ã¨Ãµ Ã°Ã³Ãª, Ã±Ã­Ã¿Ã« Ã¢Ã®Ã¥Ã­Ã­Ã»Ã© Ã°Ã¾ÃªÃ§Ã Ãª Ã± Ã¯Ã«Ã¥Ã· Ã¨ Ã¤Ã®Ã±Ã²Ã Ã« ÃÃ¡Ã°Ã¥Ã§Ã»")
                                 elseif gun == 27 then
-                                    sampSendChat("/me äîñòàë äğîáîâèê Spas, ñíÿë ïğåäîõğàíèòåëü")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¤Ã°Ã®Ã¡Ã®Ã¢Ã¨Ãª Spas, Ã±Ã­Ã¿Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼")
                                 elseif gun == 28 then
-                                    sampSendChat("/me ğåçêèì äâèæåíèåì îáîèõ ğóê, ñíÿë âîåííûé ğşêçàê ñ ïëå÷ è äîñòàë ÓÇÈ")
+                                    sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã¡Ã®Ã¨Ãµ Ã°Ã³Ãª, Ã±Ã­Ã¿Ã« Ã¢Ã®Ã¥Ã­Ã­Ã»Ã© Ã°Ã¾ÃªÃ§Ã Ãª Ã± Ã¯Ã«Ã¥Ã· Ã¨ Ã¤Ã®Ã±Ã²Ã Ã« Ã“Ã‡Ãˆ")
                                 elseif gun == 29 then
-                                    sampSendChat("/me äîñòàë ÷åõîë ñî ñïèíû, âçÿë ÌÏ5 è óáğàë ïğåäîõğàíèòåëü")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã·Ã¥ÃµÃ®Ã« Ã±Ã® Ã±Ã¯Ã¨Ã­Ã», Ã¢Ã§Ã¿Ã« ÃŒÃ5 Ã¨ Ã³Ã¡Ã°Ã Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼")
                                 elseif gun == 30 then
-                                    sampSendChat("/me äîñòàë êàğàáèí AK-47 ñî ñïèíû")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« ÃªÃ Ã°Ã Ã¡Ã¨Ã­ AK-47 Ã±Ã® Ã±Ã¯Ã¨Ã­Ã»")
                                 elseif gun == 31 then
-                                    sampSendChat("/me äîñòàë êàğàáèí Ì4 ñî ñïèíû")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« ÃªÃ Ã°Ã Ã¡Ã¨Ã­ ÃŒ4 Ã±Ã® Ã±Ã¯Ã¨Ã­Ã»")
                                 elseif gun == 32 then
-                                    sampSendChat("/me ğåçêèì äâèæåíèåì îáîèõ ğóê, ñíÿë âîåííûé ğşêçàê ñ ïëå÷ è äîñòàë TEC-9")
+                                    sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã¡Ã®Ã¨Ãµ Ã°Ã³Ãª, Ã±Ã­Ã¿Ã« Ã¢Ã®Ã¥Ã­Ã­Ã»Ã© Ã°Ã¾ÃªÃ§Ã Ãª Ã± Ã¯Ã«Ã¥Ã· Ã¨ Ã¤Ã®Ã±Ã²Ã Ã« TEC-9")
                                 elseif gun == 33 then
-                                    sampSendChat("/me äîñòàë âèíòîâêó áåç ïğèöåëà èç âîåííîé ñóìêè")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¢Ã¨Ã­Ã²Ã®Ã¢ÃªÃ³ Ã¡Ã¥Ã§ Ã¯Ã°Ã¨Ã¶Ã¥Ã«Ã  Ã¨Ã§ Ã¢Ã®Ã¥Ã­Ã­Ã®Ã© Ã±Ã³Ã¬ÃªÃ¨")
                                 elseif gun == 34 then
-                                    sampSendChat("/me äîñòàë Ñíàéïåğñêóş âèíòîâêó ñ âîåííîé ñóìêè")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã‘Ã­Ã Ã©Ã¯Ã¥Ã°Ã±ÃªÃ³Ã¾ Ã¢Ã¨Ã­Ã²Ã®Ã¢ÃªÃ³ Ã± Ã¢Ã®Ã¥Ã­Ã­Ã®Ã© Ã±Ã³Ã¬ÃªÃ¨")
                                 elseif gun == 43 then
-                                    sampSendChat("/me äîñòàë ôîòîêàìåğó èç ğşêçàêà")
+                                    sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã´Ã®Ã²Ã®ÃªÃ Ã¬Ã¥Ã°Ã³ Ã¨Ã§ Ã°Ã¾ÃªÃ§Ã ÃªÃ ")
                                 elseif gun == 0 then
-                                    sampSendChat("/me ïîñòàâèë ïğåäîõğàíèòåëü, óáğàë îğóæèå")
+                                    sampSendChat("/me Ã¯Ã®Ã±Ã²Ã Ã¢Ã¨Ã« Ã¯Ã°Ã¥Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¥Ã«Ã¼, Ã³Ã¡Ã°Ã Ã« Ã®Ã°Ã³Ã¦Ã¨Ã¥")
                                 end
                                 lastgun = gun
                             end
                         end
                     end)
                 end
-                imgui.Checkbox(u8'Àâòî-äîêëàä ïàòğóëÿ êàæäûå 10 ìèíóò(âêëş÷àòü ïğè íà÷àëå)/]. Âñåãî 30 ìèíóò', patrul)
-                imgui.InputText(u8'Íèê âàøåãî íàïàğíèêà(íà àíãëèñêîì)', partner, 255)
+                imgui.Checkbox(u8'Ã€Ã¢Ã²Ã®-Ã¤Ã®ÃªÃ«Ã Ã¤ Ã¯Ã Ã²Ã°Ã³Ã«Ã¿ ÃªÃ Ã¦Ã¤Ã»Ã¥ 10 Ã¬Ã¨Ã­Ã³Ã²(Ã¢ÃªÃ«Ã¾Ã·Ã Ã²Ã¼ Ã¯Ã°Ã¨ Ã­Ã Ã·Ã Ã«Ã¥)/]. Ã‚Ã±Ã¥Ã£Ã® 30 Ã¬Ã¨Ã­Ã³Ã²', patrul)
+                imgui.InputText(u8'ÃÃ¨Ãª Ã¢Ã Ã¸Ã¥Ã£Ã® Ã­Ã Ã¯Ã Ã°Ã­Ã¨ÃªÃ (Ã­Ã  Ã Ã­Ã£Ã«Ã¨Ã±ÃªÃ®Ã¬)', partner, 255)
                 partnerNick = u8:decode(ffi.string(partner))
-                imgui.Checkbox(u8'Ïîçûâíîé ïğè äîêëàäàõ', pozivn)
-                imgui.InputText(u8'Âàø ïîçûâíîé', poziv, 255)
+                imgui.Checkbox(u8'ÃÃ®Ã§Ã»Ã¢Ã­Ã®Ã© Ã¯Ã°Ã¨ Ã¤Ã®ÃªÃ«Ã Ã¤Ã Ãµ', pozivn)
+                imgui.InputText(u8'Ã‚Ã Ã¸ Ã¯Ã®Ã§Ã»Ã¢Ã­Ã®Ã©', poziv, 255)
                 pozivnoi = u8:decode(ffi.string(poziv))
                 if patrul[0] and pozivn[0] then
                     poziv[0] = false
                     patrul[0] = false
                     lua_thread.create(function()
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Âûõîæó â ïàòğóëü. Íàïàğíèê - " .. partnerNick .. ". Äîñòóïåí.")
+                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Ã‚Ã»ÃµÃ®Ã¦Ã³ Ã¢ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼. ÃÃ Ã¯Ã Ã°Ã­Ã¨Ãª - " .. partnerNick .. ". Ã„Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­.")
                         wait(599999)
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Ïğîäîëæàş ïàòğóëü ñ " .. partnerNick .. ". Ñîñòîÿíèå ñòàáèëüíîå. Äîñòóïåí")
+                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. ÃÃ°Ã®Ã¤Ã®Ã«Ã¦Ã Ã¾ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼ Ã± " .. partnerNick .. ". Ã‘Ã®Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¥ Ã±Ã²Ã Ã¡Ã¨Ã«Ã¼Ã­Ã®Ã¥. Ã„Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­")
                         wait(599999)
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Ïğîäîëæàş ïàòğóëü ñ " .. partnerNick .. ". Ñîñòîÿíèå ñòàáèëüíîå. Äîñòóïåí")
+                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. ÃÃ°Ã®Ã¤Ã®Ã«Ã¦Ã Ã¾ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼ Ã± " .. partnerNick .. ". Ã‘Ã®Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¥ Ã±Ã²Ã Ã¡Ã¨Ã«Ã¼Ã­Ã®Ã¥. Ã„Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­")
                         wait(599999)
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Çàêàí÷èâàş ïàòğóëü ñ " .. partnerNick .. ".")
+                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Ã‡Ã ÃªÃ Ã­Ã·Ã¨Ã¢Ã Ã¾ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼ Ã± " .. partnerNick .. ".")
                     end)
                 elseif patrul[0] then
                     lua_thread.create(function()
                         patrul[0] = false
-                        sampSendChat("/r " .. nickname .. ". Âûõîæó â ïàòğóëü. Íàïàğíèê - " .. partnerNick .. ". Äîñòóïåí.")
+                        sampSendChat("/r " .. nickname .. ". Ã‚Ã»ÃµÃ®Ã¦Ã³ Ã¢ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼. ÃÃ Ã¯Ã Ã°Ã­Ã¨Ãª - " .. partnerNick .. ". Ã„Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­.")
                         wait(599999)
-                        sampSendChat("/r " .. nickname .. ". Ïğîäîëæàş ïàòğóëü ñ " .. partnerNick .. ". Ñîñòîÿíèå ñòàáèëüíîå. Äîñòóïåí")
+                        sampSendChat("/r " .. nickname .. ". ÃÃ°Ã®Ã¤Ã®Ã«Ã¦Ã Ã¾ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼ Ã± " .. partnerNick .. ". Ã‘Ã®Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¥ Ã±Ã²Ã Ã¡Ã¨Ã«Ã¼Ã­Ã®Ã¥. Ã„Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­")
                         wait(599999)
-                        sampSendChat("/r " .. nickname .. ". Ïğîäîëæàş ïàòğóëü ñ " .. partnerNick .. ". Ñîñòîÿíèå ñòàáèëüíîå. Äîñòóïåí")
+                        sampSendChat("/r " .. nickname .. ". ÃÃ°Ã®Ã¤Ã®Ã«Ã¦Ã Ã¾ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼ Ã± " .. partnerNick .. ". Ã‘Ã®Ã±Ã²Ã®Ã¿Ã­Ã¨Ã¥ Ã±Ã²Ã Ã¡Ã¨Ã«Ã¼Ã­Ã®Ã¥. Ã„Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­")
                         wait(599999)
-                        sampSendChat("/r " .. nickname .. ". Çàêàí÷èâàş ïàòğóëü ñ " .. partnerNick .. ".")
+                        sampSendChat("/r " .. nickname .. ". Ã‡Ã ÃªÃ Ã­Ã·Ã¨Ã¢Ã Ã¾ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼ Ã± " .. partnerNick .. ".")
                     end)
 
                 end
-                imgui.Checkbox(u8'Àâòî-Àêöåíò', AutoAccentBool)
+                imgui.Checkbox(u8'Ã€Ã¢Ã²Ã®-Ã€ÃªÃ¶Ã¥Ã­Ã²', AutoAccentBool)
                 if AutoAccentBool[0] then
                     AutoAccentCheck = true
                     mainIni.Accent.autoAccent = true
@@ -1080,35 +1080,35 @@ imgui.OnFrame(
                     mainIni.Accent.autoAccent = false
                     inicfg.save(mainIni, "mvdhelper.ini")
                 end
-                imgui.InputText(u8'Àêöåíò', AutoAccentInput, 255)
+                imgui.InputText(u8'Ã€ÃªÃ¶Ã¥Ã­Ã²', AutoAccentInput, 255)
                 AutoAccentText = u8:decode(ffi.string(AutoAccentInput))
                 mainIni.Accent.accent = AutoAccentText
                 inicfg.save(mainIni, "mvdhelper.ini")
-                if imgui.Button(u8'Âñïîìîãàòåëüíîå îêîøêî') then
+                if imgui.Button(u8'Ã‚Ã±Ã¯Ã®Ã¬Ã®Ã£Ã Ã²Ã¥Ã«Ã¼Ã­Ã®Ã¥ Ã®ÃªÃ®Ã¸ÃªÃ®') then
                 	suppWindow[0] = not suppWindow [0]
 
 				end
             elseif tab == 7 then
-                imgui.Text(u8'Âåğñèÿ: 4.8')
-                imgui.Text(u8'Ğàçğàáîò÷èê: @Sashe4ka_ReZoN and @daniel29032012')
-                imgui.Text(u8'ÒÃ êàíàë: @lua_arz')
-                imgui.Text(u8'Ïîääåğæàòü: https://qiwi.com/n/SASHE4KAREZON')
-                imgui.Text(u8'Ñïîíñîğû: @Negt,@King_Rostislavia,@sidrusha,@Timur77998')
-                imgui.Text(u8'Ñäåëàíî Ïğè ïîääåğæêå Arzfun Mobile(áåñïëàòíàÿ àäìèíêà) @ArizonaMobileFun')
-                imgui.Text(u8'Ìóíìîíåò çäåëàí ñ ïîìîùüş @UxyOy')
-                imgui.Text(u8'Îáíîâëåíèå 4.1 - Èçìåíåíèå èíòåğôåéñà, äîáàâëåíèå âêëàäîê "Èíôî" è "Äëÿ ÑÑ". Äîáàâëåí àâòî àêöåíò. Ôèêñ áàãîâ.')
-                imgui.Text(u8'Îáíîâëåíèå 4.2 - Ôèêñ àâòî îïğåäåëåíèÿ. Äîñòóï ê ïàíåëèè ÑÑ ñ ëşáîãî ğàíãà(Ïàíåëü ëèäåğà òàêæå îñòàåòñÿ îò 9 ğàíãà).')
-                imgui.Text(u8'Îáíîâëåíèå 4.3 - Ôèêñ ïğèâåòñòâèÿ. Äîáàâëåííî ÔÁĞ â ñïèñîê îğãàíèçàöèé')
-                imgui.Text(u8'Îáíîâëåíèå 4.4 - Äîáàâèëè ëåêöèè,Ïàíåëü ëèäåğà(â ğàçğàáîòêå)')
-                imgui.Text(u8'Îáíîâëåíèå 4.5 - Òåïåğü ìîæíî ïîñòàâèòü ñâîé ÓÊ. Äîáàâëåíà ôèîëåòîâàÿ òåìà. Îáíîâëåí /mvds')
-                imgui.Text(u8'Îáíîâëåíèå 4.6 - Ôèêñ áàãîâ,Èçìåíåíû íåêîòîğûå îòûãğîâêè')
-                imgui.Text(u8'Îáíîâëåíèå 4.7 - Äîáàâëåíà Êîìàíäà /traf ïîôèêøåíû áàãè,àâòî àêöåíò è èçìåíåííû íåêîòîğûå îòûãğîâêè')
-                imgui.Text(u8'Îáíîâëåíèå 4.8 - Ìóíìîíåò,àâòî îáíîâà')
-                if imgui.Button(u8'Îáíîâèòü') then
+                imgui.Text(u8'Ã‚Ã¥Ã°Ã±Ã¨Ã¿: 4.8')
+                imgui.Text(u8'ÃÃ Ã§Ã°Ã Ã¡Ã®Ã²Ã·Ã¨Ãª: @Sashe4ka_ReZoN and @daniel29032012')
+                imgui.Text(u8'Ã’Ãƒ ÃªÃ Ã­Ã Ã«: @lua_arz')
+                imgui.Text(u8'ÃÃ®Ã¤Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¼: https://qiwi.com/n/SASHE4KAREZON')
+                imgui.Text(u8'Ã‘Ã¯Ã®Ã­Ã±Ã®Ã°Ã»: @Negt,@King_Rostislavia,@sidrusha,@Timur77998')
+                imgui.Text(u8'Ã‘Ã¤Ã¥Ã«Ã Ã­Ã® ÃÃ°Ã¨ Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦ÃªÃ¥ Arzfun Mobile(Ã¡Ã¥Ã±Ã¯Ã«Ã Ã²Ã­Ã Ã¿ Ã Ã¤Ã¬Ã¨Ã­ÃªÃ ) @ArizonaMobileFun')
+                imgui.Text(u8'ÃŒÃ³Ã­Ã¬Ã®Ã­Ã¥Ã² Ã§Ã¤Ã¥Ã«Ã Ã­ Ã± Ã¯Ã®Ã¬Ã®Ã¹Ã¼Ã¾ @UxyOy')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.1 - ÃˆÃ§Ã¬Ã¥Ã­Ã¥Ã­Ã¨Ã¥ Ã¨Ã­Ã²Ã¥Ã°Ã´Ã¥Ã©Ã±Ã , Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¢ÃªÃ«Ã Ã¤Ã®Ãª "ÃˆÃ­Ã´Ã®" Ã¨ "Ã„Ã«Ã¿ Ã‘Ã‘". Ã„Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­ Ã Ã¢Ã²Ã® Ã ÃªÃ¶Ã¥Ã­Ã². Ã”Ã¨ÃªÃ± Ã¡Ã Ã£Ã®Ã¢.')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.2 - Ã”Ã¨ÃªÃ± Ã Ã¢Ã²Ã® Ã®Ã¯Ã°Ã¥Ã¤Ã¥Ã«Ã¥Ã­Ã¨Ã¿. Ã„Ã®Ã±Ã²Ã³Ã¯ Ãª Ã¯Ã Ã­Ã¥Ã«Ã¨Ã¨ Ã‘Ã‘ Ã± Ã«Ã¾Ã¡Ã®Ã£Ã® Ã°Ã Ã­Ã£Ã (ÃÃ Ã­Ã¥Ã«Ã¼ Ã«Ã¨Ã¤Ã¥Ã°Ã  Ã²Ã ÃªÃ¦Ã¥ Ã®Ã±Ã²Ã Ã¥Ã²Ã±Ã¿ Ã®Ã² 9 Ã°Ã Ã­Ã£Ã ).')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.3 - Ã”Ã¨ÃªÃ± Ã¯Ã°Ã¨Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã¨Ã¿. Ã„Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã­Ã® Ã”ÃÃ Ã¢ Ã±Ã¯Ã¨Ã±Ã®Ãª Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã©')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.4 - Ã„Ã®Ã¡Ã Ã¢Ã¨Ã«Ã¨ Ã«Ã¥ÃªÃ¶Ã¨Ã¨,ÃÃ Ã­Ã¥Ã«Ã¼ Ã«Ã¨Ã¤Ã¥Ã°Ã (Ã¢ Ã°Ã Ã§Ã°Ã Ã¡Ã®Ã²ÃªÃ¥)')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.5 - Ã’Ã¥Ã¯Ã¥Ã°Ã¼ Ã¬Ã®Ã¦Ã­Ã® Ã¯Ã®Ã±Ã²Ã Ã¢Ã¨Ã²Ã¼ Ã±Ã¢Ã®Ã© Ã“ÃŠ. Ã„Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã  Ã´Ã¨Ã®Ã«Ã¥Ã²Ã®Ã¢Ã Ã¿ Ã²Ã¥Ã¬Ã . ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­ /mvds')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.6 - Ã”Ã¨ÃªÃ± Ã¡Ã Ã£Ã®Ã¢,ÃˆÃ§Ã¬Ã¥Ã­Ã¥Ã­Ã» Ã­Ã¥ÃªÃ®Ã²Ã®Ã°Ã»Ã¥ Ã®Ã²Ã»Ã£Ã°Ã®Ã¢ÃªÃ¨')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.7 - Ã„Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­Ã  ÃŠÃ®Ã¬Ã Ã­Ã¤Ã  /traf Ã¯Ã®Ã´Ã¨ÃªÃ¸Ã¥Ã­Ã» Ã¡Ã Ã£Ã¨,Ã Ã¢Ã²Ã® Ã ÃªÃ¶Ã¥Ã­Ã² Ã¨ Ã¨Ã§Ã¬Ã¥Ã­Ã¥Ã­Ã­Ã» Ã­Ã¥ÃªÃ®Ã²Ã®Ã°Ã»Ã¥ Ã®Ã²Ã»Ã£Ã°Ã®Ã¢ÃªÃ¨')
+                imgui.Text(u8'ÃÃ¡Ã­Ã®Ã¢Ã«Ã¥Ã­Ã¨Ã¥ 4.8 - ÃŒÃ³Ã­Ã¬Ã®Ã­Ã¥Ã²,Ã Ã¢Ã²Ã® Ã®Ã¡Ã­Ã®Ã¢Ã ')
+                if imgui.Button(u8'ÃÃ¡Ã­Ã®Ã¢Ã¨Ã²Ã¼') then
             		updateScript(scriptUrl, scriptPath)
             	end
             end
-            -- == [Îñíîâíîå] Ñîäåğæèìîå âêëàäîê çàêîí÷èëîñü == --
+            -- == [ÃÃ±Ã­Ã®Ã¢Ã­Ã®Ã¥] Ã‘Ã®Ã¤Ã¥Ã°Ã¦Ã¨Ã¬Ã®Ã¥ Ã¢ÃªÃ«Ã Ã¤Ã®Ãª Ã§Ã ÃªÃ®Ã­Ã·Ã¨Ã«Ã®Ã±Ã¼ == --
             imgui.EndChild()
             imgui.End()
         end
@@ -1182,37 +1182,37 @@ function sampev.onSendSpawn()
 	if spawn and isMonetLoader() then
 		spawn = false
 		sampSendChat('/stats')
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ñêğèïò óñïåøíî çàãğóçèëñÿ", 0x8B00FF)
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Àâòîğû:t.me/Sashe4ka_ReZoN and t.me/daniel29032012",0x8B00FF)
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}×òîáû ïîñìîòğåòü êîììàíäû,ââåäèòå /mvd è /mvds ",0x8B00FF)
+        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ã‘ÃªÃ°Ã¨Ã¯Ã² Ã³Ã±Ã¯Ã¥Ã¸Ã­Ã® Ã§Ã Ã£Ã°Ã³Ã§Ã¨Ã«Ã±Ã¿", 0x8B00FF)
+        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ã€Ã¢Ã²Ã®Ã°Ã»:t.me/Sashe4ka_ReZoN and t.me/daniel29032012",0x8B00FF)
+        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Ã—Ã²Ã®Ã¡Ã» Ã¯Ã®Ã±Ã¬Ã®Ã²Ã°Ã¥Ã²Ã¼ ÃªÃ®Ã¬Ã¬Ã Ã­Ã¤Ã»,Ã¢Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ /mvd Ã¨ /mvds ",0x8B00FF)
         nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))
     end
 end
 
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
-    if dialogId == 235 and title == "{BFBBBA}Îñíîâíàÿ ñòàòèñòèêà" then
+    if dialogId == 235 and title == "{BFBBBA}ÃÃ±Ã­Ã®Ã¢Ã­Ã Ã¿ Ã±Ã²Ã Ã²Ã¨Ã±Ã²Ã¨ÃªÃ " then
         statsCheck = true
-        if string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "Ïîëèöèÿ ËÂ" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "Ïîëèöèÿ ËÑ" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "Ïîëèöèÿ ÑÔ" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "SFa" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "LSa" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "RCSD"  or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "Îáëàñòíàÿ ïîëèöèÿ" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "ÔÁĞ" or string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]") == "FBI" then
-            org = string.match(text, "Îğãàíèçàöèÿ: {B83434}%[(%D+)%]")
-            if org ~= 'Íå èìååòñÿ' then dol = string.match(text, "Äîëæíîñòü: {B83434}(%D+)%(%d+%)") end
+        if string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¿ Ã‹Ã‚" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¿ Ã‹Ã‘" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¿ Ã‘Ã”" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "SFa" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "LSa" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "RCSD"  or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "ÃÃ¡Ã«Ã Ã±Ã²Ã­Ã Ã¿ Ã¯Ã®Ã«Ã¨Ã¶Ã¨Ã¿" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "Ã”ÃÃ" or string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]") == "FBI" then
+            org = string.match(text, "ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¿: {B83434}%[(%D+)%]")
+            if org ~= 'ÃÃ¥ Ã¨Ã¬Ã¥Ã¥Ã²Ã±Ã¿' then dol = string.match(text, "Ã„Ã®Ã«Ã¦Ã­Ã®Ã±Ã²Ã¼: {B83434}(%D+)%(%d+%)") end
             dl = u8(dol)
-            if org == 'Ïîëèöèÿ ËÂ' then org_g = u8'LVPD'; ccity = u8'Ëàñ-Âåíòóğàñ'; org_tag = 'LVPD' end
-            if org == 'Ïîëèöèÿ ËÑ' then org_g = u8'LSPD'; ccity = u8'Ëîñ-Ñàíòîñ'; org_tag = 'LSPD' end
-            if org == 'Ïîëèöèÿ ÑÔ' then org_g = u8'SFPD'; ccity = u8'Ñàí-Ôèåğğî'; org_tag = 'SFPD' end
-            if org == 'ÔÁĞ' then org_g = u8'FBI'; ccity = u8'Ñàí-Ôèåğğî'; org_tag = 'FBI' end
-            if org == 'FBI' then org_g = u8'FBI'; ccity = u8'Ñàí-Ôèåğğî'; org_tag = 'FBI' end
-            if org == 'RCSD' or org == 'Îáëàñòíàÿ ïîëèöèÿ' then org_g = u8'RCSD'; ccity = u8'Red Country'; org_tag = 'RCSD' end
-            if org == 'LSa' or org == 'Àğìèÿ Ëîñ Ñàíòîñ' then org_g = u8'LSa'; ccity = u8'Ëîñ Ñàíòîñ'; org_tag = 'LSa' end
-            if org == 'SFa' or org == 'Àğìèÿ Ñàí Ôèåğğî' then org_g = u8'SFa'; ccity = u8'Ñàí Ôèåğğî'; org_tag = 'SFa' end
-            if org == '[Íå èìååòñÿ]' then
-                org = 'Âû íå ñîñòîèòå â ÏÄ'
-                org_g = 'Âû íå ñîñòîèòå â ÏÄ'
-                ccity = 'Âû íå ñîñòîèòå â ÏÄ'
-                org_tag = 'Âû íå ñîñòîèòå â ÏÄ'
-                dol = 'Âû íå ñîñòîèòå â ÏÄ'
-                dl = 'Âû íå ñîñòîèòå â ÏÄ'
+            if org == 'ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¿ Ã‹Ã‚' then org_g = u8'LVPD'; ccity = u8'Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±'; org_tag = 'LVPD' end
+            if org == 'ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¿ Ã‹Ã‘' then org_g = u8'LSPD'; ccity = u8'Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±'; org_tag = 'LSPD' end
+            if org == 'ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¿ Ã‘Ã”' then org_g = u8'SFPD'; ccity = u8'Ã‘Ã Ã­-Ã”Ã¨Ã¥Ã°Ã°Ã®'; org_tag = 'SFPD' end
+            if org == 'Ã”ÃÃ' then org_g = u8'FBI'; ccity = u8'Ã‘Ã Ã­-Ã”Ã¨Ã¥Ã°Ã°Ã®'; org_tag = 'FBI' end
+            if org == 'FBI' then org_g = u8'FBI'; ccity = u8'Ã‘Ã Ã­-Ã”Ã¨Ã¥Ã°Ã°Ã®'; org_tag = 'FBI' end
+            if org == 'RCSD' or org == 'ÃÃ¡Ã«Ã Ã±Ã²Ã­Ã Ã¿ Ã¯Ã®Ã«Ã¨Ã¶Ã¨Ã¿' then org_g = u8'RCSD'; ccity = u8'Red Country'; org_tag = 'RCSD' end
+            if org == 'LSa' or org == 'Ã€Ã°Ã¬Ã¨Ã¿ Ã‹Ã®Ã± Ã‘Ã Ã­Ã²Ã®Ã±' then org_g = u8'LSa'; ccity = u8'Ã‹Ã®Ã± Ã‘Ã Ã­Ã²Ã®Ã±'; org_tag = 'LSa' end
+            if org == 'SFa' or org == 'Ã€Ã°Ã¬Ã¨Ã¿ Ã‘Ã Ã­ Ã”Ã¨Ã¥Ã°Ã°Ã®' then org_g = u8'SFa'; ccity = u8'Ã‘Ã Ã­ Ã”Ã¨Ã¥Ã°Ã°Ã®'; org_tag = 'SFa' end
+            if org == '[ÃÃ¥ Ã¨Ã¬Ã¥Ã¥Ã²Ã±Ã¿]' then
+                org = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+                org_g = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+                ccity = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+                org_tag = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+                dol = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
+                dl = 'Ã‚Ã» Ã­Ã¥ Ã±Ã®Ã±Ã²Ã®Ã¨Ã²Ã¥ Ã¢ ÃÃ„'
             else
-                rang_n = tonumber(string.match(text, "Äîëæíîñòü: {B83434}%D+%((%d+)%)"))
+                rang_n = tonumber(string.match(text, "Ã„Ã®Ã«Ã¦Ã­Ã®Ã±Ã²Ã¼: {B83434}%D+%((%d+)%)"))
             end
             mainIni.Info.org = org_g
             mainIni.Info.rang_n = rang_n
@@ -1227,7 +1227,7 @@ function openwindow()
 end
 
 function decor()
-    -- == Äåêîğ ÷àñòü == --
+    -- == Ã„Ã¥ÃªÃ®Ã° Ã·Ã Ã±Ã²Ã¼ == --
     imgui.SwitchContext()
     local ImVec4 = imgui.ImVec4
     imgui.GetStyle().WindowPadding = imgui.ImVec2(5, 5)
@@ -1253,13 +1253,13 @@ function decor()
 end
 
 imgui.OnInitialize(function()
-    decor() -- ïğèìåíÿåì äåêîğ ÷àñòü
+    decor() -- Ã¯Ã°Ã¨Ã¬Ã¥Ã­Ã¿Ã¥Ã¬ Ã¤Ã¥ÃªÃ®Ã° Ã·Ã Ã±Ã²Ã¼
     imgui.GetIO().IniFilename = nil
     local config = imgui.ImFontConfig()
     config.MergeMode = true
     config.PixelSnapH = true
     iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
-    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 20, config, iconRanges) -- solid - òèï èêîíîê, òàê æå åñòü thin, regular, light è duotone
+    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 20, config, iconRanges) -- solid - Ã²Ã¨Ã¯ Ã¨ÃªÃ®Ã­Ã®Ãª, Ã²Ã Ãª Ã¦Ã¥ Ã¥Ã±Ã²Ã¼ thin, regular, light Ã¨ duotone
 	local tmp = imgui.ColorConvertU32ToFloat4(mainIni.theme['moonmonet'])
 	gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
 	mmcolor = imgui.new.float[3](tmp.z, tmp.y, tmp.x)
@@ -1273,18 +1273,18 @@ end
 
 function cmd_showpass(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/showpass [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/showpass [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me äîñòàë ïàïêó ñ äîêóìåíòàìè")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã Ã¯ÃªÃ³ Ã± Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã Ã¬Ã¨")
             wait(1500)
-            sampSendChat("/do Ïàïêà â ğóêå.")
+            sampSendChat("/do ÃÃ Ã¯ÃªÃ  Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me äîñòàë ïàñïîğò")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã Ã±Ã¯Ã®Ã°Ã²")
             wait(1500)
-            sampSendChat("/do Ïàñïîğò â ğóêå.")
+            sampSendChat("/do ÃÃ Ã±Ã¯Ã®Ã°Ã² Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me ïåğåäàë ïàñïîğò ÷åëîâåêó íà ïğîòèâ")
+            sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã« Ã¯Ã Ã±Ã¯Ã®Ã°Ã² Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã  Ã¯Ã°Ã®Ã²Ã¨Ã¢")
             wait(1500)
             sampSendChat("/showpass " .. id .. " ")
         end)
@@ -1293,16 +1293,16 @@ end
 
 function cmd_showbadge(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/showbadge [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/showbadge [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me èç âíóòğåííåãî êàğìàíà äîñòàë óäîñòîâåğåíèå")
+            sampSendChat("/me Ã¨Ã§ Ã¢Ã­Ã³Ã²Ã°Ã¥Ã­Ã­Ã¥Ã£Ã® ÃªÃ Ã°Ã¬Ã Ã­Ã  Ã¤Ã®Ã±Ã²Ã Ã« Ã³Ã¤Ã®Ã±Ã²Ã®Ã¢Ã¥Ã°Ã¥Ã­Ã¨Ã¥")
             wait(1500)
-            sampSendChat("/me îòêğûë äîêóìåíò â ğàçâ¸ğíóòîì âèäå, ïîêàçàë ñîäåğæèìîå ÷åëîâåêó íàïğîòèâ")
+            sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Ã¢ Ã°Ã Ã§Ã¢Â¸Ã°Ã­Ã³Ã²Ã®Ã¬ Ã¢Ã¨Ã¤Ã¥, Ã¯Ã®ÃªÃ Ã§Ã Ã« Ã±Ã®Ã¤Ã¥Ã°Ã¦Ã¨Ã¬Ã®Ã¥ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã Ã¯Ã°Ã®Ã²Ã¨Ã¢")
             wait(1500)
-            sampSendChat("/do Íèæå íàõîäèòñÿ ïå÷àòü ïğàâèòåëüñòâà è ïîäïèñü.")
+            sampSendChat("/do ÃÃ¨Ã¦Ã¥ Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ Ã¯Ã¥Ã·Ã Ã²Ã¼ Ã¯Ã°Ã Ã¢Ã¨Ã²Ã¥Ã«Ã¼Ã±Ã²Ã¢Ã  Ã¨ Ã¯Ã®Ã¤Ã¯Ã¨Ã±Ã¼.")
             wait(1500)
-            sampSendChat("/me çàêğûë äîêóìåíò , óáğàë åãî îáğàòíî â êàğìàí")
+            sampSendChat("/me Ã§Ã ÃªÃ°Ã»Ã« Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² , Ã³Ã¡Ã°Ã Ã« Ã¥Ã£Ã® Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã¢ ÃªÃ Ã°Ã¬Ã Ã­")
             wait(1500)
             sampSendChat ("/showbadge "..id.." ")
         end)
@@ -1311,18 +1311,18 @@ end
 
 function cmd_showlic(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/showlic [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/showlic [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me äîñòàë ïàïêó ñ äîêóìåíòàìè")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã Ã¯ÃªÃ³ Ã± Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã Ã¬Ã¨")
             wait(1500)
-            sampSendChat("/do Ïàïêà â ğóêå.")
+            sampSendChat("/do ÃÃ Ã¯ÃªÃ  Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me äîñòàë ëèöåíçèè")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã«Ã¨Ã¶Ã¥Ã­Ã§Ã¨Ã¨")
             wait(1500)
-            sampSendChat("/do Ëèöåíçèè â ğóêå.")
+            sampSendChat("/do Ã‹Ã¨Ã¶Ã¥Ã­Ã§Ã¨Ã¨ Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me ïåğåäàë ëèöåíçèè ÷åëîâåêó íà ïğîòèâ")
+            sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã« Ã«Ã¨Ã¶Ã¥Ã­Ã§Ã¨Ã¨ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã  Ã¯Ã°Ã®Ã²Ã¨Ã¢")
             wait(1500)
             sampSendChat("/showlic " .. id .. " ")
         end)
@@ -1331,25 +1331,25 @@ end
 
 function cmd_mvds(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Êîìàíäû MVD HELPER 4.7", "/showlic -  Ïîêàçûâàåò âàøè ëèöåíçèè\n/showpass - Ïîêàçûâàåò âàø ïàñïîğò\n/showmc - Ïîêàçûâàåò âàøó Ìåä. Êàğòó\n/showskill - Ïîêàçûâàåò âàøè íàâûêè îğóæèÿ\n/showbadge - Ïîêàçàòü âàøå óäîñòîâåğåíèå ÷åëîâåêó\n/pull - Âûêèäûâàåò ÷àëîâåêà èç àâòî è îãëóøàåò\n/uninvite - Óâîëèòü ÷åëîâåêà èç îğãàíèçàöèè\n/invite - Ïğèíÿòü ÷åëîâåêà â îğãàíèçàöèş\n/cuff - Íàäåòü íàğó÷íèêè\n/uncuff - Ñíÿòü íàğó÷íèêè\n/frisk - Îáûñêàòü ÷åëîâåêà\n/mask - Íàäåòü ìàñêó\n/arm - Ñíÿòü/Íàäåòü áğîíèæåëåò\n/asu - Âûäàòü ğîçûñê\n/drug - Èñïîëüçîâàòü íàğêîòèêè\n/arrest - Ìåòêà äëÿ àğåñòà ÷åëîâåêà\n/stop - 10-55 Òğàôôèê-Ñòîï\n/giverank - Âûäàòü ğàíã ÷åëîâåêó\n/unmask - Ñíÿòü ìàñêó ñ ïğåñòóïíèêà\n/miranda - Çà÷èòàòü ïğàâà\n/bodyon - Âêëş÷èòü Áîäè-Êàìåğó\n/bodyoff - Âûêëş÷èòü Áîäè-Êàìåğó\n/ticket - Âûïèñàòü øòğàô\n/pursuit - Âåñòè ïğåñëåäîâàíèå çà èãğîêîì\n/drugtestno - Òåñò íà íàğêîòèêè ( Îòğèöàòåëüíûé )\n/drugtestyes - Òåñò íà íàğêîòèêè ( Ïîëîæèòåëüíûé )\n/vzatka - Ğï Âçÿòêà\n/bomb - Ğàçìèíèğîâàíèå áîìáû\n/dismiss - Óâîëèòü ÷åëîâåêà èç îğãàíèçàöèè ( 6 ÔÁĞ )\n/demoute - Óâîëèòü ÷åëîâåêà èç îğãàíèçàöèè ( 9 ÔÁĞ )\n/cure - Âûëå÷èòü äğóãà êîòîğîãî ïîëîæèëè\n/find - Îòûãğîâêà ïîèñêà ïğåñòóïíèêà\n/incar - Ïîñàäèòü ïğåñòóïíèêà â ìàøèíó\n/tencodes - Òåí Êîäû\n/marks - Ìàğêè Àâòî\n/sitcodes - Ñèòóàöèîííûå Êîäû\n/zsu - Çàïğîñ â ğîçûñê\n/mask - Íàäåòü ìàñêó\n/take - Çàáğàòü çàïğåù¸íûå âåùè\n/gcuff - cuff + gotome\n/fbi.secret - äîêóìåíò î íåğàçãëàøåíèè äåÿòåëüíîñòè ÔÁĞ\n/fbi.pravda - Äîêóìåíò î ïğàâäèâîñòè ñëîâ íà äîïğîñå\n/finger.p - Ñíÿòèå îòïå÷àòêîâ ïàëüöåâ ÷åëîâåêà\n/podmoga - Âûçîâ ïîäìîãè â /r\n/traf - Ïîãîíÿ 10-55\n/grim - Íàíåñåíèå ãğèìà\n/eks - İêñïåğòèçà îğóæèå\n/traf - íå ïîìíş\nÀâòîğ:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Çàêğûòü", "Exit", 0)
+        sampShowDialog(1,"ÃŠÃ®Ã¬Ã Ã­Ã¤Ã» MVD HELPER 4.7", "/showlic -  ÃÃ®ÃªÃ Ã§Ã»Ã¢Ã Ã¥Ã² Ã¢Ã Ã¸Ã¨ Ã«Ã¨Ã¶Ã¥Ã­Ã§Ã¨Ã¨\n/showpass - ÃÃ®ÃªÃ Ã§Ã»Ã¢Ã Ã¥Ã² Ã¢Ã Ã¸ Ã¯Ã Ã±Ã¯Ã®Ã°Ã²\n/showmc - ÃÃ®ÃªÃ Ã§Ã»Ã¢Ã Ã¥Ã² Ã¢Ã Ã¸Ã³ ÃŒÃ¥Ã¤. ÃŠÃ Ã°Ã²Ã³\n/showskill - ÃÃ®ÃªÃ Ã§Ã»Ã¢Ã Ã¥Ã² Ã¢Ã Ã¸Ã¨ Ã­Ã Ã¢Ã»ÃªÃ¨ Ã®Ã°Ã³Ã¦Ã¨Ã¿\n/showbadge - ÃÃ®ÃªÃ Ã§Ã Ã²Ã¼ Ã¢Ã Ã¸Ã¥ Ã³Ã¤Ã®Ã±Ã²Ã®Ã¢Ã¥Ã°Ã¥Ã­Ã¨Ã¥ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³\n/pull - Ã‚Ã»ÃªÃ¨Ã¤Ã»Ã¢Ã Ã¥Ã² Ã·Ã Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¨Ã§ Ã Ã¢Ã²Ã® Ã¨ Ã®Ã£Ã«Ã³Ã¸Ã Ã¥Ã²\n/uninvite - Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¨Ã§ Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¨\n/invite - ÃÃ°Ã¨Ã­Ã¿Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¢ Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¾\n/cuff - ÃÃ Ã¤Ã¥Ã²Ã¼ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨\n/uncuff - Ã‘Ã­Ã¿Ã²Ã¼ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨\n/frisk - ÃÃ¡Ã»Ã±ÃªÃ Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ \n/mask - ÃÃ Ã¤Ã¥Ã²Ã¼ Ã¬Ã Ã±ÃªÃ³\n/arm - Ã‘Ã­Ã¿Ã²Ã¼/ÃÃ Ã¤Ã¥Ã²Ã¼ Ã¡Ã°Ã®Ã­Ã¨Ã¦Ã¥Ã«Ã¥Ã²\n/asu - Ã‚Ã»Ã¤Ã Ã²Ã¼ Ã°Ã®Ã§Ã»Ã±Ãª\n/drug - ÃˆÃ±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã²Ã¼ Ã­Ã Ã°ÃªÃ®Ã²Ã¨ÃªÃ¨\n/arrest - ÃŒÃ¥Ã²ÃªÃ  Ã¤Ã«Ã¿ Ã Ã°Ã¥Ã±Ã²Ã  Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ \n/stop - 10-55 Ã’Ã°Ã Ã´Ã´Ã¨Ãª-Ã‘Ã²Ã®Ã¯\n/giverank - Ã‚Ã»Ã¤Ã Ã²Ã¼ Ã°Ã Ã­Ã£ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³\n/unmask - Ã‘Ã­Ã¿Ã²Ã¼ Ã¬Ã Ã±ÃªÃ³ Ã± Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ \n/miranda - Ã‡Ã Ã·Ã¨Ã²Ã Ã²Ã¼ Ã¯Ã°Ã Ã¢Ã \n/bodyon - Ã‚ÃªÃ«Ã¾Ã·Ã¨Ã²Ã¼ ÃÃ®Ã¤Ã¨-ÃŠÃ Ã¬Ã¥Ã°Ã³\n/bodyoff - Ã‚Ã»ÃªÃ«Ã¾Ã·Ã¨Ã²Ã¼ ÃÃ®Ã¤Ã¨-ÃŠÃ Ã¬Ã¥Ã°Ã³\n/ticket - Ã‚Ã»Ã¯Ã¨Ã±Ã Ã²Ã¼ Ã¸Ã²Ã°Ã Ã´\n/pursuit - Ã‚Ã¥Ã±Ã²Ã¨ Ã¯Ã°Ã¥Ã±Ã«Ã¥Ã¤Ã®Ã¢Ã Ã­Ã¨Ã¥ Ã§Ã  Ã¨Ã£Ã°Ã®ÃªÃ®Ã¬\n/drugtestno - Ã’Ã¥Ã±Ã² Ã­Ã  Ã­Ã Ã°ÃªÃ®Ã²Ã¨ÃªÃ¨ ( ÃÃ²Ã°Ã¨Ã¶Ã Ã²Ã¥Ã«Ã¼Ã­Ã»Ã© )\n/drugtestyes - Ã’Ã¥Ã±Ã² Ã­Ã  Ã­Ã Ã°ÃªÃ®Ã²Ã¨ÃªÃ¨ ( ÃÃ®Ã«Ã®Ã¦Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã»Ã© )\n/vzatka - ÃÃ¯ Ã‚Ã§Ã¿Ã²ÃªÃ \n/bomb - ÃÃ Ã§Ã¬Ã¨Ã­Ã¨Ã°Ã®Ã¢Ã Ã­Ã¨Ã¥ Ã¡Ã®Ã¬Ã¡Ã»\n/dismiss - Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¨Ã§ Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¨ ( 6 Ã”ÃÃ )\n/demoute - Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¨Ã§ Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¨ ( 9 Ã”ÃÃ )\n/cure - Ã‚Ã»Ã«Ã¥Ã·Ã¨Ã²Ã¼ Ã¤Ã°Ã³Ã£Ã  ÃªÃ®Ã²Ã®Ã°Ã®Ã£Ã® Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã«Ã¨\n/find - ÃÃ²Ã»Ã£Ã°Ã®Ã¢ÃªÃ  Ã¯Ã®Ã¨Ã±ÃªÃ  Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ \n/incar - ÃÃ®Ã±Ã Ã¤Ã¨Ã²Ã¼ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã³\n/tencodes - Ã’Ã¥Ã­ ÃŠÃ®Ã¤Ã»\n/marks - ÃŒÃ Ã°ÃªÃ¨ Ã€Ã¢Ã²Ã®\n/sitcodes - Ã‘Ã¨Ã²Ã³Ã Ã¶Ã¨Ã®Ã­Ã­Ã»Ã¥ ÃŠÃ®Ã¤Ã»\n/zsu - Ã‡Ã Ã¯Ã°Ã®Ã± Ã¢ Ã°Ã®Ã§Ã»Ã±Ãª\n/mask - ÃÃ Ã¤Ã¥Ã²Ã¼ Ã¬Ã Ã±ÃªÃ³\n/take - Ã‡Ã Ã¡Ã°Ã Ã²Ã¼ Ã§Ã Ã¯Ã°Ã¥Ã¹Â¸Ã­Ã»Ã¥ Ã¢Ã¥Ã¹Ã¨\n/gcuff - cuff + gotome\n/fbi.secret - Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Ã® Ã­Ã¥Ã°Ã Ã§Ã£Ã«Ã Ã¸Ã¥Ã­Ã¨Ã¨ Ã¤Ã¥Ã¿Ã²Ã¥Ã«Ã¼Ã­Ã®Ã±Ã²Ã¨ Ã”ÃÃ\n/fbi.pravda - Ã„Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Ã® Ã¯Ã°Ã Ã¢Ã¤Ã¨Ã¢Ã®Ã±Ã²Ã¨ Ã±Ã«Ã®Ã¢ Ã­Ã  Ã¤Ã®Ã¯Ã°Ã®Ã±Ã¥\n/finger.p - Ã‘Ã­Ã¿Ã²Ã¨Ã¥ Ã®Ã²Ã¯Ã¥Ã·Ã Ã²ÃªÃ®Ã¢ Ã¯Ã Ã«Ã¼Ã¶Ã¥Ã¢ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ \n/podmoga - Ã‚Ã»Ã§Ã®Ã¢ Ã¯Ã®Ã¤Ã¬Ã®Ã£Ã¨ Ã¢ /r\n/traf - ÃÃ®Ã£Ã®Ã­Ã¿ 10-55\n/grim - ÃÃ Ã­Ã¥Ã±Ã¥Ã­Ã¨Ã¥ Ã£Ã°Ã¨Ã¬Ã \n/eks - ÃÃªÃ±Ã¯Ã¥Ã°Ã²Ã¨Ã§Ã  Ã®Ã°Ã³Ã¦Ã¨Ã¥\n/traf - Ã­Ã¥ Ã¯Ã®Ã¬Ã­Ã¾\nÃ€Ã¢Ã²Ã®Ã°:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Ã‡Ã ÃªÃ°Ã»Ã²Ã¼", "Exit", 0)
         end)
         end
 
 
 function cmd_showskill(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/showskill [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/showskill [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me äîñòàë ïàïêó ñ äîêóìåíòàìè")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã Ã¯ÃªÃ³ Ã± Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã Ã¬Ã¨")
             wait(1500)
-            sampSendChat("/do Ïàïêà â ğóêå.")
+            sampSendChat("/do ÃÃ Ã¯ÃªÃ  Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me äîñòàë âûïèñêó ñ òèğà")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¢Ã»Ã¯Ã¨Ã±ÃªÃ³ Ã± Ã²Ã¨Ã°Ã ")
             wait(1500)
-            sampSendChat("/do Âûïèñêà â ğóêå.")
+            sampSendChat("/do Ã‚Ã»Ã¯Ã¨Ã±ÃªÃ  Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me ïåğåäàë âûïèñêó ÷åëîâåêó íà ïğîòèâ")
+            sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã« Ã¢Ã»Ã¯Ã¨Ã±ÃªÃ³ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã  Ã¯Ã°Ã®Ã²Ã¨Ã¢")
             wait(1500)
             sampSendChat("/showskill " .. id .. " ")
         end)
@@ -1358,18 +1358,18 @@ end
 
 function cmd_showmc(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/showmc [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/showmc [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me äîñòàë ïàïêó ñ äîêóìåíòàìè")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã Ã¯ÃªÃ³ Ã± Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã Ã¬Ã¨")
             wait(1500)
-            sampSendChat("/do Ïàïêà â ğóêå.")
+            sampSendChat("/do ÃÃ Ã¯ÃªÃ  Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me äîñòàë ìåä. êàğòó")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¬Ã¥Ã¤. ÃªÃ Ã°Ã²Ã³")
             wait(1500)
-            sampSendChat("/do Ìåä. êàğòà â ğóêå.")
+            sampSendChat("/do ÃŒÃ¥Ã¤. ÃªÃ Ã°Ã²Ã  Ã¢ Ã°Ã³ÃªÃ¥.")
             wait(1500)
-            sampSendChat("/me ïåğåäàë ìåä. êàğòó ÷åëîâåêó íà ïğîòèâ")
+            sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã« Ã¬Ã¥Ã¤. ÃªÃ Ã°Ã²Ã³ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã  Ã¯Ã°Ã®Ã²Ã¨Ã¢")
             wait(1500)
             sampSendChat("/showmc " .. id .. " ")
         end)
@@ -1378,16 +1378,16 @@ end
 
 function cmd_pull(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/pull [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/pull [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/pull " .. id .. " ")
             wait(1500)
-            sampSendChat("/me ñõâàòèë äóáèíêó ñ ïîÿñà, ğåçêèì âçìàõîì åå è íà÷àë áèòü ïî îêíó âîäèòåëÿ")
+            sampSendChat("/me Ã±ÃµÃ¢Ã Ã²Ã¨Ã« Ã¤Ã³Ã¡Ã¨Ã­ÃªÃ³ Ã± Ã¯Ã®Ã¿Ã±Ã , Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¢Ã§Ã¬Ã ÃµÃ®Ã¬ Ã¥Ã¥ Ã¨ Ã­Ã Ã·Ã Ã« Ã¡Ã¨Ã²Ã¼ Ã¯Ã® Ã®ÃªÃ­Ã³ Ã¢Ã®Ã¤Ã¨Ã²Ã¥Ã«Ã¿")
             wait(1500)
-            sampSendChat("/me ğàçáèâ ñòåêëî, îòêğûë äâåğü èçíóòğè è ñõâàòèë âîäèòåëÿ çà îäåæäó ...")
+            sampSendChat("/me Ã°Ã Ã§Ã¡Ã¨Ã¢ Ã±Ã²Ã¥ÃªÃ«Ã®, Ã®Ã²ÃªÃ°Ã»Ã« Ã¤Ã¢Ã¥Ã°Ã¼ Ã¨Ã§Ã­Ã³Ã²Ã°Ã¨ Ã¨ Ã±ÃµÃ¢Ã Ã²Ã¨Ã« Ã¢Ã®Ã¤Ã¨Ã²Ã¥Ã«Ã¿ Ã§Ã  Ã®Ã¤Ã¥Ã¦Ã¤Ã³ ...")
             wait(1500)
-            sampSendChat("/me ... ïîñëå ÷åãî, âûáğîñèë ïîäîçğåâàåìîãî íà àñôàëüò è çàëîìàë åãî ğóêè")
+            sampSendChat("/me ... Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã®, Ã¢Ã»Ã¡Ã°Ã®Ã±Ã¨Ã« Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã®Ã£Ã® Ã­Ã  Ã Ã±Ã´Ã Ã«Ã¼Ã² Ã¨ Ã§Ã Ã«Ã®Ã¬Ã Ã« Ã¥Ã£Ã® Ã°Ã³ÃªÃ¨")
 
         end)
     end
@@ -1395,18 +1395,18 @@ end
 
 function cmd_invite(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/invite [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/invite [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/do Ïîä ñòîéêîé íàõîäèòñÿ ğşêçàê.")
+            sampSendChat("/do ÃÃ®Ã¤ Ã±Ã²Ã®Ã©ÃªÃ®Ã© Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ Ã°Ã¾ÃªÃ§Ã Ãª.")
             wait(1500)
-            sampSendChat("/do Ôîğìà â ğşêçàêå...")
+            sampSendChat("/do Ã”Ã®Ã°Ã¬Ã  Ã¢ Ã°Ã¾ÃªÃ§Ã ÃªÃ¥...")
             wait(1500)
-            sampSendChat("/me ñóíóë ğóêó â ğşêçàê, ïîñëå ÷åãî âçÿë ôîğìó è áåéäæèê â ğóêè")
+            sampSendChat("/me Ã±Ã³Ã­Ã³Ã« Ã°Ã³ÃªÃ³ Ã¢ Ã°Ã¾ÃªÃ§Ã Ãª, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¢Ã§Ã¿Ã« Ã´Ã®Ã°Ã¬Ã³ Ã¨ Ã¡Ã¥Ã©Ã¤Ã¦Ã¨Ãª Ã¢ Ã°Ã³ÃªÃ¨")
             wait(1500)
-            sampSendChat("/me ïåğåäà¸ò ôîğìó è áåéäæèê")
+            sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¤Ã Â¸Ã² Ã´Ã®Ã°Ã¬Ã³ Ã¨ Ã¡Ã¥Ã©Ã¤Ã¦Ã¨Ãª")
             wait(1500)
-            sampSendChat("/todo Èäèòå ïåğåîäåíüòåñü*óêàçûâàÿ ïàëüöåì íà äâåğü ğàçäåâàëêè")
+            sampSendChat("/todo ÃˆÃ¤Ã¨Ã²Ã¥ Ã¯Ã¥Ã°Ã¥Ã®Ã¤Ã¥Ã­Ã¼Ã²Ã¥Ã±Ã¼*Ã³ÃªÃ Ã§Ã»Ã¢Ã Ã¿ Ã¯Ã Ã«Ã¼Ã¶Ã¥Ã¬ Ã­Ã  Ã¤Ã¢Ã¥Ã°Ã¼ Ã°Ã Ã§Ã¤Ã¥Ã¢Ã Ã«ÃªÃ¨")
             wait(1500)
             sampSendChat("/invite " .. id .. " ")
         end)
@@ -1415,16 +1415,16 @@ end
 
 function cmd_uninvite(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/uninvite [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/uninvite [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat ("/do Íà ïîÿñå çàêğåïëåí ÊÏÊ.")
+            sampSendChat ("/do ÃÃ  Ã¯Ã®Ã¿Ã±Ã¥ Ã§Ã ÃªÃ°Ã¥Ã¯Ã«Ã¥Ã­ ÃŠÃÃŠ.")
             wait(1500)
-            sampSendChat("/me ñíèìàåò ÊÏÊ ñ ïîÿñà è íàæàòèåì êíîïêè âêëş÷àåò åãî.")
+            sampSendChat("/me Ã±Ã­Ã¨Ã¬Ã Ã¥Ã² ÃŠÃÃŠ Ã± Ã¯Ã®Ã¿Ã±Ã  Ã¨ Ã­Ã Ã¦Ã Ã²Ã¨Ã¥Ã¬ ÃªÃ­Ã®Ã¯ÃªÃ¨ Ã¢ÃªÃ«Ã¾Ã·Ã Ã¥Ã² Ã¥Ã£Ã®.")
             wait(1500)
-            sampSendChat ("/me çàõîäèò â áàçó ñîòğóäíèêîâ è âûáèğàåò íóæíîãî, ïîñëå ÷åãî íàæèìàåò íà êíîïêó *Óâîëèòü*.")
+            sampSendChat ("/me Ã§Ã ÃµÃ®Ã¤Ã¨Ã² Ã¢ Ã¡Ã Ã§Ã³ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ®Ã¢ Ã¨ Ã¢Ã»Ã¡Ã¨Ã°Ã Ã¥Ã² Ã­Ã³Ã¦Ã­Ã®Ã£Ã®, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã­Ã Ã¦Ã¨Ã¬Ã Ã¥Ã² Ã­Ã  ÃªÃ­Ã®Ã¯ÃªÃ³ *Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼*.")
             wait(1500)
-            sampSendChat ("/me âûêëş÷àåò ÊÏÊ è âåøàåò îáğàòíî íà ïîÿñ.")
+            sampSendChat ("/me Ã¢Ã»ÃªÃ«Ã¾Ã·Ã Ã¥Ã² ÃŠÃÃŠ Ã¨ Ã¢Ã¥Ã¸Ã Ã¥Ã² Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã¯Ã®Ã¿Ã±.")
             wait(1500)
             sampSendChat("/uninvite " .. id .. " ")
         end)
@@ -1433,18 +1433,18 @@ end
 
 function cmd_cuff(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/cuff [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/cuff [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/do Íàğó÷íèêè âèñÿò íà ïîÿñå.")
+            sampSendChat("/do ÃÃ Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã¢Ã¨Ã±Ã¿Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
             wait(1500)
-            sampSendChat("/me ñíÿë ñ äåğæàòåëÿ íàğó÷íèêè")
+            sampSendChat("/me Ã±Ã­Ã¿Ã« Ã± Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨")
             wait(1500)
-            sampSendChat("/do Íàğó÷íèêè â ğóêàõ.")
+            sampSendChat("/do ÃÃ Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã¢ Ã°Ã³ÃªÃ Ãµ.")
             wait(1500)
-            sampSendChat("/me ğåçêèì äâèæåíèåì îáåèõ ğóê, íàäåë íàğó÷íèêè íà ïğåñòóïíèêà")
+            sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã¡Ã¥Ã¨Ãµ Ã°Ã³Ãª, Ã­Ã Ã¤Ã¥Ã« Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã­Ã  Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
             wait(1500)
-            sampSendChat("/do Ïğåñòóïíèê ñêîâàí.")
+            sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã±ÃªÃ®Ã¢Ã Ã­.")
             wait(1500)
             sampSendChat("/cuff "..id.." ")
          end)
@@ -1453,14 +1453,14 @@ function cmd_cuff(id)
 
 function cmd_uncuff(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/uncuff [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/uncuff [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/do Êëş÷ îò íàğó÷íèêîâ â êàğìàíå.")
+            sampSendChat("/do ÃŠÃ«Ã¾Ã· Ã®Ã² Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ®Ã¢ Ã¢ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
             wait(1500)
-            sampSendChat("/me äâèæåíèåì ïğàâîé ğóêè äîñòàë èç êàğìàíà êëş÷ è îòêğûë íàğó÷íèêè")
+            sampSendChat("/me Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã¯Ã°Ã Ã¢Ã®Ã© Ã°Ã³ÃªÃ¨ Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã  ÃªÃ«Ã¾Ã· Ã¨ Ã®Ã²ÃªÃ°Ã»Ã« Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨")
             wait(1500)
-            sampSendChat("/do Ïğåñòóïíèê ğàñêîâàí.")
+            sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã°Ã Ã±ÃªÃ®Ã¢Ã Ã­.")
             wait(1500)
             sampSendChat("/uncuff "..id.." ")
         end)
@@ -1469,12 +1469,12 @@ function cmd_uncuff(id)
 
 function cmd_gotome(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/gotome [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/gotome [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me çàëîìèë ïğàâóş ğóêó íàğóøèòåëş")
+            sampSendChat("/me Ã§Ã Ã«Ã®Ã¬Ã¨Ã« Ã¯Ã°Ã Ã¢Ã³Ã¾ Ã°Ã³ÃªÃ³ Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¾")
             wait(1500)
-            sampSendChat("/me âåäåò íàğóøèòåëÿ çà ñîáîé")
+            sampSendChat("/me Ã¢Ã¥Ã¤Ã¥Ã² Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¿ Ã§Ã  Ã±Ã®Ã¡Ã®Ã©")
             wait(1500)
             sampSendChat("/gotome "..id.." ")
         end)
@@ -1483,12 +1483,12 @@ function cmd_gotome(id)
 
 function cmd_ungotome(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/ungotome [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/ungotome [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me îòïóñòèë ïğàâóş ğóêó ïğåñòóïíèêà")
+            sampSendChat("/me Ã®Ã²Ã¯Ã³Ã±Ã²Ã¨Ã« Ã¯Ã°Ã Ã¢Ã³Ã¾ Ã°Ã³ÃªÃ³ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
             wait(1500)
-            sampSendChat("/do Ïğåñòóïíèê ñâîáîäåí.")
+            sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã±Ã¢Ã®Ã¡Ã®Ã¤Ã¥Ã­.")
             wait(1500)
             sampSendChat("/ungotome "..id.." ")
         end)
@@ -1497,24 +1497,24 @@ function cmd_ungotome(id)
 
 function cmd_gcuff(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/gcuff [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/gcuff [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/do Íàğó÷íèêè âèñÿò íà ïîÿñå.")
+            sampSendChat("/do ÃÃ Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã¢Ã¨Ã±Ã¿Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
             wait(1500)
-            sampSendChat("/me ñíÿë ñ äåğæàòåëÿ íàğó÷íèêè")
+            sampSendChat("/me Ã±Ã­Ã¿Ã« Ã± Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿ Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨")
             wait(1500)
-            sampSendChat("/do Íàğó÷íèêè â ğóêàõ.")
+            sampSendChat("/do ÃÃ Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã¢ Ã°Ã³ÃªÃ Ãµ.")
             wait(1500)
-            sampSendChat("/me ğåçêèì äâèæåíèåì îáåèõ ğóê, íàäåë íàğó÷íèêè íà ïğåñòóïíèêà")
+            sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã®Ã¡Ã¥Ã¨Ãµ Ã°Ã³Ãª, Ã­Ã Ã¤Ã¥Ã« Ã­Ã Ã°Ã³Ã·Ã­Ã¨ÃªÃ¨ Ã­Ã  Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
             wait(1500)
-            sampSendChat("/do Ïğåñòóïíèê ñêîâàí.")
+            sampSendChat("/do ÃÃ°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨Ãª Ã±ÃªÃ®Ã¢Ã Ã­.")
             wait(1500)
             sampSendChat("/cuff "..id.." ")
             wait(1500)
-            sampSendChat("/me çàëîìèë ïğàâóş ğóêó íàğóøèòåëş")
+            sampSendChat("/me Ã§Ã Ã«Ã®Ã¬Ã¨Ã« Ã¯Ã°Ã Ã¢Ã³Ã¾ Ã°Ã³ÃªÃ³ Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¾")
             wait(1500)
-            sampSendChat("/me âåäåò íàğóøèòåëÿ çà ñîáîé")
+            sampSendChat("/me Ã¢Ã¥Ã¤Ã¥Ã² Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¿ Ã§Ã  Ã±Ã®Ã¡Ã®Ã©")
             wait(1500)
             sampSendChat("/gotome "..id.." ")
         end)
@@ -1523,16 +1523,16 @@ function cmd_gcuff(id)
 
 function cmd_frisk(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/frisk [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/frisk [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me íàäåâ ğåçèíîâûå ïåğ÷àòêè, íà÷àë ïğîùóïûâàòü ãğàæäàíèíà ïî âñåìó òåëó ...")
+            sampSendChat("/me Ã­Ã Ã¤Ã¥Ã¢ Ã°Ã¥Ã§Ã¨Ã­Ã®Ã¢Ã»Ã¥ Ã¯Ã¥Ã°Ã·Ã Ã²ÃªÃ¨, Ã­Ã Ã·Ã Ã« Ã¯Ã°Ã®Ã¹Ã³Ã¯Ã»Ã¢Ã Ã²Ã¼ Ã£Ã°Ã Ã¦Ã¤Ã Ã­Ã¨Ã­Ã  Ã¯Ã® Ã¢Ã±Ã¥Ã¬Ã³ Ã²Ã¥Ã«Ã³ ...")
             wait(1500)
-            sampSendChat("/do Ïåğ÷àòêè íàäåòû.")
+            sampSendChat("/do ÃÃ¥Ã°Ã·Ã Ã²ÃªÃ¨ Ã­Ã Ã¤Ã¥Ã²Ã».")
             wait(1500)
-            sampSendChat("/me ïğîâîäèò ğóêàìè ïî âåğõíåé ÷àñòè òåëà")
+            sampSendChat("/me Ã¯Ã°Ã®Ã¢Ã®Ã¤Ã¨Ã² Ã°Ã³ÃªÃ Ã¬Ã¨ Ã¯Ã® Ã¢Ã¥Ã°ÃµÃ­Ã¥Ã© Ã·Ã Ã±Ã²Ã¨ Ã²Ã¥Ã«Ã ")
             wait(1500)
-            sampSendChat("/me ... çà òåì íà÷àë òùàòåëüíî îáûñêèâàòü ãğàæäàíèíà, âûêëàäûâàÿ âñ¸ äëÿ èçó÷åíèÿ")
+            sampSendChat("/me ... Ã§Ã  Ã²Ã¥Ã¬ Ã­Ã Ã·Ã Ã« Ã²Ã¹Ã Ã²Ã¥Ã«Ã¼Ã­Ã® Ã®Ã¡Ã»Ã±ÃªÃ¨Ã¢Ã Ã²Ã¼ Ã£Ã°Ã Ã¦Ã¤Ã Ã­Ã¨Ã­Ã , Ã¢Ã»ÃªÃ«Ã Ã¤Ã»Ã¢Ã Ã¿ Ã¢Ã±Â¸ Ã¤Ã«Ã¿ Ã¨Ã§Ã³Ã·Ã¥Ã­Ã¨Ã¿")
             wait(1500)
             sampSendChat("/frisk " .. id .. " ")
         end)
@@ -1542,20 +1542,20 @@ end
 
 function cmd_pursuit(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/pursuit [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/pursuit [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/do ÊÏÊ â ëåâîì êàğìàíå.")
+            sampSendChat("/do ÃŠÃÃŠ Ã¢ Ã«Ã¥Ã¢Ã®Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
             wait(1500)
-            sampSendChat("/me äîñòàë ÊÏÊ èç ëåâîãî êàğìàíà")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« ÃŠÃÃŠ Ã¨Ã§ Ã«Ã¥Ã¢Ã®Ã£Ã® ÃªÃ Ã°Ã¬Ã Ã­Ã ")
             wait(1500)
-            sampSendChat("/me âêëş÷èë ÊÏÊ è çàøåë â áàçó äàííûõ Ïîëèöèè")
+            sampSendChat("/me Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¡Ã Ã§Ã³ Ã¤Ã Ã­Ã­Ã»Ãµ ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¨")
             wait(1500)
-            sampSendChat("/me îòêğûë äåëî ñ äàííûìè ïğåñòóïíèêà")
+            sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¤Ã¥Ã«Ã® Ã± Ã¤Ã Ã­Ã­Ã»Ã¬Ã¨ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
             wait(1500)
-            sampSendChat("/do Äàííûå ïğåñòóïíèêà ïîëó÷åíû.")
+            sampSendChat("/do Ã„Ã Ã­Ã­Ã»Ã¥ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¯Ã®Ã«Ã³Ã·Ã¥Ã­Ã».")
             wait(1500)
-            sampSendChat("/me ïîäêëş÷èëñÿ ê êàìåğàì ñëåæåíèÿ øòàòà")
+            sampSendChat("/me Ã¯Ã®Ã¤ÃªÃ«Ã¾Ã·Ã¨Ã«Ã±Ã¿ Ãª ÃªÃ Ã¬Ã¥Ã°Ã Ã¬ Ã±Ã«Ã¥Ã¦Ã¥Ã­Ã¨Ã¿ Ã¸Ã²Ã Ã²Ã ")
             wait(1500)
             sampSendChat("/pursuit " .. id .. " ")
         end)
@@ -1566,24 +1566,24 @@ function cmd_arm(id)
         lua_thread.create(function()
             sampSendChat("/armour")
             wait(1500)
-            sampSendChat("/me ñìåíèë ïëàñòèíû â áğîíèæåëåòå")
+            sampSendChat("/me Ã±Ã¬Ã¥Ã­Ã¨Ã« Ã¯Ã«Ã Ã±Ã²Ã¨Ã­Ã» Ã¢ Ã¡Ã°Ã®Ã­Ã¨Ã¦Ã¥Ã«Ã¥Ã²Ã¥")
         end)
     end
 
     function cmd_agenda(id)
         if id == "" then
-            sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/agenda [ID].",0x318CE7FF -1)
+            sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/agenda [ID].",0x318CE7FF -1)
         else
             lua_thread.create(function()
-                sampSendChat("/do Â íàãğóäíîì êàğìàíå ëåæàò áëàíêè ïîâåñòîê.")
+                sampSendChat("/do Ã‚ Ã­Ã Ã£Ã°Ã³Ã¤Ã­Ã®Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥ Ã«Ã¥Ã¦Ã Ã² Ã¡Ã«Ã Ã­ÃªÃ¨ Ã¯Ã®Ã¢Ã¥Ã±Ã²Ã®Ãª.")
                 wait(1500)
-                sampSendChat("/me ïåğåêëàäûâàåò ïàñïîğò â ëåâóş ğóêó")
+                sampSendChat("/me Ã¯Ã¥Ã°Ã¥ÃªÃ«Ã Ã¤Ã»Ã¢Ã Ã¥Ã² Ã¯Ã Ã±Ã¯Ã®Ã°Ã² Ã¢ Ã«Ã¥Ã¢Ã³Ã¾ Ã°Ã³ÃªÃ³")
                 wait(1500)
-                sampSendChat("/me âûòÿãèâàåò èç íàãğóäíîãî êàğìàíà îäèí áëàíê, ğàçâîğà÷èâàåò åãî è íà÷èíàåò çàïîëíÿòü")
+                sampSendChat("/me Ã¢Ã»Ã²Ã¿Ã£Ã¨Ã¢Ã Ã¥Ã² Ã¨Ã§ Ã­Ã Ã£Ã°Ã³Ã¤Ã­Ã®Ã£Ã® ÃªÃ Ã°Ã¬Ã Ã­Ã  Ã®Ã¤Ã¨Ã­ Ã¡Ã«Ã Ã­Ãª, Ã°Ã Ã§Ã¢Ã®Ã°Ã Ã·Ã¨Ã¢Ã Ã¥Ã² Ã¥Ã£Ã® Ã¨ Ã­Ã Ã·Ã¨Ã­Ã Ã¥Ã² Ã§Ã Ã¯Ã®Ã«Ã­Ã¿Ã²Ã¼")
                 wait(1500)
-                sampSendChat("/me ïåğåïèñûâàåò âñå äàííûå èç ïàñïîğòà, ïîñëå ÷åãî ñòàâèò ïîäïèñü")
+                sampSendChat("/me Ã¯Ã¥Ã°Ã¥Ã¯Ã¨Ã±Ã»Ã¢Ã Ã¥Ã² Ã¢Ã±Ã¥ Ã¤Ã Ã­Ã­Ã»Ã¥ Ã¨Ã§ Ã¯Ã Ã±Ã¯Ã®Ã°Ã²Ã , Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã±Ã²Ã Ã¢Ã¨Ã² Ã¯Ã®Ã¤Ã¯Ã¨Ã±Ã¼")
                 wait(1500)
-                sampSendChat("/todo Âîò, ğàñïèøèòåñü*ïåğåäàâàÿ áóìàãè ÷åëîâåêó íàïğîòèâ")
+                sampSendChat("/todo Ã‚Ã®Ã², Ã°Ã Ã±Ã¯Ã¨Ã¸Ã¨Ã²Ã¥Ã±Ã¼*Ã¯Ã¥Ã°Ã¥Ã¤Ã Ã¢Ã Ã¿ Ã¡Ã³Ã¬Ã Ã£Ã¨ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³ Ã­Ã Ã¯Ã°Ã®Ã²Ã¨Ã¢")
                 wait(1500)
                 sampSendChat("/agenda " .. id .. " ")
             end)
@@ -1594,18 +1594,18 @@ function cmd_mask()
 lua_thread.create(function()
             sampSendChat("/mask")
             wait(1500)
-            sampSendChat("/me íàäåë íà ğóêè ïåğ÷àòêè, íàäåë áàëàêëàâó íà ëèöî")
+            sampSendChat("/me Ã­Ã Ã¤Ã¥Ã« Ã­Ã  Ã°Ã³ÃªÃ¨ Ã¯Ã¥Ã°Ã·Ã Ã²ÃªÃ¨, Ã­Ã Ã¤Ã¥Ã« Ã¡Ã Ã«Ã ÃªÃ«Ã Ã¢Ã³ Ã­Ã  Ã«Ã¨Ã¶Ã®")
         end)
     end
 
 function cmd_drug(id)
     if id == "" then
-         sampAddChatMessage("Ââåäè êîë-âî íàğêî [1-3]: {FFFFFF}/usedrugs [1-3].",0x318CE7FF -1)
+         sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ ÃªÃ®Ã«-Ã¢Ã® Ã­Ã Ã°ÃªÃ® [1-3]: {FFFFFF}/usedrugs [1-3].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me äîñòàë èç êàğìàíà êîíôåòêó ğîøåí")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã  ÃªÃ®Ã­Ã´Ã¥Ã²ÃªÃ³ Ã°Ã®Ã¸Ã¥Ã­")
             wait(1200)
-            sampSendChat("/do Ñíÿë ôàíòèê, ñúåë åå.")
+            sampSendChat("/do Ã‘Ã­Ã¿Ã« Ã´Ã Ã­Ã²Ã¨Ãª, Ã±ÃºÃ¥Ã« Ã¥Ã¥.")
             sampSendChat("/usedrugs "..id.." ")
         end)
     end
@@ -1617,13 +1617,13 @@ lua_thread.create(function()
     if arg1 ~= nil and arg2 ~= nil and arg3 ~= nil then
         sampSendChat('/su '..arg1..' '..arg2..' '..arg3..'')
 		wait(1000)
-		sampSendChat("/me ñíÿë ğàöèş ñ ãğóäíîãî äåğæàòåëÿ è ñîîáùèë äèñïåò÷åğó î íàğóøèòåëå")
+		sampSendChat("/me Ã±Ã­Ã¿Ã« Ã°Ã Ã¶Ã¨Ã¾ Ã± Ã£Ã°Ã³Ã¤Ã­Ã®Ã£Ã® Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿ Ã¨ Ã±Ã®Ã®Ã¡Ã¹Ã¨Ã« Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã³ Ã® Ã­Ã Ã°Ã³Ã¸Ã¨Ã²Ã¥Ã«Ã¥")
         wait(1000)
-        sampSendChat("/do Ñïóñòÿ ïîëìèíóòû ïîëó÷èë îòâåò îò äèñïåò÷åğà.")
+        sampSendChat("/do Ã‘Ã¯Ã³Ã±Ã²Ã¿ Ã¯Ã®Ã«Ã¬Ã¨Ã­Ã³Ã²Ã» Ã¯Ã®Ã«Ã³Ã·Ã¨Ã« Ã®Ã²Ã¢Ã¥Ã² Ã®Ã² Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã .")
         wait(1000)
-        sampSendChat("/todo 10-4, Êîíåö ñâÿçè.*ïîâåñèâ ğàöèş íà ãğóäíîé äåğæàòåëü")
+        sampSendChat("/todo 10-4, ÃŠÃ®Ã­Ã¥Ã¶ Ã±Ã¢Ã¿Ã§Ã¨.*Ã¯Ã®Ã¢Ã¥Ã±Ã¨Ã¢ Ã°Ã Ã¶Ã¨Ã¾ Ã­Ã  Ã£Ã°Ã³Ã¤Ã­Ã®Ã© Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¼")
     else
-		sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/asu [ID] [Êîë-âî ğîçûñêà] [Ïğè÷èíà].", 0x318CE7FF -1)
+		sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/asu [ID] [ÃŠÃ®Ã«-Ã¢Ã® Ã°Ã®Ã§Ã»Ã±ÃªÃ ] [ÃÃ°Ã¨Ã·Ã¨Ã­Ã ].", 0x318CE7FF -1)
 		end
 	end)
 end
@@ -1631,16 +1631,16 @@ end
 
 function cmd_arrest(id)
     if id == "" then
-         sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/arrest [ID].",0x318CE7FF -1)
+         sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/arrest [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me íàæàâ íà òàíãåòó, ñîîáùèë äèñïåò÷åğó î ïğîâåçåííîì ïğåñòóïíèêè ...")
+            sampSendChat("/me Ã­Ã Ã¦Ã Ã¢ Ã­Ã  Ã²Ã Ã­Ã£Ã¥Ã²Ã³, Ã±Ã®Ã®Ã¡Ã¹Ã¨Ã« Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã³ Ã® Ã¯Ã°Ã®Ã¢Ã¥Ã§Ã¥Ã­Ã­Ã®Ã¬ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ¨ ...")
             wait(1500)
-            sampSendChat("/me çàïğîñèë îôèöåğîâ äëÿ ñîïğîâîæäåíèÿ")
+            sampSendChat("/me Ã§Ã Ã¯Ã°Ã®Ã±Ã¨Ã« Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¢ Ã¤Ã«Ã¿ Ã±Ã®Ã¯Ã°Ã®Ã¢Ã®Ã¦Ã¤Ã¥Ã­Ã¨Ã¿")
             wait(1500)
-            sampSendChat("/do Äåïàğòàìåíò: Ïğèíÿòî, îæèäàéòå äâóõ îôèöåğîâ.")
+            sampSendChat("/do Ã„Ã¥Ã¯Ã Ã°Ã²Ã Ã¬Ã¥Ã­Ã²: ÃÃ°Ã¨Ã­Ã¿Ã²Ã®, Ã®Ã¦Ã¨Ã¤Ã Ã©Ã²Ã¥ Ã¤Ã¢Ã³Ãµ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¢.")
             wait(1500)
-            sampSendChat("/do Èç ó÷àñòêà âûõîäÿò 2 îôèöåğà, ïîñëå çàáèğàşò ïğåñòóïíèêà.")
+            sampSendChat("/do ÃˆÃ§ Ã³Ã·Ã Ã±Ã²ÃªÃ  Ã¢Ã»ÃµÃ®Ã¤Ã¿Ã² 2 Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã , Ã¯Ã®Ã±Ã«Ã¥ Ã§Ã Ã¡Ã¨Ã°Ã Ã¾Ã² Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ .")
             sampSendChat("/arrest "..id.." ")
         end)
     end
@@ -1652,26 +1652,26 @@ function cmd_giverank(arg)
         if arg1 ~= nil and arg2 ~= nil then
             sampSendChat('/giverank '..arg1..' '..arg2..'')
             wait(1500)
-            sampSendChat("/do Íà ïîÿñå çàêğåïëåí ÊÏÊ.")
+            sampSendChat("/do ÃÃ  Ã¯Ã®Ã¿Ã±Ã¥ Ã§Ã ÃªÃ°Ã¥Ã¯Ã«Ã¥Ã­ ÃŠÃÃŠ.")
             wait(1500)
-            sampSendChat("/me ñíèìàåò ÊÏÊ ñ ïîÿñà è íàæàòèåì êíîïêè âêëş÷àåò åãî")
+            sampSendChat("/me Ã±Ã­Ã¨Ã¬Ã Ã¥Ã² ÃŠÃÃŠ Ã± Ã¯Ã®Ã¿Ã±Ã  Ã¨ Ã­Ã Ã¦Ã Ã²Ã¨Ã¥Ã¬ ÃªÃ­Ã®Ã¯ÃªÃ¨ Ã¢ÃªÃ«Ã¾Ã·Ã Ã¥Ã² Ã¥Ã£Ã®")
             wait(1500)
-            sampSendChat("/me çàõîäèò â áàçó ñîòğóäíèêîâ è ââîäèò èçìåíåíèÿ, ïîñëå ÷åãî âåøàåò ÊÏÊ îáğàòíî íà ïîÿñ")
+            sampSendChat("/me Ã§Ã ÃµÃ®Ã¤Ã¨Ã² Ã¢ Ã¡Ã Ã§Ã³ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ®Ã¢ Ã¨ Ã¢Ã¢Ã®Ã¤Ã¨Ã² Ã¨Ã§Ã¬Ã¥Ã­Ã¥Ã­Ã¨Ã¿, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¢Ã¥Ã¸Ã Ã¥Ã² ÃŠÃÃŠ Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã¯Ã®Ã¿Ã±")
             wait(1500)
-            sampSendChat("/todo Íîâàÿ ôîğìà â øêàô÷èêå*óëûáàÿñü âçãëÿíóâ â ñòîğîíó äâåğè")
+            sampSendChat("/todo ÃÃ®Ã¢Ã Ã¿ Ã´Ã®Ã°Ã¬Ã  Ã¢ Ã¸ÃªÃ Ã´Ã·Ã¨ÃªÃ¥*Ã³Ã«Ã»Ã¡Ã Ã¿Ã±Ã¼ Ã¢Ã§Ã£Ã«Ã¿Ã­Ã³Ã¢ Ã¢ Ã±Ã²Ã®Ã°Ã®Ã­Ã³ Ã¤Ã¢Ã¥Ã°Ã¨")
             wait(1500)
         else
-            sampAddChatMessage("Ââåäè àéäè èãğîêà:{FFFFFF}/giverank [ID] [Ğàíã 1-9].",0x318CE7FF -1)
+            sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :{FFFFFF}/giverank [ID] [ÃÃ Ã­Ã£ 1-9].",0x318CE7FF -1)
         end
     end)
 end
 
 function cmd_unmask(id)
     if id == nil or id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/unmask [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/unmask [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me äåğæà ïîäîçğåâàåìîãî, ëåâîé ğóêîé íàñèëüíî ñäèğàåò ìàñêó ñ ÷åëîâåêà")
+            sampSendChat("/me Ã¤Ã¥Ã°Ã¦Ã  Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã®Ã£Ã®, Ã«Ã¥Ã¢Ã®Ã© Ã°Ã³ÃªÃ®Ã© Ã­Ã Ã±Ã¨Ã«Ã¼Ã­Ã® Ã±Ã¤Ã¨Ã°Ã Ã¥Ã² Ã¬Ã Ã±ÃªÃ³ Ã± Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ ")
             wait(1500)
             sampSendChat("/unmask "..id.." ")
         end)
@@ -1680,37 +1680,37 @@ end
 
 function cmd_miranda()
 lua_thread.create(function()
-            sampSendChat("Âû èìååòå ïğàâî õğàíèòü ìîë÷àíèå.")
+            sampSendChat("Ã‚Ã» Ã¨Ã¬Ã¥Ã¥Ã²Ã¥ Ã¯Ã°Ã Ã¢Ã® ÃµÃ°Ã Ã­Ã¨Ã²Ã¼ Ã¬Ã®Ã«Ã·Ã Ã­Ã¨Ã¥.")
             wait(1500)
-            sampSendChat("Âñ¸, ÷òî âû ñêàæåòå, ìû ìîæåì è áóäåì èñïîëüçîâàòü ïğîòèâ âàñ â ñóäå.")
+            sampSendChat("Ã‚Ã±Â¸, Ã·Ã²Ã® Ã¢Ã» Ã±ÃªÃ Ã¦Ã¥Ã²Ã¥, Ã¬Ã» Ã¬Ã®Ã¦Ã¥Ã¬ Ã¨ Ã¡Ã³Ã¤Ã¥Ã¬ Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã²Ã¼ Ã¯Ã°Ã®Ã²Ã¨Ã¢ Ã¢Ã Ã± Ã¢ Ã±Ã³Ã¤Ã¥.")
             wait(1500)
-            sampSendChat("Âû èìååòå ïğàâî íà àäâîêàòà è íà îäèí òåëåôîííûé çâîíîê.")
+            sampSendChat("Ã‚Ã» Ã¨Ã¬Ã¥Ã¥Ã²Ã¥ Ã¯Ã°Ã Ã¢Ã® Ã­Ã  Ã Ã¤Ã¢Ã®ÃªÃ Ã²Ã  Ã¨ Ã­Ã  Ã®Ã¤Ã¨Ã­ Ã²Ã¥Ã«Ã¥Ã´Ã®Ã­Ã­Ã»Ã© Ã§Ã¢Ã®Ã­Ã®Ãª.")
             wait(1500)
-            sampSendChat("Åñëè ó âàñ íåò àäâîêàòà, ãîñóäàğñòâî ïğåäîñòàâèò âàì àäâîêàòà, óâèäåòü êîòîğîãî âû ñìîæåòå â çàëå ñóäà.")
+            sampSendChat("Ã…Ã±Ã«Ã¨ Ã³ Ã¢Ã Ã± Ã­Ã¥Ã² Ã Ã¤Ã¢Ã®ÃªÃ Ã²Ã , Ã£Ã®Ã±Ã³Ã¤Ã Ã°Ã±Ã²Ã¢Ã® Ã¯Ã°Ã¥Ã¤Ã®Ã±Ã²Ã Ã¢Ã¨Ã² Ã¢Ã Ã¬ Ã Ã¤Ã¢Ã®ÃªÃ Ã²Ã , Ã³Ã¢Ã¨Ã¤Ã¥Ã²Ã¼ ÃªÃ®Ã²Ã®Ã°Ã®Ã£Ã® Ã¢Ã» Ã±Ã¬Ã®Ã¦Ã¥Ã²Ã¥ Ã¢ Ã§Ã Ã«Ã¥ Ã±Ã³Ã¤Ã .")
             wait(1500)
-            sampSendChat("Âàì ïîíÿòíû âàøè ïğàâà?")
+            sampSendChat("Ã‚Ã Ã¬ Ã¯Ã®Ã­Ã¿Ã²Ã­Ã» Ã¢Ã Ã¸Ã¨ Ã¯Ã°Ã Ã¢Ã ?")
         end)
      end
 
 function cmd_bodyon()
 
         lua_thread.create(function()
-            sampSendChat("/do Íà ãğóäè  âåñèò êàìåğà AXON BODY 3.")
+            sampSendChat("/do ÃÃ  Ã£Ã°Ã³Ã¤Ã¨  Ã¢Ã¥Ã±Ã¨Ã² ÃªÃ Ã¬Ã¥Ã°Ã  AXON BODY 3.")
             wait(1500)
-            sampSendChat("/me ëåãêèì äâèæåíèåì ğóêè ïğîòÿíóëñÿ ê ñåíñîğó è íàæàë îäèí ğàç äëÿ àêòèâàöèè")
+            sampSendChat("/me Ã«Ã¥Ã£ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã°Ã³ÃªÃ¨ Ã¯Ã°Ã®Ã²Ã¿Ã­Ã³Ã«Ã±Ã¿ Ãª Ã±Ã¥Ã­Ã±Ã®Ã°Ã³ Ã¨ Ã­Ã Ã¦Ã Ã« Ã®Ã¤Ã¨Ã­ Ã°Ã Ã§ Ã¤Ã«Ã¿ Ã ÃªÃ²Ã¨Ã¢Ã Ã¶Ã¨Ã¨")
             wait(1500)
-            sampSendChat("/do Áîäè êàìåğà èçäàëà çâóê è âêëş÷èëàñü.")
+            sampSendChat("/do ÃÃ®Ã¤Ã¨ ÃªÃ Ã¬Ã¥Ã°Ã  Ã¨Ã§Ã¤Ã Ã«Ã  Ã§Ã¢Ã³Ãª Ã¨ Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã«Ã Ã±Ã¼.")
         end)
      end
 
 function cmd_bodyoff()
 
 lua_thread.create(function()
-            sampSendChat("/do Íà ãğóäè  âåñèò êàìåğà AXON BODY 3.")
+            sampSendChat("/do ÃÃ  Ã£Ã°Ã³Ã¤Ã¨  Ã¢Ã¥Ã±Ã¨Ã² ÃªÃ Ã¬Ã¥Ã°Ã  AXON BODY 3.")
             wait(1500)
-            sampSendChat("/me ëåãêèì äâèæåíèåì ğóêè ïğîòÿíóëñÿ ê ñåíñîğó è íàæàë îäèí ğàç äëÿ äåàêòèâàöèè")
+            sampSendChat("/me Ã«Ã¥Ã£ÃªÃ¨Ã¬ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¥Ã¬ Ã°Ã³ÃªÃ¨ Ã¯Ã°Ã®Ã²Ã¿Ã­Ã³Ã«Ã±Ã¿ Ãª Ã±Ã¥Ã­Ã±Ã®Ã°Ã³ Ã¨ Ã­Ã Ã¦Ã Ã« Ã®Ã¤Ã¨Ã­ Ã°Ã Ã§ Ã¤Ã«Ã¿ Ã¤Ã¥Ã ÃªÃ²Ã¨Ã¢Ã Ã¶Ã¨Ã¨")
             wait(1500)
-            sampSendChat("/do Áîäè êàìåğà èçäàëà çâóê è âûêëş÷èëàñü")
+            sampSendChat("/do ÃÃ®Ã¤Ã¨ ÃªÃ Ã¬Ã¥Ã°Ã  Ã¨Ã§Ã¤Ã Ã«Ã  Ã§Ã¢Ã³Ãª Ã¨ Ã¢Ã»ÃªÃ«Ã¾Ã·Ã¨Ã«Ã Ã±Ã¼")
         end)
      end
 
@@ -1719,25 +1719,25 @@ function cmd_ticket(arg)
     lua_thread.create(function()
         local id, prichina, price = arg:match('(%d+)%s(%d+)%s(.)')
         if id ~= nil and prichina ~= nil and price ~= nil then
-                sampSendChat("/me äîñòàâ íåáîëüøîé òåğìèíàë, ïğèñîåäèíèë åãî ê ÊÏÊ è ïîêàçàë ïğè¸ìíèê äëÿ êàğòû")
+                sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã¢ Ã­Ã¥Ã¡Ã®Ã«Ã¼Ã¸Ã®Ã© Ã²Ã¥Ã°Ã¬Ã¨Ã­Ã Ã«, Ã¯Ã°Ã¨Ã±Ã®Ã¥Ã¤Ã¨Ã­Ã¨Ã« Ã¥Ã£Ã® Ãª ÃŠÃÃŠ Ã¨ Ã¯Ã®ÃªÃ Ã§Ã Ã« Ã¯Ã°Ã¨Â¸Ã¬Ã­Ã¨Ãª Ã¤Ã«Ã¿ ÃªÃ Ã°Ã²Ã»")
                 wait(1500)
-                sampSendChat("/todo Âñòàâüòå ñíà÷àëà âîäèòåëüñêóş, çàòåì êğåäèòíóş êàğòó â ïğè¸ìíèê!*äåğæà òåğìèíàë")
+                sampSendChat("/todo Ã‚Ã±Ã²Ã Ã¢Ã¼Ã²Ã¥ Ã±Ã­Ã Ã·Ã Ã«Ã  Ã¢Ã®Ã¤Ã¨Ã²Ã¥Ã«Ã¼Ã±ÃªÃ³Ã¾, Ã§Ã Ã²Ã¥Ã¬ ÃªÃ°Ã¥Ã¤Ã¨Ã²Ã­Ã³Ã¾ ÃªÃ Ã°Ã²Ã³ Ã¢ Ã¯Ã°Ã¨Â¸Ã¬Ã­Ã¨Ãª!*Ã¤Ã¥Ã°Ã¦Ã  Ã²Ã¥Ã°Ã¬Ã¨Ã­Ã Ã«")
                 wait(1500)
                 sampSendChat('/ticket '..id..' '..prichina..'  '..price..' ')
          else
-      sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/ticket [ID] [Ñóììà] [Ïğè÷èíà].", 0x318CE7FF)
+      sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/ticket [ID] [Ã‘Ã³Ã¬Ã¬Ã ] [ÃÃ°Ã¨Ã·Ã¨Ã­Ã ].", 0x318CE7FF)
       end
      end)
     end
 
 function cmd_pursuit(id)
     if id == "" then
-         sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/pursuit [ID].", 0x318CE7FF - 1)
+         sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/pursuit [ID].", 0x318CE7FF - 1)
     else
         lua_thread.create(function()
-            sampSendChat("/me ïîëîæèâ ğóêè íà êëàâèàòóğó áîğòîâîãî êîìïüşòåğà, íà÷àë ïîèñê ïî áàçå äàííûõ ïî èìåíè")
+            sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã¢ Ã°Ã³ÃªÃ¨ Ã­Ã  ÃªÃ«Ã Ã¢Ã¨Ã Ã²Ã³Ã°Ã³ Ã¡Ã®Ã°Ã²Ã®Ã¢Ã®Ã£Ã® ÃªÃ®Ã¬Ã¯Ã¼Ã¾Ã²Ã¥Ã°Ã , Ã­Ã Ã·Ã Ã« Ã¯Ã®Ã¨Ã±Ãª Ã¯Ã® Ã¡Ã Ã§Ã¥ Ã¤Ã Ã­Ã­Ã»Ãµ Ã¯Ã® Ã¨Ã¬Ã¥Ã­Ã¨")
             wait(1500)
-            sampSendChat("/me íàéäÿ èìÿ, ïğîâåğèë íîìåğ òåëåôîíà è âêëş÷èë îòñëåæèâàíèÿ ïî ÃÏÑ")
+            sampSendChat("/me Ã­Ã Ã©Ã¤Ã¿ Ã¨Ã¬Ã¿, Ã¯Ã°Ã®Ã¢Ã¥Ã°Ã¨Ã« Ã­Ã®Ã¬Ã¥Ã° Ã²Ã¥Ã«Ã¥Ã´Ã®Ã­Ã  Ã¨ Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« Ã®Ã²Ã±Ã«Ã¥Ã¦Ã¨Ã¢Ã Ã­Ã¨Ã¿ Ã¯Ã® ÃƒÃÃ‘")
             wait(1500)
             sampSendChat("/pursuit "..id.." ")
         end)
@@ -1746,92 +1746,92 @@ function cmd_pursuit(id)
 
 function cmd_drugtestno()
 lua_thread.create(function()
-            sampSendChat("/me äîñòàë èç ïîäñóìêà íàáîğ Drug-test")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ Ã¯Ã®Ã¤Ã±Ã³Ã¬ÃªÃ  Ã­Ã Ã¡Ã®Ã° Drug-test")
             wait(1500)
-            sampSendChat("/me âçÿë èç íàáîğà ïğîáèğêó ñ ıòèëîâûì ñïèğòîì")
+            sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã¨Ã§ Ã­Ã Ã¡Ã®Ã°Ã  Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã± Ã½Ã²Ã¨Ã«Ã®Ã¢Ã»Ã¬ Ã±Ã¯Ã¨Ã°Ã²Ã®Ã¬")
             wait(1500)
-            sampSendChat("/me íàñûïàë â ïğîáèğêó íàéäåíîå âåùåñòâî")
+            sampSendChat("/me Ã­Ã Ã±Ã»Ã¯Ã Ã« Ã¢ Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã­Ã Ã©Ã¤Ã¥Ã­Ã®Ã¥ Ã¢Ã¥Ã¹Ã¥Ã±Ã²Ã¢Ã®")
             wait(1500)
-            sampSendChat ("/me äîáàâèë â ïğîáèğêó òåñò Èìóíî-Õğîì-10")
+            sampSendChat ("/me Ã¤Ã®Ã¡Ã Ã¢Ã¨Ã« Ã¢ Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã²Ã¥Ã±Ã² ÃˆÃ¬Ã³Ã­Ã®-Ã•Ã°Ã®Ã¬-10")
             wait(1700)
-            sampSendChat("/me ğåçêèìè äâèæåíèÿìè âçáàëòûâàåò ïğîáèğêó")
+            sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬Ã¨ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¿Ã¬Ã¨ Ã¢Ã§Ã¡Ã Ã«Ã²Ã»Ã¢Ã Ã¥Ã² Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³")
             wait(1700)
-            sampSendChat("/do Òåñò äàë îòğèöàòåëüíûé ğåçóëüòàò, âåùåñòâî íå ÿâëÿåòñÿ íàğêîòèêîì.")
+            sampSendChat("/do Ã’Ã¥Ã±Ã² Ã¤Ã Ã« Ã®Ã²Ã°Ã¨Ã¶Ã Ã²Ã¥Ã«Ã¼Ã­Ã»Ã© Ã°Ã¥Ã§Ã³Ã«Ã¼Ã²Ã Ã², Ã¢Ã¥Ã¹Ã¥Ã±Ã²Ã¢Ã® Ã­Ã¥ Ã¿Ã¢Ã«Ã¿Ã¥Ã²Ã±Ã¿ Ã­Ã Ã°ÃªÃ®Ã²Ã¨ÃªÃ®Ã¬.")
         end)
      end
 
 
 function cmd_drugtestyes()
 lua_thread.create(function()
-            sampSendChat("/me äîñòàë èç ïîäñóìêà íàáîğ Drug-test")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ Ã¯Ã®Ã¤Ã±Ã³Ã¬ÃªÃ  Ã­Ã Ã¡Ã®Ã° Drug-test")
             wait(1500)
-            sampSendChat("/me âçÿë èç íàáîğà ïğîáèğêó ñ ıòèëîâûì ñïèğòîì")
+            sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã¨Ã§ Ã­Ã Ã¡Ã®Ã°Ã  Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã± Ã½Ã²Ã¨Ã«Ã®Ã¢Ã»Ã¬ Ã±Ã¯Ã¨Ã°Ã²Ã®Ã¬")
             wait(1500)
-            sampSendChat("/me íàñûïàë â ïğîáèğêó íàéäåíîå âåùåñòâî")
+            sampSendChat("/me Ã­Ã Ã±Ã»Ã¯Ã Ã« Ã¢ Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã­Ã Ã©Ã¤Ã¥Ã­Ã®Ã¥ Ã¢Ã¥Ã¹Ã¥Ã±Ã²Ã¢Ã®")
             wait(1500)
-            sampSendChat ("/me äîáàâèë â ïğîáèğêó òåñò Èìóíî-Õğîì-10")
+            sampSendChat ("/me Ã¤Ã®Ã¡Ã Ã¢Ã¨Ã« Ã¢ Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã²Ã¥Ã±Ã² ÃˆÃ¬Ã³Ã­Ã®-Ã•Ã°Ã®Ã¬-10")
             wait(1700)
-            sampSendChat("/me ğåçêèìè äâèæåíèÿìè âçáàëòûâàåò ïğîáèğêó")
+            sampSendChat("/me Ã°Ã¥Ã§ÃªÃ¨Ã¬Ã¨ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¿Ã¬Ã¨ Ã¢Ã§Ã¡Ã Ã«Ã²Ã»Ã¢Ã Ã¥Ã² Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³")
             wait(1700)
-            sampSendChat("/do Òåñò äàë ïîëîæèòåëüíûé ğåçóëüòàò, âåùåñòâî ÿâëÿåòñÿ íàğêîòèêîì.")
+            sampSendChat("/do Ã’Ã¥Ã±Ã² Ã¤Ã Ã« Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã»Ã© Ã°Ã¥Ã§Ã³Ã«Ã¼Ã²Ã Ã², Ã¢Ã¥Ã¹Ã¥Ã±Ã²Ã¢Ã® Ã¿Ã¢Ã«Ã¿Ã¥Ã²Ã±Ã¿ Ã­Ã Ã°ÃªÃ®Ã²Ã¨ÃªÃ®Ã¬.")
         end)
      end
 
 function cmd_vzatka()
 lua_thread.create(function()
-         sampSendChat("/me ñìîòğèò íà çàäåğæàííîãî, äîñòà¸ò ñ áàğäà÷êà ğó÷êó è ëèñòî÷åê.")
+         sampSendChat("/me Ã±Ã¬Ã®Ã²Ã°Ã¨Ã² Ã­Ã  Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã­Ã®Ã£Ã®, Ã¤Ã®Ã±Ã²Ã Â¸Ã² Ã± Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ  Ã°Ã³Ã·ÃªÃ³ Ã¨ Ã«Ã¨Ã±Ã²Ã®Ã·Ã¥Ãª.")
          wait(1500)
-         sampSendChat("/me ïèøåò íà ëèñòî÷êå ñóììó ñ øåñòüş íóëÿìè, êèäàåò íà çàäíåå ñèäåíüå.")
+         sampSendChat("/me Ã¯Ã¨Ã¸Ã¥Ã² Ã­Ã  Ã«Ã¨Ã±Ã²Ã®Ã·ÃªÃ¥ Ã±Ã³Ã¬Ã¬Ã³ Ã± Ã¸Ã¥Ã±Ã²Ã¼Ã¾ Ã­Ã³Ã«Ã¿Ã¬Ã¨, ÃªÃ¨Ã¤Ã Ã¥Ã² Ã­Ã  Ã§Ã Ã¤Ã­Ã¥Ã¥ Ã±Ã¨Ã¤Ã¥Ã­Ã¼Ã¥.")
          wait(1500)
-         sampSendChat("/do Íà ëèñòî÷êå íåáğåæíî è êîğÿâî áûëî íàïèñàíî: 5.000.000$.")
+         sampSendChat("/do ÃÃ  Ã«Ã¨Ã±Ã²Ã®Ã·ÃªÃ¥ Ã­Ã¥Ã¡Ã°Ã¥Ã¦Ã­Ã® Ã¨ ÃªÃ®Ã°Ã¿Ã¢Ã® Ã¡Ã»Ã«Ã® Ã­Ã Ã¯Ã¨Ã±Ã Ã­Ã®: 5.000.000$.")
       end)
    end
 
 
 function cmd_bomb()
 lua_thread.create(function()
-         sampSendChat("/do Ïåğåä ÷åëîâåêîì íàõîäèòñÿ áîìáà, íà áîìáå çàâåäåí òàéìåğ.")
+         sampSendChat("/do ÃÃ¥Ã°Ã¥Ã¤ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ®Ã¬ Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ Ã¡Ã®Ã¬Ã¡Ã , Ã­Ã  Ã¡Ã®Ã¬Ã¡Ã¥ Ã§Ã Ã¢Ã¥Ã¤Ã¥Ã­ Ã²Ã Ã©Ã¬Ã¥Ã°.")
          wait(1500)
-         sampSendChat("/do Íà áğîíåæèëåòå çàêğåïëåíà íåáîëüøàÿ ñóìêà ñàï¸ğà.")
+         sampSendChat("/do ÃÃ  Ã¡Ã°Ã®Ã­Ã¥Ã¦Ã¨Ã«Ã¥Ã²Ã¥ Ã§Ã ÃªÃ°Ã¥Ã¯Ã«Ã¥Ã­Ã  Ã­Ã¥Ã¡Ã®Ã«Ã¼Ã¸Ã Ã¿ Ã±Ã³Ã¬ÃªÃ  Ã±Ã Ã¯Â¸Ã°Ã .")
          wait(1500)
-         sampSendChat("/me îòêğûâ ñóìêó ïîòÿíóëñÿ çà ñïåöèàëüíûì ÊÏÊ äëÿ ğàçìèíèğîâàíèÿ áîìá")
+         sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã¢ Ã±Ã³Ã¬ÃªÃ³ Ã¯Ã®Ã²Ã¿Ã­Ã³Ã«Ã±Ã¿ Ã§Ã  Ã±Ã¯Ã¥Ã¶Ã¨Ã Ã«Ã¼Ã­Ã»Ã¬ ÃŠÃÃŠ Ã¤Ã«Ã¿ Ã°Ã Ã§Ã¬Ã¨Ã­Ã¨Ã°Ã®Ã¢Ã Ã­Ã¨Ã¿ Ã¡Ã®Ã¬Ã¡")
          wait(1500)
-         sampSendChat("/me äîñòàë ÊÏÊ èç ñóìêè âêëş÷èë åãî, ñôîòîãğàôèğîâàë íà íåãî áîìáó è òàéìåğ, ...")
+         sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« ÃŠÃÃŠ Ã¨Ã§ Ã±Ã³Ã¬ÃªÃ¨ Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« Ã¥Ã£Ã®, Ã±Ã´Ã®Ã²Ã®Ã£Ã°Ã Ã´Ã¨Ã°Ã®Ã¢Ã Ã« Ã­Ã  Ã­Ã¥Ã£Ã® Ã¡Ã®Ã¬Ã¡Ã³ Ã¨ Ã²Ã Ã©Ã¬Ã¥Ã°, ...")
          wait(1500)
-         sampSendChat("/me ... ïîñëå ñâÿçàâøèñü ñ äèñïåò÷åğîì ïåğåñëàë ñäåëàííûå ñíèìêè")
+         sampSendChat("/me ... Ã¯Ã®Ã±Ã«Ã¥ Ã±Ã¢Ã¿Ã§Ã Ã¢Ã¸Ã¨Ã±Ã¼ Ã± Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã®Ã¬ Ã¯Ã¥Ã°Ã¥Ã±Ã«Ã Ã« Ã±Ã¤Ã¥Ã«Ã Ã­Ã­Ã»Ã¥ Ã±Ã­Ã¨Ã¬ÃªÃ¨")
          wait(1500)
-         sampSendChat("/do [Äèñïåò÷åğ]: - Ìû ïîëó÷èëè ñíèìêè, òèï áîìáû PR-256, îãëàøàş ïîğÿäîê äåéñòâèé.")
+         sampSendChat("/do [Ã„Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°]: - ÃŒÃ» Ã¯Ã®Ã«Ã³Ã·Ã¨Ã«Ã¨ Ã±Ã­Ã¨Ã¬ÃªÃ¨, Ã²Ã¨Ã¯ Ã¡Ã®Ã¬Ã¡Ã» PR-256, Ã®Ã£Ã«Ã Ã¸Ã Ã¾ Ã¯Ã®Ã°Ã¿Ã¤Ã®Ãª Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã¨Ã©.")
          wait(1500)
-         sampSendChat("/do [Äèñïåò÷åğ]: - Ê äàííîìó òèïó áîìáû ìîæíî ïîäêëş÷èòüñÿ ïî ñåòè, äåéñòâóéòå.")
+         sampSendChat("/do [Ã„Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°]: - ÃŠ Ã¤Ã Ã­Ã­Ã®Ã¬Ã³ Ã²Ã¨Ã¯Ã³ Ã¡Ã®Ã¬Ã¡Ã» Ã¬Ã®Ã¦Ã­Ã® Ã¯Ã®Ã¤ÃªÃ«Ã¾Ã·Ã¨Ã²Ã¼Ã±Ã¿ Ã¯Ã® Ã±Ã¥Ã²Ã¨, Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã³Ã©Ã²Ã¥.")
          wait(1500)
-         sampSendChat("/me íàæàë â ÊÏÊ êíîïêó search for the nearest device, ïîñëå ÷åãî ÊÏÊ íà÷àë ïîèñê")
+         sampSendChat("/me Ã­Ã Ã¦Ã Ã« Ã¢ ÃŠÃÃŠ ÃªÃ­Ã®Ã¯ÃªÃ³ search for the nearest device, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® ÃŠÃÃŠ Ã­Ã Ã·Ã Ã« Ã¯Ã®Ã¨Ã±Ãª")
          wait(1500)
-         sampSendChat("/do ÊÏÊ âûäàë óñòğîéñòâî INNPR-256NNI.")
+         sampSendChat("/do ÃŠÃÃŠ Ã¢Ã»Ã¤Ã Ã« Ã³Ã±Ã²Ã°Ã®Ã©Ã±Ã²Ã¢Ã® INNPR-256NNI.")
          wait(1500)
-         sampSendChat("/me ïîäêëş÷èëñÿ ê óñòğîéñòâó, ïîñëå äîëîæèë îá ıòîì äèñïåò÷åğó")
+         sampSendChat("/me Ã¯Ã®Ã¤ÃªÃ«Ã¾Ã·Ã¨Ã«Ã±Ã¿ Ãª Ã³Ã±Ã²Ã°Ã®Ã©Ã±Ã²Ã¢Ã³, Ã¯Ã®Ã±Ã«Ã¥ Ã¤Ã®Ã«Ã®Ã¦Ã¨Ã« Ã®Ã¡ Ã½Ã²Ã®Ã¬ Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã³")
          wait(1500)
-         sampSendChat("/do [Äèñïåò÷åğ]: - Äà, âû ïîäêëş÷èëèñü, òåïåğü ââåäèòå êîä 1-0-5-J-J-Q-G-2-2.")
+         sampSendChat("/do [Ã„Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°]: - Ã„Ã , Ã¢Ã» Ã¯Ã®Ã¤ÃªÃ«Ã¾Ã·Ã¨Ã«Ã¨Ã±Ã¼, Ã²Ã¥Ã¯Ã¥Ã°Ã¼ Ã¢Ã¢Ã¥Ã¤Ã¨Ã²Ã¥ ÃªÃ®Ã¤ 1-0-5-J-J-Q-G-2-2.")
          wait(1500)
-         sampSendChat("/me íà÷àë ââîäèòü êîä íàçâàííûé äèñïåò÷åğîì")
+         sampSendChat("/me Ã­Ã Ã·Ã Ã« Ã¢Ã¢Ã®Ã¤Ã¨Ã²Ã¼ ÃªÃ®Ã¤ Ã­Ã Ã§Ã¢Ã Ã­Ã­Ã»Ã© Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã®Ã¬")
          wait(1500)
-         sampSendChat("/do Òàéìåğ íà áîìáå îñòàíîâèëñÿ.")
+         sampSendChat("/do Ã’Ã Ã©Ã¬Ã¥Ã° Ã­Ã  Ã¡Ã®Ã¬Ã¡Ã¥ Ã®Ã±Ã²Ã Ã­Ã®Ã¢Ã¨Ã«Ã±Ã¿.")
          wait(1500)
-         sampSendChat("/todo Ïîëó÷èëîñü.*ãîâîğÿ ïî ğàöèè ñ äèñïåò÷åğîì")
+         sampSendChat("/todo ÃÃ®Ã«Ã³Ã·Ã¨Ã«Ã®Ã±Ã¼.*Ã£Ã®Ã¢Ã®Ã°Ã¿ Ã¯Ã® Ã°Ã Ã¶Ã¨Ã¨ Ã± Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã®Ã¬")
          wait(1500)
-         sampSendChat("/do [Äèñïåò÷åğ]: - Âàøà ìèññèÿ çàâåğøåíà, âåçèòå áîìáó â Îôèñ, êîíåö ñâÿçè.")
+         sampSendChat("/do [Ã„Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°]: - Ã‚Ã Ã¸Ã  Ã¬Ã¨Ã±Ã±Ã¨Ã¿ Ã§Ã Ã¢Ã¥Ã°Ã¸Ã¥Ã­Ã , Ã¢Ã¥Ã§Ã¨Ã²Ã¥ Ã¡Ã®Ã¬Ã¡Ã³ Ã¢ ÃÃ´Ã¨Ã±, ÃªÃ®Ã­Ã¥Ã¶ Ã±Ã¢Ã¿Ã§Ã¨.")
       end)
    end
 
 
 function cmd_probiv()
 lua_thread.create(function()
-         sampSendChat("/do Íà ïîÿñå âèñèò ëè÷íûé ÊÏÊ ñîòğóäíèêà.")
+         sampSendChat("/do ÃÃ  Ã¯Ã®Ã¿Ã±Ã¥ Ã¢Ã¨Ã±Ã¨Ã² Ã«Ã¨Ã·Ã­Ã»Ã© ÃŠÃÃŠ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ .")
          wait(1500)
-         sampSendChat("/me ñíÿë ñ ïîÿñà ÊÏÊ , íà÷àë ïğîáèâàòü ÷åëîâåêà...")
+         sampSendChat("/me Ã±Ã­Ã¿Ã« Ã± Ã¯Ã®Ã¿Ã±Ã  ÃŠÃÃŠ , Ã­Ã Ã·Ã Ã« Ã¯Ã°Ã®Ã¡Ã¨Ã¢Ã Ã²Ã¼ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ ...")
          wait(1500)
-         sampSendChat("/me ... ïî åãî ëèöó, ID-êàğòå , áåéäæèêó è æåòîíó")
+         sampSendChat("/me ... Ã¯Ã® Ã¥Ã£Ã® Ã«Ã¨Ã¶Ã³, ID-ÃªÃ Ã°Ã²Ã¥ , Ã¡Ã¥Ã©Ã¤Ã¦Ã¨ÃªÃ³ Ã¨ Ã¦Ã¥Ã²Ã®Ã­Ã³")
          wait(1500)
-         sampSendChat("/do Íà ıêğàíå ÊÏÊ âûñâåòèëàñü âñÿ èíôîğìàöèÿ î ÷åëîâåêå.")
+         sampSendChat("/do ÃÃ  Ã½ÃªÃ°Ã Ã­Ã¥ ÃŠÃÃŠ Ã¢Ã»Ã±Ã¢Ã¥Ã²Ã¨Ã«Ã Ã±Ã¼ Ã¢Ã±Ã¿ Ã¨Ã­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¿ Ã® Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ¥.")
       end)
    end
 
@@ -1841,19 +1841,19 @@ lua_thread.create(function()
     if arg1 ~= nil and arg2 ~= nil then
    sampSendChat('/dismiss '..arg1..' '..arg2..'')
    wait(1500)
-   sampSendChat("/do Â ïğàâîì êàğìàíå áğşê íàõîäèòñÿ ÊÏÊ.")
+   sampSendChat("/do Ã‚ Ã¯Ã°Ã Ã¢Ã®Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥ Ã¡Ã°Ã¾Ãª Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ ÃŠÃÃŠ.")
    wait (1500)
-   sampSendChat("/me äîñòàë ÊÏÊ èç ïğàâîãî êàğìàíà, çàòåì íà÷àë ïğîáèâàòü ïî áàçå äàííûõ ñîòğóäíèêà ÷åğåç ëèöî, ID êàğòó è æåòîí")
+   sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« ÃŠÃÃŠ Ã¨Ã§ Ã¯Ã°Ã Ã¢Ã®Ã£Ã® ÃªÃ Ã°Ã¬Ã Ã­Ã , Ã§Ã Ã²Ã¥Ã¬ Ã­Ã Ã·Ã Ã« Ã¯Ã°Ã®Ã¡Ã¨Ã¢Ã Ã²Ã¼ Ã¯Ã® Ã¡Ã Ã§Ã¥ Ã¤Ã Ã­Ã­Ã»Ãµ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ  Ã·Ã¥Ã°Ã¥Ã§ Ã«Ã¨Ã¶Ã®, ID ÃªÃ Ã°Ã²Ã³ Ã¨ Ã¦Ã¥Ã²Ã®Ã­")
    wait(1500)
-   sampSendChat("/do Íà ıêğàíå ÊÏÊ ïîÿâèëàñü ïîëíàÿ èíôîğìàöèÿ î ñîòğóäíèêå.")
+   sampSendChat("/do ÃÃ  Ã½ÃªÃ°Ã Ã­Ã¥ ÃŠÃÃŠ Ã¯Ã®Ã¿Ã¢Ã¨Ã«Ã Ã±Ã¼ Ã¯Ã®Ã«Ã­Ã Ã¿ Ã¨Ã­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¿ Ã® Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¥.")
    wait(1500)
-   sampSendChat("/me íàæàë íà êíîïêó Óâîëèòü èç Ãîñ. Îğãàíèçàöèè")
+   sampSendChat("/me Ã­Ã Ã¦Ã Ã« Ã­Ã  ÃªÃ­Ã®Ã¯ÃªÃ³ Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼ Ã¨Ã§ ÃƒÃ®Ã±. ÃÃ°Ã£Ã Ã­Ã¨Ã§Ã Ã¶Ã¨Ã¨")
    wait(1500)
-   sampSendChat ("/do Ñîòğóäíèê áûë óäàëåí èç ñïèñêà 'Ãîñ. Ñîòğóäíèêè'.")
+   sampSendChat ("/do Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª Ã¡Ã»Ã« Ã³Ã¤Ã Ã«Ã¥Ã­ Ã¨Ã§ Ã±Ã¯Ã¨Ã±ÃªÃ  'ÃƒÃ®Ã±. Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¨'.")
    wait(1500)
-   sampSendChat("/me óáğàë ÊÏÊ îáğàòíî â ïğàâûé êàğìàí")
+   sampSendChat("/me Ã³Ã¡Ã°Ã Ã« ÃŠÃÃŠ Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã¢ Ã¯Ã°Ã Ã¢Ã»Ã© ÃªÃ Ã°Ã¬Ã Ã­")
     else
-  sampAddChatMessage("Ââåäè àéäè èãğîêà:{FFFFFF} /dismiss [ID] [Ïğè÷èíà].",0x318CE7FF -1)
+  sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :{FFFFFF} /dismiss [ID] [ÃÃ°Ã¨Ã·Ã¨Ã­Ã ].",0x318CE7FF -1)
   end
  end)
 end
@@ -1864,35 +1864,35 @@ lua_thread.create(function()
     if arg1 ~= nil and arg2 ~= nil then
         sampSendChat('/demoute '..arg1..' '..arg2..'')
          wait(1500)
-        sampSendChat("/do ÊÏÊ ëåæèò â íàãğóäíîì êàğìàíå.")
+        sampSendChat("/do ÃŠÃÃŠ Ã«Ã¥Ã¦Ã¨Ã² Ã¢ Ã­Ã Ã£Ã°Ã³Ã¤Ã­Ã®Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
          wait(1500)
-         sampSendChat("/me íûğíóë ğóêîé â ïğàâûé êàğìàí, ïîñëå ÷åãî äîñòàë ÊÏÊ")
+         sampSendChat("/me Ã­Ã»Ã°Ã­Ã³Ã« Ã°Ã³ÃªÃ®Ã© Ã¢ Ã¯Ã°Ã Ã¢Ã»Ã© ÃªÃ Ã°Ã¬Ã Ã­, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¤Ã®Ã±Ã²Ã Ã« ÃŠÃÃŠ")
          wait(1500)
-         sampSendChat("/me îòêğûë â ÊÏÊ áàçó äàííûõ ñîòğóäíèêîâ Ãîññóäàğñòâåííûõ ñòğóêòóğ, ïîñëå ÷åãî íàæàë íà êíîïêó Demoute")
+         sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¢ ÃŠÃÃŠ Ã¡Ã Ã§Ã³ Ã¤Ã Ã­Ã­Ã»Ãµ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ®Ã¢ ÃƒÃ®Ã±Ã±Ã³Ã¤Ã Ã°Ã±Ã²Ã¢Ã¥Ã­Ã­Ã»Ãµ Ã±Ã²Ã°Ã³ÃªÃ²Ã³Ã°, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã­Ã Ã¦Ã Ã« Ã­Ã  ÃªÃ­Ã®Ã¯ÃªÃ³ Demoute")
          wait(1500)
-         sampSendChat("/do Ñîòğóäíèê óñïåøíî óäàëåí èç áàçû äàííûõ ãîññóäàğñòâåííûõ ñòğóêòóğ")
+         sampSendChat("/do Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª Ã³Ã±Ã¯Ã¥Ã¸Ã­Ã® Ã³Ã¤Ã Ã«Ã¥Ã­ Ã¨Ã§ Ã¡Ã Ã§Ã» Ã¤Ã Ã­Ã­Ã»Ãµ Ã£Ã®Ã±Ã±Ã³Ã¤Ã Ã°Ã±Ã²Ã¢Ã¥Ã­Ã­Ã»Ãµ Ã±Ã²Ã°Ã³ÃªÃ²Ã³Ã°")
     else
-  sampAddChatMessage("Ââåäè àéäè èãğîêà:{FFFFFF} /demoute [ID] [Ïğè÷èíà].",0x318CE7FF -1)
+  sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :{FFFFFF} /demoute [ID] [ÃÃ°Ã¨Ã·Ã¨Ã­Ã ].",0x318CE7FF -1)
   end
  end)
 end
 
 function cmd_cure(id)
     if id == "" then
-             sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/cure [ID].", 0x318CE7FF)
+             sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/cure [ID].", 0x318CE7FF)
     else
         lua_thread.create(function()
-             sampSendChat("/do Â ñïåöèàëüíîì ïîäñóìêå íà ôîğìå ëåæàò: ñòåğèëüíûå øïğèöû è àìïóëà ñ àäğåíàëèíîì.")
+             sampSendChat("/do Ã‚ Ã±Ã¯Ã¥Ã¶Ã¨Ã Ã«Ã¼Ã­Ã®Ã¬ Ã¯Ã®Ã¤Ã±Ã³Ã¬ÃªÃ¥ Ã­Ã  Ã´Ã®Ã°Ã¬Ã¥ Ã«Ã¥Ã¦Ã Ã²: Ã±Ã²Ã¥Ã°Ã¨Ã«Ã¼Ã­Ã»Ã¥ Ã¸Ã¯Ã°Ã¨Ã¶Ã» Ã¨ Ã Ã¬Ã¯Ã³Ã«Ã  Ã± Ã Ã¤Ã°Ã¥Ã­Ã Ã«Ã¨Ã­Ã®Ã¬.")
              wait(1200)
-             sampSendChat("/me äîñòàë ñòåğèëüíûé øïğèö ñ àìïóëîé, àêêóğàòíî ïğèîòêğûë àìïóëó ñ àäğåíàëèíîì")
+             sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã±Ã²Ã¥Ã°Ã¨Ã«Ã¼Ã­Ã»Ã© Ã¸Ã¯Ã°Ã¨Ã¶ Ã± Ã Ã¬Ã¯Ã³Ã«Ã®Ã©, Ã ÃªÃªÃ³Ã°Ã Ã²Ã­Ã® Ã¯Ã°Ã¨Ã®Ã²ÃªÃ°Ã»Ã« Ã Ã¬Ã¯Ã³Ã«Ã³ Ã± Ã Ã¤Ã°Ã¥Ã­Ã Ã«Ã¨Ã­Ã®Ã¬")
              wait(1200)
-             sampSendChat("/me íàáğàë ñîäåğæèìîå àìïóëû â øïğèö")
+             sampSendChat("/me Ã­Ã Ã¡Ã°Ã Ã« Ã±Ã®Ã¤Ã¥Ã°Ã¦Ã¨Ã¬Ã®Ã¥ Ã Ã¬Ã¯Ã³Ã«Ã» Ã¢ Ã¸Ã¯Ã°Ã¨Ã¶")
              wait(1200)
-             sampSendChat("/me çàêàòàë ğóêàâ ïîñòğàäàâøåãî, ïîñëå ÷åãî ââ¸ë àäğåíàëèí ÷åğåç øïğèö â âåíó, âäàâèâ ïîğøåíü")
+             sampSendChat("/me Ã§Ã ÃªÃ Ã²Ã Ã« Ã°Ã³ÃªÃ Ã¢ Ã¯Ã®Ã±Ã²Ã°Ã Ã¤Ã Ã¢Ã¸Ã¥Ã£Ã®, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¢Ã¢Â¸Ã« Ã Ã¤Ã°Ã¥Ã­Ã Ã«Ã¨Ã­ Ã·Ã¥Ã°Ã¥Ã§ Ã¸Ã¯Ã°Ã¨Ã¶ Ã¢ Ã¢Ã¥Ã­Ã³, Ã¢Ã¤Ã Ã¢Ã¨Ã¢ Ã¯Ã®Ã°Ã¸Ã¥Ã­Ã¼")
              wait(1200)
-             sampSendChat("/do Àäğåíàëèí ïğîíèê â îğãàíèçì ïîñòğàäàâøåãî.")
+             sampSendChat("/do Ã€Ã¤Ã°Ã¥Ã­Ã Ã«Ã¨Ã­ Ã¯Ã°Ã®Ã­Ã¨Ãª Ã¢ Ã®Ã°Ã£Ã Ã­Ã¨Ã§Ã¬ Ã¯Ã®Ã±Ã²Ã°Ã Ã¤Ã Ã¢Ã¸Ã¥Ã£Ã®.")
              wait(1200)
-             sampSendChat("/me óáğàë èñïîëüçîâàííûé øïğèö â ñïåöèàëüíûé ïîäñóìîê")
+             sampSendChat("/me Ã³Ã¡Ã°Ã Ã« Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã­Ã­Ã»Ã© Ã¸Ã¯Ã°Ã¨Ã¶ Ã¢ Ã±Ã¯Ã¥Ã¶Ã¨Ã Ã«Ã¼Ã­Ã»Ã© Ã¯Ã®Ã¤Ã±Ã³Ã¬Ã®Ãª")
              wait(1200)
              sampSendChat("/cure "..id.." ")
          end)
@@ -1902,24 +1902,24 @@ function cmd_cure(id)
 
 function cmd_find(id)
     if id == "" then
-         sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/find [ID].", 0x318CE7FF - 1)
+         sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/find [ID].", 0x318CE7FF - 1)
     else
         lua_thread.create(function()
-         sampSendChat("/do ÊÏÊ â ëåâîì êàğìàíå.")
+         sampSendChat("/do ÃŠÃÃŠ Ã¢ Ã«Ã¥Ã¢Ã®Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
          wait(1500)
-         sampSendChat("/me äîñòàë ëåâîé ğóêîé ÊÏÊ èç êàğìàíà")
+         sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã«Ã¥Ã¢Ã®Ã© Ã°Ã³ÃªÃ®Ã© ÃŠÃÃŠ Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã ")
          wait(1500)
-         sampSendChat("/do ÊÏÊ â ëåâîé ğóêå.")
+         sampSendChat("/do ÃŠÃÃŠ Ã¢ Ã«Ã¥Ã¢Ã®Ã© Ã°Ã³ÃªÃ¥.")
          wait(1500)
-         sampSendChat("/me âêëş÷èë ÊÏÊ è çàøåë â áàçó äàííûõ Ïîëèöèè")
+         sampSendChat("/me Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¡Ã Ã§Ã³ Ã¤Ã Ã­Ã­Ã»Ãµ ÃÃ®Ã«Ã¨Ã¶Ã¨Ã¨")
          wait(1500)
-         sampSendChat("/me îòêğûë äåëî ñ äàííûìè ïğåñòóïíèêà")
+         sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¤Ã¥Ã«Ã® Ã± Ã¤Ã Ã­Ã­Ã»Ã¬Ã¨ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ ")
          wait(1500)
-         sampSendChat("/do Äàííûå ïğåñòóïíèêà ïîëó÷åíû.")
+         sampSendChat("/do Ã„Ã Ã­Ã­Ã»Ã¥ Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¯Ã®Ã«Ã³Ã·Ã¥Ã­Ã».")
          wait(1500)
-         sampSendChat("/me ïîäêëş÷èëñÿ ê êàìåğàì ñëåæåíèÿ øòàòà")
+         sampSendChat("/me Ã¯Ã®Ã¤ÃªÃ«Ã¾Ã·Ã¨Ã«Ã±Ã¿ Ãª ÃªÃ Ã¬Ã¥Ã°Ã Ã¬ Ã±Ã«Ã¥Ã¦Ã¥Ã­Ã¨Ã¿ Ã¸Ã²Ã Ã²Ã ")
          wait(1500)
-         sampSendChat ("/do Íà íàâèãàòîğå ïîÿâèëñÿ ìàğøğóò.")
+         sampSendChat ("/do ÃÃ  Ã­Ã Ã¢Ã¨Ã£Ã Ã²Ã®Ã°Ã¥ Ã¯Ã®Ã¿Ã¢Ã¨Ã«Ã±Ã¿ Ã¬Ã Ã°Ã¸Ã°Ã³Ã².")
          wait(1500)
          sampSendChat("/find "..id.." ")
       end)
@@ -1930,11 +1930,11 @@ function cmd_zsu(arg)
 lua_thread.create(function()
     local arg1, arg2, arg3 = arg:match('(.+) (.+) (.+)')
     if arg1 ~= nil and arg2 ~= nil and arg3 ~= nil then
-        sampSendChat('/r Çàïğàøèâàş îáüÿâëåíèå â ğîçûñê äåëî N-'..arg1..'.')
+        sampSendChat('/r Ã‡Ã Ã¯Ã°Ã Ã¸Ã¨Ã¢Ã Ã¾ Ã®Ã¡Ã¼Ã¿Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¢ Ã°Ã®Ã§Ã»Ã±Ãª Ã¤Ã¥Ã«Ã® N-'..arg1..'.')
 		wait(2500)
-		sampSendChat('/r Ïî ïğè÷èíå - ' ..arg3..'. '..arg2..' Ñòåïåíü.')
+		sampSendChat('/r ÃÃ® Ã¯Ã°Ã¨Ã·Ã¨Ã­Ã¥ - ' ..arg3..'. '..arg2..' Ã‘Ã²Ã¥Ã¯Ã¥Ã­Ã¼.')
     else
-		sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/zsu [ID] [Êîë-âî ğîçûñêà] [Ïğè÷èíà].",0x318CE7FF -1)
+		sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/zsu [ID] [ÃŠÃ®Ã«-Ã¢Ã® Ã°Ã®Ã§Ã»Ã±ÃªÃ ] [ÃÃ°Ã¨Ã·Ã¨Ã­Ã ].",0x318CE7FF -1)
 		end
 	end)
 end
@@ -1945,99 +1945,99 @@ lua_thread.create(function()
     if arg1 ~= nil and arg2 ~= nil then
         sampSendChat('/incar '..arg1..' '..arg2..'')
         wait(1500)
-        sampSendChat('/do Äâåğè â ìàøèíå çàêğûòû.')
+        sampSendChat('/do Ã„Ã¢Ã¥Ã°Ã¨ Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã¥ Ã§Ã ÃªÃ°Ã»Ã²Ã».')
         wait(1500)
-  sampSendChat('/me îòêğûë çàäíşş äâåğü â ìàøèíå')
+  sampSendChat('/me Ã®Ã²ÃªÃ°Ã»Ã« Ã§Ã Ã¤Ã­Ã¾Ã¾ Ã¤Ã¢Ã¥Ã°Ã¼ Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã¥')
   wait(1500)
-  sampSendChat('/me ïîñàäèë ïğåñòóïíèêà â ìàøèíó')
+  sampSendChat('/me Ã¯Ã®Ã±Ã Ã¤Ã¨Ã« Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã­Ã¨ÃªÃ  Ã¢ Ã¬Ã Ã¸Ã¨Ã­Ã³')
   wait(1500)
-  sampSendChat('/me çàáëîêèğîâàë äâåğè')
+  sampSendChat('/me Ã§Ã Ã¡Ã«Ã®ÃªÃ¨Ã°Ã®Ã¢Ã Ã« Ã¤Ã¢Ã¥Ã°Ã¨')
   wait(1500)
-  sampSendChat('/do Äâåğè çàáëîêèğîâàíû.')
+  sampSendChat('/do Ã„Ã¢Ã¥Ã°Ã¨ Ã§Ã Ã¡Ã«Ã®ÃªÃ¨Ã°Ã®Ã¢Ã Ã­Ã».')
    else
-  sampAddChatMessage("Ââåäè àéäè èãğîêà:{FFFFFF}/incar [ID] [Ìåñòî 1-4].",0x318CE7FF -1)
+  sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :{FFFFFF}/incar [ID] [ÃŒÃ¥Ã±Ã²Ã® 1-4].",0x318CE7FF -1)
   end
  end)
 end
 
 function cmd_stop(id)
     lua_thread.create(function()
-        sampSendChat("/do Ìåãàôîí â áàğäà÷êå.")
+        sampSendChat("/do ÃŒÃ¥Ã£Ã Ã´Ã®Ã­ Ã¢ Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ¥.")
         wait(1500)
-        sampSendChat("/me äîñòàë ìåãàôîí ñ áàğäà÷êà ïîñëå ÷åãî âêëş÷èë åãî")
+        sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¬Ã¥Ã£Ã Ã´Ã®Ã­ Ã± Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ  Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« Ã¥Ã£Ã®")
         wait(1500)
-        sampSendChat("/m Ãğàæäàíèí ïğèæìèòåñü ê îáî÷èíå!")
+        sampSendChat("/m ÃƒÃ°Ã Ã¦Ã¤Ã Ã­Ã¨Ã­ Ã¯Ã°Ã¨Ã¦Ã¬Ã¨Ã²Ã¥Ã±Ã¼ Ãª Ã®Ã¡Ã®Ã·Ã¨Ã­Ã¥!")
     end)
 end
 
 function cmd_eject(id)
     if id == "" then
-        sampAddChatMessage("Ââåäè àéäè èãğîêà:: {FFFFFF}/eject [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ :: {FFFFFF}/eject [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me îòêğûë äâåğü àâòî, ïîñëå âûáğîñèë ÷åëîâåêà èç àâòî")
+            sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¤Ã¢Ã¥Ã°Ã¼ Ã Ã¢Ã²Ã®, Ã¯Ã®Ã±Ã«Ã¥ Ã¢Ã»Ã¡Ã°Ã®Ã±Ã¨Ã« Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã¨Ã§ Ã Ã¢Ã²Ã®")
             wait(1500)
             sampSendChat("/eject "..id.." ")
             wait(1500)
-            sampSendChat("/me çàêğûë äâåğü àâòî")
+            sampSendChat("/me Ã§Ã ÃªÃ°Ã»Ã« Ã¤Ã¢Ã¥Ã°Ã¼ Ã Ã¢Ã²Ã®")
       end)
    end
 end
 
 function cmd_pog(id)
     if id == "" then
-         sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/pog [ID].", 0x318CE7FF - 1)
+         sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/pog [ID].", 0x318CE7FF - 1)
     else
         lua_thread.create(function()
-         sampSendChat("/m Âîäèòåëü, îñòàíîâèòå òğàíñïîğòíîå ñğåäñòâî, çàãëóøèòå äâèãàòåëü...")
+         sampSendChat("/m Ã‚Ã®Ã¤Ã¨Ã²Ã¥Ã«Ã¼, Ã®Ã±Ã²Ã Ã­Ã®Ã¢Ã¨Ã²Ã¥ Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã­Ã®Ã¥ Ã±Ã°Ã¥Ã¤Ã±Ã²Ã¢Ã®, Ã§Ã Ã£Ã«Ã³Ã¸Ã¨Ã²Ã¥ Ã¤Ã¢Ã¨Ã£Ã Ã²Ã¥Ã«Ã¼...")
          wait(1500)
-         sampSendChat("/m Èíà÷å ÿ îòêğîş îãîíü ïî âàøåìó òğàíñïîğòó!")
+         sampSendChat("/m ÃˆÃ­Ã Ã·Ã¥ Ã¿ Ã®Ã²ÃªÃ°Ã®Ã¾ Ã®Ã£Ã®Ã­Ã¼ Ã¯Ã® Ã¢Ã Ã¸Ã¥Ã¬Ã³ Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã³!")
       end)
    end
 end
 
 function cmd_tencodes(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Ñïèñîê àêòèâíûõ òåí-êîäîâ MVD HELPER 4.7", "10-1 - Âñòğå÷à âñåõ îôèöåğîâ íà äåæóğñòâå (âêëş÷àÿ ëîêàöèş è êîä).\n10-3 - Ğàäèîìîë÷àíèå (äëÿ ñğî÷íûõ ñîîáùåíèé).\n10-4 - Ïğèíÿòî.\n10-5 - Ïîâòîğèòå ïîñëåäíåå ñîîáùåíèå.\n10-6 - Íå ïğèíÿòî/íåâåğíî/íåò.\n10-7 - Îæèäàéòå.\n10-8 - Â íàñòîÿùåå âğåìÿ çàíÿò/íå äîñòóïåí.\n10-14 - Çàïğîñ òğàíñïîğòèğîâêè (âêëş÷àÿ ëîêàöèş è öåëü òğàíñïîğòèğîâêè).\n10-15 - Ïîäîçğåâàåìûå àğåñòîâàíû (âêëş÷àÿ êîë-âî ïîäîçğåâàåìûõ, ëîêàöèş).\n10-18 - Òğåáóåòñÿ ïîääåğæêà äîïîëíèòåëüíûõ şíèòîâ.\n10-20 - Ëîêàöèÿ.\n10-21 - Ñîîáùåíèå î ñòàòóñå è ìåñòîíàõîæäåíèè, îïèñàíèå ñèòóàöèè.\n10-22 - Íàïğàâëÿéòåñü â 'ëîêàöèÿ' (îáğàùåíèå ê êîíêğåòíîìó îôèöåğó).\n10-27 - Ìåíÿş ìàğêèğîâêó ïàòğóëÿ (âêëş÷àÿ ñòàğóş è íîâóş ìàğêèğîâêó).\n10-46 - Ïğîâîæó îáûñê.\n10-55 - Òğàôôèê ñòîï.\n10-66 - Îñòàíîâêà ïîâûøåííîãî ğèñêà (åñëè èçâåñòíî, ÷òî ïîäîçğåâàåìûé â àâòî âîîğóæåí/ñîâåğøèë ïğåñòóïëåíèå. Åñëè îñòàíîâêà ïğîèçîøëà ïîñëå ïîãîíè).\n10-88 - Òåğàêò/×Ñ.\n10-99 - Ñèòóàöèÿ óğåãóëèğîâàíà\n10-100 Âğåìåííî íåäîñòóïåí äëÿ âûçîâîâ\nÀâòîğ:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Çàêğûòü", "Exit", 0)
+        sampShowDialog(1,"Ã‘Ã¯Ã¨Ã±Ã®Ãª Ã ÃªÃ²Ã¨Ã¢Ã­Ã»Ãµ Ã²Ã¥Ã­-ÃªÃ®Ã¤Ã®Ã¢ MVD HELPER 4.7", "10-1 - Ã‚Ã±Ã²Ã°Ã¥Ã·Ã  Ã¢Ã±Ã¥Ãµ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¢ Ã­Ã  Ã¤Ã¥Ã¦Ã³Ã°Ã±Ã²Ã¢Ã¥ (Ã¢ÃªÃ«Ã¾Ã·Ã Ã¿ Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾ Ã¨ ÃªÃ®Ã¤).\n10-3 - ÃÃ Ã¤Ã¨Ã®Ã¬Ã®Ã«Ã·Ã Ã­Ã¨Ã¥ (Ã¤Ã«Ã¿ Ã±Ã°Ã®Ã·Ã­Ã»Ãµ Ã±Ã®Ã®Ã¡Ã¹Ã¥Ã­Ã¨Ã©).\n10-4 - ÃÃ°Ã¨Ã­Ã¿Ã²Ã®.\n10-5 - ÃÃ®Ã¢Ã²Ã®Ã°Ã¨Ã²Ã¥ Ã¯Ã®Ã±Ã«Ã¥Ã¤Ã­Ã¥Ã¥ Ã±Ã®Ã®Ã¡Ã¹Ã¥Ã­Ã¨Ã¥.\n10-6 - ÃÃ¥ Ã¯Ã°Ã¨Ã­Ã¿Ã²Ã®/Ã­Ã¥Ã¢Ã¥Ã°Ã­Ã®/Ã­Ã¥Ã².\n10-7 - ÃÃ¦Ã¨Ã¤Ã Ã©Ã²Ã¥.\n10-8 - Ã‚ Ã­Ã Ã±Ã²Ã®Ã¿Ã¹Ã¥Ã¥ Ã¢Ã°Ã¥Ã¬Ã¿ Ã§Ã Ã­Ã¿Ã²/Ã­Ã¥ Ã¤Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­.\n10-14 - Ã‡Ã Ã¯Ã°Ã®Ã± Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã¨Ã°Ã®Ã¢ÃªÃ¨ (Ã¢ÃªÃ«Ã¾Ã·Ã Ã¿ Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾ Ã¨ Ã¶Ã¥Ã«Ã¼ Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã¨Ã°Ã®Ã¢ÃªÃ¨).\n10-15 - ÃÃ®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã»Ã¥ Ã Ã°Ã¥Ã±Ã²Ã®Ã¢Ã Ã­Ã» (Ã¢ÃªÃ«Ã¾Ã·Ã Ã¿ ÃªÃ®Ã«-Ã¢Ã® Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã»Ãµ, Ã«Ã®ÃªÃ Ã¶Ã¨Ã¾).\n10-18 - Ã’Ã°Ã¥Ã¡Ã³Ã¥Ã²Ã±Ã¿ Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦ÃªÃ  Ã¤Ã®Ã¯Ã®Ã«Ã­Ã¨Ã²Ã¥Ã«Ã¼Ã­Ã»Ãµ Ã¾Ã­Ã¨Ã²Ã®Ã¢.\n10-20 - Ã‹Ã®ÃªÃ Ã¶Ã¨Ã¿.\n10-21 - Ã‘Ã®Ã®Ã¡Ã¹Ã¥Ã­Ã¨Ã¥ Ã® Ã±Ã²Ã Ã²Ã³Ã±Ã¥ Ã¨ Ã¬Ã¥Ã±Ã²Ã®Ã­Ã ÃµÃ®Ã¦Ã¤Ã¥Ã­Ã¨Ã¨, Ã®Ã¯Ã¨Ã±Ã Ã­Ã¨Ã¥ Ã±Ã¨Ã²Ã³Ã Ã¶Ã¨Ã¨.\n10-22 - ÃÃ Ã¯Ã°Ã Ã¢Ã«Ã¿Ã©Ã²Ã¥Ã±Ã¼ Ã¢ 'Ã«Ã®ÃªÃ Ã¶Ã¨Ã¿' (Ã®Ã¡Ã°Ã Ã¹Ã¥Ã­Ã¨Ã¥ Ãª ÃªÃ®Ã­ÃªÃ°Ã¥Ã²Ã­Ã®Ã¬Ã³ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã³).\n10-27 - ÃŒÃ¥Ã­Ã¿Ã¾ Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ³ Ã¯Ã Ã²Ã°Ã³Ã«Ã¿ (Ã¢ÃªÃ«Ã¾Ã·Ã Ã¿ Ã±Ã²Ã Ã°Ã³Ã¾ Ã¨ Ã­Ã®Ã¢Ã³Ã¾ Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ³).\n10-46 - ÃÃ°Ã®Ã¢Ã®Ã¦Ã³ Ã®Ã¡Ã»Ã±Ãª.\n10-55 - Ã’Ã°Ã Ã´Ã´Ã¨Ãª Ã±Ã²Ã®Ã¯.\n10-66 - ÃÃ±Ã²Ã Ã­Ã®Ã¢ÃªÃ  Ã¯Ã®Ã¢Ã»Ã¸Ã¥Ã­Ã­Ã®Ã£Ã® Ã°Ã¨Ã±ÃªÃ  (Ã¥Ã±Ã«Ã¨ Ã¨Ã§Ã¢Ã¥Ã±Ã²Ã­Ã®, Ã·Ã²Ã® Ã¯Ã®Ã¤Ã®Ã§Ã°Ã¥Ã¢Ã Ã¥Ã¬Ã»Ã© Ã¢ Ã Ã¢Ã²Ã® Ã¢Ã®Ã®Ã°Ã³Ã¦Ã¥Ã­/Ã±Ã®Ã¢Ã¥Ã°Ã¸Ã¨Ã« Ã¯Ã°Ã¥Ã±Ã²Ã³Ã¯Ã«Ã¥Ã­Ã¨Ã¥. Ã…Ã±Ã«Ã¨ Ã®Ã±Ã²Ã Ã­Ã®Ã¢ÃªÃ  Ã¯Ã°Ã®Ã¨Ã§Ã®Ã¸Ã«Ã  Ã¯Ã®Ã±Ã«Ã¥ Ã¯Ã®Ã£Ã®Ã­Ã¨).\n10-88 - Ã’Ã¥Ã°Ã ÃªÃ²/Ã—Ã‘.\n10-99 - Ã‘Ã¨Ã²Ã³Ã Ã¶Ã¨Ã¿ Ã³Ã°Ã¥Ã£Ã³Ã«Ã¨Ã°Ã®Ã¢Ã Ã­Ã \n10-100 Ã‚Ã°Ã¥Ã¬Ã¥Ã­Ã­Ã® Ã­Ã¥Ã¤Ã®Ã±Ã²Ã³Ã¯Ã¥Ã­ Ã¤Ã«Ã¿ Ã¢Ã»Ã§Ã®Ã¢Ã®Ã¢\nÃ€Ã¢Ã²Ã®Ã°:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Ã‡Ã ÃªÃ°Ã»Ã²Ã¼", "Exit", 0)
         end)
         end
 
 function cmd_marks(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Ìàğêèğîâêè íà àâòî MVD HELPER 4.7", "ADAM [A] Ìàğêèğîâêà şíèòà, ñîñòîÿùåãî èç äâóõ îôèöåğîâ.\nLINCOLN [L] Ìàğêèğîâêà şíèòà, ñîñòîÿùåãî èç îäíîãî îôèöåğà.\nAIR [AIR] Ìàğêèğîâêà âîçäóøíîãî şíèòà, â ñîñòàâå äâóõ îôèöåğîâ\nAir Support Division [ASD] Ìàğêèğîâêà şíèòà âîçäóøíîé ïîääåğæêè.\nMARY [M] Ìàğêèğîâêà ìîòî-ïàòğóëÿ.\nHENRY [H] Ìàğêèğîâêà âûñîêî - ñêîğîñòíîãî şíèòà, ñîñòîÿùåãî èç îäíîãî èëè äâóõ îôèöåğ.\nCHARLIE [C] Ìàğêèğîâêà ãğóïïû çàõâàòà.\nROBERT [R] Ìàğêèğîâêà îòäåëà äåòåêòèâîâ.\nSUPERVISOR [SV] Ìàğêèğîâêà ğóêîâîäÿùåãî ñîñòàâà (STAFF).\nDavid [D] Ìàğêèğîâêà ñïåö.îòäåëà\nÊàæäûé îôèöåğ ïğè âûõîäå â ïàòğóëü, îáÿçàí ïîñòàâèòü ìàğêèğîâêó íà ñâîé êğóçåğ (/vdesc)\nÀâòîğ:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Çàêğûòü", "Exit", 0)
+        sampShowDialog(1,"ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ¨ Ã­Ã  Ã Ã¢Ã²Ã® MVD HELPER 4.7", "ADAM [A] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¾Ã­Ã¨Ã²Ã , Ã±Ã®Ã±Ã²Ã®Ã¿Ã¹Ã¥Ã£Ã® Ã¨Ã§ Ã¤Ã¢Ã³Ãµ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¢.\nLINCOLN [L] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¾Ã­Ã¨Ã²Ã , Ã±Ã®Ã±Ã²Ã®Ã¿Ã¹Ã¥Ã£Ã® Ã¨Ã§ Ã®Ã¤Ã­Ã®Ã£Ã® Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã .\nAIR [AIR] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¢Ã®Ã§Ã¤Ã³Ã¸Ã­Ã®Ã£Ã® Ã¾Ã­Ã¨Ã²Ã , Ã¢ Ã±Ã®Ã±Ã²Ã Ã¢Ã¥ Ã¤Ã¢Ã³Ãµ Ã®Ã´Ã¨Ã¶Ã¥Ã°Ã®Ã¢\nAir Support Division [ASD] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¾Ã­Ã¨Ã²Ã  Ã¢Ã®Ã§Ã¤Ã³Ã¸Ã­Ã®Ã© Ã¯Ã®Ã¤Ã¤Ã¥Ã°Ã¦ÃªÃ¨.\nMARY [M] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¬Ã®Ã²Ã®-Ã¯Ã Ã²Ã°Ã³Ã«Ã¿.\nHENRY [H] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã¢Ã»Ã±Ã®ÃªÃ® - Ã±ÃªÃ®Ã°Ã®Ã±Ã²Ã­Ã®Ã£Ã® Ã¾Ã­Ã¨Ã²Ã , Ã±Ã®Ã±Ã²Ã®Ã¿Ã¹Ã¥Ã£Ã® Ã¨Ã§ Ã®Ã¤Ã­Ã®Ã£Ã® Ã¨Ã«Ã¨ Ã¤Ã¢Ã³Ãµ Ã®Ã´Ã¨Ã¶Ã¥Ã°.\nCHARLIE [C] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã£Ã°Ã³Ã¯Ã¯Ã» Ã§Ã ÃµÃ¢Ã Ã²Ã .\nROBERT [R] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã®Ã²Ã¤Ã¥Ã«Ã  Ã¤Ã¥Ã²Ã¥ÃªÃ²Ã¨Ã¢Ã®Ã¢.\nSUPERVISOR [SV] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã°Ã³ÃªÃ®Ã¢Ã®Ã¤Ã¿Ã¹Ã¥Ã£Ã® Ã±Ã®Ã±Ã²Ã Ã¢Ã  (STAFF).\nDavid [D] ÃŒÃ Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ  Ã±Ã¯Ã¥Ã¶.Ã®Ã²Ã¤Ã¥Ã«Ã \nÃŠÃ Ã¦Ã¤Ã»Ã© Ã®Ã´Ã¨Ã¶Ã¥Ã° Ã¯Ã°Ã¨ Ã¢Ã»ÃµÃ®Ã¤Ã¥ Ã¢ Ã¯Ã Ã²Ã°Ã³Ã«Ã¼, Ã®Ã¡Ã¿Ã§Ã Ã­ Ã¯Ã®Ã±Ã²Ã Ã¢Ã¨Ã²Ã¼ Ã¬Ã Ã°ÃªÃ¨Ã°Ã®Ã¢ÃªÃ³ Ã­Ã  Ã±Ã¢Ã®Ã© ÃªÃ°Ã³Ã§Ã¥Ã° (/vdesc)\nÃ€Ã¢Ã²Ã®Ã°:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Ã‡Ã ÃªÃ°Ã»Ã²Ã¼", "Exit", 0)
          end)
          end
 
 function cmd_sitcodes(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Ñèòóàöèîííûå êîäû MVD HELPER 4.7", "CODE 0 - Îôèöåğ ğàíåí.\nCODE 1 - Îôèöåğ â áåäñòâåííîì ïîëîæåíèè.\nCODE 2 - Îáû÷íûé âûçîâ ñ íèçêèì ïğèîğèòåòîì. Áåç âêëş÷åíèÿ ñèğåí è ñïåö.ñèãíàëîâ, ñîáëşäàÿ ÏÄÄ.\nCODE 2 HIGH - Ïğèîğèòåòíûé âûçîâ. Âñ¸ òàê æå áåç âêëş÷åíèÿ ñèğåí è ñïåö.ñèãíàëîâ, ñîáëşäàÿ ÏÄÄ.\nCODE 3 - Ñğî÷íûé âûçîâ. Èñïîëüçîâàíèå ñèğåí è ñïåö.ñèãíàëîâ, èãíîğèğîâàíèå íåêîòîğûõ ïóíêòîâ ÏÄÄ.\nCODE 4 - Ïîìîùü íå òğåáóåòñÿ.\nCODE 4 ADAM - Ïîìîùü íå òğåáóåòñÿ â äàííûé ìîìåíò âğåìåíè. Îôèöåğû íàõîäÿùèåñÿ ïî áëèçîñòè äîëæíû áûòü ãîòîâû îêàçàòü ïîìîùü.\nCODE 7 - Ïåğåğûâ íà îáåä.\nCODE 30 - Ñğàáàòûâàíèå 'òèõîé' ñèãíàëèçàöèè íà ìåñòå ïğîèñøåñòâèÿ.\nCODE 30 RINGER - Ñğàáàòûâàíèå 'ãğîìêîé' ñèãíàëèçàöèè íà ìåñòå ïğîèñøåñòâèÿ.\nCODE 37 - Îáíàğóæåíèå óãíàííîãî òğàíñïîğòíîãî ñğåäñòâà. Íåîáõîäèìî óêàçàòü íîìåğ, îïèñàíèå àâòîìîáèëÿ, íàïğàâëåíèå äâèæåíèÿ.\nÀâòîğ:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Çàêğûòü", "Exit", 0)
+        sampShowDialog(1,"Ã‘Ã¨Ã²Ã³Ã Ã¶Ã¨Ã®Ã­Ã­Ã»Ã¥ ÃªÃ®Ã¤Ã» MVD HELPER 4.7", "CODE 0 - ÃÃ´Ã¨Ã¶Ã¥Ã° Ã°Ã Ã­Ã¥Ã­.\nCODE 1 - ÃÃ´Ã¨Ã¶Ã¥Ã° Ã¢ Ã¡Ã¥Ã¤Ã±Ã²Ã¢Ã¥Ã­Ã­Ã®Ã¬ Ã¯Ã®Ã«Ã®Ã¦Ã¥Ã­Ã¨Ã¨.\nCODE 2 - ÃÃ¡Ã»Ã·Ã­Ã»Ã© Ã¢Ã»Ã§Ã®Ã¢ Ã± Ã­Ã¨Ã§ÃªÃ¨Ã¬ Ã¯Ã°Ã¨Ã®Ã°Ã¨Ã²Ã¥Ã²Ã®Ã¬. ÃÃ¥Ã§ Ã¢ÃªÃ«Ã¾Ã·Ã¥Ã­Ã¨Ã¿ Ã±Ã¨Ã°Ã¥Ã­ Ã¨ Ã±Ã¯Ã¥Ã¶.Ã±Ã¨Ã£Ã­Ã Ã«Ã®Ã¢, Ã±Ã®Ã¡Ã«Ã¾Ã¤Ã Ã¿ ÃÃ„Ã„.\nCODE 2 HIGH - ÃÃ°Ã¨Ã®Ã°Ã¨Ã²Ã¥Ã²Ã­Ã»Ã© Ã¢Ã»Ã§Ã®Ã¢. Ã‚Ã±Â¸ Ã²Ã Ãª Ã¦Ã¥ Ã¡Ã¥Ã§ Ã¢ÃªÃ«Ã¾Ã·Ã¥Ã­Ã¨Ã¿ Ã±Ã¨Ã°Ã¥Ã­ Ã¨ Ã±Ã¯Ã¥Ã¶.Ã±Ã¨Ã£Ã­Ã Ã«Ã®Ã¢, Ã±Ã®Ã¡Ã«Ã¾Ã¤Ã Ã¿ ÃÃ„Ã„.\nCODE 3 - Ã‘Ã°Ã®Ã·Ã­Ã»Ã© Ã¢Ã»Ã§Ã®Ã¢. ÃˆÃ±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã­Ã¨Ã¥ Ã±Ã¨Ã°Ã¥Ã­ Ã¨ Ã±Ã¯Ã¥Ã¶.Ã±Ã¨Ã£Ã­Ã Ã«Ã®Ã¢, Ã¨Ã£Ã­Ã®Ã°Ã¨Ã°Ã®Ã¢Ã Ã­Ã¨Ã¥ Ã­Ã¥ÃªÃ®Ã²Ã®Ã°Ã»Ãµ Ã¯Ã³Ã­ÃªÃ²Ã®Ã¢ ÃÃ„Ã„.\nCODE 4 - ÃÃ®Ã¬Ã®Ã¹Ã¼ Ã­Ã¥ Ã²Ã°Ã¥Ã¡Ã³Ã¥Ã²Ã±Ã¿.\nCODE 4 ADAM - ÃÃ®Ã¬Ã®Ã¹Ã¼ Ã­Ã¥ Ã²Ã°Ã¥Ã¡Ã³Ã¥Ã²Ã±Ã¿ Ã¢ Ã¤Ã Ã­Ã­Ã»Ã© Ã¬Ã®Ã¬Ã¥Ã­Ã² Ã¢Ã°Ã¥Ã¬Ã¥Ã­Ã¨. ÃÃ´Ã¨Ã¶Ã¥Ã°Ã» Ã­Ã ÃµÃ®Ã¤Ã¿Ã¹Ã¨Ã¥Ã±Ã¿ Ã¯Ã® Ã¡Ã«Ã¨Ã§Ã®Ã±Ã²Ã¨ Ã¤Ã®Ã«Ã¦Ã­Ã» Ã¡Ã»Ã²Ã¼ Ã£Ã®Ã²Ã®Ã¢Ã» Ã®ÃªÃ Ã§Ã Ã²Ã¼ Ã¯Ã®Ã¬Ã®Ã¹Ã¼.\nCODE 7 - ÃÃ¥Ã°Ã¥Ã°Ã»Ã¢ Ã­Ã  Ã®Ã¡Ã¥Ã¤.\nCODE 30 - Ã‘Ã°Ã Ã¡Ã Ã²Ã»Ã¢Ã Ã­Ã¨Ã¥ 'Ã²Ã¨ÃµÃ®Ã©' Ã±Ã¨Ã£Ã­Ã Ã«Ã¨Ã§Ã Ã¶Ã¨Ã¨ Ã­Ã  Ã¬Ã¥Ã±Ã²Ã¥ Ã¯Ã°Ã®Ã¨Ã±Ã¸Ã¥Ã±Ã²Ã¢Ã¨Ã¿.\nCODE 30 RINGER - Ã‘Ã°Ã Ã¡Ã Ã²Ã»Ã¢Ã Ã­Ã¨Ã¥ 'Ã£Ã°Ã®Ã¬ÃªÃ®Ã©' Ã±Ã¨Ã£Ã­Ã Ã«Ã¨Ã§Ã Ã¶Ã¨Ã¨ Ã­Ã  Ã¬Ã¥Ã±Ã²Ã¥ Ã¯Ã°Ã®Ã¨Ã±Ã¸Ã¥Ã±Ã²Ã¢Ã¨Ã¿.\nCODE 37 - ÃÃ¡Ã­Ã Ã°Ã³Ã¦Ã¥Ã­Ã¨Ã¥ Ã³Ã£Ã­Ã Ã­Ã­Ã®Ã£Ã® Ã²Ã°Ã Ã­Ã±Ã¯Ã®Ã°Ã²Ã­Ã®Ã£Ã® Ã±Ã°Ã¥Ã¤Ã±Ã²Ã¢Ã . ÃÃ¥Ã®Ã¡ÃµÃ®Ã¤Ã¨Ã¬Ã® Ã³ÃªÃ Ã§Ã Ã²Ã¼ Ã­Ã®Ã¬Ã¥Ã°, Ã®Ã¯Ã¨Ã±Ã Ã­Ã¨Ã¥ Ã Ã¢Ã²Ã®Ã¬Ã®Ã¡Ã¨Ã«Ã¿, Ã­Ã Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã¤Ã¢Ã¨Ã¦Ã¥Ã­Ã¨Ã¿.\nÃ€Ã¢Ã²Ã®Ã°:t.me/Sashe4ka_ReZoN and t.me/daniel29032012", "Ã‡Ã ÃªÃ°Ã»Ã²Ã¼", "Exit", 0)
          end)
          end
 
 function cmd_pas(arg)
  lua_thread.create(function()
   if tonumber(arg) == nil then
-  sampAddChatMessage("Ââåäè àéäè èãğîêà : {FFFFFF}/pas [ID].", 0x318CE7FF -1)
+  sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ  : {FFFFFF}/pas [ID].", 0x318CE7FF -1)
   else
   id = arg
-  sampSendChat('Çäğàâñòâóéòå, íàäåşñü âàñ íå áåñïîêîş.')
+  sampSendChat('Ã‡Ã¤Ã°Ã Ã¢Ã±Ã²Ã¢Ã³Ã©Ã²Ã¥, Ã­Ã Ã¤Ã¥Ã¾Ã±Ã¼ Ã¢Ã Ã± Ã­Ã¥ Ã¡Ã¥Ã±Ã¯Ã®ÃªÃ®Ã¾.')
   wait(1500)
-  sampSendChat('/do Ñëåâà íà ãğóäè æåòîí ïîëèöåéñêîãî, ñïğàâà - èìåííàÿ íàøèâêà ñ ôàìèëèåé.')
+  sampSendChat('/do Ã‘Ã«Ã¥Ã¢Ã  Ã­Ã  Ã£Ã°Ã³Ã¤Ã¨ Ã¦Ã¥Ã²Ã®Ã­ Ã¯Ã®Ã«Ã¨Ã¶Ã¥Ã©Ã±ÃªÃ®Ã£Ã®, Ã±Ã¯Ã°Ã Ã¢Ã  - Ã¨Ã¬Ã¥Ã­Ã­Ã Ã¿ Ã­Ã Ã¸Ã¨Ã¢ÃªÃ  Ã± Ã´Ã Ã¬Ã¨Ã«Ã¨Ã¥Ã©.')
   wait(1500)
   sampSendChat('/showbadge '..id)
   wait(1500)
-  sampSendChat('Ïğîøó ïğåäüÿâèòü äîêóìåíò óäîñòîâåğÿşùèé âàøó ëè÷íîñòü.')
+  sampSendChat('ÃÃ°Ã®Ã¸Ã³ Ã¯Ã°Ã¥Ã¤Ã¼Ã¿Ã¢Ã¨Ã²Ã¼ Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Ã³Ã¤Ã®Ã±Ã²Ã®Ã¢Ã¥Ã°Ã¿Ã¾Ã¹Ã¨Ã© Ã¢Ã Ã¸Ã³ Ã«Ã¨Ã·Ã­Ã®Ã±Ã²Ã¼.')
   end
  end)
 end
 
 function cmd_clear(arg)
   if tonumber(arg) == nil then
-   sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF} /clear [ID].", 0x318CE7FF -1)
+   sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF} /clear [ID].", 0x318CE7FF -1)
   else
   lua_thread.create(function()
   id = arg
-  sampSendChat("/me íàæàâ íà òàíãåíòó, ñîîáùèë äèñïåò÷åğó èìÿ ÷åëîâåêà, êîòîğûé áîëåå íå ÷èñëèëñÿ â ğîçûñêå")
+  sampSendChat("/me Ã­Ã Ã¦Ã Ã¢ Ã­Ã  Ã²Ã Ã­Ã£Ã¥Ã­Ã²Ã³, Ã±Ã®Ã®Ã¡Ã¹Ã¨Ã« Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã°Ã³ Ã¨Ã¬Ã¿ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ , ÃªÃ®Ã²Ã®Ã°Ã»Ã© Ã¡Ã®Ã«Ã¥Ã¥ Ã­Ã¥ Ã·Ã¨Ã±Ã«Ã¨Ã«Ã±Ã¿ Ã¢ Ã°Ã®Ã§Ã»Ã±ÃªÃ¥")
   wait(1500)
   sampSendChat('/clear '..id)
   end)
@@ -2046,20 +2046,20 @@ end
 
 function cmd_take(id)
     if id == "" then
-             sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/take [ID].", 0x318CE7FF)
+             sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/take [ID].", 0x318CE7FF)
     else
         lua_thread.create(function()
-             sampSendChat("/do Íà ğóêàõ îïåğàòèâíèêà íàäåòû ğåçèíîâûå ïåğ÷àòêè.")
+             sampSendChat("/do ÃÃ  Ã°Ã³ÃªÃ Ãµ Ã®Ã¯Ã¥Ã°Ã Ã²Ã¨Ã¢Ã­Ã¨ÃªÃ  Ã­Ã Ã¤Ã¥Ã²Ã» Ã°Ã¥Ã§Ã¨Ã­Ã®Ã¢Ã»Ã¥ Ã¯Ã¥Ã°Ã·Ã Ã²ÃªÃ¨.")
              wait(1500)
-             sampSendChat("/me ïîñëå îáûñêà èçúÿë çàïğåù¸ííûå âåùè")
+             sampSendChat("/me Ã¯Ã®Ã±Ã«Ã¥ Ã®Ã¡Ã»Ã±ÃªÃ  Ã¨Ã§ÃºÃ¿Ã« Ã§Ã Ã¯Ã°Ã¥Ã¹Â¸Ã­Ã­Ã»Ã¥ Ã¢Ã¥Ã¹Ã¨")
              wait(1500)
-             sampSendChat("/do Ïàêåòèê äëÿ óëèê â êàğìàíå.")
+             sampSendChat("/do ÃÃ ÃªÃ¥Ã²Ã¨Ãª Ã¤Ã«Ã¿ Ã³Ã«Ã¨Ãª Ã¢ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
              wait(1500)
-             sampSendChat("/me äîñòàë ïàêåòèê äëÿ óëèê, ïîñëå ÷åãî ïîëîæèë òóäà çàïğåù¸ííûå âåùè")
+             sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¯Ã ÃªÃ¥Ã²Ã¨Ãª Ã¤Ã«Ã¿ Ã³Ã«Ã¨Ãª, Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã²Ã³Ã¤Ã  Ã§Ã Ã¯Ã°Ã¥Ã¹Â¸Ã­Ã­Ã»Ã¥ Ã¢Ã¥Ã¹Ã¨")
              wait(1500)
-             sampSendChat("/me ïîëîæèë ïàêåò ñ óëèêàìè â êàğìàøåê")
+             sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã¯Ã ÃªÃ¥Ã² Ã± Ã³Ã«Ã¨ÃªÃ Ã¬Ã¨ Ã¢ ÃªÃ Ã°Ã¬Ã Ã¸Ã¥Ãª")
              wait(1500)
-             sampSendChat("/do Ïàêåò ñ óëèêàìè â êàğìàíå.")
+             sampSendChat("/do ÃÃ ÃªÃ¥Ã² Ã± Ã³Ã«Ã¨ÃªÃ Ã¬Ã¨ Ã¢ ÃªÃ Ã°Ã¬Ã Ã­Ã¥.")
              wait(1500)
              sampSendChat("/take "..id.." ")
          end)
@@ -2068,162 +2068,162 @@ function cmd_take(id)
 
 function cmd_pravda_fbi(id)
 	lua_thread.create(function ()
-		sampSendChat("/do Â äîïğîñíîé ñòîÿë øêàô÷èê, îí áûë çàêğûò íà ıëåêòğîííûé çàìîê.")
+		sampSendChat("/do Ã‚ Ã¤Ã®Ã¯Ã°Ã®Ã±Ã­Ã®Ã© Ã±Ã²Ã®Ã¿Ã« Ã¸ÃªÃ Ã´Ã·Ã¨Ãª, Ã®Ã­ Ã¡Ã»Ã« Ã§Ã ÃªÃ°Ã»Ã² Ã­Ã  Ã½Ã«Ã¥ÃªÃ²Ã°Ã®Ã­Ã­Ã»Ã© Ã§Ã Ã¬Ã®Ãª.")
 		wait(1500)
-		sampSendChat("/me ïîäîøåë ê øêàô÷èêó, íàáğàë êîä, îòêğûâ øêàô÷èê âçÿë îò òóäà íå ïğîçğà÷íóş ÷åğíóş ïàïêó.")
+		sampSendChat("/me Ã¯Ã®Ã¤Ã®Ã¸Ã¥Ã« Ãª Ã¸ÃªÃ Ã´Ã·Ã¨ÃªÃ³, Ã­Ã Ã¡Ã°Ã Ã« ÃªÃ®Ã¤, Ã®Ã²ÃªÃ°Ã»Ã¢ Ã¸ÃªÃ Ã´Ã·Ã¨Ãª Ã¢Ã§Ã¿Ã« Ã®Ã² Ã²Ã³Ã¤Ã  Ã­Ã¥ Ã¯Ã°Ã®Ã§Ã°Ã Ã·Ã­Ã³Ã¾ Ã·Ã¥Ã°Ã­Ã³Ã¾ Ã¯Ã Ã¯ÃªÃ³.")
 		wait(1500)
-		sampSendChat("/me ïîäîøåë ê ñòîëó, ïîëîæèë ïàïêó íà íåãî, îòêğûâ åå âçÿë ãîòîâûé ëèñò ôîğìàòà A4 ñî øòàìïàìè.")
+		sampSendChat("/me Ã¯Ã®Ã¤Ã®Ã¸Ã¥Ã« Ãª Ã±Ã²Ã®Ã«Ã³, Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã¯Ã Ã¯ÃªÃ³ Ã­Ã  Ã­Ã¥Ã£Ã®, Ã®Ã²ÃªÃ°Ã»Ã¢ Ã¥Ã¥ Ã¢Ã§Ã¿Ã« Ã£Ã®Ã²Ã®Ã¢Ã»Ã© Ã«Ã¨Ã±Ã² Ã´Ã®Ã°Ã¬Ã Ã²Ã  A4 Ã±Ã® Ã¸Ã²Ã Ã¬Ã¯Ã Ã¬Ã¨.")
 		wait(1500)
-		sampSendChat("/me ïîëîæèë ïåğåä çàäåğæàííûì, ïîëîæèë ğÿäîì ğó÷êó.")
+		sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã¯Ã¥Ã°Ã¥Ã¤ Ã§Ã Ã¤Ã¥Ã°Ã¦Ã Ã­Ã­Ã»Ã¬, Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã°Ã¿Ã¤Ã®Ã¬ Ã°Ã³Ã·ÃªÃ³.")
 		wait(1500)
-		sampSendChat("/do Ğÿäîì ëåæàë îáğàçåö.")
+		sampSendChat("/do ÃÃ¿Ã¤Ã®Ã¬ Ã«Ã¥Ã¦Ã Ã« Ã®Ã¡Ã°Ã Ã§Ã¥Ã¶.")
 		wait(1500)
-		sampSendChat("/do Â îáğàçöå íàïèñàíî: 'ß Èìÿ/Ôàìèëèÿ/Äàòà ğîæäåíèÿ' ")
+		sampSendChat("/do Ã‚ Ã®Ã¡Ã°Ã Ã§Ã¶Ã¥ Ã­Ã Ã¯Ã¨Ã±Ã Ã­Ã®: 'ÃŸ ÃˆÃ¬Ã¿/Ã”Ã Ã¬Ã¨Ã«Ã¨Ã¿/Ã„Ã Ã²Ã  Ã°Ã®Ã¦Ã¤Ã¥Ã­Ã¨Ã¿' ")
 		wait(1500)
-		sampSendChat("/do 'ß íåñó ïîëíóş îòâåòñòâåííîñòü çà èíôîğìàöèş êîòîğóş ÿ ïğîèçíåñ ïğè äîïğîñå…")
+		sampSendChat("/do 'ÃŸ Ã­Ã¥Ã±Ã³ Ã¯Ã®Ã«Ã­Ã³Ã¾ Ã®Ã²Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã¥Ã­Ã­Ã®Ã±Ã²Ã¼ Ã§Ã  Ã¨Ã­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¾ ÃªÃ®Ã²Ã®Ã°Ã³Ã¾ Ã¿ Ã¯Ã°Ã®Ã¨Ã§Ã­Ã¥Ã± Ã¯Ã°Ã¨ Ã¤Ã®Ã¯Ã°Ã®Ã±Ã¥Â…")
 		wait(1500)
-		sampSendChat("/do …â ñëó÷àå íåïîäòâåğæäåíèÿ ìîèõ ñëîâ ÿ ãîòîâ íåñòè óãîëîâíóş îòâåòñòâåííîñòü.' ")
+		sampSendChat("/do Â…Ã¢ Ã±Ã«Ã³Ã·Ã Ã¥ Ã­Ã¥Ã¯Ã®Ã¤Ã²Ã¢Ã¥Ã°Ã¦Ã¤Ã¥Ã­Ã¨Ã¿ Ã¬Ã®Ã¨Ãµ Ã±Ã«Ã®Ã¢ Ã¿ Ã£Ã®Ã²Ã®Ã¢ Ã­Ã¥Ã±Ã²Ã¨ Ã³Ã£Ã®Ã«Ã®Ã¢Ã­Ã³Ã¾ Ã®Ã²Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã¥Ã­Ã­Ã®Ã±Ã²Ã¼.' ")
 		wait(1500)
-		sampSendChat("Çàïîëíÿåøü íà ÷èñòîì êàê ïî îáğàçöó, íèæå ñòàâèøü ïîäïèñü è äàòó.")
+		sampSendChat("Ã‡Ã Ã¯Ã®Ã«Ã­Ã¿Ã¥Ã¸Ã¼ Ã­Ã  Ã·Ã¨Ã±Ã²Ã®Ã¬ ÃªÃ Ãª Ã¯Ã® Ã®Ã¡Ã°Ã Ã§Ã¶Ã³, Ã­Ã¨Ã¦Ã¥ Ã±Ã²Ã Ã¢Ã¨Ã¸Ã¼ Ã¯Ã®Ã¤Ã¯Ã¨Ã±Ã¼ Ã¨ Ã¤Ã Ã²Ã³.")
 	end)
 end
 
 function cmd_secret_fbi(id)
 	lua_thread.create(function ()
-		sampSendChat("/do Íà ñòîëå ëåæèò äîêóìåíò: \"Äîêóìåíò î íåğàçãëàøåíèè äåÿòåëüíîñòè ÔÁĞ\"")
+		sampSendChat("/do ÃÃ  Ã±Ã²Ã®Ã«Ã¥ Ã«Ã¥Ã¦Ã¨Ã² Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²: \"Ã„Ã®ÃªÃ³Ã¬Ã¥Ã­Ã² Ã® Ã­Ã¥Ã°Ã Ã§Ã£Ã«Ã Ã¸Ã¥Ã­Ã¨Ã¨ Ã¤Ã¥Ã¿Ã²Ã¥Ã«Ã¼Ã­Ã®Ã±Ã²Ã¨ Ã”ÃÃ\"")
 		wait(1500)
-		sampSendChat("/do Ğÿäîì ñ äîêóìåíòîì àêêóğàòíî ğàñïîëîæåíà ğó÷êà ñ çîëîòîé ãğàâèğîâêîé \"ÔÁĞ\"")
+		sampSendChat("/do ÃÃ¿Ã¤Ã®Ã¬ Ã± Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã®Ã¬ Ã ÃªÃªÃ³Ã°Ã Ã²Ã­Ã® Ã°Ã Ã±Ã¯Ã®Ã«Ã®Ã¦Ã¥Ã­Ã  Ã°Ã³Ã·ÃªÃ  Ã± Ã§Ã®Ã«Ã®Ã²Ã®Ã© Ã£Ã°Ã Ã¢Ã¨Ã°Ã®Ã¢ÃªÃ®Ã© \"Ã”ÃÃ\"")
 		wait(1500)
-		sampSendChat("/do Â äîêóìåíòå íàïèñàíî: \"ß, (Èìÿ / Ôàìèëèÿ), êëÿíóñü äåğæàòü âòàéíå òî, ...")
+		sampSendChat("/do Ã‚ Ã¤Ã®ÃªÃ³Ã¬Ã¥Ã­Ã²Ã¥ Ã­Ã Ã¯Ã¨Ã±Ã Ã­Ã®: \"ÃŸ, (ÃˆÃ¬Ã¿ / Ã”Ã Ã¬Ã¨Ã«Ã¨Ã¿), ÃªÃ«Ã¿Ã­Ã³Ã±Ã¼ Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¼ Ã¢Ã²Ã Ã©Ã­Ã¥ Ã²Ã®, ...")
 		wait(1500)
-		sampSendChat("/do ... ÷òî âèäåë, âèæó, è áóäó âèäåòü\"")
+		sampSendChat("/do ... Ã·Ã²Ã® Ã¢Ã¨Ã¤Ã¥Ã«, Ã¢Ã¨Ã¦Ã³, Ã¨ Ã¡Ã³Ã¤Ã³ Ã¢Ã¨Ã¤Ã¥Ã²Ã¼\"")
 		wait(1500)
-		sampSendChat("/do Íèæå íàïèñàíî: \"Ãîòîâ íåñòè ïîëíóş îòâåòñòâåííîñòü, è â ñëó÷àå ñâîåãî íåïîâèíîâåíèÿ, ...")
+		sampSendChat("/do ÃÃ¨Ã¦Ã¥ Ã­Ã Ã¯Ã¨Ã±Ã Ã­Ã®: \"ÃƒÃ®Ã²Ã®Ã¢ Ã­Ã¥Ã±Ã²Ã¨ Ã¯Ã®Ã«Ã­Ã³Ã¾ Ã®Ã²Ã¢Ã¥Ã²Ã±Ã²Ã¢Ã¥Ã­Ã­Ã®Ã±Ã²Ã¼, Ã¨ Ã¢ Ã±Ã«Ã³Ã·Ã Ã¥ Ã±Ã¢Ã®Ã¥Ã£Ã® Ã­Ã¥Ã¯Ã®Ã¢Ã¨Ã­Ã®Ã¢Ã¥Ã­Ã¨Ã¿, ...")
 		wait(1500)
-		sampSendChat("/do ... ãîòîâ áûòü àğåñòîâàííûì è îòñòğàíåííûì îò äîëæíîñòè, ïğè íàëè÷èè òàêîâîé\"")
+		sampSendChat("/do ... Ã£Ã®Ã²Ã®Ã¢ Ã¡Ã»Ã²Ã¼ Ã Ã°Ã¥Ã±Ã²Ã®Ã¢Ã Ã­Ã­Ã»Ã¬ Ã¨ Ã®Ã²Ã±Ã²Ã°Ã Ã­Ã¥Ã­Ã­Ã»Ã¬ Ã®Ã² Ã¤Ã®Ã«Ã¦Ã­Ã®Ã±Ã²Ã¨, Ã¯Ã°Ã¨ Ã­Ã Ã«Ã¨Ã·Ã¨Ã¨ Ã²Ã ÃªÃ®Ã¢Ã®Ã©\"")
 		wait(1500)
-		sampSendChat("/do Åùå íèæå íàïèñàíî: \"Äàòà: ; Ïîäïèñü: \"")
+		sampSendChat("/do Ã…Ã¹Ã¥ Ã­Ã¨Ã¦Ã¥ Ã­Ã Ã¯Ã¨Ã±Ã Ã­Ã®: \"Ã„Ã Ã²Ã : ; ÃÃ®Ã¤Ã¯Ã¨Ã±Ã¼: \"")
 	end)
 end
 
 function cmd_traf(id)
     if id == "" then
-             sampAddChatMessage("Ââåäè àéäè èãğîêà: {FFFFFF}/traf [ID].", 0x318CE7FF)
+             sampAddChatMessage("Ã‚Ã¢Ã¥Ã¤Ã¨ Ã Ã©Ã¤Ã¨ Ã¨Ã£Ã°Ã®ÃªÃ : {FFFFFF}/traf [ID].", 0x318CE7FF)
     else
         lua_thread.create(function()
-            sampSendChat("/do Ìåãàôîí â áàğäà÷êå.")
+            sampSendChat("/do ÃŒÃ¥Ã£Ã Ã´Ã®Ã­ Ã¢ Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ¥.")
             wait(1200)
-            sampSendChat("/me äîñòà¸ò ìåãàôîí ñ áàğäà÷êà ïîñëå ÷åãî âêëş÷àåò åãî")
+            sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Â¸Ã² Ã¬Ã¥Ã£Ã Ã´Ã®Ã­ Ã± Ã¡Ã Ã°Ã¤Ã Ã·ÃªÃ  Ã¯Ã®Ã±Ã«Ã¥ Ã·Ã¥Ã£Ã® Ã¢ÃªÃ«Ã¾Ã·Ã Ã¥Ã² Ã¥Ã£Ã®")
             wait(1200)
-            sampSendChat("/m Âîäèòåëü àâòî îñòàíîâèòåñü íà îáî÷èíå è çàãëóøèòå äâèãàòåëü, äåğæèòå ğóêè íà ğóëå.")
+            sampSendChat("/m Ã‚Ã®Ã¤Ã¨Ã²Ã¥Ã«Ã¼ Ã Ã¢Ã²Ã® Ã®Ã±Ã²Ã Ã­Ã®Ã¢Ã¨Ã²Ã¥Ã±Ã¼ Ã­Ã  Ã®Ã¡Ã®Ã·Ã¨Ã­Ã¥ Ã¨ Ã§Ã Ã£Ã«Ã³Ã¸Ã¨Ã²Ã¥ Ã¤Ã¢Ã¨Ã£Ã Ã²Ã¥Ã«Ã¼, Ã¤Ã¥Ã°Ã¦Ã¨Ã²Ã¥ Ã°Ã³ÃªÃ¨ Ã­Ã  Ã°Ã³Ã«Ã¥.")
             wait(1200)
-            sampSendChat("/me óáèğàåò ìåãàôîí â áàğäà÷îê")
+            sampSendChat("/me Ã³Ã¡Ã¨Ã°Ã Ã¥Ã² Ã¬Ã¥Ã£Ã Ã´Ã®Ã­ Ã¢ Ã¡Ã Ã°Ã¤Ã Ã·Ã®Ãª")
         end)
     end
 end
 
 function cmd_time()
     lua_thread.create(function()
-    sampSendChat("/me ïîäíÿë ğóêó è ïîñìîòğåë íà ÷àñû áğåíäà  Rolex")
+    sampSendChat("/me Ã¯Ã®Ã¤Ã­Ã¿Ã« Ã°Ã³ÃªÃ³ Ã¨ Ã¯Ã®Ã±Ã¬Ã®Ã²Ã°Ã¥Ã« Ã­Ã  Ã·Ã Ã±Ã» Ã¡Ã°Ã¥Ã­Ã¤Ã   Rolex")
     wait(1500)
     sampSendChat("/time")
-    sampSendChat('/do Íà ÷àñàõ '..os.date('%H:%M:%S'))
+    sampSendChat('/do ÃÃ  Ã·Ã Ã±Ã Ãµ '..os.date('%H:%M:%S'))
     end)
 end
 
 function cmd_finger_person(id)
 	lua_thread.create(function ()
-		sampSendChat("/do Çà ñïèíîé àãåíòà íàõîäèòñÿ íåáîëüøàÿ ñïåö. ñóìêà.")
+		sampSendChat("/do Ã‡Ã  Ã±Ã¯Ã¨Ã­Ã®Ã© Ã Ã£Ã¥Ã­Ã²Ã  Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ Ã­Ã¥Ã¡Ã®Ã«Ã¼Ã¸Ã Ã¿ Ã±Ã¯Ã¥Ã¶. Ã±Ã³Ã¬ÃªÃ .")
 		wait(1500)
-		sampSendChat("/me ñíÿë ñïåö. ñóìêó ñî ñïèíû, ïîñëå ïîëîæèë å¸ íà ğîâíóş ïîâåğõíîñòü")
+		sampSendChat("/me Ã±Ã­Ã¿Ã« Ã±Ã¯Ã¥Ã¶. Ã±Ã³Ã¬ÃªÃ³ Ã±Ã® Ã±Ã¯Ã¨Ã­Ã», Ã¯Ã®Ã±Ã«Ã¥ Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã¥Â¸ Ã­Ã  Ã°Ã®Ã¢Ã­Ã³Ã¾ Ã¯Ã®Ã¢Ã¥Ã°ÃµÃ­Ã®Ã±Ã²Ã¼")
 		wait(1500)
-		sampSendChat("/do Â ñïåö. ñóìêå èìååòñÿ: ïóäğà è êèñòî÷êà äëÿ å¸ íàíåñåíèÿ, ñïåö. ïë¸íêà.")
+		sampSendChat("/do Ã‚ Ã±Ã¯Ã¥Ã¶. Ã±Ã³Ã¬ÃªÃ¥ Ã¨Ã¬Ã¥Ã¥Ã²Ã±Ã¿: Ã¯Ã³Ã¤Ã°Ã  Ã¨ ÃªÃ¨Ã±Ã²Ã®Ã·ÃªÃ  Ã¤Ã«Ã¿ Ã¥Â¸ Ã­Ã Ã­Ã¥Ã±Ã¥Ã­Ã¨Ã¿, Ã±Ã¯Ã¥Ã¶. Ã¯Ã«Â¸Ã­ÃªÃ .")
 		wait(1500)
-		sampSendChat("/me âçÿë áàíî÷êó ñ ïóäğîé, îòêğûâ å¸ àêêóğàòíî íàíîñèò ïóäğó íà ïàëüöû ÷åëîâåêà íàïğîòèâ")
+		sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã¡Ã Ã­Ã®Ã·ÃªÃ³ Ã± Ã¯Ã³Ã¤Ã°Ã®Ã©, Ã®Ã²ÃªÃ°Ã»Ã¢ Ã¥Â¸ Ã ÃªÃªÃ³Ã°Ã Ã²Ã­Ã® Ã­Ã Ã­Ã®Ã±Ã¨Ã² Ã¯Ã³Ã¤Ã°Ã³ Ã­Ã  Ã¯Ã Ã«Ã¼Ã¶Ã» Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã­Ã Ã¯Ã°Ã®Ã²Ã¨Ã¢")
 		wait(1500)
-		sampSendChat("/do Ïàëüöû ÷åëîâåêà íàïğîòèâ ïîêğûòû ïóäğîé.")
+		sampSendChat("/do ÃÃ Ã«Ã¼Ã¶Ã» Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ  Ã­Ã Ã¯Ã°Ã®Ã²Ã¨Ã¢ Ã¯Ã®ÃªÃ°Ã»Ã²Ã» Ã¯Ã³Ã¤Ã°Ã®Ã©.")
 		wait(1500)
-		sampSendChat("/me äîñòàë èç ñïåö. ñóìêè ñïåöèàëüíóş ïë¸íêó, çàòåì ïğèêëåèâàåò å¸ íà ïàëüöû ÷åëîâåêó")
+		sampSendChat("/me Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ Ã±Ã¯Ã¥Ã¶. Ã±Ã³Ã¬ÃªÃ¨ Ã±Ã¯Ã¥Ã¶Ã¨Ã Ã«Ã¼Ã­Ã³Ã¾ Ã¯Ã«Â¸Ã­ÃªÃ³, Ã§Ã Ã²Ã¥Ã¬ Ã¯Ã°Ã¨ÃªÃ«Ã¥Ã¨Ã¢Ã Ã¥Ã² Ã¥Â¸ Ã­Ã  Ã¯Ã Ã«Ã¼Ã¶Ã» Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ³")
 		wait(1500)
-		sampSendChat("/do Îòïå÷àòîê ôèêñèğóåòñÿ íà ïë¸íêå.")
+		sampSendChat("/do ÃÃ²Ã¯Ã¥Ã·Ã Ã²Ã®Ãª Ã´Ã¨ÃªÃ±Ã¨Ã°Ã³Ã¥Ã²Ã±Ã¿ Ã­Ã  Ã¯Ã«Â¸Ã­ÃªÃ¥.")
 		wait(1500)
-		sampSendChat("/me àêêóğàòíî ñíÿâ ïë¸íêó ñ ïàëüöåâ ÷åëîâåêà, ïîìåùàåò åå â ñïåö. ïàêåòèê")
+		sampSendChat("/me Ã ÃªÃªÃ³Ã°Ã Ã²Ã­Ã® Ã±Ã­Ã¿Ã¢ Ã¯Ã«Â¸Ã­ÃªÃ³ Ã± Ã¯Ã Ã«Ã¼Ã¶Ã¥Ã¢ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ , Ã¯Ã®Ã¬Ã¥Ã¹Ã Ã¥Ã² Ã¥Ã¥ Ã¢ Ã±Ã¯Ã¥Ã¶. Ã¯Ã ÃªÃ¥Ã²Ã¨Ãª")
 		wait(1500)
-		sampSendChat("/do Â ñïåö. ïàêåòèêå íàõîäèòñÿ ïë¸íêà ñ ïàëüöåâ ÷åëîâåêà.")
+		sampSendChat("/do Ã‚ Ã±Ã¯Ã¥Ã¶. Ã¯Ã ÃªÃ¥Ã²Ã¨ÃªÃ¥ Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã±Ã¿ Ã¯Ã«Â¸Ã­ÃªÃ  Ã± Ã¯Ã Ã«Ã¼Ã¶Ã¥Ã¢ Ã·Ã¥Ã«Ã®Ã¢Ã¥ÃªÃ .")
 		wait(1500)
-		sampSendChat("/me ïîëîæèë ñïåö. ïàêåòèê â çàäíèé êàğìàí áğşê, áåğ¸ò â ğóêè áàíî÷êó ñ ïóäğîé ...")
+		sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« Ã±Ã¯Ã¥Ã¶. Ã¯Ã ÃªÃ¥Ã²Ã¨Ãª Ã¢ Ã§Ã Ã¤Ã­Ã¨Ã© ÃªÃ Ã°Ã¬Ã Ã­ Ã¡Ã°Ã¾Ãª, Ã¡Ã¥Ã°Â¸Ã² Ã¢ Ã°Ã³ÃªÃ¨ Ã¡Ã Ã­Ã®Ã·ÃªÃ³ Ã± Ã¯Ã³Ã¤Ã°Ã®Ã© ...")
 		wait(1500)
-		sampSendChat("/me ... è êèñòî÷êó, óáèğàåò èõ â ñïåö. ñóìêó, ïîñëå çàêğûâàåò å¸")
+		sampSendChat("/me ... Ã¨ ÃªÃ¨Ã±Ã²Ã®Ã·ÃªÃ³, Ã³Ã¡Ã¨Ã°Ã Ã¥Ã² Ã¨Ãµ Ã¢ Ã±Ã¯Ã¥Ã¶. Ã±Ã³Ã¬ÃªÃ³, Ã¯Ã®Ã±Ã«Ã¥ Ã§Ã ÃªÃ°Ã»Ã¢Ã Ã¥Ã² Ã¥Â¸")
 		wait(1500)
-		sampSendChat("/do Ñïåö. ïàêåòèê ëåæèò â çàäíåì êàğìàíå áğşê, ñïåö. ñóìêà çàêğûòà.")
+		sampSendChat("/do Ã‘Ã¯Ã¥Ã¶. Ã¯Ã ÃªÃ¥Ã²Ã¨Ãª Ã«Ã¥Ã¦Ã¨Ã² Ã¢ Ã§Ã Ã¤Ã­Ã¥Ã¬ ÃªÃ Ã°Ã¬Ã Ã­Ã¥ Ã¡Ã°Ã¾Ãª, Ã±Ã¯Ã¥Ã¶. Ã±Ã³Ã¬ÃªÃ  Ã§Ã ÃªÃ°Ã»Ã²Ã .")
 	end)
 end
 
 function cmd_warn()
 	lua_thread.create(function ()
-		sampSendChat("/r  Ìíå òğåáóåòñÿ ïîäìîãà. Íàéäèòå ìåíÿ ïî æó÷êó  ")
+		sampSendChat("/r  ÃŒÃ­Ã¥ Ã²Ã°Ã¥Ã¡Ã³Ã¥Ã²Ã±Ã¿ Ã¯Ã®Ã¤Ã¬Ã®Ã£Ã . ÃÃ Ã©Ã¤Ã¨Ã²Ã¥ Ã¬Ã¥Ã­Ã¿ Ã¯Ã® Ã¦Ã³Ã·ÃªÃ³  ")
 	end)
 end
 
 function cmd_grim()
     lua_thread.create(function ()
-    sampSendChat("/do Â øêàô÷èêå ñòîèò íàáîğ äëÿ ïğîôåññèîíàëüíîãî ãğèìà.")
+    sampSendChat("/do Ã‚ Ã¸ÃªÃ Ã´Ã·Ã¨ÃªÃ¥ Ã±Ã²Ã®Ã¨Ã² Ã­Ã Ã¡Ã®Ã° Ã¤Ã«Ã¿ Ã¯Ã°Ã®Ã´Ã¥Ã±Ã±Ã¨Ã®Ã­Ã Ã«Ã¼Ã­Ã®Ã£Ã® Ã£Ã°Ã¨Ã¬Ã .")
     wait(1500)
-    sampSendChat("/me îòêğûë øêàô÷èê è äîñòàâ èç íåãî íàáîğ äëÿ ãğèìà, ïîñòàâèë åãî íà øêàô÷èê è îòêğûë")
+    sampSendChat("/me Ã®Ã²ÃªÃ°Ã»Ã« Ã¸ÃªÃ Ã´Ã·Ã¨Ãª Ã¨ Ã¤Ã®Ã±Ã²Ã Ã¢ Ã¨Ã§ Ã­Ã¥Ã£Ã® Ã­Ã Ã¡Ã®Ã° Ã¤Ã«Ã¿ Ã£Ã°Ã¨Ã¬Ã , Ã¯Ã®Ã±Ã²Ã Ã¢Ã¨Ã« Ã¥Ã£Ã® Ã­Ã  Ã¸ÃªÃ Ã´Ã·Ã¨Ãª Ã¨ Ã®Ã²ÃªÃ°Ã»Ã«")
     wait(1500)
-    sampSendChat("/do Íàáîğ äëÿ ãğèìà îòêğûò.")
+    sampSendChat("/do ÃÃ Ã¡Ã®Ã° Ã¤Ã«Ã¿ Ã£Ã°Ã¨Ã¬Ã  Ã®Ã²ÃªÃ°Ã»Ã².")
     wait(1500)
-    sampSendChat("/do Íàä øêàô÷èêîì âåñèò çåğêàëî.")
+    sampSendChat("/do ÃÃ Ã¤ Ã¸ÃªÃ Ã´Ã·Ã¨ÃªÃ®Ã¬ Ã¢Ã¥Ã±Ã¨Ã² Ã§Ã¥Ã°ÃªÃ Ã«Ã®.")
     wait(1500)
-    sampSendChat("/me ğàññìàòğèâàÿ íàáîğ, âçÿë áîëüøóş êèñòü è îêóíóâ å¸ â ò¸ìíûé öâåò, íà÷àë íàíîñèòü åãî íà ëèöî, ñìîòğÿ â çåğêàëî")
+    sampSendChat("/me Ã°Ã Ã±Ã±Ã¬Ã Ã²Ã°Ã¨Ã¢Ã Ã¿ Ã­Ã Ã¡Ã®Ã°, Ã¢Ã§Ã¿Ã« Ã¡Ã®Ã«Ã¼Ã¸Ã³Ã¾ ÃªÃ¨Ã±Ã²Ã¼ Ã¨ Ã®ÃªÃ³Ã­Ã³Ã¢ Ã¥Â¸ Ã¢ Ã²Â¸Ã¬Ã­Ã»Ã© Ã¶Ã¢Ã¥Ã², Ã­Ã Ã·Ã Ã« Ã­Ã Ã­Ã®Ã±Ã¨Ã²Ã¼ Ã¥Ã£Ã® Ã­Ã  Ã«Ã¨Ã¶Ã®, Ã±Ã¬Ã®Ã²Ã°Ã¿ Ã¢ Ã§Ã¥Ã°ÃªÃ Ã«Ã®")
     wait(1500)
-    sampSendChat("/me âçÿâ òîíêóş êèñòî÷êó, îêóíóë å¸ â ğóìÿí è íà÷àë íàíîñèòü íà ëèöî")
+    sampSendChat("/me Ã¢Ã§Ã¿Ã¢ Ã²Ã®Ã­ÃªÃ³Ã¾ ÃªÃ¨Ã±Ã²Ã®Ã·ÃªÃ³, Ã®ÃªÃ³Ã­Ã³Ã« Ã¥Â¸ Ã¢ Ã°Ã³Ã¬Ã¿Ã­ Ã¨ Ã­Ã Ã·Ã Ã« Ã­Ã Ã­Ã®Ã±Ã¨Ã²Ã¼ Ã­Ã  Ã«Ã¨Ã¶Ã®")
    wait(1500)
-   sampSendChat("/me íàğèñîâàâ íà ëèöå ñêóëû, îêóíóë êèñòî÷êó â ò¸ìíóş òåíü è íàí¸ñ èõ íà ëèöî")
+   sampSendChat("/me Ã­Ã Ã°Ã¨Ã±Ã®Ã¢Ã Ã¢ Ã­Ã  Ã«Ã¨Ã¶Ã¥ Ã±ÃªÃ³Ã«Ã», Ã®ÃªÃ³Ã­Ã³Ã« ÃªÃ¨Ã±Ã²Ã®Ã·ÃªÃ³ Ã¢ Ã²Â¸Ã¬Ã­Ã³Ã¾ Ã²Ã¥Ã­Ã¼ Ã¨ Ã­Ã Ã­Â¸Ã± Ã¨Ãµ Ã­Ã  Ã«Ã¨Ã¶Ã®")
    wait(1500)
-   sampSendChat("/me âçÿë êèñòü è îêóíóâ å¸ â ò¸ìíóş ïóäğó è íàí¸ñ å¸ íà ëèöî")
+   sampSendChat("/me Ã¢Ã§Ã¿Ã« ÃªÃ¨Ã±Ã²Ã¼ Ã¨ Ã®ÃªÃ³Ã­Ã³Ã¢ Ã¥Â¸ Ã¢ Ã²Â¸Ã¬Ã­Ã³Ã¾ Ã¯Ã³Ã¤Ã°Ã³ Ã¨ Ã­Ã Ã­Â¸Ã± Ã¥Â¸ Ã­Ã  Ã«Ã¨Ã¶Ã®")
    wait(1500)
-   sampSendChat("/me ïîëîæèë êèñòè â îòñåê äëÿ èíñòğóìåíòîâ è çàêğûë íàáîğ")
+   sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« ÃªÃ¨Ã±Ã²Ã¨ Ã¢ Ã®Ã²Ã±Ã¥Ãª Ã¤Ã«Ã¿ Ã¨Ã­Ã±Ã²Ã°Ã³Ã¬Ã¥Ã­Ã²Ã®Ã¢ Ã¨ Ã§Ã ÃªÃ°Ã»Ã« Ã­Ã Ã¡Ã®Ã°")
    wait(1500)
-   sampSendChat("/me óáğàë íàáîğ â øêàô÷èê è çàêğûë åãî")
+   sampSendChat("/me Ã³Ã¡Ã°Ã Ã« Ã­Ã Ã¡Ã®Ã° Ã¢ Ã¸ÃªÃ Ã´Ã·Ã¨Ãª Ã¨ Ã§Ã ÃªÃ°Ã»Ã« Ã¥Ã£Ã®")
    wait(1500)
-   sampSendChat("/do Íà ëèöå íàíåñ¸í ãğèì.")
+   sampSendChat("/do ÃÃ  Ã«Ã¨Ã¶Ã¥ Ã­Ã Ã­Ã¥Ã±Â¸Ã­ Ã£Ã°Ã¨Ã¬.")
        end)
 end
 
 function cmd_eks()
     lua_thread.create(function ()
-    sampSendChat ("/do Â êàğìàíå ïèäæàêà ëåæàò ğåçèíîâûå ïåğ÷àòêè.")
+    sampSendChat ("/do Ã‚ ÃªÃ Ã°Ã¬Ã Ã­Ã¥ Ã¯Ã¨Ã¤Ã¦Ã ÃªÃ  Ã«Ã¥Ã¦Ã Ã² Ã°Ã¥Ã§Ã¨Ã­Ã®Ã¢Ã»Ã¥ Ã¯Ã¥Ã°Ã·Ã Ã²ÃªÃ¨.")
 wait(1500)
-sampSendChat ("/me ïğàâîé ğóêîé äîñòàë èç êàğìàíà ïåğ÷àòêè è íàäåë èõ íà êèñòè ğóê")
+sampSendChat ("/me Ã¯Ã°Ã Ã¢Ã®Ã© Ã°Ã³ÃªÃ®Ã© Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ ÃªÃ Ã°Ã¬Ã Ã­Ã  Ã¯Ã¥Ã°Ã·Ã Ã²ÃªÃ¨ Ã¨ Ã­Ã Ã¤Ã¥Ã« Ã¨Ãµ Ã­Ã  ÃªÃ¨Ã±Ã²Ã¨ Ã°Ã³Ãª")
 wait(1500)
-sampSendChat("/do Íà ñòîëå ëåæèò îğóæèå, ïîëîñêà è ëèñò áåëîé áóìàãè, äâå ñòîéêè ñ ïğîáèğêàìè.")
+sampSendChat("/do ÃÃ  Ã±Ã²Ã®Ã«Ã¥ Ã«Ã¥Ã¦Ã¨Ã² Ã®Ã°Ã³Ã¦Ã¨Ã¥, Ã¯Ã®Ã«Ã®Ã±ÃªÃ  Ã¨ Ã«Ã¨Ã±Ã² Ã¡Ã¥Ã«Ã®Ã© Ã¡Ã³Ã¬Ã Ã£Ã¨, Ã¤Ã¢Ã¥ Ã±Ã²Ã®Ã©ÃªÃ¨ Ã± Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ Ã¬Ã¨.")
 wait(1500)
-sampSendChat("/me îñìîòğåë îğóæèå è àêêóğàòíî ğàçîáğàë åãî íà îòäåëüíûå ÷àñòè")
+sampSendChat("/me Ã®Ã±Ã¬Ã®Ã²Ã°Ã¥Ã« Ã®Ã°Ã³Ã¦Ã¨Ã¥ Ã¨ Ã ÃªÃªÃ³Ã°Ã Ã²Ã­Ã® Ã°Ã Ã§Ã®Ã¡Ã°Ã Ã« Ã¥Ã£Ã® Ã­Ã  Ã®Ã²Ã¤Ã¥Ã«Ã¼Ã­Ã»Ã¥ Ã·Ã Ã±Ã²Ã¨")
 wait(1500)
-sampSendChat("/me âçÿë â ğóêè çàòâîğ è ïîëîñêó áóìàãè, ïîìåñòèë ïîëîñêó â çàäíèé ñğåç ïàòğîííèêà")
+sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã¢ Ã°Ã³ÃªÃ¨ Ã§Ã Ã²Ã¢Ã®Ã° Ã¨ Ã¯Ã®Ã«Ã®Ã±ÃªÃ³ Ã¡Ã³Ã¬Ã Ã£Ã¨, Ã¯Ã®Ã¬Ã¥Ã±Ã²Ã¨Ã« Ã¯Ã®Ã«Ã®Ã±ÃªÃ³ Ã¢ Ã§Ã Ã¤Ã­Ã¨Ã© Ã±Ã°Ã¥Ã§ Ã¯Ã Ã²Ã°Ã®Ã­Ã­Ã¨ÃªÃ ")
 wait(1500)
-sampSendChat("/me óáğàë ïîëîñêó áóìàãè èç çàòâîğà")
+sampSendChat("/me Ã³Ã¡Ã°Ã Ã« Ã¯Ã®Ã«Ã®Ã±ÃªÃ³ Ã¡Ã³Ã¬Ã Ã£Ã¨ Ã¨Ã§ Ã§Ã Ã²Ã¢Ã®Ã°Ã ")
 wait(1500)
-sampSendChat("/do Íà ïîëîñêå áóìàãè îñòàëèñü ñëåäû íàãàğà îò íå ñãîğåâøåãî ïîğîõà.")
+sampSendChat("/do ÃÃ  Ã¯Ã®Ã«Ã®Ã±ÃªÃ¥ Ã¡Ã³Ã¬Ã Ã£Ã¨ Ã®Ã±Ã²Ã Ã«Ã¨Ã±Ã¼ Ã±Ã«Ã¥Ã¤Ã» Ã­Ã Ã£Ã Ã°Ã  Ã®Ã² Ã­Ã¥ Ã±Ã£Ã®Ã°Ã¥Ã¢Ã¸Ã¥Ã£Ã® Ã¯Ã®Ã°Ã®ÃµÃ .")
 wait(1500)
-sampSendChat("/me âûòğÿõíóë ÷àñòèöû ñ ïîëîñêè íà ëèñò áóìàãè")
+sampSendChat("/me Ã¢Ã»Ã²Ã°Ã¿ÃµÃ­Ã³Ã« Ã·Ã Ã±Ã²Ã¨Ã¶Ã» Ã± Ã¯Ã®Ã«Ã®Ã±ÃªÃ¨ Ã­Ã  Ã«Ã¨Ã±Ã² Ã¡Ã³Ã¬Ã Ã£Ã¨")
 wait(1500)
-sampSendChat("/me âçÿë ïğîáèğêó ñî ñòîéêè è ïåğåñûïàë ñîäåğæèìîå ñ ëèñòà â ïğîáèğêó")
+sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã±Ã® Ã±Ã²Ã®Ã©ÃªÃ¨ Ã¨ Ã¯Ã¥Ã°Ã¥Ã±Ã»Ã¯Ã Ã« Ã±Ã®Ã¤Ã¥Ã°Ã¦Ã¨Ã¬Ã®Ã¥ Ã± Ã«Ã¨Ã±Ã²Ã  Ã¢ Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³")
 wait(1500)
-sampSendChat("/me çàêğûë ïğîáèğêó è ïîñòàâèë íà äğóãóş ñòîéêó")
+sampSendChat("/me Ã§Ã ÃªÃ°Ã»Ã« Ã¯Ã°Ã®Ã¡Ã¨Ã°ÃªÃ³ Ã¨ Ã¯Ã®Ã±Ã²Ã Ã¢Ã¨Ã« Ã­Ã  Ã¤Ã°Ã³Ã£Ã³Ã¾ Ã±Ã²Ã®Ã©ÃªÃ³")
 wait(1500)
-sampSendChat("/me âçÿë â ğóêè êğûøêó ñòâîëüíîé êîğîáêè è ïğîñìîòğåë ñåğèéíûé íîìåğ îğóæèÿ")
+sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã¢ Ã°Ã³ÃªÃ¨ ÃªÃ°Ã»Ã¸ÃªÃ³ Ã±Ã²Ã¢Ã®Ã«Ã¼Ã­Ã®Ã© ÃªÃ®Ã°Ã®Ã¡ÃªÃ¨ Ã¨ Ã¯Ã°Ã®Ã±Ã¬Ã®Ã²Ã°Ã¥Ã« Ã±Ã¥Ã°Ã¨Ã©Ã­Ã»Ã© Ã­Ã®Ã¬Ã¥Ã° Ã®Ã°Ã³Ã¦Ã¨Ã¿")
 wait(1500)
-sampSendChat("/me âêëş÷èë êîìïüşòåğ è îòêğûë áàçó äàííûõ, â ïîèñêîâóş ñòğîêó ââ¸ë íîìåğ îğóæèÿ")
+sampSendChat("/me Ã¢ÃªÃ«Ã¾Ã·Ã¨Ã« ÃªÃ®Ã¬Ã¯Ã¼Ã¾Ã²Ã¥Ã° Ã¨ Ã®Ã²ÃªÃ°Ã»Ã« Ã¡Ã Ã§Ã³ Ã¤Ã Ã­Ã­Ã»Ãµ, Ã¢ Ã¯Ã®Ã¨Ã±ÃªÃ®Ã¢Ã³Ã¾ Ã±Ã²Ã°Ã®ÃªÃ³ Ã¢Ã¢Â¸Ã« Ã­Ã®Ã¬Ã¥Ã° Ã®Ã°Ã³Ã¦Ã¨Ã¿")
 wait(1500)
-sampSendChat("/do Íà ıêğàíå âûñâåòèëàñü èíôîğìàöèÿ îá îğóæèè è âëàäåëüöå.")
+sampSendChat("/do ÃÃ  Ã½ÃªÃ°Ã Ã­Ã¥ Ã¢Ã»Ã±Ã¢Ã¥Ã²Ã¨Ã«Ã Ã±Ã¼ Ã¨Ã­Ã´Ã®Ã°Ã¬Ã Ã¶Ã¨Ã¿ Ã®Ã¡ Ã®Ã°Ã³Ã¦Ã¨Ã¨ Ã¨ Ã¢Ã«Ã Ã¤Ã¥Ã«Ã¼Ã¶Ã¥.")
 wait(1500)
-sampSendChat("/me ïîëîæèë êğûøêó ñòâîëüíîé êîğîáêè îáğàòíî íà ñòîë")
+sampSendChat("/me Ã¯Ã®Ã«Ã®Ã¦Ã¨Ã« ÃªÃ°Ã»Ã¸ÃªÃ³ Ã±Ã²Ã¢Ã®Ã«Ã¼Ã­Ã®Ã© ÃªÃ®Ã°Ã®Ã¡ÃªÃ¨ Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã±Ã²Ã®Ã«")
 wait(1500)
-sampSendChat("/me ñîáğàë îğóæèå â öåëîå, äîñòàë èç ÿùèêà ïğîçğà÷íûé ñïåö.ïàêåò è ïîìåñòèë â íåãî îğóæèå")
+sampSendChat("/me Ã±Ã®Ã¡Ã°Ã Ã« Ã®Ã°Ã³Ã¦Ã¨Ã¥ Ã¢ Ã¶Ã¥Ã«Ã®Ã¥, Ã¤Ã®Ã±Ã²Ã Ã« Ã¨Ã§ Ã¿Ã¹Ã¨ÃªÃ  Ã¯Ã°Ã®Ã§Ã°Ã Ã·Ã­Ã»Ã© Ã±Ã¯Ã¥Ã¶.Ã¯Ã ÃªÃ¥Ã² Ã¨ Ã¯Ã®Ã¬Ã¥Ã±Ã²Ã¨Ã« Ã¢ Ã­Ã¥Ã£Ã® Ã®Ã°Ã³Ã¦Ã¨Ã¥")
 wait(1500)
-sampSendChat("/me âçÿë ñî ñòîëà ôëîìàñòåğ è ïîìåòèë èì ñïåö.ïàêåò, óáğàë ôëîìàñòåğ â ÿùèê è çàêğûë åãî")
+sampSendChat("/me Ã¢Ã§Ã¿Ã« Ã±Ã® Ã±Ã²Ã®Ã«Ã  Ã´Ã«Ã®Ã¬Ã Ã±Ã²Ã¥Ã° Ã¨ Ã¯Ã®Ã¬Ã¥Ã²Ã¨Ã« Ã¨Ã¬ Ã±Ã¯Ã¥Ã¶.Ã¯Ã ÃªÃ¥Ã², Ã³Ã¡Ã°Ã Ã« Ã´Ã«Ã®Ã¬Ã Ã±Ã²Ã¥Ã° Ã¢ Ã¿Ã¹Ã¨Ãª Ã¨ Ã§Ã ÃªÃ°Ã»Ã« Ã¥Ã£Ã®")
        end)
 end
 
@@ -2235,18 +2235,18 @@ local secondFrame = imgui.OnFrame(
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
-        imgui.Begin(u8"Âûäà÷à ğîçûñêà", windowTwo)
-        imgui.InputInt(u8 'ID èãğîêà ñ êîòîğûì áóäåòå âçàèìîäåéñòâîâàòü', id,10)
+        imgui.Begin(u8"Ã‚Ã»Ã¤Ã Ã·Ã  Ã°Ã®Ã§Ã»Ã±ÃªÃ ", windowTwo)
+        imgui.InputInt(u8 'ID Ã¨Ã£Ã°Ã®ÃªÃ  Ã± ÃªÃ®Ã²Ã®Ã°Ã»Ã¬ Ã¡Ã³Ã¤Ã¥Ã²Ã¥ Ã¢Ã§Ã Ã¨Ã¬Ã®Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã®Ã¢Ã Ã²Ã¼', id,10)
         for i = 1, #tableUk["Text"] do
-            if imgui.Button(u8(tableUk["Text"][i] .. ' Óğîâåíü ğîçûñêà: ' .. tableUk["Ur"][i])) then
+            if imgui.Button(u8(tableUk["Text"][i] .. ' Ã“Ã°Ã®Ã¢Ã¥Ã­Ã¼ Ã°Ã®Ã§Ã»Ã±ÃªÃ : ' .. tableUk["Ur"][i])) then
                 lua_thread.create(function()
-                    sampSendChat("/do Ğàöèÿ âèñèò íà áğîíåæåëåòå.")
+                    sampSendChat("/do ÃÃ Ã¶Ã¨Ã¿ Ã¢Ã¨Ã±Ã¨Ã² Ã­Ã  Ã¡Ã°Ã®Ã­Ã¥Ã¦Ã¥Ã«Ã¥Ã²Ã¥.")
                     wait(1500)
-                    sampSendChat("/me ñîğâàâ ñ ãğóäíîãî äåğæàòåëÿ ğàöèş, ñîîáùèë äàííûå î ñàïåêòå")
+                    sampSendChat("/me Ã±Ã®Ã°Ã¢Ã Ã¢ Ã± Ã£Ã°Ã³Ã¤Ã­Ã®Ã£Ã® Ã¤Ã¥Ã°Ã¦Ã Ã²Ã¥Ã«Ã¿ Ã°Ã Ã¶Ã¨Ã¾, Ã±Ã®Ã®Ã¡Ã¹Ã¨Ã« Ã¤Ã Ã­Ã­Ã»Ã¥ Ã® Ã±Ã Ã¯Ã¥ÃªÃ²Ã¥")
                     wait(1500)
                     sampSendChat("/su " .. id[0] .. " " .. tableUk["Ur"][i] .. " " .. tableUk["Text"][i])
                     wait(1500)
-                    sampSendChat("/do Ñïóñòÿ âğåìÿ äèñïåò÷åğ îáúÿâèë ñàïåêòà â ôåäåğàëüíûé ğîçûñê.")
+                    sampSendChat("/do Ã‘Ã¯Ã³Ã±Ã²Ã¿ Ã¢Ã°Ã¥Ã¬Ã¿ Ã¤Ã¨Ã±Ã¯Ã¥Ã²Ã·Ã¥Ã° Ã®Ã¡ÃºÃ¿Ã¢Ã¨Ã« Ã±Ã Ã¯Ã¥ÃªÃ²Ã  Ã¢ Ã´Ã¥Ã¤Ã¥Ã°Ã Ã«Ã¼Ã­Ã»Ã© Ã°Ã®Ã§Ã»Ã±Ãª.")
                 end)
             end
         end
@@ -2262,75 +2262,75 @@ local thirdFrame = imgui.OnFrame(
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
-        imgui.Begin(u8"Ïàíåëü ëèäåğà/çàìåñòèòåëÿ", leaderPanel)
-        imgui.InputInt(u8'ID èãğîêà ñ êîòîğûì õîòèòå âçàèìîäåéñòâîâàòü', id, 10)
-        if imgui.Button(u8'Óâîëèòü ñîòğóäíèêà') then
+        imgui.Begin(u8"ÃÃ Ã­Ã¥Ã«Ã¼ Ã«Ã¨Ã¤Ã¥Ã°Ã /Ã§Ã Ã¬Ã¥Ã±Ã²Ã¨Ã²Ã¥Ã«Ã¿", leaderPanel)
+        imgui.InputInt(u8'ID Ã¨Ã£Ã°Ã®ÃªÃ  Ã± ÃªÃ®Ã²Ã®Ã°Ã»Ã¬ ÃµÃ®Ã²Ã¨Ã²Ã¥ Ã¢Ã§Ã Ã¨Ã¬Ã®Ã¤Ã¥Ã©Ã±Ã²Ã¢Ã®Ã¢Ã Ã²Ã¼', id, 10)
+        if imgui.Button(u8'Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ ') then
             lua_thread.create(function ()
-                sampSendChat("/do ÊÏÊ âåñèò íà ïîÿñå.")
+                sampSendChat("/do ÃŠÃÃŠ Ã¢Ã¥Ã±Ã¨Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
                 wait(1500)
-                sampSendChat("/me ñíÿë ÊÏÊ ñ ïîÿñà è çàøåë â ïğîãğàììó óïğàâëåíèÿ")
+                sampSendChat("/me Ã±Ã­Ã¿Ã« ÃŠÃÃŠ Ã± Ã¯Ã®Ã¿Ã±Ã  Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¯Ã°Ã®Ã£Ã°Ã Ã¬Ã¬Ã³ Ã³Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¿")
                 wait(1500)
-                sampSendChat("/me íàøåë â ñïèñêå ñîòğóäíèêà è íàæàë íà êíîïêó Óâîëèòü")
+                sampSendChat("/me Ã­Ã Ã¸Ã¥Ã« Ã¢ Ã±Ã¯Ã¨Ã±ÃªÃ¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ  Ã¨ Ã­Ã Ã¦Ã Ã« Ã­Ã  ÃªÃ­Ã®Ã¯ÃªÃ³ Ã“Ã¢Ã®Ã«Ã¨Ã²Ã¼")
                 wait(1500)
-                sampSendChat("/do Íà ÊÏÊ âûñâåòèëàñü íàäïèñü 'Ñîòğóäíèê óñïåøíî óâîëåí!'")
+                sampSendChat("/do ÃÃ  ÃŠÃÃŠ Ã¢Ã»Ã±Ã¢Ã¥Ã²Ã¨Ã«Ã Ã±Ã¼ Ã­Ã Ã¤Ã¯Ã¨Ã±Ã¼ 'Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª Ã³Ã±Ã¯Ã¥Ã¸Ã­Ã® Ã³Ã¢Ã®Ã«Ã¥Ã­!'")
                 wait(1500)
-                sampSendChat("/me âûêëş÷èë ÊÏÊ è ïîâåñèë îáğàòíî íà ïîÿñ")
+                sampSendChat("/me Ã¢Ã»ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã¯Ã®Ã¢Ã¥Ã±Ã¨Ã« Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã¯Ã®Ã¿Ã±")
                 wait(1500)
-                sampSendChat("Íó ÷òî æ, âû óâîëåííû. Îñòàâüòå ïîãîíû â ìîåì êàáèíåòå.")
+                sampSendChat("ÃÃ³ Ã·Ã²Ã® Ã¦, Ã¢Ã» Ã³Ã¢Ã®Ã«Ã¥Ã­Ã­Ã». ÃÃ±Ã²Ã Ã¢Ã¼Ã²Ã¥ Ã¯Ã®Ã£Ã®Ã­Ã» Ã¢ Ã¬Ã®Ã¥Ã¬ ÃªÃ Ã¡Ã¨Ã­Ã¥Ã²Ã¥.")
                 wait(1500)
                 sampSendChat("/uninvite".. id[0])
             end)
         end
 
-        if imgui.Button(u8'Ïğèíÿòü ãğàæäàíèíà') then
+        if imgui.Button(u8'ÃÃ°Ã¨Ã­Ã¿Ã²Ã¼ Ã£Ã°Ã Ã¦Ã¤Ã Ã­Ã¨Ã­Ã ') then
             lua_thread.create(function ()
-                sampSendChat("/do ÊÏÊ âåñèò íà ïîÿñå.")
+                sampSendChat("/do ÃŠÃÃŠ Ã¢Ã¥Ã±Ã¨Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
                 wait(1500)
-                sampSendChat("/me ñíÿë ÊÏÊ ñ ïîÿñà è çàøåë â ïğîãğàììó óïğàâëåíèÿ")
+                sampSendChat("/me Ã±Ã­Ã¿Ã« ÃŠÃÃŠ Ã± Ã¯Ã®Ã¿Ã±Ã  Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¯Ã°Ã®Ã£Ã°Ã Ã¬Ã¬Ã³ Ã³Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¿")
                 wait(1500)
-                sampSendChat("/me çàøåë â òàáëèöó è ââåë äàííûå î íîâîì ñîòğóäíèêå")
+                sampSendChat("/me Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã²Ã Ã¡Ã«Ã¨Ã¶Ã³ Ã¨ Ã¢Ã¢Ã¥Ã« Ã¤Ã Ã­Ã­Ã»Ã¥ Ã® Ã­Ã®Ã¢Ã®Ã¬ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ¥")
                 wait(1500)
-                sampSendChat("/do Íà ÊÏÊ âûñâåòèëàñü íàäïèñü: 'Ñîòğóäíèê óñïåøíî äîáàâëåí! Ïîæåëàéòå åìó õîğîøåé ñëóæáû :)'")
+                sampSendChat("/do ÃÃ  ÃŠÃÃŠ Ã¢Ã»Ã±Ã¢Ã¥Ã²Ã¨Ã«Ã Ã±Ã¼ Ã­Ã Ã¤Ã¯Ã¨Ã±Ã¼: 'Ã‘Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨Ãª Ã³Ã±Ã¯Ã¥Ã¸Ã­Ã® Ã¤Ã®Ã¡Ã Ã¢Ã«Ã¥Ã­! ÃÃ®Ã¦Ã¥Ã«Ã Ã©Ã²Ã¥ Ã¥Ã¬Ã³ ÃµÃ®Ã°Ã®Ã¸Ã¥Ã© Ã±Ã«Ã³Ã¦Ã¡Ã» :)'")
                 wait(1500)
-                sampSendChat("/me âûêëş÷èë ÊÏÊ è ïîâåñèë îáğàòíî íà ïîÿñ")
+                sampSendChat("/me Ã¢Ã»ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã¯Ã®Ã¢Ã¥Ã±Ã¨Ã« Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã¯Ã®Ã¿Ã±")
                 wait(1500)
-                sampSendChat("Ïîçäğîâëÿş, âû ïğèíÿòû! Ôîğìó âîçüìåòå â ğàçäåâàëêå.")
+                sampSendChat("ÃÃ®Ã§Ã¤Ã°Ã®Ã¢Ã«Ã¿Ã¾, Ã¢Ã» Ã¯Ã°Ã¨Ã­Ã¿Ã²Ã»! Ã”Ã®Ã°Ã¬Ã³ Ã¢Ã®Ã§Ã¼Ã¬Ã¥Ã²Ã¥ Ã¢ Ã°Ã Ã§Ã¤Ã¥Ã¢Ã Ã«ÃªÃ¥.")
                 wait(1500)
                 sampSendChat("/invite".. id[0])
             end)
         end
 
-        if imgui.Button(u8'Âûäàòü âûãîâîğ ñîòğóäíèêó') then
+        if imgui.Button(u8'Ã‚Ã»Ã¤Ã Ã²Ã¼ Ã¢Ã»Ã£Ã®Ã¢Ã®Ã° Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ³') then
             lua_thread.create(function ()
-                sampSendChat("/do ÊÏÊ âåñèò íà ïîÿñå.")
+                sampSendChat("/do ÃŠÃÃŠ Ã¢Ã¥Ã±Ã¨Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
                 wait(1500)
-                sampSendChat("/me ñíÿë ÊÏÊ ñ ïîÿñà è çàøåë â ïğîãğàììó óïğàâëåíèÿ")
+                sampSendChat("/me Ã±Ã­Ã¿Ã« ÃŠÃÃŠ Ã± Ã¯Ã®Ã¿Ã±Ã  Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¯Ã°Ã®Ã£Ã°Ã Ã¬Ã¬Ã³ Ã³Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¿")
                 wait(1500)
-                sampSendChat("/me íàøåë â ñïèñêå ñîòğóäíèêà è íàæàë íà êíîïêó Âûäàòü âûãîâîğ")
+                sampSendChat("/me Ã­Ã Ã¸Ã¥Ã« Ã¢ Ã±Ã¯Ã¨Ã±ÃªÃ¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ  Ã¨ Ã­Ã Ã¦Ã Ã« Ã­Ã  ÃªÃ­Ã®Ã¯ÃªÃ³ Ã‚Ã»Ã¤Ã Ã²Ã¼ Ã¢Ã»Ã£Ã®Ã¢Ã®Ã°")
                 wait(1500)
-                sampSendChat("/do Íà ÊÏÊ âûñâåòèëàñü íàäïèñü: 'Âûãîâîğ âûäàí!'")
+                sampSendChat("/do ÃÃ  ÃŠÃÃŠ Ã¢Ã»Ã±Ã¢Ã¥Ã²Ã¨Ã«Ã Ã±Ã¼ Ã­Ã Ã¤Ã¯Ã¨Ã±Ã¼: 'Ã‚Ã»Ã£Ã®Ã¢Ã®Ã° Ã¢Ã»Ã¤Ã Ã­!'")
                 wait(1500)
-                sampSendChat("/me âûêëş÷èë ÊÏÊ è ïîâåñèë îáğàòíî íà ïîÿñ")
+                sampSendChat("/me Ã¢Ã»ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã¯Ã®Ã¢Ã¥Ã±Ã¨Ã« Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã¯Ã®Ã¿Ã±")
                 wait(1500)
-                sampSendChat("Íó ÷òî æ, âûãîâîğ âûäàí. Îòğàáàòûâàéòå.")
+                sampSendChat("ÃÃ³ Ã·Ã²Ã® Ã¦, Ã¢Ã»Ã£Ã®Ã¢Ã®Ã° Ã¢Ã»Ã¤Ã Ã­. ÃÃ²Ã°Ã Ã¡Ã Ã²Ã»Ã¢Ã Ã©Ã²Ã¥.")
                 wait(1500)
                 sampSendChat("/fwarn".. id[0])
             end)
         end
 
-        if imgui.Button(u8'Ñíÿòü âûãîâîğ ñîòğóäíèêó') then
+        if imgui.Button(u8'Ã‘Ã­Ã¿Ã²Ã¼ Ã¢Ã»Ã£Ã®Ã¢Ã®Ã° Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ³') then
             lua_thread.create(function ()
-                sampSendChat("/do ÊÏÊ âåñèò íà ïîÿñå.")
+                sampSendChat("/do ÃŠÃÃŠ Ã¢Ã¥Ã±Ã¨Ã² Ã­Ã  Ã¯Ã®Ã¿Ã±Ã¥.")
                 wait(1500)
-                sampSendChat("/me ñíÿë ÊÏÊ ñ ïîÿñà è çàøåë â ïğîãğàììó óïğàâëåíèÿ")
+                sampSendChat("/me Ã±Ã­Ã¿Ã« ÃŠÃÃŠ Ã± Ã¯Ã®Ã¿Ã±Ã  Ã¨ Ã§Ã Ã¸Ã¥Ã« Ã¢ Ã¯Ã°Ã®Ã£Ã°Ã Ã¬Ã¬Ã³ Ã³Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¿")
                 wait(1500)
-                sampSendChat("/me íàøåë â ñïèñêå ñîòğóäíèêà è íàæàë íà êíîïêó Ñíÿòü âûãîâîğ")
+                sampSendChat("/me Ã­Ã Ã¸Ã¥Ã« Ã¢ Ã±Ã¯Ã¨Ã±ÃªÃ¥ Ã±Ã®Ã²Ã°Ã³Ã¤Ã­Ã¨ÃªÃ  Ã¨ Ã­Ã Ã¦Ã Ã« Ã­Ã  ÃªÃ­Ã®Ã¯ÃªÃ³ Ã‘Ã­Ã¿Ã²Ã¼ Ã¢Ã»Ã£Ã®Ã¢Ã®Ã°")
                 wait(1500)
-                sampSendChat("/do Íà ÊÏÊ âûñâåòèëàñü íàäïèñü: 'Âûãîâîğ ñíÿò!'")
+                sampSendChat("/do ÃÃ  ÃŠÃÃŠ Ã¢Ã»Ã±Ã¢Ã¥Ã²Ã¨Ã«Ã Ã±Ã¼ Ã­Ã Ã¤Ã¯Ã¨Ã±Ã¼: 'Ã‚Ã»Ã£Ã®Ã¢Ã®Ã° Ã±Ã­Ã¿Ã²!'")
                 wait(1500)
-                sampSendChat("/me âûêëş÷èë ÊÏÊ è ïîâåñèë îáğàòíî íà ïîÿñ")
+                sampSendChat("/me Ã¢Ã»ÃªÃ«Ã¾Ã·Ã¨Ã« ÃŠÃÃŠ Ã¨ Ã¯Ã®Ã¢Ã¥Ã±Ã¨Ã« Ã®Ã¡Ã°Ã Ã²Ã­Ã® Ã­Ã  Ã¯Ã®Ã¿Ã±")
                 wait(1500)
-                sampSendChat("Íó ÷òî æ, îòğàáîòàëè.")
+                sampSendChat("ÃÃ³ Ã·Ã²Ã® Ã¦, Ã®Ã²Ã°Ã Ã¡Ã®Ã²Ã Ã«Ã¨.")
                 wait(1500)
                 sampSendChat("/unfwarn" .. id[0])
             end)
@@ -2347,18 +2347,18 @@ local setUkFrame = imgui.OnFrame(
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(900, 700), imgui.Cond.FirstUseEver)
-        imgui.Begin(u8"Íàñòğîéêà óìíîãî ğîçûñêà", setUkWindow)
+        imgui.Begin(u8"ÃÃ Ã±Ã²Ã°Ã®Ã©ÃªÃ  Ã³Ã¬Ã­Ã®Ã£Ã® Ã°Ã®Ã§Ã»Ã±ÃªÃ ", setUkWindow)
             if imgui.BeginChild('Name', imgui.ImVec2(700, 500), true) then
                 for i = 1, #tableUk["Text"] do
-                    imgui.Text(u8(tableUk["Text"][i] .. ' Óğîâåíü ğîçûñêà: ' .. tableUk["Ur"][i]))
+                    imgui.Text(u8(tableUk["Text"][i] .. ' Ã“Ã°Ã®Ã¢Ã¥Ã­Ã¼ Ã°Ã®Ã§Ã»Ã±ÃªÃ : ' .. tableUk["Ur"][i]))
                     Uk = #tableUk["Text"]
                 end
                 imgui.EndChild()
             end
-            if imgui.Button(u8'Äîáàâèòü', imgui.ImVec2(500, 36)) then
+            if imgui.Button(u8'Ã„Ã®Ã¡Ã Ã¢Ã¨Ã²Ã¼', imgui.ImVec2(500, 36)) then
                 addUkWindow[0] = not addUkWindow[0]
             end
-            if imgui.Button(u8'Óäàëèòü', imgui.ImVec2(500, 36)) then
+            if imgui.Button(u8'Ã“Ã¤Ã Ã«Ã¨Ã²Ã¼', imgui.ImVec2(500, 36)) then
                 Uk = #tableUk["Text"]
             	table.remove(tableUk.Text, #tableUk.Text)
                 table.remove(tableUk.Ur, #tableUk.Ur)
@@ -2383,11 +2383,11 @@ local addUkFrame = imgui.OnFrame(
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
-        imgui.Begin(u8"Íàñòğîéêà óìíîãî ğîçûñêà", addUkWindow)
-            imgui.InputText(u8'Òåêñò ñòàòüè(ñ íîìåğîì.)', newUkInput, 255)
+        imgui.Begin(u8"ÃÃ Ã±Ã²Ã°Ã®Ã©ÃªÃ  Ã³Ã¬Ã­Ã®Ã£Ã® Ã°Ã®Ã§Ã»Ã±ÃªÃ ", addUkWindow)
+            imgui.InputText(u8'Ã’Ã¥ÃªÃ±Ã² Ã±Ã²Ã Ã²Ã¼Ã¨(Ã± Ã­Ã®Ã¬Ã¥Ã°Ã®Ã¬.)', newUkInput, 255)
             newUkName = u8:decode(ffi.string(newUkInput))
-            imgui.InputInt(u8'Óğîâåíü ğîçûñêà(òîëüêî öèôğà)', newUkUr, 10)
-            if imgui.Button(u8'Ñîõğàíèòü') then
+            imgui.InputInt(u8'Ã“Ã°Ã®Ã¢Ã¥Ã­Ã¼ Ã°Ã®Ã§Ã»Ã±ÃªÃ (Ã²Ã®Ã«Ã¼ÃªÃ® Ã¶Ã¨Ã´Ã°Ã )', newUkUr, 10)
+            if imgui.Button(u8'Ã‘Ã®ÃµÃ°Ã Ã­Ã¨Ã²Ã¼') then
             	Uk = #tableUk["Text"]
             	tableUk["Text"][Uk+1] = newUkName
             	tableUk["Ur"][Uk+1] = newUkUr[0]
@@ -2403,390 +2403,390 @@ local addUkFrame = imgui.OnFrame(
 
 function calculateZone(x, y, z)
     local streets = {
-        {"Çàãîğîäíûé êëóá «Àâèñïà»", -2667.810, -302.135, -28.831, -2646.400, -262.320, 71.169},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1315.420, -405.388, 15.406, -1264.400, -209.543, 25.406},
-        {"Çàãîğîäíûé êëóá «Àâèñïà»", -2550.040, -355.493, 0.000, -2470.040, -318.493, 39.700},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1490.330, -209.543, 15.406, -1264.400, -148.388, 25.406},
-        {"Ãàğñèÿ", -2395.140, -222.589, -5.3, -2354.090, -204.792, 200.000},
-        {"Øåéäè-Êıáèí", -1632.830, -2263.440, -3.0, -1601.330, -2231.790, 200.000},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2381.680, -1494.030, -89.084, 2421.030, -1454.350, 110.916},
-        {"Ãğóçîâîå äåïî Ëàñ-Âåíòóğàñà", 1236.630, 1163.410, -89.084, 1277.050, 1203.280, 110.916},
-        {"Ïåğåñå÷åíèå Áëıêôèëä", 1277.050, 1044.690, -89.084, 1315.350, 1087.630, 110.916},
-        {"Çàãîğîäíûé êëóá «Àâèñïà»", -2470.040, -355.493, 0.000, -2270.040, -318.493, 46.100},
-        {"Òåìïë", 1252.330, -926.999, -89.084, 1357.000, -910.170, 110.916},
-        {"Ñòàíöèÿ «Şíèòè»", 1692.620, -1971.800, -20.492, 1812.620, -1932.800, 79.508},
-        {"Ãğóçîâîå äåïî Ëàñ-Âåíòóğàñà", 1315.350, 1044.690, -89.084, 1375.600, 1087.630, 110.916},
-        {"Ëîñ-Ôëîğåñ", 2581.730, -1454.350, -89.084, 2632.830, -1393.420, 110.916},
-        {"Êàçèíî «Ìîğñêàÿ çâåçäà»", 2437.390, 1858.100, -39.084, 2495.090, 1970.850, 60.916},
-        {"Õèìçàâîä Èñòåğ-Áıé", -1132.820, -787.391, 0.000, -956.476, -768.027, 200.000},
-        {"Äåëîâîé ğàéîí", 1370.850, -1170.870, -89.084, 1463.900, -1130.850, 110.916},
-        {"Âîñòî÷íàÿ İñïàëàíäà", -1620.300, 1176.520, -4.5, -1580.010, 1274.260, 200.000},
-        {"Ñòàíöèÿ «Ìàğêåò»", 787.461, -1410.930, -34.126, 866.009, -1310.210, 65.874},
-        {"Ñòàíöèÿ «Ëèíäåí»", 2811.250, 1229.590, -39.594, 2861.250, 1407.590, 60.406},
-        {"Ïåğåñå÷åíèå Ìîíòãîìåğè", 1582.440, 347.457, 0.000, 1664.620, 401.750, 200.000},
-        {"Ìîñò «Ôğåäåğèê»", 2759.250, 296.501, 0.000, 2774.250, 594.757, 200.000},
-        {"Ñòàíöèÿ «Éåëëîó-Áåëë»", 1377.480, 2600.430, -21.926, 1492.450, 2687.360, 78.074},
-        {"Äåëîâîé ğàéîí", 1507.510, -1385.210, 110.916, 1582.550, -1325.310, 335.916},
-        {"Äæåôôåğñîí", 2185.330, -1210.740, -89.084, 2281.450, -1154.590, 110.916},
-        {"Ìàëõîëëàíä", 1318.130, -910.170, -89.084, 1357.000, -768.027, 110.916},
-        {"Çàãîğîäíûé êëóá «Àâèñïà»", -2361.510, -417.199, 0.000, -2270.040, -355.493, 200.000},
-        {"Äæåôôåğñîí", 1996.910, -1449.670, -89.084, 2056.860, -1350.720, 110.916},
-        {"Çàïàäàíàÿ àâòîñòğàäà Äæóëèóñ", 1236.630, 2142.860, -89.084, 1297.470, 2243.230, 110.916},
-        {"Äæåôôåğñîí", 2124.660, -1494.030, -89.084, 2266.210, -1449.670, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 1848.400, 2478.490, -89.084, 1938.800, 2553.490, 110.916},
-        {"Ğîäåî", 422.680, -1570.200, -89.084, 466.223, -1406.050, 110.916},
-        {"Ñòàíöèÿ «Êğıíáåğğè»", -2007.830, 56.306, 0.000, -1922.000, 224.782, 100.000},
-        {"Äåëîâîé ğàéîí", 1391.050, -1026.330, -89.084, 1463.900, -926.999, 110.916},
-        {"Çàïàäíûé Ğıäñıíäñ", 1704.590, 2243.230, -89.084, 1777.390, 2342.830, 110.916},
-        {"Ìàëåíüêàÿ Ìåêñèêà", 1758.900, -1722.260, -89.084, 1812.620, -1577.590, 110.916},
-        {"Ïåğåñå÷åíèå Áëıêôèëä", 1375.600, 823.228, -89.084, 1457.390, 919.447, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Ëîñ-Ñàíòîñ", 1974.630, -2394.330, -39.084, 2089.000, -2256.590, 60.916},
-        {"Áåêîí-Õèëë", -399.633, -1075.520, -1.489, -319.033, -977.516, 198.511},
-        {"Ğîäåî", 334.503, -1501.950, -89.084, 422.680, -1406.050, 110.916},
-        {"Ğè÷ìàí", 225.165, -1369.620, -89.084, 334.503, -1292.070, 110.916},
-        {"Äåëîâîé ğàéîí", 1724.760, -1250.900, -89.084, 1812.620, -1150.870, 110.916},
-        {"Ñòğèï", 2027.400, 1703.230, -89.084, 2137.400, 1783.230, 110.916},
-        {"Äåëîâîé ğàéîí", 1378.330, -1130.850, -89.084, 1463.900, -1026.330, 110.916},
-        {"Ïåğåñå÷åíèå Áëıêôèëä", 1197.390, 1044.690, -89.084, 1277.050, 1163.390, 110.916},
-        {"Êîíôåğåíö Öåíòğ", 1073.220, -1842.270, -89.084, 1323.900, -1804.210, 110.916},
-        {"Ìîíòãîìåğè", 1451.400, 347.457, -6.1, 1582.440, 420.802, 200.000},
-        {"Äîëèíà Ôîñòåğ", -2270.040, -430.276, -1.2, -2178.690, -324.114, 200.000},
-        {"×àñîâíÿ Áëıêôèëä", 1325.600, 596.349, -89.084, 1375.600, 795.010, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Ëîñ-Ñàíòîñ", 2051.630, -2597.260, -39.084, 2152.450, -2394.330, 60.916},
-        {"Ìàëõîëëàíä", 1096.470, -910.170, -89.084, 1169.130, -768.027, 110.916},
-        {"Ïîëå äëÿ ãîëüôà «Éåëëîó-Áåëë»", 1457.460, 2723.230, -89.084, 1534.560, 2863.230, 110.916},
-        {"Ñòğèï", 2027.400, 1783.230, -89.084, 2162.390, 1863.230, 110.916},
-        {"Äæåôôåğñîí", 2056.860, -1210.740, -89.084, 2185.330, -1126.320, 110.916},
-        {"Ìàëõîëëàíä", 952.604, -937.184, -89.084, 1096.470, -860.619, 110.916},
-        {"Àëüäåà-Ìàëüâàäà", -1372.140, 2498.520, 0.000, -1277.590, 2615.350, 200.000},
-        {"Ëàñ-Êîëèíàñ", 2126.860, -1126.320, -89.084, 2185.330, -934.489, 110.916},
-        {"Ëàñ-Êîëèíàñ", 1994.330, -1100.820, -89.084, 2056.860, -920.815, 110.916},
-        {"Ğè÷ìàí", 647.557, -954.662, -89.084, 768.694, -860.619, 110.916},
-        {"Ãğóçîâîå äåïî Ëàñ-Âåíòóğàñà", 1277.050, 1087.630, -89.084, 1375.600, 1203.280, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 1377.390, 2433.230, -89.084, 1534.560, 2507.230, 110.916},
-        {"Óèëëîóôèëä", 2201.820, -2095.000, -89.084, 2324.000, -1989.900, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 1704.590, 2342.830, -89.084, 1848.400, 2433.230, 110.916},
-        {"Òåìïë", 1252.330, -1130.850, -89.084, 1378.330, -1026.330, 110.916},
-        {"Ìàëåíüêàÿ Ìåêñèêà", 1701.900, -1842.270, -89.084, 1812.620, -1722.260, 110.916},
-        {"Êâèíñ", -2411.220, 373.539, 0.000, -2253.540, 458.411, 200.000},
-        {"Àığîïîğò Ëàñ-Âåíòóğàñ", 1515.810, 1586.400, -12.500, 1729.950, 1714.560, 87.500},
-        {"Ğè÷ìàí", 225.165, -1292.070, -89.084, 466.223, -1235.070, 110.916},
-        {"Òåìïë", 1252.330, -1026.330, -89.084, 1391.050, -926.999, 110.916},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2266.260, -1494.030, -89.084, 2381.680, -1372.040, 110.916},
-        {"Âîñòî÷íàÿ àâòîñòğàäà Äæóëèóñ", 2623.180, 943.235, -89.084, 2749.900, 1055.960, 110.916},
-        {"Óèëëîóôèëä", 2541.700, -1941.400, -89.084, 2703.580, -1852.870, 110.916},
-        {"Ëàñ-Êîëèíàñ", 2056.860, -1126.320, -89.084, 2126.860, -920.815, 110.916},
-        {"Âîñòî÷íàÿ àâòîñòğàäà Äæóëèóñ", 2625.160, 2202.760, -89.084, 2685.160, 2442.550, 110.916},
-        {"Ğîäåî", 225.165, -1501.950, -89.084, 334.503, -1369.620, 110.916},
-        {"Ëàñ-Áğóõàñ", -365.167, 2123.010, -3.0, -208.570, 2217.680, 200.000},
-        {"Âîñòî÷íàÿ àâòîñòğàäà Äæóëèóñ", 2536.430, 2442.550, -89.084, 2685.160, 2542.550, 110.916},
-        {"Ğîäåî", 334.503, -1406.050, -89.084, 466.223, -1292.070, 110.916},
-        {"Âàéíâóä", 647.557, -1227.280, -89.084, 787.461, -1118.280, 110.916},
-        {"Ğîäåî", 422.680, -1684.650, -89.084, 558.099, -1570.200, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 2498.210, 2542.550, -89.084, 2685.160, 2626.550, 110.916},
-        {"Äåëîâîé ğàéîí", 1724.760, -1430.870, -89.084, 1812.620, -1250.900, 110.916},
-        {"Ğîäåî", 225.165, -1684.650, -89.084, 312.803, -1501.950, 110.916},
-        {"Äæåôôåğñîí", 2056.860, -1449.670, -89.084, 2266.210, -1372.040, 110.916},
-        {"Õıìïòîí-Áàğíñ", 603.035, 264.312, 0.000, 761.994, 366.572, 200.000},
-        {"Òåìïë", 1096.470, -1130.840, -89.084, 1252.330, -1026.330, 110.916},
-        {"Ìîñò «Êèíêåéä»", -1087.930, 855.370, -89.084, -961.950, 986.281, 110.916},
-        {"Ïëÿæ «Âåğîíà»", 1046.150, -1722.260, -89.084, 1161.520, -1577.590, 110.916},
-        {"Êîììåğ÷åñêèé ğàéîí", 1323.900, -1722.260, -89.084, 1440.900, -1577.590, 110.916},
-        {"Ìàëõîëëàíä", 1357.000, -926.999, -89.084, 1463.900, -768.027, 110.916},
-        {"Ğîäåî", 466.223, -1570.200, -89.084, 558.099, -1385.070, 110.916},
-        {"Ìàëõîëëàíä", 911.802, -860.619, -89.084, 1096.470, -768.027, 110.916},
-        {"Ìàëõîëëàíä", 768.694, -954.662, -89.084, 952.604, -860.619, 110.916},
-        {"Şæíàÿ àâòîñòğàäà Äæóëèóñ", 2377.390, 788.894, -89.084, 2537.390, 897.901, 110.916},
-        {"Àéäëâóä", 1812.620, -1852.870, -89.084, 1971.660, -1742.310, 110.916},
-        {"Îêåàíñêèå äîêè", 2089.000, -2394.330, -89.084, 2201.820, -2235.840, 110.916},
-        {"Êîììåğ÷åñêèé ğàéîí", 1370.850, -1577.590, -89.084, 1463.900, -1384.950, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 2121.400, 2508.230, -89.084, 2237.400, 2663.170, 110.916},
-        {"Òåìïë", 1096.470, -1026.330, -89.084, 1252.330, -910.170, 110.916},
-        {"Ãëåí Ïàğê", 1812.620, -1449.670, -89.084, 1996.910, -1350.720, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1242.980, -50.096, 0.000, -1213.910, 578.396, 200.000},
-        {"Ìîñò «Ìàğòèí»", -222.179, 293.324, 0.000, -122.126, 476.465, 200.000},
-        {"Ñòğèï", 2106.700, 1863.230, -89.084, 2162.390, 2202.760, 110.916},
-        {"Óèëëîóôèëä", 2541.700, -2059.230, -89.084, 2703.580, -1941.400, 110.916},
-        {"Ìàğèíà", 807.922, -1577.590, -89.084, 926.922, -1416.250, 110.916},
-        {"Àığîïîğò Ëàñ-Âåíòóğàñ", 1457.370, 1143.210, -89.084, 1777.400, 1203.280, 110.916},
-        {"Àéäëâóä", 1812.620, -1742.310, -89.084, 1951.660, -1602.310, 110.916},
-        {"Âîñòî÷íàÿ İñïàëàíäà", -1580.010, 1025.980, -6.1, -1499.890, 1274.260, 200.000},
-        {"Äåëîâîé ğàéîí", 1370.850, -1384.950, -89.084, 1463.900, -1170.870, 110.916},
-        {"Ìîñò «Ìàêî»", 1664.620, 401.750, 0.000, 1785.140, 567.203, 200.000},
-        {"Ğîäåî", 312.803, -1684.650, -89.084, 422.680, -1501.950, 110.916},
-        {"Ïëîùàäü «Ïåğøèíã»", 1440.900, -1722.260, -89.084, 1583.500, -1577.590, 110.916},
-        {"Ìàëõîëëàíä", 687.802, -860.619, -89.084, 911.802, -768.027, 110.916},
-        {"Ìîñò «Ãàíò»", -2741.070, 1490.470, -6.1, -2616.400, 1659.680, 200.000},
-        {"Ëàñ-Êîëèíàñ", 2185.330, -1154.590, -89.084, 2281.450, -934.489, 110.916},
-        {"Ìàëõîëëàíä", 1169.130, -910.170, -89.084, 1318.130, -768.027, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 1938.800, 2508.230, -89.084, 2121.400, 2624.230, 110.916},
-        {"Êîììåğ÷åñêèé ğàéîí", 1667.960, -1577.590, -89.084, 1812.620, -1430.870, 110.916},
-        {"Ğîäåî", 72.648, -1544.170, -89.084, 225.165, -1404.970, 110.916},
-        {"Ğîêà-İñêàëàíòå", 2536.430, 2202.760, -89.084, 2625.160, 2442.550, 110.916},
-        {"Ğîäåî", 72.648, -1684.650, -89.084, 225.165, -1544.170, 110.916},
-        {"Ìàğêåò", 952.663, -1310.210, -89.084, 1072.660, -1130.850, 110.916},
-        {"Ëàñ-Êîëèíàñ", 2632.740, -1135.040, -89.084, 2747.740, -945.035, 110.916},
-        {"Ìàëõîëëàíä", 861.085, -674.885, -89.084, 1156.550, -600.896, 110.916},
-        {"Êèíãñ", -2253.540, 373.539, -9.1, -1993.280, 458.411, 200.000},
-        {"Âîñòî÷íûé Ğıäñıíäñ", 1848.400, 2342.830, -89.084, 2011.940, 2478.490, 110.916},
-        {"Äåëîâîé ğàéîí", -1580.010, 744.267, -6.1, -1499.890, 1025.980, 200.000},
-        {"Êîíôåğåíö Öåíòğ", 1046.150, -1804.210, -89.084, 1323.900, -1722.260, 110.916},
-        {"Ğè÷ìàí", 647.557, -1118.280, -89.084, 787.461, -954.662, 110.916},
-        {"Îóøåí-Ôëıòñ", -2994.490, 277.411, -9.1, -2867.850, 458.411, 200.000},
-        {"Êîëëåäæ Ãğèíãëàññ", 964.391, 930.890, -89.084, 1166.530, 1044.690, 110.916},
-        {"Ãëåí Ïàğê", 1812.620, -1100.820, -89.084, 1994.330, -973.380, 110.916},
-        {"Ãğóçîâîå äåïî Ëàñ-Âåíòóğàñà", 1375.600, 919.447, -89.084, 1457.370, 1203.280, 110.916},
-        {"Ğåãüşëàğ-Òîì", -405.770, 1712.860, -3.0, -276.719, 1892.750, 200.000},
-        {"Ïëÿæ «Âåğîíà»", 1161.520, -1722.260, -89.084, 1323.900, -1577.590, 110.916},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2281.450, -1372.040, -89.084, 2381.680, -1135.040, 110.916},
-        {"Äâîğåö Êàëèãóëû", 2137.400, 1703.230, -89.084, 2437.390, 1783.230, 110.916},
-        {"Àéäëâóä", 1951.660, -1742.310, -89.084, 2124.660, -1602.310, 110.916},
-        {"Ïèëèãğèì", 2624.400, 1383.230, -89.084, 2685.160, 1783.230, 110.916},
-        {"Àéäëâóä", 2124.660, -1742.310, -89.084, 2222.560, -1494.030, 110.916},
-        {"Êâèíñ", -2533.040, 458.411, 0.000, -2329.310, 578.396, 200.000},
-        {"Äåëîâîé ğàéîí", -1871.720, 1176.420, -4.5, -1620.300, 1274.260, 200.000},
-        {"Êîììåğ÷åñêèé ğàéîí", 1583.500, -1722.260, -89.084, 1758.900, -1577.590, 110.916},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2381.680, -1454.350, -89.084, 2462.130, -1135.040, 110.916},
-        {"Ìàğèíà", 647.712, -1577.590, -89.084, 807.922, -1416.250, 110.916},
-        {"Ğè÷ìàí", 72.648, -1404.970, -89.084, 225.165, -1235.070, 110.916},
-        {"Âàéíâóä", 647.712, -1416.250, -89.084, 787.461, -1227.280, 110.916},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2222.560, -1628.530, -89.084, 2421.030, -1494.030, 110.916},
-        {"Ğîäåî", 558.099, -1684.650, -89.084, 647.522, -1384.930, 110.916},
-        {"Èñòåğñêèé Òîííåëü", -1709.710, -833.034, -1.5, -1446.010, -730.118, 200.000},
-        {"Ğîäåî", 466.223, -1385.070, -89.084, 647.522, -1235.070, 110.916},
-        {"Âîñòî÷íûé Ğıäñıíäñ", 1817.390, 2202.760, -89.084, 2011.940, 2342.830, 110.916},
-        {"Êàçèíî «Êàğìàí êëîóíà»", 2162.390, 1783.230, -89.084, 2437.390, 1883.230, 110.916},
-        {"Àéäëâóä", 1971.660, -1852.870, -89.084, 2222.560, -1742.310, 110.916},
-        {"Ïåğåñå÷åíèå Ìîíòãîìåğè", 1546.650, 208.164, 0.000, 1745.830, 347.457, 200.000},
-        {"Óèëëîóôèëä", 2089.000, -2235.840, -89.084, 2201.820, -1989.900, 110.916},
-        {"Òåìïë", 952.663, -1130.840, -89.084, 1096.470, -937.184, 110.916},
-        {"Ïğèêë-Ïàéí", 1848.400, 2553.490, -89.084, 1938.800, 2863.230, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Ëîñ-Ñàíòîñ", 1400.970, -2669.260, -39.084, 2189.820, -2597.260, 60.916},
-        {"Ìîñò «Ãàğâåğ»", -1213.910, 950.022, -89.084, -1087.930, 1178.930, 110.916},
-        {"Ìîñò «Ãàğâåğ»", -1339.890, 828.129, -89.084, -1213.910, 1057.040, 110.916},
-        {"Ìîñò «Êèíêåéä»", -1339.890, 599.218, -89.084, -1213.910, 828.129, 110.916},
-        {"Ìîñò «Êèíêåéä»", -1213.910, 721.111, -89.084, -1087.930, 950.022, 110.916},
-        {"Ïëÿæ «Âåğîíà»", 930.221, -2006.780, -89.084, 1073.220, -1804.210, 110.916},
-        {"Îáñåğâàòîğèÿ «Çåë¸íûé óò¸ñ»", 1073.220, -2006.780, -89.084, 1249.620, -1842.270, 110.916},
-        {"Âàéíâóä", 787.461, -1130.840, -89.084, 952.604, -954.662, 110.916},
-        {"Âàéíâóä", 787.461, -1310.210, -89.084, 952.663, -1130.840, 110.916},
-        {"Êîììåğ÷åñêèé ğàéîí", 1463.900, -1577.590, -89.084, 1667.960, -1430.870, 110.916},
-        {"Ìàğêåò", 787.461, -1416.250, -89.084, 1072.660, -1310.210, 110.916},
-        {"Çàïàäíûé Ğîêøîğ", 2377.390, 596.349, -89.084, 2537.390, 788.894, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 2237.400, 2542.550, -89.084, 2498.210, 2663.170, 110.916},
-        {"Âîñòî÷íûé ïëÿæ", 2632.830, -1668.130, -89.084, 2747.740, -1393.420, 110.916},
-        {"Ìîñò «Ôàëëîó»", 434.341, 366.572, 0.000, 603.035, 555.680, 200.000},
-        {"Óèëëîóôèëä", 2089.000, -1989.900, -89.084, 2324.000, -1852.870, 110.916},
-        {"×àéíàòàóí", -2274.170, 578.396, -7.6, -2078.670, 744.170, 200.000},
-        {"İëü-Êàñòèëüî-äåëü-Äüÿáëî", -208.570, 2337.180, 0.000, 8.430, 2487.180, 200.000},
-        {"Îêåàíñêèå äîêè", 2324.000, -2145.100, -89.084, 2703.580, -2059.230, 110.916},
-        {"Õèìçàâîä Èñòåğ-Áıé", -1132.820, -768.027, 0.000, -956.476, -578.118, 200.000},
-        {"Êàçèíî «Âèçàæ»", 1817.390, 1703.230, -89.084, 2027.400, 1863.230, 110.916},
-        {"Îóøåí-Ôëıòñ", -2994.490, -430.276, -1.2, -2831.890, -222.589, 200.000},
-        {"Ğè÷ìàí", 321.356, -860.619, -89.084, 687.802, -768.027, 110.916},
-        {"Íåôòÿíîé êîìïëåêñ «Çåëåíûé îàçèñ»", 176.581, 1305.450, -3.0, 338.658, 1520.720, 200.000},
-        {"Ğè÷ìàí", 321.356, -768.027, -89.084, 700.794, -674.885, 110.916},
-        {"Êàçèíî «Ìîğñêàÿ çâåçäà»", 2162.390, 1883.230, -89.084, 2437.390, 2012.180, 110.916},
-        {"Âîñòî÷íûé ïëÿæ", 2747.740, -1668.130, -89.084, 2959.350, -1498.620, 110.916},
-        {"Äæåôôåğñîí", 2056.860, -1372.040, -89.084, 2281.450, -1210.740, 110.916},
-        {"Äåëîâîé ğàéîí", 1463.900, -1290.870, -89.084, 1724.760, -1150.870, 110.916},
-        {"Äåëîâîé ğàéîí", 1463.900, -1430.870, -89.084, 1724.760, -1290.870, 110.916},
-        {"Ìîñò «Ãàğâåğ»", -1499.890, 696.442, -179.615, -1339.890, 925.353, 20.385},
-        {"Şæíàÿ àâòîñòğàäà Äæóëèóñ", 1457.390, 823.228, -89.084, 2377.390, 863.229, 110.916},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2421.030, -1628.530, -89.084, 2632.830, -1454.350, 110.916},
-        {"Êîëëåäæ «Ãğèíãëàññ»", 964.391, 1044.690, -89.084, 1197.390, 1203.220, 110.916},
-        {"Ëàñ-Êîëèíàñ", 2747.740, -1120.040, -89.084, 2959.350, -945.035, 110.916},
-        {"Ìàëõîëëàíä", 737.573, -768.027, -89.084, 1142.290, -674.885, 110.916},
-        {"Îêåàíñêèå äîêè", 2201.820, -2730.880, -89.084, 2324.000, -2418.330, 110.916},
-        {"Âîñòî÷íûé Ëîñ-Ñàíòîñ", 2462.130, -1454.350, -89.084, 2581.730, -1135.040, 110.916},
-        {"Ãàíòîí", 2222.560, -1722.330, -89.084, 2632.830, -1628.530, 110.916},
-        {"Çàãîğîäíûé êëóá «Àâèñïà»", -2831.890, -430.276, -6.1, -2646.400, -222.589, 200.000},
-        {"Óèëëîóôèëä", 1970.620, -2179.250, -89.084, 2089.000, -1852.870, 110.916},
-        {"Ñåâåğíàÿ İñïëàíàäà", -1982.320, 1274.260, -4.5, -1524.240, 1358.900, 200.000},
-        {"Êàçèíî «Õàé-Ğîëëåğ»", 1817.390, 1283.230, -89.084, 2027.390, 1469.230, 110.916},
-        {"Îêåàíñêèå äîêè", 2201.820, -2418.330, -89.084, 2324.000, -2095.000, 110.916},
-        {"Ìîòåëü «Ïîñëåäíèé öåíò»", 1823.080, 596.349, -89.084, 1997.220, 823.228, 110.916},
-        {"Áıéñàéíä-Ìàğèíà", -2353.170, 2275.790, 0.000, -2153.170, 2475.790, 200.000},
-        {"Êèíãñ", -2329.310, 458.411, -7.6, -1993.280, 578.396, 200.000},
-        {"İëü-Êîğîíà", 1692.620, -2179.250, -89.084, 1812.620, -1842.270, 110.916},
-        {"×àñîâíÿ Áëıêôèëä", 1375.600, 596.349, -89.084, 1558.090, 823.228, 110.916},
-        {"«Ğîçîâûé ëåáåäü»", 1817.390, 1083.230, -89.084, 2027.390, 1283.230, 110.916},
-        {"Çàïàäàíàÿ àâòîñòğàäà Äæóëèóñ", 1197.390, 1163.390, -89.084, 1236.630, 2243.230, 110.916},
-        {"Ëîñ-Ôëîğåñ", 2581.730, -1393.420, -89.084, 2747.740, -1135.040, 110.916},
-        {"Êàçèíî «Âèçàæ»", 1817.390, 1863.230, -89.084, 2106.700, 2011.830, 110.916},
-        {"Ïğèêë-Ïàéí", 1938.800, 2624.230, -89.084, 2121.400, 2861.550, 110.916},
-        {"Ïëÿæ «Âåğîíà»", 851.449, -1804.210, -89.084, 1046.150, -1577.590, 110.916},
-        {"Ïåğåñå÷åíèå Ğîáàäà", -1119.010, 1178.930, -89.084, -862.025, 1351.450, 110.916},
-        {"Ëèíäåí-Ñàéä", 2749.900, 943.235, -89.084, 2923.390, 1198.990, 110.916},
-        {"Îêåàíñêèå äîêè", 2703.580, -2302.330, -89.084, 2959.350, -2126.900, 110.916},
-        {"Óèëëîóôèëä", 2324.000, -2059.230, -89.084, 2541.700, -1852.870, 110.916},
-        {"Êèíãñ", -2411.220, 265.243, -9.1, -1993.280, 373.539, 200.000},
-        {"Êîììåğ÷åñêèé ğàéîí", 1323.900, -1842.270, -89.084, 1701.900, -1722.260, 110.916},
-        {"Ìàëõîëëàíä", 1269.130, -768.027, -89.084, 1414.070, -452.425, 110.916},
-        {"Ìàğèíà", 647.712, -1804.210, -89.084, 851.449, -1577.590, 110.916},
-        {"Áıòòåğè-Ïîéíò", -2741.070, 1268.410, -4.5, -2533.040, 1490.470, 200.000},
-        {"Êàçèíî «4 Äğàêîíà»", 1817.390, 863.232, -89.084, 2027.390, 1083.230, 110.916},
-        {"Áëıêôèëä", 964.391, 1203.220, -89.084, 1197.390, 1403.220, 110.916},
-        {"Ñåâåğíàÿ àâòîñòğàäà Äæóëèóñ", 1534.560, 2433.230, -89.084, 1848.400, 2583.230, 110.916},
-        {"Ïîëå äëÿ ãîëüôà «Éåëëîó-Áåëë»", 1117.400, 2723.230, -89.084, 1457.460, 2863.230, 110.916},
-        {"Àéäëâóä", 1812.620, -1602.310, -89.084, 2124.660, -1449.670, 110.916},
-        {"Çàïàäíûé Ğıäñıíäñ", 1297.470, 2142.860, -89.084, 1777.390, 2243.230, 110.916},
-        {"Äîığòè", -2270.040, -324.114, -1.2, -1794.920, -222.589, 200.000},
-        {"Ôåğìà Õèëëòîï", 967.383, -450.390, -3.0, 1176.780, -217.900, 200.000},
-        {"Ëàñ-Áàğğàíêàñ", -926.130, 1398.730, -3.0, -719.234, 1634.690, 200.000},
-        {"Êàçèíî «Ïèğàòû â ìóæñêèõ øòàíàõ»", 1817.390, 1469.230, -89.084, 2027.400, 1703.230, 110.916},
-        {"Ñèòè Õîëë", -2867.850, 277.411, -9.1, -2593.440, 458.411, 200.000},
-        {"Çàãîğîäíûé êëóá «Àâèñïà»", -2646.400, -355.493, 0.000, -2270.040, -222.589, 200.000},
-        {"Ñòğèï", 2027.400, 863.229, -89.084, 2087.390, 1703.230, 110.916},
-        {"Õàøáåğè", -2593.440, -222.589, -1.0, -2411.220, 54.722, 200.000},
-        {"Ìåæäóíàğîäíûé àığîïîğò Ëîñ-Ñàíòîñ", 1852.000, -2394.330, -89.084, 2089.000, -2179.250, 110.916},
-        {"Óàéòâóä-Èñòåéòñ", 1098.310, 1726.220, -89.084, 1197.390, 2243.230, 110.916},
-        {"Âîäîõğàíèëèùå Øåğìàíà", -789.737, 1659.680, -89.084, -599.505, 1929.410, 110.916},
-        {"İëü-Êîğîíà", 1812.620, -2179.250, -89.084, 1970.620, -1852.870, 110.916},
-        {"Äåëîâîé ğàéîí", -1700.010, 744.267, -6.1, -1580.010, 1176.520, 200.000},
-        {"Äîëèíà Ôîñòåğ", -2178.690, -1250.970, 0.000, -1794.920, -1115.580, 200.000},
-        {"Ëàñ-Ïàÿñàäàñ", -354.332, 2580.360, 2.0, -133.625, 2816.820, 200.000},
-        {"Äîëèíà Îêóëüòàäî", -936.668, 2611.440, 2.0, -715.961, 2847.900, 200.000},
-        {"Ïåğåñå÷åíèå Áëıêôèëä", 1166.530, 795.010, -89.084, 1375.600, 1044.690, 110.916},
-        {"Ãàíòîí", 2222.560, -1852.870, -89.084, 2632.830, -1722.330, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1213.910, -730.118, 0.000, -1132.820, -50.096, 200.000},
-        {"Âîñòî÷íûé Ğıäñıíäñ", 1817.390, 2011.830, -89.084, 2106.700, 2202.760, 110.916},
-        {"Âîñòî÷íàÿ İñïàëàíäà", -1499.890, 578.396, -79.615, -1339.890, 1274.260, 20.385},
-        {"Äâîğåö Êàëèãóëû", 2087.390, 1543.230, -89.084, 2437.390, 1703.230, 110.916},
-        {"Êàçèíî «Ğîÿëü»", 2087.390, 1383.230, -89.084, 2437.390, 1543.230, 110.916},
-        {"Ğè÷ìàí", 72.648, -1235.070, -89.084, 321.356, -1008.150, 110.916},
-        {"Êàçèíî «Ìîğñêàÿ çâåçäà»", 2437.390, 1783.230, -89.084, 2685.160, 2012.180, 110.916},
-        {"Ìàëõîëëàíä", 1281.130, -452.425, -89.084, 1641.130, -290.913, 110.916},
-        {"Äåëîâîé ğàéîí", -1982.320, 744.170, -6.1, -1871.720, 1274.260, 200.000},
-        {"Õàíêè-Ïàíêè-Ïîéíò", 2576.920, 62.158, 0.000, 2759.250, 385.503, 200.000},
-        {"Âîåííûé ñêëàä òîïëèâà Ê.À.Ñ.Ñ.", 2498.210, 2626.550, -89.084, 2749.900, 2861.550, 110.916},
-        {"Àâòîñòğàäà «Ãàğğè-Ãîëä»", 1777.390, 863.232, -89.084, 1817.390, 2342.830, 110.916},
-        {"Òîííåëü Áıéñàéä", -2290.190, 2548.290, -89.084, -1950.190, 2723.290, 110.916},
-        {"Îêåàíñêèå äîêè", 2324.000, -2302.330, -89.084, 2703.580, -2145.100, 110.916},
-        {"Ğè÷ìàí", 321.356, -1044.070, -89.084, 647.557, -860.619, 110.916},
-        {"Ïğîìñêëàä èìåíè Ğıíäîëüôà", 1558.090, 596.349, -89.084, 1823.080, 823.235, 110.916},
-        {"Âîñòî÷íûé ïëÿæ", 2632.830, -1852.870, -89.084, 2959.350, -1668.130, 110.916},
-        {"Ôëèíò-Óîòåğ", -314.426, -753.874, -89.084, -106.339, -463.073, 110.916},
-        {"Áëóáåğğè", 19.607, -404.136, 3.8, 349.607, -220.137, 200.000},
-        {"Ñòàíöèÿ «Ëèíäåí»", 2749.900, 1198.990, -89.084, 2923.390, 1548.990, 110.916},
-        {"Ãëåí Ïàğê", 1812.620, -1350.720, -89.084, 2056.860, -1100.820, 110.916},
-        {"Äåëîâîé ğàéîí", -1993.280, 265.243, -9.1, -1794.920, 578.396, 200.000},
-        {"Çàïàäíûé Ğıäñıíäñ", 1377.390, 2243.230, -89.084, 1704.590, 2433.230, 110.916},
-        {"Ğè÷ìàí", 321.356, -1235.070, -89.084, 647.522, -1044.070, 110.916},
-        {"Ìîñò «Ãàíò»", -2741.450, 1659.680, -6.1, -2616.400, 2175.150, 200.000},
-        {"Áàğ «Probe Inn»", -90.218, 1286.850, -3.0, 153.859, 1554.120, 200.000},
-        {"Ïåğåñå÷åíèå Ôëèíò", -187.700, -1596.760, -89.084, 17.063, -1276.600, 110.916},
-        {"Ëàñ-Êîëèíàñ", 2281.450, -1135.040, -89.084, 2632.740, -945.035, 110.916},
-        {"Ñîáåëë-Ğåéë-ßğäñ", 2749.900, 1548.990, -89.084, 2923.390, 1937.250, 110.916},
-        {"Èçóìğóäíûé îñòğîâ", 2011.940, 2202.760, -89.084, 2237.400, 2508.230, 110.916},
-        {"İëü-Êàñòèëüî-äåëü-Äüÿáëî", -208.570, 2123.010, -7.6, 114.033, 2337.180, 200.000},
-        {"Ñàíòà-Ôëîğà", -2741.070, 458.411, -7.6, -2533.040, 793.411, 200.000},
-        {"Ïëàéÿ-äåëü-Ñåâèëü", 2703.580, -2126.900, -89.084, 2959.350, -1852.870, 110.916},
-        {"Ìàğêåò", 926.922, -1577.590, -89.084, 1370.850, -1416.250, 110.916},
-        {"Êâèíñ", -2593.440, 54.722, 0.000, -2411.220, 458.411, 200.000},
-        {"Ïåğåñå÷åíèå Ïèëñîí", 1098.390, 2243.230, -89.084, 1377.390, 2507.230, 110.916},
-        {"Ñïèíèáåä", 2121.400, 2663.170, -89.084, 2498.210, 2861.550, 110.916},
-        {"Ïèëèãğèì", 2437.390, 1383.230, -89.084, 2624.400, 1783.230, 110.916},
-        {"Áëıêôèëä", 964.391, 1403.220, -89.084, 1197.390, 1726.220, 110.916},
-        {"«Áîëüøîå óõî»", -410.020, 1403.340, -3.0, -137.969, 1681.230, 200.000},
-        {"Äèëëèìîğ", 580.794, -674.885, -9.5, 861.085, -404.790, 200.000},
-        {"İëü-Êåáğàäîñ", -1645.230, 2498.520, 0.000, -1372.140, 2777.850, 200.000},
-        {"Ñåâåğíàÿ İñïëàíàäà", -2533.040, 1358.900, -4.5, -1996.660, 1501.210, 200.000},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1499.890, -50.096, -1.0, -1242.980, 249.904, 200.000},
-        {"Ğûáàöêàÿ ëàãóíà", 1916.990, -233.323, -100.000, 2131.720, 13.800, 200.000},
-        {"Ìàëõîëëàíä", 1414.070, -768.027, -89.084, 1667.610, -452.425, 110.916},
-        {"Âîñòî÷íûé ïëÿæ", 2747.740, -1498.620, -89.084, 2959.350, -1120.040, 110.916},
-        {"Ñàí-Àíäğåàñ Ñàóíä", 2450.390, 385.503, -100.000, 2759.250, 562.349, 200.000},
-        {"Òåíèñòûå ğó÷üè", -2030.120, -2174.890, -6.1, -1820.640, -1771.660, 200.000},
-        {"Ìàğêåò", 1072.660, -1416.250, -89.084, 1370.850, -1130.850, 110.916},
-        {"Çàïàäíûé Ğîêøîğ", 1997.220, 596.349, -89.084, 2377.390, 823.228, 110.916},
-        {"Ïğèêë-Ïàéí", 1534.560, 2583.230, -89.084, 1848.400, 2863.230, 110.916},
-        {"«Áóõòà Ïàñõè»", -1794.920, -50.096, -1.04, -1499.890, 249.904, 200.000},
-        {"Ëèôè-Õîëëîó", -1166.970, -1856.030, 0.000, -815.624, -1602.070, 200.000},
-        {"Ãğóçîâîå äåïî Ëàñ-Âåíòóğàñà", 1457.390, 863.229, -89.084, 1777.400, 1143.210, 110.916},
-        {"Ïğèêë-Ïàéí", 1117.400, 2507.230, -89.084, 1534.560, 2723.230, 110.916},
-        {"Áëóáåğğè", 104.534, -220.137, 2.3, 349.607, 152.236, 200.000},
-        {"İëü-Êàñòèëüî-äåëü-Äüÿáëî", -464.515, 2217.680, 0.000, -208.570, 2580.360, 200.000},
-        {"Äåëîâîé ğàéîí", -2078.670, 578.396, -7.6, -1499.890, 744.267, 200.000},
-        {"Âîñòî÷íûé Ğîêøîğ", 2537.390, 676.549, -89.084, 2902.350, 943.235, 110.916},
-        {"Çàëèâ Ñàí-Ôèåğğî", -2616.400, 1501.210, -3.0, -1996.660, 1659.680, 200.000},
-        {"Ïàğàäèçî", -2741.070, 793.411, -6.1, -2533.040, 1268.410, 200.000},
-        {"Êàçèíî «Íîñîê âåğáëşäà»", 2087.390, 1203.230, -89.084, 2640.400, 1383.230, 110.916},
-        {"Îëä-Âåíòóğàñ-Ñòğèï", 2162.390, 2012.180, -89.084, 2685.160, 2202.760, 110.916},
-        {"Äæàíèïåğ-Õèëë", -2533.040, 578.396, -7.6, -2274.170, 968.369, 200.000},
-        {"Äæàíèïåğ-Õîëëîó", -2533.040, 968.369, -6.1, -2274.170, 1358.900, 200.000},
-        {"Ğîêà-İñêàëàíòå", 2237.400, 2202.760, -89.084, 2536.430, 2542.550, 110.916},
-        {"Âîñòî÷íàÿ àâòîñòğàäà Äæóëèóñ", 2685.160, 1055.960, -89.084, 2749.900, 2626.550, 110.916},
-        {"Ïëÿæ «Âåğîíà»", 647.712, -2173.290, -89.084, 930.221, -1804.210, 110.916},
-        {"Äîëèíà Ôîñòåğ", -2178.690, -599.884, -1.2, -1794.920, -324.114, 200.000},
-        {"Àğêî-äåëü-Îıñòå", -901.129, 2221.860, 0.000, -592.090, 2571.970, 200.000},
-        {"«Óïàâøåå äåğåâî»", -792.254, -698.555, -5.3, -452.404, -380.043, 200.000},
-        {"Ôåğìà", -1209.670, -1317.100, 114.981, -908.161, -787.391, 251.981},
-        {"Äàìáà Øåğìàíà", -968.772, 1929.410, -3.0, -481.126, 2155.260, 200.000},
-        {"Ñåâåğíàÿ İñïëàíàäà", -1996.660, 1358.900, -4.5, -1524.240, 1592.510, 200.000},
-        {"Ôèíàíñîâûé ğàéîí", -1871.720, 744.170, -6.1, -1701.300, 1176.420, 300.000},
-        {"Ãàğñèÿ", -2411.220, -222.589, -1.14, -2173.040, 265.243, 200.000},
-        {"Ìîíòãîìåğè", 1119.510, 119.526, -3.0, 1451.400, 493.323, 200.000},
-        {"Êğèê", 2749.900, 1937.250, -89.084, 2921.620, 2669.790, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Ëîñ-Ñàíòîñ", 1249.620, -2394.330, -89.084, 1852.000, -2179.250, 110.916},
-        {"Ïëÿæ «Ñàíòà-Ìàğèÿ»", 72.648, -2173.290, -89.084, 342.648, -1684.650, 110.916},
-        {"Ïåğåñå÷åíèå Ìàëõîëëàíä", 1463.900, -1150.870, -89.084, 1812.620, -768.027, 110.916},
-        {"İéíäæåë-Ïàéí", -2324.940, -2584.290, -6.1, -1964.220, -2212.110, 200.000},
-        {"Â¸ğäàíò-Ìåäîóñ", 37.032, 2337.180, -3.0, 435.988, 2677.900, 200.000},
-        {"Îêòàí-Ñïğèíãñ", 338.658, 1228.510, 0.000, 664.308, 1655.050, 200.000},
-        {"Êàçèíî Êàì-ı-Ëîò", 2087.390, 943.235, -89.084, 2623.180, 1203.230, 110.916},
-        {"Çàïàäíûé Ğıäñıíäñ", 1236.630, 1883.110, -89.084, 1777.390, 2142.860, 110.916},
-        {"Ïëÿæ «Ñàíòà-Ìàğèÿ»", 342.648, -2173.290, -89.084, 647.712, -1684.650, 110.916},
-        {"Îáñåğâàòîğèÿ «Çåë¸íûé óò¸ñ", 1249.620, -2179.250, -89.084, 1692.620, -1842.270, 110.916},
-        {"Àığîïîğò Ëàñ-Âåíòóğàñ", 1236.630, 1203.280, -89.084, 1457.370, 1883.110, 110.916},
-        {"Îêğóã Ôëèíò", -594.191, -1648.550, 0.000, -187.700, -1276.600, 200.000},
-        {"Îáñåğâàòîğèÿ «Çåë¸íûé óò¸ñ", 930.221, -2488.420, -89.084, 1249.620, -2006.780, 110.916},
-        {"Ïàëîìèíî Êğèê", 2160.220, -149.004, 0.000, 2576.920, 228.322, 200.000},
-        {"Îêåàíñêèå äîêè", 2373.770, -2697.090, -89.084, 2809.220, -2330.460, 110.916},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1213.910, -50.096, -4.5, -947.980, 578.396, 200.000},
-        {"Óàéòâóä-Èñòåéòñ", 883.308, 1726.220, -89.084, 1098.310, 2507.230, 110.916},
-        {"Êàëòîí-Õàéòñ", -2274.170, 744.170, -6.1, -1982.320, 1358.900, 200.000},
-        {"«Áóõòà Ïàñõè»", -1794.920, 249.904, -9.1, -1242.980, 578.396, 200.000},
-        {"Çàëèâ Ëîñ-Ñàíòîñ", -321.744, -2224.430, -89.084, 44.615, -1724.430, 110.916},
-        {"Äîığòè", -2173.040, -222.589, -1.0, -1794.920, 265.243, 200.000},
-        {"Ãîğà ×èëèàä", -2178.690, -2189.910, -47.917, -2030.120, -1771.660, 576.083},
-        {"Ôîğò-Êàğñîí", -376.233, 826.326, -3.0, 123.717, 1220.440, 200.000},
-        {"Äîëèíà Ôîñòåğ", -2178.690, -1115.580, 0.000, -1794.920, -599.884, 200.000},
-        {"Îóøåí-Ôëıòñ", -2994.490, -222.589, -1.0, -2593.440, 277.411, 200.000},
-        {"Ôåğí-Ğèäæ", 508.189, -139.259, 0.000, 1306.660, 119.526, 200.000},
-        {"Áıéñàéä", -2741.070, 2175.150, 0.000, -2353.170, 2722.790, 200.000},
-        {"Àığîïîğò Ëàñ-Âåíòóğàñ", 1457.370, 1203.280, -89.084, 1777.390, 1883.110, 110.916},
-        {"Ïîìåñòüå Áëóáåğğè", -319.676, -220.137, 0.000, 104.534, 293.324, 200.000},
-        {"Ïıëèñåéäñ", -2994.490, 458.411, -6.1, -2741.070, 1339.610, 200.000},
-        {"Íîğò-Ğîê", 2285.370, -768.027, 0.000, 2770.590, -269.740, 200.000},
-        {"Êàğüåğ «Õàíòåğ»", 337.244, 710.840, -115.239, 860.554, 1031.710, 203.761},
-        {"Ìåæäóíàğîäíûé àığîïîğò Ëîñ-Ñàíòîñ", 1382.730, -2730.880, -89.084, 2201.820, -2394.330, 110.916},
-        {"Ìèññèîíåğ-Õèëë", -2994.490, -811.276, 0.000, -2178.690, -430.276, 200.000},
-        {"Çàëèâ Ñàí-Ôèåğğî", -2616.400, 1659.680, -3.0, -1996.660, 2175.150, 200.000},
-        {"Çàïğåòíàÿ Çîíà", -91.586, 1655.050, -50.000, 421.234, 2123.010, 250.000},
-        {"Ãîğà «×èëèàä»", -2997.470, -1115.580, -47.917, -2178.690, -971.913, 576.083},
-        {"Ãîğà «×èëèàä»", -2178.690, -1771.660, -47.917, -1936.120, -1250.970, 576.083},
-        {"Ìåæäóíàğîäíûé àığîïîğò Èñòåğ-Áıé", -1794.920, -730.118, -3.0, -1213.910, -50.096, 200.000},
-        {"Ïàíîïòèêóì", -947.980, -304.320, -1.1, -319.676, 327.071, 200.000},
-        {"Òåíèñòûå ğó÷üè", -1820.640, -2643.680, -8.0, -1226.780, -1771.660, 200.000},
-        {"Áıê-î-Áåéîíä", -1166.970, -2641.190, 0.000, -321.744, -1856.030, 200.000},
-        {"Ãîğà «×èëèàä»", -2994.490, -2189.910, -47.917, -2178.690, -1115.580, 576.083},
-        {"Òüåğğà Ğîáàäà", -1213.910, 596.349, -242.990, -480.539, 1659.680, 900.000},
-        {"Îêğóã Ôëèíò", -1213.910, -2892.970, -242.990, 44.615, -768.027, 900.000},
-        {"Óıòñòîóí", -2997.470, -2892.970, -242.990, -1213.910, -1115.580, 900.000},
-        {"Ïóñòûííûé îêğóã", -480.539, 596.349, -242.990, 869.461, 2993.870, 900.000},
-        {"Òüåğğà Ğîáàäà", -2997.470, 1659.680, -242.990, -480.539, 2993.870, 900.000},
-        {"Ñàí Ôèåğğî", -2997.470, -1115.580, -242.990, -1213.910, 1659.680, 900.000},
-        {"Ëàñ Âåíòóğàñ", 869.461, 596.349, -242.990, 2997.060, 2993.870, 900.000},
-        {"Òóìàííûé îêğóã", -1213.910, -768.027, -242.990, 2997.060, 596.349, 900.000},
-        {"Ëîñ Ñàíòîñ", 44.615, -2892.970, -242.990, 2997.060, -768.027, 900.000}
+        {"Ã‡Ã Ã£Ã®Ã°Ã®Ã¤Ã­Ã»Ã© ÃªÃ«Ã³Ã¡ Â«Ã€Ã¢Ã¨Ã±Ã¯Ã Â»", -2667.810, -302.135, -28.831, -2646.400, -262.320, 71.169},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1315.420, -405.388, 15.406, -1264.400, -209.543, 25.406},
+        {"Ã‡Ã Ã£Ã®Ã°Ã®Ã¤Ã­Ã»Ã© ÃªÃ«Ã³Ã¡ Â«Ã€Ã¢Ã¨Ã±Ã¯Ã Â»", -2550.040, -355.493, 0.000, -2470.040, -318.493, 39.700},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1490.330, -209.543, 15.406, -1264.400, -148.388, 25.406},
+        {"ÃƒÃ Ã°Ã±Ã¨Ã¿", -2395.140, -222.589, -5.3, -2354.090, -204.792, 200.000},
+        {"Ã˜Ã¥Ã©Ã¤Ã¨-ÃŠÃ½Ã¡Ã¨Ã­", -1632.830, -2263.440, -3.0, -1601.330, -2231.790, 200.000},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2381.680, -1494.030, -89.084, 2421.030, -1454.350, 110.916},
+        {"ÃƒÃ°Ã³Ã§Ã®Ã¢Ã®Ã¥ Ã¤Ã¥Ã¯Ã® Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±Ã ", 1236.630, 1163.410, -89.084, 1277.050, 1203.280, 110.916},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 1277.050, 1044.690, -89.084, 1315.350, 1087.630, 110.916},
+        {"Ã‡Ã Ã£Ã®Ã°Ã®Ã¤Ã­Ã»Ã© ÃªÃ«Ã³Ã¡ Â«Ã€Ã¢Ã¨Ã±Ã¯Ã Â»", -2470.040, -355.493, 0.000, -2270.040, -318.493, 46.100},
+        {"Ã’Ã¥Ã¬Ã¯Ã«", 1252.330, -926.999, -89.084, 1357.000, -910.170, 110.916},
+        {"Ã‘Ã²Ã Ã­Ã¶Ã¨Ã¿ Â«ÃÃ­Ã¨Ã²Ã¨Â»", 1692.620, -1971.800, -20.492, 1812.620, -1932.800, 79.508},
+        {"ÃƒÃ°Ã³Ã§Ã®Ã¢Ã®Ã¥ Ã¤Ã¥Ã¯Ã® Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±Ã ", 1315.350, 1044.690, -89.084, 1375.600, 1087.630, 110.916},
+        {"Ã‹Ã®Ã±-Ã”Ã«Ã®Ã°Ã¥Ã±", 2581.730, -1454.350, -89.084, 2632.830, -1393.420, 110.916},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃŒÃ®Ã°Ã±ÃªÃ Ã¿ Ã§Ã¢Ã¥Ã§Ã¤Ã Â»", 2437.390, 1858.100, -39.084, 2495.090, 1970.850, 60.916},
+        {"Ã•Ã¨Ã¬Ã§Ã Ã¢Ã®Ã¤ ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1132.820, -787.391, 0.000, -956.476, -768.027, 200.000},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1370.850, -1170.870, -89.084, 1463.900, -1130.850, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ ÃÃ±Ã¯Ã Ã«Ã Ã­Ã¤Ã ", -1620.300, 1176.520, -4.5, -1580.010, 1274.260, 200.000},
+        {"Ã‘Ã²Ã Ã­Ã¶Ã¨Ã¿ Â«ÃŒÃ Ã°ÃªÃ¥Ã²Â»", 787.461, -1410.930, -34.126, 866.009, -1310.210, 65.874},
+        {"Ã‘Ã²Ã Ã­Ã¶Ã¨Ã¿ Â«Ã‹Ã¨Ã­Ã¤Ã¥Ã­Â»", 2811.250, 1229.590, -39.594, 2861.250, 1407.590, 60.406},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃŒÃ®Ã­Ã²Ã£Ã®Ã¬Ã¥Ã°Ã¨", 1582.440, 347.457, 0.000, 1664.620, 401.750, 200.000},
+        {"ÃŒÃ®Ã±Ã² Â«Ã”Ã°Ã¥Ã¤Ã¥Ã°Ã¨ÃªÂ»", 2759.250, 296.501, 0.000, 2774.250, 594.757, 200.000},
+        {"Ã‘Ã²Ã Ã­Ã¶Ã¨Ã¿ Â«Ã‰Ã¥Ã«Ã«Ã®Ã³-ÃÃ¥Ã«Ã«Â»", 1377.480, 2600.430, -21.926, 1492.450, 2687.360, 78.074},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1507.510, -1385.210, 110.916, 1582.550, -1325.310, 335.916},
+        {"Ã„Ã¦Ã¥Ã´Ã´Ã¥Ã°Ã±Ã®Ã­", 2185.330, -1210.740, -89.084, 2281.450, -1154.590, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1318.130, -910.170, -89.084, 1357.000, -768.027, 110.916},
+        {"Ã‡Ã Ã£Ã®Ã°Ã®Ã¤Ã­Ã»Ã© ÃªÃ«Ã³Ã¡ Â«Ã€Ã¢Ã¨Ã±Ã¯Ã Â»", -2361.510, -417.199, 0.000, -2270.040, -355.493, 200.000},
+        {"Ã„Ã¦Ã¥Ã´Ã´Ã¥Ã°Ã±Ã®Ã­", 1996.910, -1449.670, -89.084, 2056.860, -1350.720, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1236.630, 2142.860, -89.084, 1297.470, 2243.230, 110.916},
+        {"Ã„Ã¦Ã¥Ã´Ã´Ã¥Ã°Ã±Ã®Ã­", 2124.660, -1494.030, -89.084, 2266.210, -1449.670, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1848.400, 2478.490, -89.084, 1938.800, 2553.490, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 422.680, -1570.200, -89.084, 466.223, -1406.050, 110.916},
+        {"Ã‘Ã²Ã Ã­Ã¶Ã¨Ã¿ Â«ÃŠÃ°Ã½Ã­Ã¡Ã¥Ã°Ã°Ã¨Â»", -2007.830, 56.306, 0.000, -1922.000, 224.782, 100.000},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1391.050, -1026.330, -89.084, 1463.900, -926.999, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1704.590, 2243.230, -89.084, 1777.390, 2342.830, 110.916},
+        {"ÃŒÃ Ã«Ã¥Ã­Ã¼ÃªÃ Ã¿ ÃŒÃ¥ÃªÃ±Ã¨ÃªÃ ", 1758.900, -1722.260, -89.084, 1812.620, -1577.590, 110.916},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 1375.600, 823.228, -89.084, 1457.390, 919.447, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 1974.630, -2394.330, -39.084, 2089.000, -2256.590, 60.916},
+        {"ÃÃ¥ÃªÃ®Ã­-Ã•Ã¨Ã«Ã«", -399.633, -1075.520, -1.489, -319.033, -977.516, 198.511},
+        {"ÃÃ®Ã¤Ã¥Ã®", 334.503, -1501.950, -89.084, 422.680, -1406.050, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 225.165, -1369.620, -89.084, 334.503, -1292.070, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1724.760, -1250.900, -89.084, 1812.620, -1150.870, 110.916},
+        {"Ã‘Ã²Ã°Ã¨Ã¯", 2027.400, 1703.230, -89.084, 2137.400, 1783.230, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1378.330, -1130.850, -89.084, 1463.900, -1026.330, 110.916},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 1197.390, 1044.690, -89.084, 1277.050, 1163.390, 110.916},
+        {"ÃŠÃ®Ã­Ã´Ã¥Ã°Ã¥Ã­Ã¶ Ã–Ã¥Ã­Ã²Ã°", 1073.220, -1842.270, -89.084, 1323.900, -1804.210, 110.916},
+        {"ÃŒÃ®Ã­Ã²Ã£Ã®Ã¬Ã¥Ã°Ã¨", 1451.400, 347.457, -6.1, 1582.440, 420.802, 200.000},
+        {"Ã„Ã®Ã«Ã¨Ã­Ã  Ã”Ã®Ã±Ã²Ã¥Ã°", -2270.040, -430.276, -1.2, -2178.690, -324.114, 200.000},
+        {"Ã—Ã Ã±Ã®Ã¢Ã­Ã¿ ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 1325.600, 596.349, -89.084, 1375.600, 795.010, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2051.630, -2597.260, -39.084, 2152.450, -2394.330, 60.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1096.470, -910.170, -89.084, 1169.130, -768.027, 110.916},
+        {"ÃÃ®Ã«Ã¥ Ã¤Ã«Ã¿ Ã£Ã®Ã«Ã¼Ã´Ã  Â«Ã‰Ã¥Ã«Ã«Ã®Ã³-ÃÃ¥Ã«Ã«Â»", 1457.460, 2723.230, -89.084, 1534.560, 2863.230, 110.916},
+        {"Ã‘Ã²Ã°Ã¨Ã¯", 2027.400, 1783.230, -89.084, 2162.390, 1863.230, 110.916},
+        {"Ã„Ã¦Ã¥Ã´Ã´Ã¥Ã°Ã±Ã®Ã­", 2056.860, -1210.740, -89.084, 2185.330, -1126.320, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 952.604, -937.184, -89.084, 1096.470, -860.619, 110.916},
+        {"Ã€Ã«Ã¼Ã¤Ã¥Ã -ÃŒÃ Ã«Ã¼Ã¢Ã Ã¤Ã ", -1372.140, 2498.520, 0.000, -1277.590, 2615.350, 200.000},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 2126.860, -1126.320, -89.084, 2185.330, -934.489, 110.916},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 1994.330, -1100.820, -89.084, 2056.860, -920.815, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 647.557, -954.662, -89.084, 768.694, -860.619, 110.916},
+        {"ÃƒÃ°Ã³Ã§Ã®Ã¢Ã®Ã¥ Ã¤Ã¥Ã¯Ã® Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±Ã ", 1277.050, 1087.630, -89.084, 1375.600, 1203.280, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1377.390, 2433.230, -89.084, 1534.560, 2507.230, 110.916},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 2201.820, -2095.000, -89.084, 2324.000, -1989.900, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1704.590, 2342.830, -89.084, 1848.400, 2433.230, 110.916},
+        {"Ã’Ã¥Ã¬Ã¯Ã«", 1252.330, -1130.850, -89.084, 1378.330, -1026.330, 110.916},
+        {"ÃŒÃ Ã«Ã¥Ã­Ã¼ÃªÃ Ã¿ ÃŒÃ¥ÃªÃ±Ã¨ÃªÃ ", 1701.900, -1842.270, -89.084, 1812.620, -1722.260, 110.916},
+        {"ÃŠÃ¢Ã¨Ã­Ã±", -2411.220, 373.539, 0.000, -2253.540, 458.411, 200.000},
+        {"Ã€Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±", 1515.810, 1586.400, -12.500, 1729.950, 1714.560, 87.500},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 225.165, -1292.070, -89.084, 466.223, -1235.070, 110.916},
+        {"Ã’Ã¥Ã¬Ã¯Ã«", 1252.330, -1026.330, -89.084, 1391.050, -926.999, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2266.260, -1494.030, -89.084, 2381.680, -1372.040, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2623.180, 943.235, -89.084, 2749.900, 1055.960, 110.916},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 2541.700, -1941.400, -89.084, 2703.580, -1852.870, 110.916},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 2056.860, -1126.320, -89.084, 2126.860, -920.815, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2625.160, 2202.760, -89.084, 2685.160, 2442.550, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 225.165, -1501.950, -89.084, 334.503, -1369.620, 110.916},
+        {"Ã‹Ã Ã±-ÃÃ°Ã³ÃµÃ Ã±", -365.167, 2123.010, -3.0, -208.570, 2217.680, 200.000},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2536.430, 2442.550, -89.084, 2685.160, 2542.550, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 334.503, -1406.050, -89.084, 466.223, -1292.070, 110.916},
+        {"Ã‚Ã Ã©Ã­Ã¢Ã³Ã¤", 647.557, -1227.280, -89.084, 787.461, -1118.280, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 422.680, -1684.650, -89.084, 558.099, -1570.200, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2498.210, 2542.550, -89.084, 2685.160, 2626.550, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1724.760, -1430.870, -89.084, 1812.620, -1250.900, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 225.165, -1684.650, -89.084, 312.803, -1501.950, 110.916},
+        {"Ã„Ã¦Ã¥Ã´Ã´Ã¥Ã°Ã±Ã®Ã­", 2056.860, -1449.670, -89.084, 2266.210, -1372.040, 110.916},
+        {"Ã•Ã½Ã¬Ã¯Ã²Ã®Ã­-ÃÃ Ã°Ã­Ã±", 603.035, 264.312, 0.000, 761.994, 366.572, 200.000},
+        {"Ã’Ã¥Ã¬Ã¯Ã«", 1096.470, -1130.840, -89.084, 1252.330, -1026.330, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃŠÃ¨Ã­ÃªÃ¥Ã©Ã¤Â»", -1087.930, 855.370, -89.084, -961.950, 986.281, 110.916},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‚Ã¥Ã°Ã®Ã­Ã Â»", 1046.150, -1722.260, -89.084, 1161.520, -1577.590, 110.916},
+        {"ÃŠÃ®Ã¬Ã¬Ã¥Ã°Ã·Ã¥Ã±ÃªÃ¨Ã© Ã°Ã Ã©Ã®Ã­", 1323.900, -1722.260, -89.084, 1440.900, -1577.590, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1357.000, -926.999, -89.084, 1463.900, -768.027, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 466.223, -1570.200, -89.084, 558.099, -1385.070, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 911.802, -860.619, -89.084, 1096.470, -768.027, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 768.694, -954.662, -89.084, 952.604, -860.619, 110.916},
+        {"ÃÃ¦Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2377.390, 788.894, -89.084, 2537.390, 897.901, 110.916},
+        {"Ã€Ã©Ã¤Ã«Ã¢Ã³Ã¤", 1812.620, -1852.870, -89.084, 1971.660, -1742.310, 110.916},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2089.000, -2394.330, -89.084, 2201.820, -2235.840, 110.916},
+        {"ÃŠÃ®Ã¬Ã¬Ã¥Ã°Ã·Ã¥Ã±ÃªÃ¨Ã© Ã°Ã Ã©Ã®Ã­", 1370.850, -1577.590, -89.084, 1463.900, -1384.950, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2121.400, 2508.230, -89.084, 2237.400, 2663.170, 110.916},
+        {"Ã’Ã¥Ã¬Ã¯Ã«", 1096.470, -1026.330, -89.084, 1252.330, -910.170, 110.916},
+        {"ÃƒÃ«Ã¥Ã­ ÃÃ Ã°Ãª", 1812.620, -1449.670, -89.084, 1996.910, -1350.720, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1242.980, -50.096, 0.000, -1213.910, 578.396, 200.000},
+        {"ÃŒÃ®Ã±Ã² Â«ÃŒÃ Ã°Ã²Ã¨Ã­Â»", -222.179, 293.324, 0.000, -122.126, 476.465, 200.000},
+        {"Ã‘Ã²Ã°Ã¨Ã¯", 2106.700, 1863.230, -89.084, 2162.390, 2202.760, 110.916},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 2541.700, -2059.230, -89.084, 2703.580, -1941.400, 110.916},
+        {"ÃŒÃ Ã°Ã¨Ã­Ã ", 807.922, -1577.590, -89.084, 926.922, -1416.250, 110.916},
+        {"Ã€Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±", 1457.370, 1143.210, -89.084, 1777.400, 1203.280, 110.916},
+        {"Ã€Ã©Ã¤Ã«Ã¢Ã³Ã¤", 1812.620, -1742.310, -89.084, 1951.660, -1602.310, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ ÃÃ±Ã¯Ã Ã«Ã Ã­Ã¤Ã ", -1580.010, 1025.980, -6.1, -1499.890, 1274.260, 200.000},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1370.850, -1384.950, -89.084, 1463.900, -1170.870, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃŒÃ ÃªÃ®Â»", 1664.620, 401.750, 0.000, 1785.140, 567.203, 200.000},
+        {"ÃÃ®Ã¤Ã¥Ã®", 312.803, -1684.650, -89.084, 422.680, -1501.950, 110.916},
+        {"ÃÃ«Ã®Ã¹Ã Ã¤Ã¼ Â«ÃÃ¥Ã°Ã¸Ã¨Ã­Ã£Â»", 1440.900, -1722.260, -89.084, 1583.500, -1577.590, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 687.802, -860.619, -89.084, 911.802, -768.027, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃƒÃ Ã­Ã²Â»", -2741.070, 1490.470, -6.1, -2616.400, 1659.680, 200.000},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 2185.330, -1154.590, -89.084, 2281.450, -934.489, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1169.130, -910.170, -89.084, 1318.130, -768.027, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1938.800, 2508.230, -89.084, 2121.400, 2624.230, 110.916},
+        {"ÃŠÃ®Ã¬Ã¬Ã¥Ã°Ã·Ã¥Ã±ÃªÃ¨Ã© Ã°Ã Ã©Ã®Ã­", 1667.960, -1577.590, -89.084, 1812.620, -1430.870, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 72.648, -1544.170, -89.084, 225.165, -1404.970, 110.916},
+        {"ÃÃ®ÃªÃ -ÃÃ±ÃªÃ Ã«Ã Ã­Ã²Ã¥", 2536.430, 2202.760, -89.084, 2625.160, 2442.550, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 72.648, -1684.650, -89.084, 225.165, -1544.170, 110.916},
+        {"ÃŒÃ Ã°ÃªÃ¥Ã²", 952.663, -1310.210, -89.084, 1072.660, -1130.850, 110.916},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 2632.740, -1135.040, -89.084, 2747.740, -945.035, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 861.085, -674.885, -89.084, 1156.550, -600.896, 110.916},
+        {"ÃŠÃ¨Ã­Ã£Ã±", -2253.540, 373.539, -9.1, -1993.280, 458.411, 200.000},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1848.400, 2342.830, -89.084, 2011.940, 2478.490, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", -1580.010, 744.267, -6.1, -1499.890, 1025.980, 200.000},
+        {"ÃŠÃ®Ã­Ã´Ã¥Ã°Ã¥Ã­Ã¶ Ã–Ã¥Ã­Ã²Ã°", 1046.150, -1804.210, -89.084, 1323.900, -1722.260, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 647.557, -1118.280, -89.084, 787.461, -954.662, 110.916},
+        {"ÃÃ³Ã¸Ã¥Ã­-Ã”Ã«Ã½Ã²Ã±", -2994.490, 277.411, -9.1, -2867.850, 458.411, 200.000},
+        {"ÃŠÃ®Ã«Ã«Ã¥Ã¤Ã¦ ÃƒÃ°Ã¨Ã­Ã£Ã«Ã Ã±Ã±", 964.391, 930.890, -89.084, 1166.530, 1044.690, 110.916},
+        {"ÃƒÃ«Ã¥Ã­ ÃÃ Ã°Ãª", 1812.620, -1100.820, -89.084, 1994.330, -973.380, 110.916},
+        {"ÃƒÃ°Ã³Ã§Ã®Ã¢Ã®Ã¥ Ã¤Ã¥Ã¯Ã® Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±Ã ", 1375.600, 919.447, -89.084, 1457.370, 1203.280, 110.916},
+        {"ÃÃ¥Ã£Ã¼Ã¾Ã«Ã Ã°-Ã’Ã®Ã¬", -405.770, 1712.860, -3.0, -276.719, 1892.750, 200.000},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‚Ã¥Ã°Ã®Ã­Ã Â»", 1161.520, -1722.260, -89.084, 1323.900, -1577.590, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2281.450, -1372.040, -89.084, 2381.680, -1135.040, 110.916},
+        {"Ã„Ã¢Ã®Ã°Ã¥Ã¶ ÃŠÃ Ã«Ã¨Ã£Ã³Ã«Ã»", 2137.400, 1703.230, -89.084, 2437.390, 1783.230, 110.916},
+        {"Ã€Ã©Ã¤Ã«Ã¢Ã³Ã¤", 1951.660, -1742.310, -89.084, 2124.660, -1602.310, 110.916},
+        {"ÃÃ¨Ã«Ã¨Ã£Ã°Ã¨Ã¬", 2624.400, 1383.230, -89.084, 2685.160, 1783.230, 110.916},
+        {"Ã€Ã©Ã¤Ã«Ã¢Ã³Ã¤", 2124.660, -1742.310, -89.084, 2222.560, -1494.030, 110.916},
+        {"ÃŠÃ¢Ã¨Ã­Ã±", -2533.040, 458.411, 0.000, -2329.310, 578.396, 200.000},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", -1871.720, 1176.420, -4.5, -1620.300, 1274.260, 200.000},
+        {"ÃŠÃ®Ã¬Ã¬Ã¥Ã°Ã·Ã¥Ã±ÃªÃ¨Ã© Ã°Ã Ã©Ã®Ã­", 1583.500, -1722.260, -89.084, 1758.900, -1577.590, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2381.680, -1454.350, -89.084, 2462.130, -1135.040, 110.916},
+        {"ÃŒÃ Ã°Ã¨Ã­Ã ", 647.712, -1577.590, -89.084, 807.922, -1416.250, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 72.648, -1404.970, -89.084, 225.165, -1235.070, 110.916},
+        {"Ã‚Ã Ã©Ã­Ã¢Ã³Ã¤", 647.712, -1416.250, -89.084, 787.461, -1227.280, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2222.560, -1628.530, -89.084, 2421.030, -1494.030, 110.916},
+        {"ÃÃ®Ã¤Ã¥Ã®", 558.099, -1684.650, -89.084, 647.522, -1384.930, 110.916},
+        {"ÃˆÃ±Ã²Ã¥Ã°Ã±ÃªÃ¨Ã© Ã’Ã®Ã­Ã­Ã¥Ã«Ã¼", -1709.710, -833.034, -1.5, -1446.010, -730.118, 200.000},
+        {"ÃÃ®Ã¤Ã¥Ã®", 466.223, -1385.070, -89.084, 647.522, -1235.070, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1817.390, 2202.760, -89.084, 2011.940, 2342.830, 110.916},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃŠÃ Ã°Ã¬Ã Ã­ ÃªÃ«Ã®Ã³Ã­Ã Â»", 2162.390, 1783.230, -89.084, 2437.390, 1883.230, 110.916},
+        {"Ã€Ã©Ã¤Ã«Ã¢Ã³Ã¤", 1971.660, -1852.870, -89.084, 2222.560, -1742.310, 110.916},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃŒÃ®Ã­Ã²Ã£Ã®Ã¬Ã¥Ã°Ã¨", 1546.650, 208.164, 0.000, 1745.830, 347.457, 200.000},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 2089.000, -2235.840, -89.084, 2201.820, -1989.900, 110.916},
+        {"Ã’Ã¥Ã¬Ã¯Ã«", 952.663, -1130.840, -89.084, 1096.470, -937.184, 110.916},
+        {"ÃÃ°Ã¨ÃªÃ«-ÃÃ Ã©Ã­", 1848.400, 2553.490, -89.084, 1938.800, 2863.230, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 1400.970, -2669.260, -39.084, 2189.820, -2597.260, 60.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃƒÃ Ã°Ã¢Ã¥Ã°Â»", -1213.910, 950.022, -89.084, -1087.930, 1178.930, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃƒÃ Ã°Ã¢Ã¥Ã°Â»", -1339.890, 828.129, -89.084, -1213.910, 1057.040, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃŠÃ¨Ã­ÃªÃ¥Ã©Ã¤Â»", -1339.890, 599.218, -89.084, -1213.910, 828.129, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃŠÃ¨Ã­ÃªÃ¥Ã©Ã¤Â»", -1213.910, 721.111, -89.084, -1087.930, 950.022, 110.916},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‚Ã¥Ã°Ã®Ã­Ã Â»", 930.221, -2006.780, -89.084, 1073.220, -1804.210, 110.916},
+        {"ÃÃ¡Ã±Ã¥Ã°Ã¢Ã Ã²Ã®Ã°Ã¨Ã¿ Â«Ã‡Ã¥Ã«Â¸Ã­Ã»Ã© Ã³Ã²Â¸Ã±Â»", 1073.220, -2006.780, -89.084, 1249.620, -1842.270, 110.916},
+        {"Ã‚Ã Ã©Ã­Ã¢Ã³Ã¤", 787.461, -1130.840, -89.084, 952.604, -954.662, 110.916},
+        {"Ã‚Ã Ã©Ã­Ã¢Ã³Ã¤", 787.461, -1310.210, -89.084, 952.663, -1130.840, 110.916},
+        {"ÃŠÃ®Ã¬Ã¬Ã¥Ã°Ã·Ã¥Ã±ÃªÃ¨Ã© Ã°Ã Ã©Ã®Ã­", 1463.900, -1577.590, -89.084, 1667.960, -1430.870, 110.916},
+        {"ÃŒÃ Ã°ÃªÃ¥Ã²", 787.461, -1416.250, -89.084, 1072.660, -1310.210, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã­Ã»Ã© ÃÃ®ÃªÃ¸Ã®Ã°", 2377.390, 596.349, -89.084, 2537.390, 788.894, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2237.400, 2542.550, -89.084, 2498.210, 2663.170, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã¯Ã«Ã¿Ã¦", 2632.830, -1668.130, -89.084, 2747.740, -1393.420, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«Ã”Ã Ã«Ã«Ã®Ã³Â»", 434.341, 366.572, 0.000, 603.035, 555.680, 200.000},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 2089.000, -1989.900, -89.084, 2324.000, -1852.870, 110.916},
+        {"Ã—Ã Ã©Ã­Ã Ã²Ã Ã³Ã­", -2274.170, 578.396, -7.6, -2078.670, 744.170, 200.000},
+        {"ÃÃ«Ã¼-ÃŠÃ Ã±Ã²Ã¨Ã«Ã¼Ã®-Ã¤Ã¥Ã«Ã¼-Ã„Ã¼Ã¿Ã¡Ã«Ã®", -208.570, 2337.180, 0.000, 8.430, 2487.180, 200.000},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2324.000, -2145.100, -89.084, 2703.580, -2059.230, 110.916},
+        {"Ã•Ã¨Ã¬Ã§Ã Ã¢Ã®Ã¤ ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1132.820, -768.027, 0.000, -956.476, -578.118, 200.000},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«Ã‚Ã¨Ã§Ã Ã¦Â»", 1817.390, 1703.230, -89.084, 2027.400, 1863.230, 110.916},
+        {"ÃÃ³Ã¸Ã¥Ã­-Ã”Ã«Ã½Ã²Ã±", -2994.490, -430.276, -1.2, -2831.890, -222.589, 200.000},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 321.356, -860.619, -89.084, 687.802, -768.027, 110.916},
+        {"ÃÃ¥Ã´Ã²Ã¿Ã­Ã®Ã© ÃªÃ®Ã¬Ã¯Ã«Ã¥ÃªÃ± Â«Ã‡Ã¥Ã«Ã¥Ã­Ã»Ã© Ã®Ã Ã§Ã¨Ã±Â»", 176.581, 1305.450, -3.0, 338.658, 1520.720, 200.000},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 321.356, -768.027, -89.084, 700.794, -674.885, 110.916},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃŒÃ®Ã°Ã±ÃªÃ Ã¿ Ã§Ã¢Ã¥Ã§Ã¤Ã Â»", 2162.390, 1883.230, -89.084, 2437.390, 2012.180, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã¯Ã«Ã¿Ã¦", 2747.740, -1668.130, -89.084, 2959.350, -1498.620, 110.916},
+        {"Ã„Ã¦Ã¥Ã´Ã´Ã¥Ã°Ã±Ã®Ã­", 2056.860, -1372.040, -89.084, 2281.450, -1210.740, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1463.900, -1290.870, -89.084, 1724.760, -1150.870, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", 1463.900, -1430.870, -89.084, 1724.760, -1290.870, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃƒÃ Ã°Ã¢Ã¥Ã°Â»", -1499.890, 696.442, -179.615, -1339.890, 925.353, 20.385},
+        {"ÃÃ¦Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1457.390, 823.228, -89.084, 2377.390, 863.229, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2421.030, -1628.530, -89.084, 2632.830, -1454.350, 110.916},
+        {"ÃŠÃ®Ã«Ã«Ã¥Ã¤Ã¦ Â«ÃƒÃ°Ã¨Ã­Ã£Ã«Ã Ã±Ã±Â»", 964.391, 1044.690, -89.084, 1197.390, 1203.220, 110.916},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 2747.740, -1120.040, -89.084, 2959.350, -945.035, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 737.573, -768.027, -89.084, 1142.290, -674.885, 110.916},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2201.820, -2730.880, -89.084, 2324.000, -2418.330, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 2462.130, -1454.350, -89.084, 2581.730, -1135.040, 110.916},
+        {"ÃƒÃ Ã­Ã²Ã®Ã­", 2222.560, -1722.330, -89.084, 2632.830, -1628.530, 110.916},
+        {"Ã‡Ã Ã£Ã®Ã°Ã®Ã¤Ã­Ã»Ã© ÃªÃ«Ã³Ã¡ Â«Ã€Ã¢Ã¨Ã±Ã¯Ã Â»", -2831.890, -430.276, -6.1, -2646.400, -222.589, 200.000},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 1970.620, -2179.250, -89.084, 2089.000, -1852.870, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ ÃÃ±Ã¯Ã«Ã Ã­Ã Ã¤Ã ", -1982.320, 1274.260, -4.5, -1524.240, 1358.900, 200.000},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«Ã•Ã Ã©-ÃÃ®Ã«Ã«Ã¥Ã°Â»", 1817.390, 1283.230, -89.084, 2027.390, 1469.230, 110.916},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2201.820, -2418.330, -89.084, 2324.000, -2095.000, 110.916},
+        {"ÃŒÃ®Ã²Ã¥Ã«Ã¼ Â«ÃÃ®Ã±Ã«Ã¥Ã¤Ã­Ã¨Ã© Ã¶Ã¥Ã­Ã²Â»", 1823.080, 596.349, -89.084, 1997.220, 823.228, 110.916},
+        {"ÃÃ½Ã©Ã±Ã Ã©Ã­Ã¤-ÃŒÃ Ã°Ã¨Ã­Ã ", -2353.170, 2275.790, 0.000, -2153.170, 2475.790, 200.000},
+        {"ÃŠÃ¨Ã­Ã£Ã±", -2329.310, 458.411, -7.6, -1993.280, 578.396, 200.000},
+        {"ÃÃ«Ã¼-ÃŠÃ®Ã°Ã®Ã­Ã ", 1692.620, -2179.250, -89.084, 1812.620, -1842.270, 110.916},
+        {"Ã—Ã Ã±Ã®Ã¢Ã­Ã¿ ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 1375.600, 596.349, -89.084, 1558.090, 823.228, 110.916},
+        {"Â«ÃÃ®Ã§Ã®Ã¢Ã»Ã© Ã«Ã¥Ã¡Ã¥Ã¤Ã¼Â»", 1817.390, 1083.230, -89.084, 2027.390, 1283.230, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1197.390, 1163.390, -89.084, 1236.630, 2243.230, 110.916},
+        {"Ã‹Ã®Ã±-Ã”Ã«Ã®Ã°Ã¥Ã±", 2581.730, -1393.420, -89.084, 2747.740, -1135.040, 110.916},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«Ã‚Ã¨Ã§Ã Ã¦Â»", 1817.390, 1863.230, -89.084, 2106.700, 2011.830, 110.916},
+        {"ÃÃ°Ã¨ÃªÃ«-ÃÃ Ã©Ã­", 1938.800, 2624.230, -89.084, 2121.400, 2861.550, 110.916},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‚Ã¥Ã°Ã®Ã­Ã Â»", 851.449, -1804.210, -89.084, 1046.150, -1577.590, 110.916},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃÃ®Ã¡Ã Ã¤Ã ", -1119.010, 1178.930, -89.084, -862.025, 1351.450, 110.916},
+        {"Ã‹Ã¨Ã­Ã¤Ã¥Ã­-Ã‘Ã Ã©Ã¤", 2749.900, 943.235, -89.084, 2923.390, 1198.990, 110.916},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2703.580, -2302.330, -89.084, 2959.350, -2126.900, 110.916},
+        {"Ã“Ã¨Ã«Ã«Ã®Ã³Ã´Ã¨Ã«Ã¤", 2324.000, -2059.230, -89.084, 2541.700, -1852.870, 110.916},
+        {"ÃŠÃ¨Ã­Ã£Ã±", -2411.220, 265.243, -9.1, -1993.280, 373.539, 200.000},
+        {"ÃŠÃ®Ã¬Ã¬Ã¥Ã°Ã·Ã¥Ã±ÃªÃ¨Ã© Ã°Ã Ã©Ã®Ã­", 1323.900, -1842.270, -89.084, 1701.900, -1722.260, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1269.130, -768.027, -89.084, 1414.070, -452.425, 110.916},
+        {"ÃŒÃ Ã°Ã¨Ã­Ã ", 647.712, -1804.210, -89.084, 851.449, -1577.590, 110.916},
+        {"ÃÃ½Ã²Ã²Ã¥Ã°Ã¨-ÃÃ®Ã©Ã­Ã²", -2741.070, 1268.410, -4.5, -2533.040, 1490.470, 200.000},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«4 Ã„Ã°Ã ÃªÃ®Ã­Ã Â»", 1817.390, 863.232, -89.084, 2027.390, 1083.230, 110.916},
+        {"ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 964.391, 1203.220, -89.084, 1197.390, 1403.220, 110.916},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 1534.560, 2433.230, -89.084, 1848.400, 2583.230, 110.916},
+        {"ÃÃ®Ã«Ã¥ Ã¤Ã«Ã¿ Ã£Ã®Ã«Ã¼Ã´Ã  Â«Ã‰Ã¥Ã«Ã«Ã®Ã³-ÃÃ¥Ã«Ã«Â»", 1117.400, 2723.230, -89.084, 1457.460, 2863.230, 110.916},
+        {"Ã€Ã©Ã¤Ã«Ã¢Ã³Ã¤", 1812.620, -1602.310, -89.084, 2124.660, -1449.670, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1297.470, 2142.860, -89.084, 1777.390, 2243.230, 110.916},
+        {"Ã„Ã®Ã½Ã°Ã²Ã¨", -2270.040, -324.114, -1.2, -1794.920, -222.589, 200.000},
+        {"Ã”Ã¥Ã°Ã¬Ã  Ã•Ã¨Ã«Ã«Ã²Ã®Ã¯", 967.383, -450.390, -3.0, 1176.780, -217.900, 200.000},
+        {"Ã‹Ã Ã±-ÃÃ Ã°Ã°Ã Ã­ÃªÃ Ã±", -926.130, 1398.730, -3.0, -719.234, 1634.690, 200.000},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃÃ¨Ã°Ã Ã²Ã» Ã¢ Ã¬Ã³Ã¦Ã±ÃªÃ¨Ãµ Ã¸Ã²Ã Ã­Ã ÃµÂ»", 1817.390, 1469.230, -89.084, 2027.400, 1703.230, 110.916},
+        {"Ã‘Ã¨Ã²Ã¨ Ã•Ã®Ã«Ã«", -2867.850, 277.411, -9.1, -2593.440, 458.411, 200.000},
+        {"Ã‡Ã Ã£Ã®Ã°Ã®Ã¤Ã­Ã»Ã© ÃªÃ«Ã³Ã¡ Â«Ã€Ã¢Ã¨Ã±Ã¯Ã Â»", -2646.400, -355.493, 0.000, -2270.040, -222.589, 200.000},
+        {"Ã‘Ã²Ã°Ã¨Ã¯", 2027.400, 863.229, -89.084, 2087.390, 1703.230, 110.916},
+        {"Ã•Ã Ã¸Ã¡Ã¥Ã°Ã¨", -2593.440, -222.589, -1.0, -2411.220, 54.722, 200.000},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 1852.000, -2394.330, -89.084, 2089.000, -2179.250, 110.916},
+        {"Ã“Ã Ã©Ã²Ã¢Ã³Ã¤-ÃˆÃ±Ã²Ã¥Ã©Ã²Ã±", 1098.310, 1726.220, -89.084, 1197.390, 2243.230, 110.916},
+        {"Ã‚Ã®Ã¤Ã®ÃµÃ°Ã Ã­Ã¨Ã«Ã¨Ã¹Ã¥ Ã˜Ã¥Ã°Ã¬Ã Ã­Ã ", -789.737, 1659.680, -89.084, -599.505, 1929.410, 110.916},
+        {"ÃÃ«Ã¼-ÃŠÃ®Ã°Ã®Ã­Ã ", 1812.620, -2179.250, -89.084, 1970.620, -1852.870, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", -1700.010, 744.267, -6.1, -1580.010, 1176.520, 200.000},
+        {"Ã„Ã®Ã«Ã¨Ã­Ã  Ã”Ã®Ã±Ã²Ã¥Ã°", -2178.690, -1250.970, 0.000, -1794.920, -1115.580, 200.000},
+        {"Ã‹Ã Ã±-ÃÃ Ã¿Ã±Ã Ã¤Ã Ã±", -354.332, 2580.360, 2.0, -133.625, 2816.820, 200.000},
+        {"Ã„Ã®Ã«Ã¨Ã­Ã  ÃÃªÃ³Ã«Ã¼Ã²Ã Ã¤Ã®", -936.668, 2611.440, 2.0, -715.961, 2847.900, 200.000},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 1166.530, 795.010, -89.084, 1375.600, 1044.690, 110.916},
+        {"ÃƒÃ Ã­Ã²Ã®Ã­", 2222.560, -1852.870, -89.084, 2632.830, -1722.330, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1213.910, -730.118, 0.000, -1132.820, -50.096, 200.000},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1817.390, 2011.830, -89.084, 2106.700, 2202.760, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ ÃÃ±Ã¯Ã Ã«Ã Ã­Ã¤Ã ", -1499.890, 578.396, -79.615, -1339.890, 1274.260, 20.385},
+        {"Ã„Ã¢Ã®Ã°Ã¥Ã¶ ÃŠÃ Ã«Ã¨Ã£Ã³Ã«Ã»", 2087.390, 1543.230, -89.084, 2437.390, 1703.230, 110.916},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃÃ®Ã¿Ã«Ã¼Â»", 2087.390, 1383.230, -89.084, 2437.390, 1543.230, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 72.648, -1235.070, -89.084, 321.356, -1008.150, 110.916},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃŒÃ®Ã°Ã±ÃªÃ Ã¿ Ã§Ã¢Ã¥Ã§Ã¤Ã Â»", 2437.390, 1783.230, -89.084, 2685.160, 2012.180, 110.916},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1281.130, -452.425, -89.084, 1641.130, -290.913, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", -1982.320, 744.170, -6.1, -1871.720, 1274.260, 200.000},
+        {"Ã•Ã Ã­ÃªÃ¨-ÃÃ Ã­ÃªÃ¨-ÃÃ®Ã©Ã­Ã²", 2576.920, 62.158, 0.000, 2759.250, 385.503, 200.000},
+        {"Ã‚Ã®Ã¥Ã­Ã­Ã»Ã© Ã±ÃªÃ«Ã Ã¤ Ã²Ã®Ã¯Ã«Ã¨Ã¢Ã  ÃŠ.Ã€.Ã‘.Ã‘.", 2498.210, 2626.550, -89.084, 2749.900, 2861.550, 110.916},
+        {"Ã€Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Â«ÃƒÃ Ã°Ã°Ã¨-ÃƒÃ®Ã«Ã¤Â»", 1777.390, 863.232, -89.084, 1817.390, 2342.830, 110.916},
+        {"Ã’Ã®Ã­Ã­Ã¥Ã«Ã¼ ÃÃ½Ã©Ã±Ã Ã©Ã¤", -2290.190, 2548.290, -89.084, -1950.190, 2723.290, 110.916},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2324.000, -2302.330, -89.084, 2703.580, -2145.100, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 321.356, -1044.070, -89.084, 647.557, -860.619, 110.916},
+        {"ÃÃ°Ã®Ã¬Ã±ÃªÃ«Ã Ã¤ Ã¨Ã¬Ã¥Ã­Ã¨ ÃÃ½Ã­Ã¤Ã®Ã«Ã¼Ã´Ã ", 1558.090, 596.349, -89.084, 1823.080, 823.235, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã¯Ã«Ã¿Ã¦", 2632.830, -1852.870, -89.084, 2959.350, -1668.130, 110.916},
+        {"Ã”Ã«Ã¨Ã­Ã²-Ã“Ã®Ã²Ã¥Ã°", -314.426, -753.874, -89.084, -106.339, -463.073, 110.916},
+        {"ÃÃ«Ã³Ã¡Ã¥Ã°Ã°Ã¨", 19.607, -404.136, 3.8, 349.607, -220.137, 200.000},
+        {"Ã‘Ã²Ã Ã­Ã¶Ã¨Ã¿ Â«Ã‹Ã¨Ã­Ã¤Ã¥Ã­Â»", 2749.900, 1198.990, -89.084, 2923.390, 1548.990, 110.916},
+        {"ÃƒÃ«Ã¥Ã­ ÃÃ Ã°Ãª", 1812.620, -1350.720, -89.084, 2056.860, -1100.820, 110.916},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", -1993.280, 265.243, -9.1, -1794.920, 578.396, 200.000},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1377.390, 2243.230, -89.084, 1704.590, 2433.230, 110.916},
+        {"ÃÃ¨Ã·Ã¬Ã Ã­", 321.356, -1235.070, -89.084, 647.522, -1044.070, 110.916},
+        {"ÃŒÃ®Ã±Ã² Â«ÃƒÃ Ã­Ã²Â»", -2741.450, 1659.680, -6.1, -2616.400, 2175.150, 200.000},
+        {"ÃÃ Ã° Â«Probe InnÂ»", -90.218, 1286.850, -3.0, 153.859, 1554.120, 200.000},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ Ã”Ã«Ã¨Ã­Ã²", -187.700, -1596.760, -89.084, 17.063, -1276.600, 110.916},
+        {"Ã‹Ã Ã±-ÃŠÃ®Ã«Ã¨Ã­Ã Ã±", 2281.450, -1135.040, -89.084, 2632.740, -945.035, 110.916},
+        {"Ã‘Ã®Ã¡Ã¥Ã«Ã«-ÃÃ¥Ã©Ã«-ÃŸÃ°Ã¤Ã±", 2749.900, 1548.990, -89.084, 2923.390, 1937.250, 110.916},
+        {"ÃˆÃ§Ã³Ã¬Ã°Ã³Ã¤Ã­Ã»Ã© Ã®Ã±Ã²Ã°Ã®Ã¢", 2011.940, 2202.760, -89.084, 2237.400, 2508.230, 110.916},
+        {"ÃÃ«Ã¼-ÃŠÃ Ã±Ã²Ã¨Ã«Ã¼Ã®-Ã¤Ã¥Ã«Ã¼-Ã„Ã¼Ã¿Ã¡Ã«Ã®", -208.570, 2123.010, -7.6, 114.033, 2337.180, 200.000},
+        {"Ã‘Ã Ã­Ã²Ã -Ã”Ã«Ã®Ã°Ã ", -2741.070, 458.411, -7.6, -2533.040, 793.411, 200.000},
+        {"ÃÃ«Ã Ã©Ã¿-Ã¤Ã¥Ã«Ã¼-Ã‘Ã¥Ã¢Ã¨Ã«Ã¼", 2703.580, -2126.900, -89.084, 2959.350, -1852.870, 110.916},
+        {"ÃŒÃ Ã°ÃªÃ¥Ã²", 926.922, -1577.590, -89.084, 1370.850, -1416.250, 110.916},
+        {"ÃŠÃ¢Ã¨Ã­Ã±", -2593.440, 54.722, 0.000, -2411.220, 458.411, 200.000},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃÃ¨Ã«Ã±Ã®Ã­", 1098.390, 2243.230, -89.084, 1377.390, 2507.230, 110.916},
+        {"Ã‘Ã¯Ã¨Ã­Ã¨Ã¡Ã¥Ã¤", 2121.400, 2663.170, -89.084, 2498.210, 2861.550, 110.916},
+        {"ÃÃ¨Ã«Ã¨Ã£Ã°Ã¨Ã¬", 2437.390, 1383.230, -89.084, 2624.400, 1783.230, 110.916},
+        {"ÃÃ«Ã½ÃªÃ´Ã¨Ã«Ã¤", 964.391, 1403.220, -89.084, 1197.390, 1726.220, 110.916},
+        {"Â«ÃÃ®Ã«Ã¼Ã¸Ã®Ã¥ Ã³ÃµÃ®Â»", -410.020, 1403.340, -3.0, -137.969, 1681.230, 200.000},
+        {"Ã„Ã¨Ã«Ã«Ã¨Ã¬Ã®Ã°", 580.794, -674.885, -9.5, 861.085, -404.790, 200.000},
+        {"ÃÃ«Ã¼-ÃŠÃ¥Ã¡Ã°Ã Ã¤Ã®Ã±", -1645.230, 2498.520, 0.000, -1372.140, 2777.850, 200.000},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ ÃÃ±Ã¯Ã«Ã Ã­Ã Ã¤Ã ", -2533.040, 1358.900, -4.5, -1996.660, 1501.210, 200.000},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1499.890, -50.096, -1.0, -1242.980, 249.904, 200.000},
+        {"ÃÃ»Ã¡Ã Ã¶ÃªÃ Ã¿ Ã«Ã Ã£Ã³Ã­Ã ", 1916.990, -233.323, -100.000, 2131.720, 13.800, 200.000},
+        {"ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1414.070, -768.027, -89.084, 1667.610, -452.425, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© Ã¯Ã«Ã¿Ã¦", 2747.740, -1498.620, -89.084, 2959.350, -1120.040, 110.916},
+        {"Ã‘Ã Ã­-Ã€Ã­Ã¤Ã°Ã¥Ã Ã± Ã‘Ã Ã³Ã­Ã¤", 2450.390, 385.503, -100.000, 2759.250, 562.349, 200.000},
+        {"Ã’Ã¥Ã­Ã¨Ã±Ã²Ã»Ã¥ Ã°Ã³Ã·Ã¼Ã¨", -2030.120, -2174.890, -6.1, -1820.640, -1771.660, 200.000},
+        {"ÃŒÃ Ã°ÃªÃ¥Ã²", 1072.660, -1416.250, -89.084, 1370.850, -1130.850, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã­Ã»Ã© ÃÃ®ÃªÃ¸Ã®Ã°", 1997.220, 596.349, -89.084, 2377.390, 823.228, 110.916},
+        {"ÃÃ°Ã¨ÃªÃ«-ÃÃ Ã©Ã­", 1534.560, 2583.230, -89.084, 1848.400, 2863.230, 110.916},
+        {"Â«ÃÃ³ÃµÃ²Ã  ÃÃ Ã±ÃµÃ¨Â»", -1794.920, -50.096, -1.04, -1499.890, 249.904, 200.000},
+        {"Ã‹Ã¨Ã´Ã¨-Ã•Ã®Ã«Ã«Ã®Ã³", -1166.970, -1856.030, 0.000, -815.624, -1602.070, 200.000},
+        {"ÃƒÃ°Ã³Ã§Ã®Ã¢Ã®Ã¥ Ã¤Ã¥Ã¯Ã® Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±Ã ", 1457.390, 863.229, -89.084, 1777.400, 1143.210, 110.916},
+        {"ÃÃ°Ã¨ÃªÃ«-ÃÃ Ã©Ã­", 1117.400, 2507.230, -89.084, 1534.560, 2723.230, 110.916},
+        {"ÃÃ«Ã³Ã¡Ã¥Ã°Ã°Ã¨", 104.534, -220.137, 2.3, 349.607, 152.236, 200.000},
+        {"ÃÃ«Ã¼-ÃŠÃ Ã±Ã²Ã¨Ã«Ã¼Ã®-Ã¤Ã¥Ã«Ã¼-Ã„Ã¼Ã¿Ã¡Ã«Ã®", -464.515, 2217.680, 0.000, -208.570, 2580.360, 200.000},
+        {"Ã„Ã¥Ã«Ã®Ã¢Ã®Ã© Ã°Ã Ã©Ã®Ã­", -2078.670, 578.396, -7.6, -1499.890, 744.267, 200.000},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã»Ã© ÃÃ®ÃªÃ¸Ã®Ã°", 2537.390, 676.549, -89.084, 2902.350, 943.235, 110.916},
+        {"Ã‡Ã Ã«Ã¨Ã¢ Ã‘Ã Ã­-Ã”Ã¨Ã¥Ã°Ã°Ã®", -2616.400, 1501.210, -3.0, -1996.660, 1659.680, 200.000},
+        {"ÃÃ Ã°Ã Ã¤Ã¨Ã§Ã®", -2741.070, 793.411, -6.1, -2533.040, 1268.410, 200.000},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® Â«ÃÃ®Ã±Ã®Ãª Ã¢Ã¥Ã°Ã¡Ã«Ã¾Ã¤Ã Â»", 2087.390, 1203.230, -89.084, 2640.400, 1383.230, 110.916},
+        {"ÃÃ«Ã¤-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±-Ã‘Ã²Ã°Ã¨Ã¯", 2162.390, 2012.180, -89.084, 2685.160, 2202.760, 110.916},
+        {"Ã„Ã¦Ã Ã­Ã¨Ã¯Ã¥Ã°-Ã•Ã¨Ã«Ã«", -2533.040, 578.396, -7.6, -2274.170, 968.369, 200.000},
+        {"Ã„Ã¦Ã Ã­Ã¨Ã¯Ã¥Ã°-Ã•Ã®Ã«Ã«Ã®Ã³", -2533.040, 968.369, -6.1, -2274.170, 1358.900, 200.000},
+        {"ÃÃ®ÃªÃ -ÃÃ±ÃªÃ Ã«Ã Ã­Ã²Ã¥", 2237.400, 2202.760, -89.084, 2536.430, 2542.550, 110.916},
+        {"Ã‚Ã®Ã±Ã²Ã®Ã·Ã­Ã Ã¿ Ã Ã¢Ã²Ã®Ã±Ã²Ã°Ã Ã¤Ã  Ã„Ã¦Ã³Ã«Ã¨Ã³Ã±", 2685.160, 1055.960, -89.084, 2749.900, 2626.550, 110.916},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‚Ã¥Ã°Ã®Ã­Ã Â»", 647.712, -2173.290, -89.084, 930.221, -1804.210, 110.916},
+        {"Ã„Ã®Ã«Ã¨Ã­Ã  Ã”Ã®Ã±Ã²Ã¥Ã°", -2178.690, -599.884, -1.2, -1794.920, -324.114, 200.000},
+        {"Ã€Ã°ÃªÃ®-Ã¤Ã¥Ã«Ã¼-ÃÃ½Ã±Ã²Ã¥", -901.129, 2221.860, 0.000, -592.090, 2571.970, 200.000},
+        {"Â«Ã“Ã¯Ã Ã¢Ã¸Ã¥Ã¥ Ã¤Ã¥Ã°Ã¥Ã¢Ã®Â»", -792.254, -698.555, -5.3, -452.404, -380.043, 200.000},
+        {"Ã”Ã¥Ã°Ã¬Ã ", -1209.670, -1317.100, 114.981, -908.161, -787.391, 251.981},
+        {"Ã„Ã Ã¬Ã¡Ã  Ã˜Ã¥Ã°Ã¬Ã Ã­Ã ", -968.772, 1929.410, -3.0, -481.126, 2155.260, 200.000},
+        {"Ã‘Ã¥Ã¢Ã¥Ã°Ã­Ã Ã¿ ÃÃ±Ã¯Ã«Ã Ã­Ã Ã¤Ã ", -1996.660, 1358.900, -4.5, -1524.240, 1592.510, 200.000},
+        {"Ã”Ã¨Ã­Ã Ã­Ã±Ã®Ã¢Ã»Ã© Ã°Ã Ã©Ã®Ã­", -1871.720, 744.170, -6.1, -1701.300, 1176.420, 300.000},
+        {"ÃƒÃ Ã°Ã±Ã¨Ã¿", -2411.220, -222.589, -1.14, -2173.040, 265.243, 200.000},
+        {"ÃŒÃ®Ã­Ã²Ã£Ã®Ã¬Ã¥Ã°Ã¨", 1119.510, 119.526, -3.0, 1451.400, 493.323, 200.000},
+        {"ÃŠÃ°Ã¨Ãª", 2749.900, 1937.250, -89.084, 2921.620, 2669.790, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 1249.620, -2394.330, -89.084, 1852.000, -2179.250, 110.916},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‘Ã Ã­Ã²Ã -ÃŒÃ Ã°Ã¨Ã¿Â»", 72.648, -2173.290, -89.084, 342.648, -1684.650, 110.916},
+        {"ÃÃ¥Ã°Ã¥Ã±Ã¥Ã·Ã¥Ã­Ã¨Ã¥ ÃŒÃ Ã«ÃµÃ®Ã«Ã«Ã Ã­Ã¤", 1463.900, -1150.870, -89.084, 1812.620, -768.027, 110.916},
+        {"ÃÃ©Ã­Ã¤Ã¦Ã¥Ã«-ÃÃ Ã©Ã­", -2324.940, -2584.290, -6.1, -1964.220, -2212.110, 200.000},
+        {"Ã‚Â¸Ã°Ã¤Ã Ã­Ã²-ÃŒÃ¥Ã¤Ã®Ã³Ã±", 37.032, 2337.180, -3.0, 435.988, 2677.900, 200.000},
+        {"ÃÃªÃ²Ã Ã­-Ã‘Ã¯Ã°Ã¨Ã­Ã£Ã±", 338.658, 1228.510, 0.000, 664.308, 1655.050, 200.000},
+        {"ÃŠÃ Ã§Ã¨Ã­Ã® ÃŠÃ Ã¬-Ã½-Ã‹Ã®Ã²", 2087.390, 943.235, -89.084, 2623.180, 1203.230, 110.916},
+        {"Ã‡Ã Ã¯Ã Ã¤Ã­Ã»Ã© ÃÃ½Ã¤Ã±Ã½Ã­Ã¤Ã±", 1236.630, 1883.110, -89.084, 1777.390, 2142.860, 110.916},
+        {"ÃÃ«Ã¿Ã¦ Â«Ã‘Ã Ã­Ã²Ã -ÃŒÃ Ã°Ã¨Ã¿Â»", 342.648, -2173.290, -89.084, 647.712, -1684.650, 110.916},
+        {"ÃÃ¡Ã±Ã¥Ã°Ã¢Ã Ã²Ã®Ã°Ã¨Ã¿ Â«Ã‡Ã¥Ã«Â¸Ã­Ã»Ã© Ã³Ã²Â¸Ã±", 1249.620, -2179.250, -89.084, 1692.620, -1842.270, 110.916},
+        {"Ã€Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±", 1236.630, 1203.280, -89.084, 1457.370, 1883.110, 110.916},
+        {"ÃÃªÃ°Ã³Ã£ Ã”Ã«Ã¨Ã­Ã²", -594.191, -1648.550, 0.000, -187.700, -1276.600, 200.000},
+        {"ÃÃ¡Ã±Ã¥Ã°Ã¢Ã Ã²Ã®Ã°Ã¨Ã¿ Â«Ã‡Ã¥Ã«Â¸Ã­Ã»Ã© Ã³Ã²Â¸Ã±", 930.221, -2488.420, -89.084, 1249.620, -2006.780, 110.916},
+        {"ÃÃ Ã«Ã®Ã¬Ã¨Ã­Ã® ÃŠÃ°Ã¨Ãª", 2160.220, -149.004, 0.000, 2576.920, 228.322, 200.000},
+        {"ÃÃªÃ¥Ã Ã­Ã±ÃªÃ¨Ã¥ Ã¤Ã®ÃªÃ¨", 2373.770, -2697.090, -89.084, 2809.220, -2330.460, 110.916},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1213.910, -50.096, -4.5, -947.980, 578.396, 200.000},
+        {"Ã“Ã Ã©Ã²Ã¢Ã³Ã¤-ÃˆÃ±Ã²Ã¥Ã©Ã²Ã±", 883.308, 1726.220, -89.084, 1098.310, 2507.230, 110.916},
+        {"ÃŠÃ Ã«Ã²Ã®Ã­-Ã•Ã Ã©Ã²Ã±", -2274.170, 744.170, -6.1, -1982.320, 1358.900, 200.000},
+        {"Â«ÃÃ³ÃµÃ²Ã  ÃÃ Ã±ÃµÃ¨Â»", -1794.920, 249.904, -9.1, -1242.980, 578.396, 200.000},
+        {"Ã‡Ã Ã«Ã¨Ã¢ Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", -321.744, -2224.430, -89.084, 44.615, -1724.430, 110.916},
+        {"Ã„Ã®Ã½Ã°Ã²Ã¨", -2173.040, -222.589, -1.0, -1794.920, 265.243, 200.000},
+        {"ÃƒÃ®Ã°Ã  Ã—Ã¨Ã«Ã¨Ã Ã¤", -2178.690, -2189.910, -47.917, -2030.120, -1771.660, 576.083},
+        {"Ã”Ã®Ã°Ã²-ÃŠÃ Ã°Ã±Ã®Ã­", -376.233, 826.326, -3.0, 123.717, 1220.440, 200.000},
+        {"Ã„Ã®Ã«Ã¨Ã­Ã  Ã”Ã®Ã±Ã²Ã¥Ã°", -2178.690, -1115.580, 0.000, -1794.920, -599.884, 200.000},
+        {"ÃÃ³Ã¸Ã¥Ã­-Ã”Ã«Ã½Ã²Ã±", -2994.490, -222.589, -1.0, -2593.440, 277.411, 200.000},
+        {"Ã”Ã¥Ã°Ã­-ÃÃ¨Ã¤Ã¦", 508.189, -139.259, 0.000, 1306.660, 119.526, 200.000},
+        {"ÃÃ½Ã©Ã±Ã Ã©Ã¤", -2741.070, 2175.150, 0.000, -2353.170, 2722.790, 200.000},
+        {"Ã€Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã Ã±-Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±", 1457.370, 1203.280, -89.084, 1777.390, 1883.110, 110.916},
+        {"ÃÃ®Ã¬Ã¥Ã±Ã²Ã¼Ã¥ ÃÃ«Ã³Ã¡Ã¥Ã°Ã°Ã¨", -319.676, -220.137, 0.000, 104.534, 293.324, 200.000},
+        {"ÃÃ½Ã«Ã¨Ã±Ã¥Ã©Ã¤Ã±", -2994.490, 458.411, -6.1, -2741.070, 1339.610, 200.000},
+        {"ÃÃ®Ã°Ã²-ÃÃ®Ãª", 2285.370, -768.027, 0.000, 2770.590, -269.740, 200.000},
+        {"ÃŠÃ Ã°Ã¼Ã¥Ã° Â«Ã•Ã Ã­Ã²Ã¥Ã°Â»", 337.244, 710.840, -115.239, 860.554, 1031.710, 203.761},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² Ã‹Ã®Ã±-Ã‘Ã Ã­Ã²Ã®Ã±", 1382.730, -2730.880, -89.084, 2201.820, -2394.330, 110.916},
+        {"ÃŒÃ¨Ã±Ã±Ã¨Ã®Ã­Ã¥Ã°-Ã•Ã¨Ã«Ã«", -2994.490, -811.276, 0.000, -2178.690, -430.276, 200.000},
+        {"Ã‡Ã Ã«Ã¨Ã¢ Ã‘Ã Ã­-Ã”Ã¨Ã¥Ã°Ã°Ã®", -2616.400, 1659.680, -3.0, -1996.660, 2175.150, 200.000},
+        {"Ã‡Ã Ã¯Ã°Ã¥Ã²Ã­Ã Ã¿ Ã‡Ã®Ã­Ã ", -91.586, 1655.050, -50.000, 421.234, 2123.010, 250.000},
+        {"ÃƒÃ®Ã°Ã  Â«Ã—Ã¨Ã«Ã¨Ã Ã¤Â»", -2997.470, -1115.580, -47.917, -2178.690, -971.913, 576.083},
+        {"ÃƒÃ®Ã°Ã  Â«Ã—Ã¨Ã«Ã¨Ã Ã¤Â»", -2178.690, -1771.660, -47.917, -1936.120, -1250.970, 576.083},
+        {"ÃŒÃ¥Ã¦Ã¤Ã³Ã­Ã Ã°Ã®Ã¤Ã­Ã»Ã© Ã Ã½Ã°Ã®Ã¯Ã®Ã°Ã² ÃˆÃ±Ã²Ã¥Ã°-ÃÃ½Ã©", -1794.920, -730.118, -3.0, -1213.910, -50.096, 200.000},
+        {"ÃÃ Ã­Ã®Ã¯Ã²Ã¨ÃªÃ³Ã¬", -947.980, -304.320, -1.1, -319.676, 327.071, 200.000},
+        {"Ã’Ã¥Ã­Ã¨Ã±Ã²Ã»Ã¥ Ã°Ã³Ã·Ã¼Ã¨", -1820.640, -2643.680, -8.0, -1226.780, -1771.660, 200.000},
+        {"ÃÃ½Ãª-Ã®-ÃÃ¥Ã©Ã®Ã­Ã¤", -1166.970, -2641.190, 0.000, -321.744, -1856.030, 200.000},
+        {"ÃƒÃ®Ã°Ã  Â«Ã—Ã¨Ã«Ã¨Ã Ã¤Â»", -2994.490, -2189.910, -47.917, -2178.690, -1115.580, 576.083},
+        {"Ã’Ã¼Ã¥Ã°Ã°Ã  ÃÃ®Ã¡Ã Ã¤Ã ", -1213.910, 596.349, -242.990, -480.539, 1659.680, 900.000},
+        {"ÃÃªÃ°Ã³Ã£ Ã”Ã«Ã¨Ã­Ã²", -1213.910, -2892.970, -242.990, 44.615, -768.027, 900.000},
+        {"Ã“Ã½Ã²Ã±Ã²Ã®Ã³Ã­", -2997.470, -2892.970, -242.990, -1213.910, -1115.580, 900.000},
+        {"ÃÃ³Ã±Ã²Ã»Ã­Ã­Ã»Ã© Ã®ÃªÃ°Ã³Ã£", -480.539, 596.349, -242.990, 869.461, 2993.870, 900.000},
+        {"Ã’Ã¼Ã¥Ã°Ã°Ã  ÃÃ®Ã¡Ã Ã¤Ã ", -2997.470, 1659.680, -242.990, -480.539, 2993.870, 900.000},
+        {"Ã‘Ã Ã­ Ã”Ã¨Ã¥Ã°Ã°Ã®", -2997.470, -1115.580, -242.990, -1213.910, 1659.680, 900.000},
+        {"Ã‹Ã Ã± Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±", 869.461, 596.349, -242.990, 2997.060, 2993.870, 900.000},
+        {"Ã’Ã³Ã¬Ã Ã­Ã­Ã»Ã© Ã®ÃªÃ°Ã³Ã£", -1213.910, -768.027, -242.990, 2997.060, 596.349, 900.000},
+        {"Ã‹Ã®Ã± Ã‘Ã Ã­Ã²Ã®Ã±", 44.615, -2892.970, -242.990, 2997.060, -768.027, 900.000}
     }
     for i, v in ipairs(streets) do
         if (x >= v[2]) and (y >= v[3]) and (z >= v[4]) and (x <= v[5]) and (y <= v[6]) and (z <= v[7]) then
             return v[1]
         end
     end
-    return 'Ïğèãîğîä'
+    return 'ÃÃ°Ã¨Ã£Ã®Ã°Ã®Ã¤'
 end
 
 local suppWindowFrame = imgui.OnFrame(
@@ -2797,19 +2797,19 @@ local suppWindowFrame = imgui.OnFrame(
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
-        imgui.Begin(u8"Âñïîìîãàòåëüíîå îêîøêî", suppWindow, imgui.WindowFlags.NoTitleBar)
+        imgui.Begin(u8"Ã‚Ã±Ã¯Ã®Ã¬Ã®Ã£Ã Ã²Ã¥Ã«Ã¼Ã­Ã®Ã¥ Ã®ÃªÃ®Ã¸ÃªÃ®", suppWindow, imgui.WindowFlags.NoTitleBar)
 
-			imgui.Text(u8'Âğåìÿ: '..os.date('%H:%M:%S'))
-            imgui.Text(u8'Ìåñÿö: '..os.date('%B'))
-			imgui.Text(u8'Ïîëíàÿ äàòà: '..arr.day..'.'.. arr.month..'.'..arr.year)
+			imgui.Text(u8'Ã‚Ã°Ã¥Ã¬Ã¿: '..os.date('%H:%M:%S'))
+            imgui.Text(u8'ÃŒÃ¥Ã±Ã¿Ã¶: '..os.date('%B'))
+			imgui.Text(u8'ÃÃ®Ã«Ã­Ã Ã¿ Ã¤Ã Ã²Ã : '..arr.day..'.'.. arr.month..'.'..arr.year)
         	local positionX, positionY, positionZ = getCharCoordinates(PLAYER_PED)
-			imgui.Text(u8'Ğàéîí:' .. u8(calculateZone(positionX, positionY, positionZ)))
+			imgui.Text(u8'ÃÃ Ã©Ã®Ã­:' .. u8(calculateZone(positionX, positionY, positionZ)))
 			local p_city = getCityPlayerIsIn(PLAYER_PED)
-			if p_city == 1 then pCity = u8'Ëîñ - Ñàíòîñ' end
-			if p_city == 2 then pCity = u8'Ñàí - Ôèåğğî' end
-			if p_city == 3 then pCity = u8'Ëàñ - Âåíòóğàñ' end
-			if getActiveInterior() ~= 0 then pCity = u8'Âû íàõîäèòåñü â èíòåğüåğå!' end
-			imgui.Text(u8'Ãîğîä: ' .. pCity)
+			if p_city == 1 then pCity = u8'Ã‹Ã®Ã± - Ã‘Ã Ã­Ã²Ã®Ã±' end
+			if p_city == 2 then pCity = u8'Ã‘Ã Ã­ - Ã”Ã¨Ã¥Ã°Ã°Ã®' end
+			if p_city == 3 then pCity = u8'Ã‹Ã Ã± - Ã‚Ã¥Ã­Ã²Ã³Ã°Ã Ã±' end
+			if getActiveInterior() ~= 0 then pCity = u8'Ã‚Ã» Ã­Ã ÃµÃ®Ã¤Ã¨Ã²Ã¥Ã±Ã¼ Ã¢ Ã¨Ã­Ã²Ã¥Ã°Ã¼Ã¥Ã°Ã¥!' end
+			imgui.Text(u8'ÃƒÃ®Ã°Ã®Ã¤: ' .. pCity)
 		imgui.End()
     end
 )
