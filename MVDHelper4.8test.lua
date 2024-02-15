@@ -91,8 +91,8 @@ local function updateScript(scriptUrl, scriptPath)
     sampAddChatMessage("Скрипт уже является последней версией.", -1)
   end
 end
-local scriptUrl = "https://raw.githubusercontent.com/Sashe4kaReZoN/mvdhelper/main/update.ini"
-local scriptPath = "update.ini"
+local scriptUrl = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/MVDHelper4.8test.lua"
+local scriptPath = "MVDHelper4.8test.lua"
 
 local mainIni = inicfg.load({
     Accent = {
