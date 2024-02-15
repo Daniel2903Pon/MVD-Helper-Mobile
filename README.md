@@ -16,4 +16,5 @@ Installation instructions:
 3.Распаковать архив по пути Android/data/com.arizona.games/monetloader/lib (если таких папок нету, то после установки лаунчера зайдите в игру).
 4.Скачать желаемую версию. Актуальная версия - MVD Helper.lua
 5.Переместить скрипт по пути Android/data/com.arizona.games/monetloader
-6.Зайти в игру и прописать /mvds для списка команда. /mvd для окошка.
+6. Скачать файл smartUk.json и переместить по пути Android/data/com.arizona.games/monetloader
+7.Зайти в игру и прописать /mvds для списка команда. /mvd для окошка.
