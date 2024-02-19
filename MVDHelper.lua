@@ -1,5 +1,5 @@
 script_name("MVD Helper Mobile")
-script_version("4.8")
+script_version("4.9")
 script_author("@Sashe4ka_ReZoN @daniel29032012")
 
 local http = require("socket.http")
@@ -627,7 +627,7 @@ imgui.OnFrame(
         imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
         apply_n_t()
         imgui.SetCursorPosY(50)
-        imgui.Text(u8'MVD Helper 4.8 \n для Arizona Mobile', imgui.SetCursorPosX(50))
+        imgui.Text(u8'MVD Helper 4.9 \n для Arizona Mobile', imgui.SetCursorPosX(50))
         if imgui.Button(settings .. u8' Настройки', imgui.ImVec2(280, 50)) then
             tab = 1
         elseif imgui.Button(list .. u8' Основное', imgui.ImVec2(280, 50)) then
@@ -1193,7 +1193,7 @@ imgui.OnFrame(
                     importUkWindow[0] = not importUkWindow[0]
                 end
             elseif tab == 7 then
-                imgui.Text(u8'Версия: 4.8')
+                imgui.Text(u8'Версия: 4.9')
                 imgui.Text(u8'Разработчики: https://t.me/Sashe4ka_ReZoN and t.me/daniel29032012')
                 imgui.Text(u8'ТГ канал: t.me/lua_arz') 
                 imgui.Text(u8'Поддержать: https://qiwi.com/n/SASHE4KAREZON') 
@@ -1283,7 +1283,7 @@ imgui.OnFrame(
                         updateScript(smartUkUrl['christmas'], smartUkPath)
                     
                     else
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следущтх обновлениях", 0x8B00FF)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следущих обновлениях", 0x8B00FF)
                     end
                 end
             end
