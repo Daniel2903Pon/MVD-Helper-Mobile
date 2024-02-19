@@ -1283,7 +1283,7 @@ imgui.OnFrame(
                         updateScript(smartUkUrl['christmas'], smartUkPath)
                     
                     else
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следущих обновлениях", 0x8B00FF)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следущтх обновлениях", 0x8B00FF)
                     end
                 end
             end
