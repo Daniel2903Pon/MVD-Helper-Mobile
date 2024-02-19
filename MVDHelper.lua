@@ -179,7 +179,7 @@ end
     
 local function updateScript(scriptUrl, scriptPath)
     sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Проверка наличия обновлений...", 0x8B00FF)
-
+	local response = http.request(scriptUrl)
     if response and response ~= currentVersion then
         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Доступна новая версия скрипта! Обновление...", 0x8B00FF)
         
