@@ -627,7 +627,7 @@ imgui.OnFrame(
         imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
         apply_n_t()
         imgui.SetCursorPosY(50)
-        imgui.Text(u8'MVD Helper 4.8 \n для Arizona Mobile', imgui.SetCursorPosX(50))
+        imgui.Text(u8'MVD Helper 4.9 \n для Arizona Mobile', imgui.SetCursorPosX(50))
         if imgui.Button(settings .. u8' Настройки', imgui.ImVec2(280, 50)) then
             tab = 1
         elseif imgui.Button(list .. u8' Основное', imgui.ImVec2(280, 50)) then
