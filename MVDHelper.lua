@@ -1,5 +1,5 @@
 script_name("MVD Helper Mobile")
-script_version("5.0")
+script_version("4.9")
 script_author("@Sashe4ka_ReZoN @daniel29032012")
 
 local http = require("socket.http")
@@ -211,113 +211,10 @@ local mainIni = inicfg.load({
         moonmonet = 759410733
     }
 }, "mvdhelper.ini")
-
-function downloadToFile(url, path, callback, progressInterval)
-    callback = callback or function() end
-    progressInterval = progressInterval or 0.1
-   
-    local effil = require("effil")
-    local progressChannel = effil.channel(0)
-   
-    local runner = effil.thread(function(url, path)
-     local http = require("socket.http")
-     local ltn = require("ltn12")
-   
-     local r, c, h = http.request({
-      method = "HEAD",
-      url = url,
-     })
-   
-     if c ~= 200 then
-      return false, c
-     end
-     local total_size = h["content-length"]
-   
-     local f = io.open(path, "wb")
-     if not f then
-      return false, "failed to open file"
-     end
-     local success, res, status_code = pcall(http.request, {
-      method = "GET",
-      url = url,
-      sink = function(chunk, err)
-       local clock = os.clock()
-       if chunk and not lastProgress or (clock - lastProgress) >= progressInterval then
-        progressChannel:push("downloading", f:seek("end"), total_size)
-        lastProgress = os.clock()
-       elseif err then
-        progressChannel:push("error", err)
-       end
-   
-       return ltn.sink.file(f)(chunk, err)
-      end,
-     })
-   
-     if not success then
-      return false, res
-     end
-   
-     if not res then
-      return false, status_code
-     end
-   
-     return true, total_size
-    end)
-    local thread = runner(url, path)
-   
-    local function checkStatus()
-     local tstatus = thread:status()
-     if tstatus == "failed" or tstatus == "completed" then
-      local result, value = thread:get()
-   
-      if result then
-       callback("finished", value)
-      else
-       callback("error", value)
-      end
-   
-      return true
-     end
-    end
-   
-    lua_thread.create(function()
-     if checkStatus() then
-      return
-     end
-   
-     while thread:status() == "running" do
-      if progressChannel:size() > 0 then
-       local type, pos, total_size = progressChannel:pop()
-       callback(type, pos, total_size)
-      end
-      wait(0)
-     end
-   
-     checkStatus()
-    end)
-   end
-
-local lfs = require("lfs")
-
-local function downloadSmartUKHandler(status, p1, p2)
-    if status == "downloading" then
-        local percent = math.floor(p1 / p2 * 100)
-        print(string.format("[Sashe4ka Police Helper]: {FFFFFF} Загрузка Smart UK: %d%%", percent))
-    elseif status == "error" then
-        print(string.format("[Sashe4ka Police Helper]: {FFFFFF} Ошибка загрузки Smart UK: %s", p1))
-    elseif status == "finished" then
-        print("[Sashe4ka Police Helper]: {FFFFFF} Smart UK успешно загружен")
-
-        local file = io.open("smartUk.json", "r") -- Открываем файл в режиме чтения
-        a = file:read("*a") -- Читаем файл, там у нас таблица
-        file:close() -- Закрываем
-        tableUk = decodeJson(a) -- Читаем нашу JSON-Таблицу
-    end
-end
-
-if not lfs.attributes("smartUK.json") then
-    downloadToFile("https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUk.json", "smartUK.json", downloadSmartUKHandler)
-end
+local file = io.open("smartUk.json", "r") -- Открываем файл в режиме чтения
+a = file:read("*a") -- Читаем файл, там у нас таблица
+file:close() -- Закрываем
+tableUk = decodeJson(a) -- Читаем нашу JSON-Таблицу
 
 local statsCheck = false
 
@@ -730,7 +627,7 @@ imgui.OnFrame(
         imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
         apply_n_t()
         imgui.SetCursorPosY(50)
-        imgui.Text(u8'MVD Helper 5.0 \n для Arizona Mobile', imgui.SetCursorPosX(50))
+        imgui.Text(u8'MVD Helper 4.9 \n для Arizona Mobile', imgui.SetCursorPosX(50))
         if imgui.Button(settings .. u8' Настройки', imgui.ImVec2(280, 50)) then
             tab = 1
         elseif imgui.Button(list .. u8' Основное', imgui.ImVec2(280, 50)) then
@@ -1296,12 +1193,14 @@ imgui.OnFrame(
                     importUkWindow[0] = not importUkWindow[0]
                 end
             elseif tab == 7 then
-                imgui.Text(u8'Версия: 5.0')
+                imgui.Text(u8'Версия: 4.9')
                 imgui.Text(u8'Разработчики: https://t.me/Sashe4ka_ReZoN and t.me/daniel29032012')
                 imgui.Text(u8'ТГ канал: t.me/lua_arz') 
                 imgui.Text(u8'Поддержать: https://qiwi.com/n/SASHE4KAREZON') 
                 imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998')
                 imgui.Text(u8'Сделано При поддержке Arzfun Mobile(бесплатная админка) @ArizonaMobileFun')
+                imgui.Text(u8'MoonMonet зделан с помощью @UxyOy')
+
                 imgui.Text(u8'Обновление 4.1 - Изменение интерфейса, добавление вкладок "Инфо" и "Для СС". Добавлен авто акцент. Фикс багов.')
                 imgui.Text(u8'Обновление 4.2 - Фикс авто определения. Доступ к панелии СС с любого ранга(Панель лидера также остается от 9 ранга).')
                 imgui.Text(u8'Обновление 4.3 - Фикс приветствия. Добавленно ФБР в список организаций')
@@ -1311,7 +1210,6 @@ imgui.OnFrame(
                 imgui.Text(u8'Обновление 4.7 - Добавлена Команда /traf пофикшены баги,авто акцент и измененны некоторые отыгровки')
                 imgui.Text(u8'Обновление 4.8 - MoonMonet, автоматическое обновление')
                 imgui.Text(u8'Обновление 4.9 - Возможность импорта Умного розыска для большинства серверов. Фикс багов.')
-                imgui.Text(u8'Обновление 5.0 - ...')
                 if imgui.Button(u8'Обновить(возможно зависание игры на 10-15 секунд)') then
             		updateScript(mvdUrl, mvdPath)
             	end
