@@ -1509,7 +1509,7 @@ end
 
 function cmd_mvds(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Команды MVD HELPER 4.7", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/stop - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/traf - Погоня 10-55\n/grim - Нанесение грима\n/eks - Экспертиза оружие\n/traf - не помню\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
+        sampShowDialog(1,"Команды MVD HELPER 4.9", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/stop - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/traf - Погоня 10-55\n/grim - Нанесение грима\n/eks - Экспертиза оружие\n/traf - не помню\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
         end)
         end
 
@@ -2526,17 +2526,18 @@ local setUkFrame = imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(900, 700), imgui.Cond.FirstUseEver)
         imgui.Begin(u8"Настройка умного розыска", setUkWindow)
-            if imgui.BeginChild('Name', imgui.ImVec2(700, 500), true) then
+            if imgui.BeginChild('Name', imgui.ImVec2(0, imgui.GetWindowSize().y - 36 - imgui.GetCursorPosY() - imgui.GetStyle().FramePadding.y * 2), true) then
                 for i = 1, #tableUk["Text"] do
                     imgui.Text(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i]))
                     Uk = #tableUk["Text"]
                 end
                 imgui.EndChild()
             end
-            if imgui.Button(u8'Добавить', imgui.ImVec2(500, 36)) then
+            if imgui.Button(u8'Добавить', imgui.ImVec2(GetMiddleButtonX(2), 36)) then
                 addUkWindow[0] = not addUkWindow[0]
             end
-            if imgui.Button(u8'Удалить', imgui.ImVec2(500, 36)) then
+            imgui.SameLine()
+            if imgui.Button(u8'Удалить', imgui.ImVec2(GetMiddleButtonX(2), 36)) then
                 Uk = #tableUk["Text"]
             	table.remove(tableUk.Text, #tableUk.Text)
                 table.remove(tableUk.Ur, #tableUk.Ur)
@@ -2545,9 +2546,6 @@ local setUkFrame = imgui.OnFrame(
                 file:write(encodedTable)
                 file:flush()
                 file:close()
-
-
-
             end
         imgui.End()
     end
@@ -2657,6 +2655,11 @@ local importUkFrame = imgui.OnFrame(
     end
 )
 
+function GetMiddleButtonX(count)
+	local width = imgui.GetWindowContentRegionWidth()
+	local space = imgui.GetStyle().ItemSpacing.x
+	return count == 1 and width or width / count - ((space * (count - 1)) / count)
+end
 function calculateZone(x, y, z)
     local streets = {
         {"Загородный клуб «Ависпа»", -2667.810, -302.135, -28.831, -2646.400, -262.320, 71.169},
