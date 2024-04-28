@@ -7,76 +7,57 @@ local ltn12 = require("ltn12")
 local imgui = require 'mimgui'
 local ffi = require 'ffi'
 local inicfg = require("inicfg")
-local monet = require('MoonMonet')
 local faicons = require('fAwesome6')
 local sampev = require('lib.samp.events')
+
+local mmloaded, monet = pcall(require, "MoonMonet")
+
+if not mmloaded then
+    print("MoonMonet doesn`t found. Script will work without it.")
+end
+
 function isMonetLoader() return MONET_VERSION ~= nil end
 
--- Определение сервера
-local serverName = sampGetCurrentServerName()
-if serverName == "Arizona RP | Phoenix | X4 Payday!" or serverName ==  "Arizona Role Play | Phoenix" then
-    server = 'Phoenix'
-elseif serverName == "Arizona RP | Tucson | X4 Payday!" or serverName == "Arizona Role Play | Tucson" then
-    server = 'Tucson'
-elseif serverName == "Arizona RP | Scottdale | X4 Payday!" or serverName == "Arizona Role Play | Scottdale" then
-    server = 'Scottdale'
-elseif serverName == "Arizona RP | Chandler | X4 Payday!" or serverName == "Arizona Role Play | Chandler" then
-    server = 'Chandler'
-elseif serverName == "Arizona RP | Brainburg | X4 Payday!" or serverName == "Arizona Role Play | Brainburg" then
-    server = 'Brainburg'
-elseif serverName == "Arizona RP | Saintrose | X4 Payday!" or serverName == "Arizona Role Play | Saintrose" then
-    server = 'Saintrose'
-elseif serverName == "Arizona RP | Mesa | X4 Payday!" or serverName == "Arizona Role Play | Mesa" then
-    server = 'Mesa'
-elseif serverName == "Arizona RP | Red-Rock | X4 Payday!" or serverName == "Arizona Role Play | Red-Rock" then
-    server = 'Red-Rock'
-elseif serverName == "Arizona RP | Yuma | X4 Payday!" or serverName == "Arizona Role Play | Yuma" then
-    server = 'Yuma'
-elseif serverName == "Arizona RP | Surprise | X4 Payday!" or serverName == "Arizona Role Play | Surprise" then
-    server = 'Surprise'
-elseif serverName == "Arizona RP | Prescott | X4 Payday!" or serverName == "Arizona Role Play | Prescott" then
-    server = 'Prescott'
-elseif serverName == "Arizona RP | Glendale | X4 Payday!" or serverName == "Arizona Role Play | Glendale" then
-    server = 'Glendale'
-elseif serverName == "Arizona RP | Kingman | X4 Payday!" or serverName == "Arizona Role Play | Kingman" then
-    server = 'Kingman'
-elseif serverName == "Arizona RP | Winslow | X4 Payday!" or serverName == "Arizona Role Play | Winslow" then
-    server = 'Winslow'
-elseif serverName == "Arizona RP | Payson | X4 Payday!" or serverName == "Arizona Role Play | Payson" then
-    server = 'Payson'
-elseif serverName == "Arizona RP | Gilbert | X4 Payday!" or serverName == "Arizona Role Play | Gilbert" then
-    server = 'Gilbert'
-elseif serverName == "Arizona RP | Show Low | X4 Payday!" or serverName == "Arizona Role Play | Show Low" then
-    server = 'Show Low'
-elseif serverName == "Arizona RP | Casa-Grande | X4 Payday!" or serverName == "Arizona Role Play | Casa-Grande" then
-    server = 'Casa-Grande'
-elseif serverName == "Arizona RP | Page | X4 Payday!" or serverName == "Arizona Role Play | Page" then
-    server = 'Page'
-elseif serverName == "Arizona RP | Sun-City | X4 Payday!" or serverName == "Arizona Role Play | Sun-City" then
-    server = 'Sun-City'
-elseif serverName == "Arizona RP | Queen-Creek | X4 Payday!" or serverName == "Arizona Role Play | Queen-Creek" then
-    server = 'Queen-Creek'
-elseif serverName == "Arizona RP | Sedona | X4 Payday!" or serverName == "Arizona Role Play | Sedona" then
-    server = 'Sedona'
-elseif serverName == "Arizona RP | Holiday | X4 Payday!" or serverName == "Arizona Role Play | Holiday" then
-    server = 'Holiday'
-elseif serverName == "Arizona RP | Wednesday | X4 Payday!" or serverName == "Arizona Role Play | Wednesday" then
-    server = 'Wednesday'
-elseif serverName == "Arizona RP | Yava | X4 Payday!" or serverName == "Arizona Role Play | Yava" then
-    server = 'Yava'
-elseif serverName == "Arizona RP | Faraway | X4 Payday!" or serverName == "Arizona Role Play | Faraway" then
-    server = 'Faraway'
-elseif serverName == "Arizona RP | Bumble Bee | X4 Payday!" or serverName == "Arizona Role Play | Bumble Bee" then
-    server = 'Bumble Bee'
-elseif serverName == "Arizona RP | Christmas | X4 Payday!" or serverName == "Arizona Role Play | Christmas" then
-    server = 'Christmas'
-elseif serverName == "Arizona RP | Mobile I | X4 Payday!" or serverName == "Arizona Role Play | Mobile I" then
-    server = 'Mobile 1'
-elseif serverName == "Arizona RP | Mobile II | X4 Payday!" or serverName == "Arizona Role Play | Mobile II" then
-    server = 'Mobile 2'
-elseif serverName == "Arizona RP | Mobile III | X4 Payday!" or serverName == "Arizona Role Play | Mobile III" then
-    server = 'Mobile 3'
-end
+local servers = {
+	["80.66.82.162"] = { number = -1, name = "Mobile I"},
+	["80.66.82.148"] = { number = -2, name = "Mobile II"},
+	["80.66.82.136"] = { number = -3, name = "Mobile III"},
+
+    ["185.169.134.44"] = {number = 4, name = "Chandler"},
+    ["185.169.134.43"] = {number = 3, name = "Scottdale"},
+    ["185.169.134.45"] = {number = 5, name = "Brainburg"},
+    ["185.169.134.5"] = {number = 6, name = "Saint-Rose"},
+    ["185.169.132.107"] = {number = 6, name = "Saint-Rose"},
+    ["185.169.134.59"] = {number = 7, name = "Mesa"},
+    ["185.169.134.61"] = {number = 8, name = "Red-Rock"},
+    ["185.169.134.107"] = {number = 9, name = "Yuma"},
+    ["185.169.134.109"] = {number = 10, name = "Surprise"},
+    ["185.169.134.166"] = {number = 11, name = "Prescott"},
+    ["185.169.134.171"] = {number = 12, name = "Glendale"},
+    ["185.169.134.172"] = {number = 13, name = "Kingman"},
+    ["185.169.134.173"] = {number = 14, name = "Winslow"},
+    ["185.169.134.174"] = {number = 15, name = "Payson"},
+    ["80.66.82.191"] = {number = 16, name = "Gilbert"},
+    ["80.66.82.190"] = {number = 17, name = "Show Low"},
+    ["80.66.82.188"] = {number = 18, name = "Casa-Grande"},
+    ["80.66.82.168"] = {number = 19, name = "Page"},
+    ["80.66.82.159"] = {number = 20, name = "Sun-City"},
+    ["80.66.82.200"] = {number = 21, name = "Queen-Creek"},
+    ["80.66.82.144"] = {number = 22, name = "Sedona"},
+    ["80.66.82.132"] = {number = 23, name = "Holiday"},
+    ["80.66.82.128"] = {number = 24, name = "Wednesday"},
+    ["80.66.82.113"] = {number = 25, name = "Yava"},
+    ["80.66.82.82"] = {number = 26, name = "Faraway"},
+    ["80.66.82.87"] = {number = 27, name = "Bumble Bee"},
+    ["80.66.82.54"] = {number = 28, name = "Christmas"},
+    ["80.66.82.39"] = {number = 29, name = "Mirage"},
+    ["185.169.134.3"] = {number = 1, name = "Phoenix"},
+    ["185.169.132.105"] = {number = 1, name = "Phoenix"},
+    ["185.169.134.4"] = {number = 2, name = "Tucson"},
+    ["185.169.132.106"] = {number = 2, name = "Tucson"},
+}
+
+server = servers[sampGetCurrentServerAddress()] and servers[sampGetCurrentServerAddress()].name or "Unknown"
 
 local encoding = require 'encoding'
 encoding.default = 'CP1251'
@@ -84,7 +65,7 @@ local u8 = encoding.UTF8
 local new = imgui.new
 
 -- Ссылки
-local mvdPath = "MVDHelper.lua"
+local mvdPath = script.this.filename
 local smartUkPath = "smartUk.json"
 local mvdUrl = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/MVDHelper.lua"
 -- Смарт Ук
@@ -212,9 +193,18 @@ local mainIni = inicfg.load({
     }
 }, "mvdhelper.ini")
 local file = io.open("smartUk.json", "r") -- Открываем файл в режиме чтения
-a = file:read("*a") -- Читаем файл, там у нас таблица
-file:close() -- Закрываем
-tableUk = decodeJson(a) -- Читаем нашу JSON-Таблицу
+
+if not file then
+    tableUk = {Ur = {6}, Text = {"Нападение на полицейского 14.4"}}
+
+    file = io.open("smartUk.json", "w")
+    file:write(encodeJson(tableUk)) -- Записываем в файл
+    file:close()
+else
+    a = file:read("*a") -- Читаем файл, там у нас таблица
+    file:close() -- Закрываем
+    tableUk = decodeJson(a) -- Читаем нашу JSON-Таблицу
+end
 
 local statsCheck = false
 
@@ -607,13 +597,13 @@ function apply_n_t()
     	bluetheme()
 	elseif mainIni.theme.theme == 'purple' then
     	purpletheme()
-	elseif mainIni.theme.theme == 'moonmonet' then
+	elseif mainIni.theme.theme == 'moonmonet' and mmloaded then
 		gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
     	local a, r, g, b = explode_argb(gen_color.accent1.color_300)
 		curcolor = '{'..rgb2hex(r, g, b)..'}'
     	curcolor1 = '0x'..('%X'):format(gen_color.accent1.color_300)
         apply_monet()
-	end
+    end
 end
 
 imgui.OnFrame(
@@ -625,7 +615,6 @@ imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(1700, 700), imgui.Cond.FirstUseEver)
         imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
-        apply_n_t()
         imgui.SetCursorPosY(50)
         imgui.Text(u8'MVD Helper 4.9 \n для Arizona Mobile', imgui.SetCursorPosX(50))
         if imgui.Button(settings .. u8' Настройки', imgui.ImVec2(280, 50)) then
@@ -660,16 +649,22 @@ imgui.OnFrame(
 	            	mainIni.theme.theme = themeta
 	            	mainIni.theme.selected = selected_theme[0]
 		            inicfg.save(mainIni, 'mvdhelper.ini')
+
+                    apply_n_t()
 	            end
             	imgui.Text(u8'Цвет MoonMonet - ')
 				imgui.SameLine()
-        		if imgui.ColorEdit3('## COLOR', mmcolor, imgui.ColorEditFlags.NoInputs) then
-                    r,g,b = mmcolor[0] * 255, mmcolor[1] * 255, mmcolor[2] * 255
-	                argb = join_argb(0, r, g, b)
-                    mainIni.theme.moonmonet = argb
-                    inicfg.save(mainIni, 'mvdhelper.ini')
-			    	apply_n_t()
-		    	end
+                if mmloaded then
+                    if imgui.ColorEdit3('## COLOR', mmcolor, imgui.ColorEditFlags.NoInputs) then
+                        r,g,b = mmcolor[0] * 255, mmcolor[1] * 255, mmcolor[2] * 255
+                        argb = join_argb(0, r, g, b)
+                        mainIni.theme.moonmonet = argb
+                        inicfg.save(mainIni, 'mvdhelper.ini')
+                        apply_n_t()
+                    end
+                else
+                    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8'MoonMonet библиотека не обнаружена! Для использования данной функции необходима библиотека MoonMonet.')
+                end
                 if imgui.Button(u8'УК') then
                     setUkWindow[0] = not setUkWindow[0]
                 end
@@ -1197,7 +1192,7 @@ imgui.OnFrame(
                 imgui.Text(u8'Разработчик: https://t.me/Sashe4ka_ReZoN')
                 imgui.Text(u8'ТГ канал: t.me/lua_arz') 
                 imgui.Text(u8'Поддержать: Временно не доступно') 
-                imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998')
+                imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x')
                 imgui.Text(u8'Сделано При поддержке Arzfun Mobile(бесплатная админка) @ArizonaMobileFun')
                 imgui.Text(u8'Обновление 4.1 - Изменение интерфейса, добавление вкладок "Инфо" и "Для СС". Добавлен авто акцент. Фикс багов.')
                 imgui.Text(u8'Обновление 4.2 - Фикс авто определения. Доступ к панелии СС с любого ранга(Панель лидера также остается от 9 ранга).')
@@ -1217,15 +1212,15 @@ imgui.OnFrame(
                         updateScript(smartUkUrl['phenix'], smartUkPath)
                         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
                     
-                    elseif server == 'Mobile 1' then
+                    elseif server == 'Mobile I' then
                         updateScript(smartUkUrl['m1'], smartUkPath)
                         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 1 успешно установлен!", 0x8B00FF)
                     
-                    elseif server == 'Mobile 2' then
+                    elseif server == 'Mobile II' then
                         updateScript(smartUkUrl['m2'], smartUkPath)
                         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 2 успешно установлен!", 0x8B00FF)
                     
-                    elseif server == 'Mobile 3' then
+                    elseif server == 'Mobile III' then
                         updateScript(smartUkUrl['m3'], smartUkPath)
                     
                     elseif server == 'Phoenix' then
@@ -1282,7 +1277,7 @@ imgui.OnFrame(
                         updateScript(smartUkUrl['christmas'], smartUkPath)
                     
                     else
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следущтх обновлениях", 0x8B00FF)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
                     end
                 end
             end
@@ -1438,9 +1433,11 @@ imgui.OnInitialize(function()
     config.PixelSnapH = true
     iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
     imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 20, config, iconRanges) -- solid - тип иконок, так же есть thin, regular, light и duotone
-	local tmp = imgui.ColorConvertU32ToFloat4(mainIni.theme['moonmonet'])
-	gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
-	mmcolor = imgui.new.float[3](tmp.z, tmp.y, tmp.x)
+	if mmloaded then
+        local tmp = imgui.ColorConvertU32ToFloat4(mainIni.theme['moonmonet'])
+        gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
+        mmcolor = imgui.new.float[3](tmp.z, tmp.y, tmp.x)
+    end
 	apply_n_t()
 end)
 
@@ -1509,7 +1506,7 @@ end
 
 function cmd_mvds(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Команды MVD HELPER 4.9", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/stop - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/traf - Погоня 10-55\n/grim - Нанесение грима\n/eks - Экспертиза оружие\n/traf - не помню\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
+        sampShowDialog(1,"Команды MVD HELPER 4.7", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/stop - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/traf - Погоня 10-55\n/grim - Нанесение грима\n/eks - Экспертиза оружие\n/traf - не помню\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
         end)
         end
 
@@ -2588,15 +2585,15 @@ local importUkFrame = imgui.OnFrame(
             updateScript(smartUkUrl['phenix'], smartUkPath)
             sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
         
-        elseif imgui.Button(u8'Mobile 1') then
+        elseif imgui.Button(u8'Mobile I') then
             updateScript(smartUkUrl['m1'], smartUkPath)
             sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 1 успешно установлен!", 0x8B00FF)
         
-        elseif imgui.Button(u8'Mobile 2') then
+        elseif imgui.Button(u8'Mobile II') then
             updateScript(smartUkUrl['m2'], smartUkPath)
             sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 2 успешно установлен!", 0x8B00FF)
         
-        elseif imgui.Button(u8'Mobile 3') then
+        elseif imgui.Button(u8'Mobile III') then
             updateScript(smartUkUrl['m3'], smartUkPath)
         
         elseif imgui.Button(u8'Phoenix') then
@@ -3068,7 +3065,7 @@ local suppWindowFrame = imgui.OnFrame(
 			if p_city == 2 then pCity = u8'Сан - Фиерро' end
 			if p_city == 3 then pCity = u8'Лас - Вентурас' end
 			if getActiveInterior() ~= 0 then pCity = u8'Вы находитесь в интерьере!' end
-			imgui.Text(u8'Город: ' .. pCity)
+			imgui.Text(u8'Город: ' .. (pCity or u8'Неизвестно'))
 		imgui.End()
     end
 )
