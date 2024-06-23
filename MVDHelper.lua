@@ -1,7 +1,9 @@
 script_name("MVD Helper Mobile")
-script_version("5.0 BETA")
-script_author("@Sashe4ka_ReZoN")
 
+script_version("5.0")
+script_author("@Sashe4ka_ReZoN @daniel29032012")
+
+MDS = MONET_DPI_SCALE or 1
 local http = require("socket.http")
 local ltn12 = require("ltn12")
 local imgui = require 'mimgui'
@@ -9,6 +11,7 @@ local ffi = require 'ffi'
 local inicfg = require("inicfg")
 local faicons = require('fAwesome6')
 local sampev = require('lib.samp.events')
+doubleclickped = require("src.doubleclickped")
 
 local mmloaded, monet = pcall(require, "MoonMonet")
 
@@ -17,11 +20,37 @@ if not mmloaded then
 end
 
 function isMonetLoader() return MONET_VERSION ~= nil end
+local function mimguiState()
+	local state = {}
+	state.renderFastMenu = imgui.new.bool(false)
+	state.fastMenuPlayerId = nil
+	state.fastMenuPos = imgui.ImVec2(0, 0)
+    
+
+	--- @type table<number, Menu>
+	state.menus = {}
+	return state
+end
+state = mimguiState()
+
+doubleclickped.onDoubleClickedPed = function(ped, x, y)
+	
+	
+
+	local res, id = sampGetPlayerIdByCharHandle(ped)
+
+	if res then
+		state.fastMenuPlayerId = id
+		state.fastMenuPos = imgui.ImVec2(x, y)
+		state.renderFastMenu[0] = true
+	end
+end
 
 local servers = {
 	["80.66.82.162"] = { number = -1, name = "Mobile I"},
 	["80.66.82.148"] = { number = -2, name = "Mobile II"},
 	["80.66.82.136"] = { number = -3, name = "Mobile III"},
+
     ["185.169.134.44"] = {number = 4, name = "Chandler"},
     ["185.169.134.43"] = {number = 3, name = "Scottdale"},
     ["185.169.134.45"] = {number = 5, name = "Brainburg"},
@@ -92,18 +121,20 @@ local smartUkUrl = {
 }
 
 sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Скрипт успешно загрузился", 0x8B00FF)
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Автор: t.me/Sashe4ka_ReZoN",0x8B00FF)
+sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Автор: t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon",0x8B00FF)
 sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Чтобы посмотреть комманды,введите /mvd and /mvds ",0x8B00FF)
 
 local renderWindow = new.bool()
 local sizeX, sizeY = getScreenResolution()
 local id = imgui.new.int(0)
 local otherorg = imgui.new.char(255)
+local searchInput = imgui.new.char(255)
 local zk = new.bool()
-local autogun = new.bool()
 local tab = 1
 local patrul = new.bool()
 local partner = imgui.new.char(255)
+local inputComName = imgui.new.char(255)
+local inputComText = imgui.new.char(255)
 local chatrp = new.bool()
 local arr = os.date("*t")
 local poziv = imgui.new.char(255)
@@ -113,6 +144,7 @@ windowTwo = imgui.new.bool()
 setUkWindow = imgui.new.bool()
 addUkWindow = imgui.new.bool()
 importUkWindow = imgui.new.bool()
+binderWindow = imgui.new.bool()
 local newUkInput = imgui.new.char(255)
 local newUkUr = imgui.new.int(0)
 local car = faicons('CAR')
@@ -125,6 +157,7 @@ local sliders = faicons('sliders')
 local userSecret = faicons('user-secret')
 leaderPanel = imgui.new.bool()
 local spawn = true
+local deleteBinderName = 0
 
 local function downloadFile(url, path)
 
@@ -177,8 +210,7 @@ end
 
 local mainIni = inicfg.load({
     Accent = {
-        accent = '[Молдавский акцент]: ',
-        autoAccent = false
+        accent = '[Молдавский акцент]: '
     },
     Info = {
         org = 'Вы не состоите в ПД',
@@ -189,10 +221,16 @@ local mainIni = inicfg.load({
         themeta = "blue",
         selected = 0,
         moonmonet = 759410733
+    },
+    settings = {
+        autoRpGun = true,
+        poziv = false,
+        autoAccent = false
     }
 }, "mvdhelper.ini")
+local autogun = new.bool(mainIni.settings.autoRpGun)
+-- Умный розыск
 local file = io.open("smartUk.json", "r") -- Открываем файл в режиме чтения
-
 if not file then
     tableUk = {Ur = {6}, Text = {"Нападение на полицейского 14.4"}}
 
@@ -205,9 +243,22 @@ else
     tableUk = decodeJson(a) -- Читаем нашу JSON-Таблицу
 end
 
-local statsCheck = false
+--Биндер
+local binder = io.open("binder.json", "r")
+if not binder then
+    binder ='{"hi": ["Доброго времени суток, я «звание» «Имя Фамилия».","/do Удостоверение в руках."]}'
 
-local AutoAccentBool = new.bool(mainIni.Accent.autoAccent)
+    local binderFile = io.open("binder.json", "w")
+    binderFile:write(encodeJson(binder))
+    binderFile:close()
+else
+    local b = binder:read("*a")
+    binder:close()
+    tableBinder = decodeJson(b)
+end
+
+local statsCheck = false
+local AutoAccentBool = new.bool(mainIni.settings.autoAccent)
 local AutoAccentInput = new.char[255](u8(mainIni.Accent.accent))
 local org = u8'Вы не состоите в ПД'
 local org_g = u8'Вы не состоите в ПД'
@@ -615,10 +666,10 @@ imgui.OnFrame(
         imgui.SetNextWindowSize(imgui.ImVec2(1700, 700), imgui.Cond.FirstUseEver)
         imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
         imgui.SetCursorPosY(50)
-        imgui.Text(u8'MVD Helper 5.0 BETA \n для Arizona Mobile', imgui.SetCursorPosX(50))
+        imgui.Text(u8'MVD Helper 5.0 \n для Arizona Mobile', imgui.SetCursorPosX(50))
         if imgui.Button(settings .. u8' Настройки', imgui.ImVec2(280, 50)) then
             tab = 1
-        elseif imgui.Button(list .. u8' Основное', imgui.ImVec2(280, 50)) then
+        elseif imgui.Button(list .. u8' Биндер', imgui.ImVec2(280, 50)) then
             tab = 2
 
         elseif imgui.Button(radio .. u8' Рация депортамента', imgui.ImVec2(280, 50)) then
@@ -667,160 +718,51 @@ imgui.OnFrame(
                 if imgui.Button(u8'УК') then
                     setUkWindow[0] = not setUkWindow[0]
                 end
-            elseif tab == 2 then -- если значение tab == 2
-                imgui.InputInt(u8 'ID игрока с которым будете взаимодействовать', id, 10)
-                if imgui.Button(u8 'Приветствие') then
-                    lua_thread.create(function()
-                        sampSendChat("Доброго времени суток, я «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
-                        wait(2000)
-                        sampSendChat("/do Удостоверение в руках.")
-                        wait(3400)
-                        sampSendChat("/me показал своё удостоверение человеку на против")
-                        wait(3400)
-                        sampSendChat("/do «" .. nickname .. "».")
-                        wait(3400)
-                        sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
-                        wait(1500)
-                        sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
-                    end)
-                end
-                if imgui.Button(u8 'Найти игрока') then
-                    lua_thread.create(function()
-                        sampSendChat("/do КПК в левом кармане.")
-                        wait(2200)
-                        sampSendChat("/me достал левой рукой КПК из кармана")
-                        wait(2200)
-                        sampSendChat("/do КПК в левой руке.")
-                        wait(2200)
-                        sampSendChat("/me включил КПК и зашел в базу данных Полиции")
-                        wait(2200)
-                        sampSendChat("/me открыл дело номер " .. id[0] .. " преступника")
-                        wait(2200)
-                        sampSendChat("/do Данные преступника получены.")
-                        wait(2200)
-                        sampSendChat("/me подключился к камерам слежения штата")
-                        wait(2200)
-                        sampSendChat("/do На навигаторе появился маршрут.")
-                        wait(2200)
-                        sampSendChat("/pursuit " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Арест') then
-                    lua_thread.create(function()
-                        sampSendChat("/me взял ручку из кармана рубашки, затем открыл бардачок и взял оттуда бланк протокола")
-                        wait(2200)
-                        sampSendChat("/do Бланк протокола и ручка в руках.")
-                        wait(2200)
-                        sampSendChat("/me заполняет описание внешности нарушителя")
-                        wait(2200)
-                        sampSendChat("/me заполняет характеристику о нарушителе")
-                        wait(2200)
-                        sampSendChat("/me заполняет данные о нарушении")
-                        wait(2200)
-                        sampSendChat("/me проставил дату и подпись")
-                        wait(2200)
-                        sampSendChat("/me положил ручку в карман рубашки")
-                        wait(2200)
-                        sampSendChat("/do Ручка в кармане рубашки.")
-                        wait(2200)
-                        sampSendChat("/me передал бланк составленного протокола в участок")
-                        wait(2200)
-                        sampSendChat("/me передал преступника в Управление Полиции под стражу")
-                        wait(2200)
-                        sampSendChat("/arrest")
-                        sampAddChatMessage("Встаньте на чекпоинт",0x8B00FF)
-                    end)
-                end
-                if imgui.Button(u8 'Надеть наручники') then
-                    lua_thread.create(function()
-                        sampSendChat("/me одной рукой держит подозреваемого, другой достает из подсумка наручники ...")
-                        wait(2200)
-                        sampSendChat("/me ...и скретив руки подозреваймого, нацепил их на него")
-                        wait(2200)
-                        sampSendChat("/cuff " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Снять наручники') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Ключ от наручников в кармане.")
-                        wait(2200)
-                        sampSendChat("/me движением правой руки достал из кармана ключ и открыл наручники")
-                        wait(2200)
-                        sampSendChat("/do Преступник раскован.")
-                        wait(2200)
-                        sampSendChat("/uncuff " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Вести за собой') then
-                    lua_thread.create(function()
-                        ampSendsChat("/me заломил правую руку нарушителю")
-                        wait(2200)
-                        sampSendChat("/me ведет нарушителя за собой")
-                        wait(2200)
-                        sampSendChat("/gotome " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Перестать вести за собой') then
-                    lua_thread.create(function()
-                        sampSendChat("/me отпустил правую руку преступника")
-                        wait(1500)
-                        sampSendChat("/do Преступник свободен.")
-                        wait(1500)
-                        sampSendChat("/ungotome " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'В машину(автоматически на 3-е место)') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Двери в машине закрыты.")
-                        wait(2200)
-                        sampSendChat("/me открыл заднюю дверь в машине")
-                        wait(2200)
-                        sampSendChat("/me посадил преступника в машину")
-                        wait(2200)
-                        sampSendChat("/me заблокировал двери")
-                        wait(2200)
-                        sampSendChat("/do Двери заблокированы.")
-                        wait(2200)
-                        sampSendChat("/incar " .. id[0] .. "3")
-                    end)
-                end
-                if imgui.Button(u8 'Обыск') then
-                    lua_thread.create(function()
-                        sampSendChat("/me нырнув руками в карманы, вытянул оттуда белые перчатки и натянул их на руки")
-                        wait(2200)
-                        sampSendChat("/do Перчатки надеты.")
-                        wait(2200)
-                        sampSendChat("/me проводит руками по верхней части тела")
-                        wait(2200)
-                        sampSendChat("/me проверяет карманы/me проводит руками по ногам")
-                        wait(2200)
-                        sampSendChat("/frisk " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Мегафон') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Мегафон в бардачке.")
-                        wait(1500)
-                        sampSendChat("/me достал мегафон с бардачка после чего включил его")
-                        wait(1500)
-                        sampSendChat("/m Водитель авто, остановитесь и заглушите двигатель, держите руки на руле.")
-                    end)
-                end
-                if imgui.Button(u8 'Вытащить из авто') then
-                    lua_thread.create(function()
-                        sampSendChat("/me сняв дубинку с поясного держателя разбил стекло в транспорте")
-                        wait(1500)
-                        sampSendChat("/do Стекло разбито.")
-                        wait(1500)
-                        sampSendChat("/me схватив за плечи человека ударил его после чего надел наручники")
-                        wait(1500)
-                        sampSendChat("/pull " .. id[0])
-                        wait(1500)
-                        sampSendChat("/cuff " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Выдача розыска') then
-                    windowTwo[0] = not windowTwo[0]
+
+            elseif tab == 2 then -- если значение 
+                -- для удобства зададим ширину каждой колонки в начале
+                local w = {
+                    first = 150,
+                    second = 250,
+                }
+                -- == Первая строка
+                imgui.Columns(3) -- 3 количество столбцов
+                imgui.Text(u8'Команда') imgui.SetColumnWidth(-1, w.first) -- первый столбик
+                imgui.NextColumn()
+                imgui.Text(u8'Текст') imgui.SetColumnWidth(-1, w.second) -- второй столбик
+                imgui.NextColumn()
+                imgui.Text(u8'Удаление') imgui.SetColumnWidth(-1, 200) -- либо можете самостоятельно вписывать
+                imgui.Columns(1)
+                imgui.Separator()
+                local keysToDelete = {}
+
+                for key, value in pairs(tableBinder) do
+    imgui.Columns(3)
+    imgui.Text(u8(key)) 
+    imgui.SetColumnWidth(-1, w.first)
+    imgui.NextColumn()
+    imgui.Text(u8(tableBinder[key][1])) 
+    imgui.SetColumnWidth(-1, w.second)
+    imgui.NextColumn()
+    
+    if imgui.Button(u8'Удалить ' .. key) then
+        
+        tableBinder[key] = nil
+        encodedTable = encodeJson(tableBinder)
+            local file = io.open("binder.json", "w")
+            file:write(encodedTable)
+            file:flush()
+            file:close()
+    end
+    
+    
+    imgui.Columns(1)
+    imgui.Separator()
+end
+
+
+                if imgui.Button(u8"Добавить") then
+                    binderWindow[0] = not binderWindow[0]
                 end
 
             elseif tab == 3 then -- если значение tab == 3
@@ -843,69 +785,69 @@ imgui.OnFrame(
                         if imgui.Button(u8'Арест и задержание') then
                             lua_thread.create(function()
                                 sampSendChat("Здравствуйте уважаемые сотрудники нашего департамента!")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Сейчас будет проведена лекция на тему арест и задержание преступников.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Для начала объясню различие между задержанием и арестом.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Задержание - это кратковременное лишение свободы лица, подозреваемого в совершении преступления.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("В свою очередь, арест - это вид уголовного наказания, заключающегося в содержании совершившего преступление..")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("..и осуждённого по приговору суда в условиях строгой изоляции от общества.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Вам разрешено задерживать лица на период 48 часов с момента их задержания.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Если в течение 48 часов вы не предъявите доказательства вины, вы обязаны отпустить гражданина.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Обратите внимание, гражданин может подать на вас иск за незаконное задержание.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Во время задержания вы обязаны провести первичный обыск на месте задержания и вторичный у капота своего автомобиля.")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("Все найденные вещи положить в 'ZIP-lock', или в контейнер для вещ. доков, Все личные вещи преступника кладутся в мешок для личных вещей задержанного")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat("На этом данная лекция подходит к концу. У кого-то имеются вопросы?")
                             end)
                         end
                         if imgui.Button("Суббординация") then
                             lua_thread.create(function()
                                 sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
-                                wait(2200)
-                                sampSendChat("Приветствую вас на лекции о субординации")
-                                wait(2200)
-                                sampSendChat("Для начала расскажу, что такое субординация")
-                                wait(2200)
-                                sampSendChat("Субординация - правила подчинения младших по званию к старшим по званию, уважение, отношение к ним")
-                                wait(2200)
-                                sampSendChat("То есть младшие сотрудники должны выполнять приказы начальства")
-                                wait(2200)
-                                sampSendChat("Кто ослушается  получит выговор, сперва устный")
-                                wait(2200)
-                                sampSendChat("Вы должны с уважением относится к начальству на 'Вы'")
-                                wait(2200)
-                                sampSendChat("Не нарушайте правила и не нарушайте субординацию дабы не получить наказание")
-                                wait(2200)
-                                sampSendChat("Лекция окончена спасибо за внимание!")
+                                wait(1500)
+                                sampSendChat(" Приветствую вас на лекции о субординации")
+                                wait(1500)
+                                sampSendChat(" Для начала расскажу, что такое субординация")
+                                wait(1500)
+                                sampSendChat(" Субординация - правила подчинения младших по званию к старшим по званию, уважение, отношение к ним")
+                                wait(1500)
+                                sampSendChat(" То есть младшие сотрудники должны выполнять приказы начальства")
+                                wait(1500)
+                                sampSendChat(" Кто ослушается  получит выговор, сперва устный")
+                                wait(1500)
+                                sampSendChat(" Вы должны с уважением относится к начальству на 'Вы'")
+                                wait(1500)
+                                sampSendChat(" Не нарушайте правила и не нарушайте субординацию дабы не получить наказание")
+                                wait(1500)
+                                sampSendChat(" Лекция окончена спасибо за внимание!")
                             end)
                         end
                         if imgui.Button(u8"Суббординация") then
                             lua_thread.create(function()
                                 sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat(" Приветствую вас на лекции о субординации")
-                                wait(2200)
-                                sampSendChat("Для начала расскажу, что такое субординация")
-                                wait(2200)
+                                wait(1500)
+                                sampSendChat(" Для начала расскажу, что такое субординация")
+                                wait(1500)
                                 sampSendChat(" Субординация - правила подчинения младших по званию к старшим по званию, уважение, отношение к ним")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat(" То есть младшие сотрудники должны выполнять приказы начальства")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat(" Кто ослушается  получит выговор, сперва устный")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat(" Вы должны с уважением относится к начальству на 'Вы'")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat(" Не нарушайте правила и не нарушайте субординацию дабы не получить наказание")
-                                wait(2200)
+                                wait(1500)
                                 sampSendChat(" Лекция окончена спасибо за внимание!")
                             end)
                         end
@@ -1063,7 +1005,7 @@ imgui.OnFrame(
                     imgui.Text(u8"10-70 - Запрос поддержки (в отличии от 10-18 необходимо указать количество юнитов и код).")
                     imgui.Text(u8"10-71 - Запрос медицинской поддержки.")
                     imgui.Text(u8"10-99 - Ситуация урегулирована.")
-                    imgui.Text(u8"10-100 - Нарушение юрисдикции ")
+                    imgui.Text(u8"10-10 - Нарушение юрисдикции ")
                 end
                 if imgui.CollapsingHeader(u8 'Маркировки патрулей') then
                     imgui.CenterText('Маркировки патрульных автомобилей')
@@ -1081,6 +1023,8 @@ imgui.OnFrame(
             elseif tab == 6 then
                 imgui.Checkbox(u8 'Авто отыгровка оружия', autogun)
                 if autogun[0] then
+                    mainIni.settings.autoRpGun = true
+                    inicfg.save(mainIni, "mvdhelper.ini")
                     lua_thread.create(function()
                         while true do
                             wait(0)
@@ -1127,6 +1071,9 @@ imgui.OnFrame(
                             end
                         end
                     end)
+                else
+                    mainIni.settings.autoRpGun = false
+                    inicfg.save(mainIni, "mvdhelper.ini")
                 end
                 imgui.Checkbox(u8'Авто-доклад патруля каждые 10 минут(включать при начале)/]. Всего 30 минут', patrul)
                 imgui.InputText(u8'Ник вашего напарника(на англиском)', partner, 255)
@@ -1162,10 +1109,10 @@ imgui.OnFrame(
                 imgui.Checkbox(u8'Авто-Акцент', AutoAccentBool)
                 if AutoAccentBool[0] then
                     AutoAccentCheck = true
-                    mainIni.Accent.autoAccent = true
+                    mainIni.settings.autoAccent = true
                     inicfg.save(mainIni, "mvdhelper.ini")
                 else
-                    mainIni.Accent.autoAccent = false
+                    mainIni.settings.autoAccent = false
                     inicfg.save(mainIni, "mvdhelper.ini")
                 end
                 imgui.InputText(u8'Акцент', AutoAccentInput, 255)
@@ -1181,8 +1128,8 @@ imgui.OnFrame(
                     importUkWindow[0] = not importUkWindow[0]
                 end
             elseif tab == 7 then
-                imgui.Text(u8'Версия: 5.0 BETA')
-                imgui.Text(u8'Разработчик: https://t.me/Sashe4ka_ReZoN')
+                imgui.Text(u8'Версия: 5.0')
+                imgui.Text(u8'Разработчики: https://t.me/Sashe4ka_ReZoN, https://t.me/daniel2903_pon')
                 imgui.Text(u8'ТГ канал: t.me/lua_arz') 
                 imgui.Text(u8'Поддержать: Временно не доступно') 
                 imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x')
@@ -1196,7 +1143,7 @@ imgui.OnFrame(
                 imgui.Text(u8'Обновление 4.7 - Добавлена Команда /traf пофикшены баги,авто акцент и измененны некоторые отыгровки')
                 imgui.Text(u8'Обновление 4.8 - MoonMonet, автоматическое обновление')
                 imgui.Text(u8'Обновление 4.9 - Возможность импорта Умного розыска для большинства серверов. Фикс багов.')
-                imgui.Text(u8'Обновление 5.0 BETA - soon...')
+                imgui.Text(u8'Обновление 5.0 - Исправлена ошибка в тен-кодах. Добавленно окошко быстрого взаимодействия. Кликните два раза по игроку(иногда не работает)б\n        Биндер. Выдача розыска по команде(/su id). Сохранение некоторых настроек вов кладке Дополнительно')
                 if imgui.Button(u8'Обновить(возможно зависание игры на 10-15 секунд)') then
             		updateScript(mvdUrl, mvdPath)
             	end
@@ -1282,66 +1229,74 @@ imgui.OnFrame(
 )
 
 function main()
+                if autogun[0] then
+                    
+                    lua_thread.create(function()
+                        while true do
+                            wait(0)
+                            if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
+                                local gun = getCurrentCharWeapon(PLAYER_PED)
+                                if gun == 3 then
+                                    sampSendChat("/me достал дубинку с поясного держателя")
+                                elseif gun == 16 then
+                                    sampSendChat("/me взял с пояса гранату")
+                                elseif gun == 17 then
+                                    sampSendChat("/me взял гранату слезоточивого газа с пояса")
+                                elseif gun == 23 then
+                                    sampSendChat("/me достал тайзер с кобуры, убрал предохранитель")
+                                elseif gun == 22 then
+                                    sampSendChat("/me достал пистолет Colt-45, снял предохранитель")
+                                elseif gun == 24 then
+                                    sampSendChat("/me достал Desert Eagle с кобуры, убрал предохранитель")
+                                elseif gun == 25 then
+                                    sampSendChat("/me достал чехол со спины, взял дробовик и убрал предохранитель")
+                                elseif gun == 26 then
+                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал Обрезы")
+                                elseif gun == 27 then
+                                    sampSendChat("/me достал дробовик Spas, снял предохранитель")
+                                elseif gun == 28 then
+                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал УЗИ")
+                                elseif gun == 29 then
+                                    sampSendChat("/me достал чехол со спины, взял МП5 и убрал предохранитель")
+                                elseif gun == 30 then
+                                    sampSendChat("/me достал карабин AK-47 со спины")
+                                elseif gun == 31 then
+                                    sampSendChat("/me достал карабин М4 со спины")
+                                elseif gun == 32 then
+                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал TEC-9")
+                                elseif gun == 33 then
+                                    sampSendChat("/me достал винтовку без прицела из военной сумки")
+                                elseif gun == 34 then
+                                    sampSendChat("/me достал Снайперскую винтовку с военной сумки")
+                                elseif gun == 43 then
+                                    sampSendChat("/me достал фотокамеру из рюкзака")
+                                elseif gun == 0 then
+                                    sampSendChat("/me поставил предохранитель, убрал оружие")
+                                end
+                                lastgun = gun
+                            end
+                        end
+                    end)
+                    end
     if statsCheck == false then
     end
     sampRegisterChatCommand('mvd', openwindow)
-    sampRegisterChatCommand("showpass", cmd_showpass)
-    sampRegisterChatCommand("showlic", cmd_showlic)
-    sampRegisterChatCommand("showskill", cmd_showskill)
-    sampRegisterChatCommand("showmc", cmd_showmc)
-    sampRegisterChatCommand("pull", cmd_pull)
-    sampRegisterChatCommand("invite", cmd_invite)
-    sampRegisterChatCommand("uninvite", cmd_uninvite)
-    sampRegisterChatCommand("cuff",cmd_cuff)
-    sampRegisterChatCommand("uncuff",cmd_uncuff)
-    sampRegisterChatCommand("gotome",cmd_gotome)
-    sampRegisterChatCommand("ungotome",cmd_ungotome)
-    sampRegisterChatCommand("frisk", cmd_frisk)
-    sampRegisterChatCommand("showbadge", cmd_showbadge)
-    sampRegisterChatCommand("tencodes",cmd_tencodes)
-    sampRegisterChatCommand("marks",cmd_marks)
-    sampRegisterChatCommand("sitcodes",cmd_sitcodes)
-    sampRegisterChatCommand("mask", cmd_mask)
-    sampRegisterChatCommand("arm", cmd_arm)
-    sampRegisterChatCommand("drug", cmd_drug)
-    sampRegisterChatCommand("asu", cmd_asu)
-    sampRegisterChatCommand("arrest", cmd_arrest)
-    sampRegisterChatCommand("stop", cmd_stop)
-    sampRegisterChatCommand("giverank",cmd_giverank)
-    sampRegisterChatCommand("unmask",cmd_unmask)
-    sampRegisterChatCommand("miranda",cmd_miranda)
-    sampRegisterChatCommand("bodyon",cmd_bodyon)
-    sampRegisterChatCommand("bodyoff",cmd_bodyoff)
-    sampRegisterChatCommand("ticket",cmd_ticket)
-    sampRegisterChatCommand("pursuit",cmd_pursuit)
-    sampRegisterChatCommand("drugtestno",cmd_drugtestno)
-    sampRegisterChatCommand("drugtestyes",cmd_drugtestyes)
-    sampRegisterChatCommand("vzatka",cmd_vzatka)
-    sampRegisterChatCommand("bomb",cmd_bomb)
-    sampRegisterChatCommand("probiv",cmd_probiv)
-    sampRegisterChatCommand("dismiss",cmd_dismiss)
-    sampRegisterChatCommand("demoute",cmd_demoute)
-    sampRegisterChatCommand("cure",cmd_cure)
-    sampRegisterChatCommand("zsu",cmd_zsu)
-    sampRegisterChatCommand("find",cmd_find)
-    sampRegisterChatCommand("incar",cmd_incar)
-    sampRegisterChatCommand("eject",cmd_eject)
-    sampRegisterChatCommand("pog",cmd_pog)
-    sampRegisterChatCommand("pas",cmd_pas)
-    sampRegisterChatCommand("clear",cmd_clear)
-    sampRegisterChatCommand("take",cmd_take)
-    sampRegisterChatCommand("gcuff",cmd_gcuff)
-    sampRegisterChatCommand("fbi.pravda", cmd_pravda_fbi)
-    sampRegisterChatCommand("fbi.secret", cmd_secret_fbi)
-    sampRegisterChatCommand("finger.p", cmd_finger_person)
-    sampRegisterChatCommand("podmoga", cmd_warn)
+    sampRegisterChatCommand("su", cmd_su)
     sampRegisterChatCommand("mvds",cmd_mvds)
-    sampRegisterChatCommand("stop", cmd_stop)
-    sampRegisterChatCommand("grim", cmd_grim)
-    sampRegisterChatCommand("eks", cmd_eks)
-    sampRegisterChatCommand("traf", cmd_traf)
-    sampRegisterChatCommand("agenda", cmd_agenda)
-    sampRegisterChatCommand("time",cmd_time)
+    
+    
+    for key, value in pairs(tableBinder) do
+    local msgFunction = function()
+        lua_thread.create(function()
+            for _, msg in ipairs(value) do
+                sampSendChat(msg, -1)
+                wait(1500)
+            end
+        end)
+    end
+
+    sampRegisterChatCommand(key, msgFunction)
+end
 end
 
 function sampev.onSendSpawn()
@@ -1349,7 +1304,7 @@ function sampev.onSendSpawn()
 		spawn = false
 		sampSendChat('/stats')
         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Скрипт успешно загрузился", 0x8B00FF)
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Автор:t.me/Sashe4ka_ReZoN",0x8B00FF)
+        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Автор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon",0x8B00FF)
         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Чтобы посмотреть комманды,введите /mvd и /mvds ",0x8B00FF)
         nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))
     end
@@ -1439,9 +1394,19 @@ function imgui.CenterText(text)
     imgui.Text(u8(text))
 end
 
+function cmd_su(p_id)
+    if p_id == "" then
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/su [ID].",0x318CE7FF -1)
+    else
+    	id = tonumber(p_id)  -- Преобразуем строку в число
+        id = imgui.new.int(id)
+        windowTwo[0] = not windowTwo[0]
+    end
+end
+
 function cmd_showpass(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/showpass [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showpass [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me достал папку с документами")
@@ -1461,7 +1426,7 @@ end
 
 function cmd_showbadge(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/showbadge [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showbadge [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me из внутреннего кармана достал удостоверение")
@@ -1479,7 +1444,7 @@ end
 
 function cmd_showlic(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/showlic [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showlic [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me достал папку с документами")
@@ -1499,14 +1464,14 @@ end
 
 function cmd_mvds(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Команды MVD HELPER 4.7", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/stop - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/traf - Погоня 10-55\n/grim - Нанесение грима\n/eks - Экспертиза оружие\n/traf - не помню\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
+        sampShowDialog(1,"Команды MVD HELPER 4.7", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/traf - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/grim - Нанесение грима\n/eks - Экспертиза оружие\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
         end)
         end
 
 
 function cmd_showskill(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/showskill [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showskill [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me достал папку с документами")
@@ -1526,7 +1491,7 @@ end
 
 function cmd_showmc(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/showmc [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showmc [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me достал папку с документами")
@@ -1546,7 +1511,7 @@ end
 
 function cmd_pull(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/pull [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/pull [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/pull " .. id .. " ")
@@ -1563,7 +1528,7 @@ end
 
 function cmd_invite(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/invite [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/invite [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/do Под стойкой находится рюкзак.")
@@ -1583,7 +1548,7 @@ end
 
 function cmd_uninvite(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/uninvite [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/uninvite [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat ("/do На поясе закреплен КПК.")
@@ -1601,12 +1566,19 @@ end
 
 function cmd_cuff(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/cuff [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/cuff [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
-            sampSendChat("/me одной рукой держит подозреваемого, другой достает из подсумка наручники ...")
-            wait(2500)
-            sampSendChat("/me ...и скретив руки подозреваймого, нацепил их на него")
+            sampSendChat("/do Наручники висят на поясе.")
+            wait(1500)
+            sampSendChat("/me снял с держателя наручники")
+            wait(1500)
+            sampSendChat("/do Наручники в руках.")
+            wait(1500)
+            sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
+            wait(1500)
+            sampSendChat("/do Преступник скован.")
+            wait(1500)
             sampSendChat("/cuff "..id.." ")
          end)
       end
@@ -1614,7 +1586,7 @@ function cmd_cuff(id)
 
 function cmd_uncuff(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/uncuff [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/uncuff [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/do Ключ от наручников в кармане.")
@@ -1630,7 +1602,7 @@ function cmd_uncuff(id)
 
 function cmd_gotome(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/gotome [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/gotome [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me заломил правую руку нарушителю")
@@ -1644,7 +1616,7 @@ function cmd_gotome(id)
 
 function cmd_ungotome(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/ungotome [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/ungotome [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me отпустил правую руку преступника")
@@ -1658,7 +1630,7 @@ function cmd_ungotome(id)
 
 function cmd_gcuff(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/gcuff [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/gcuff [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/do Наручники висят на поясе.")
@@ -1684,7 +1656,7 @@ function cmd_gcuff(id)
 
 function cmd_frisk(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/frisk [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/frisk [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me надев резиновые перчатки, начал прощупывать гражданина по всему телу ...")
@@ -1703,7 +1675,7 @@ end
 
 function cmd_pursuit(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/pursuit [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/pursuit [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/do КПК в левом кармане.")
@@ -1733,7 +1705,7 @@ function cmd_arm(id)
 
     function cmd_agenda(id)
         if id == "" then
-            sampAddChatMessage("Введи айди игрока:: {FFFFFF}/agenda [ID].",0x318CE7FF -1)
+            sampAddChatMessage("Введи айди игрока: {FFFFFF}/agenda [ID].",0x318CE7FF -1)
         else
             lua_thread.create(function()
                 sampSendChat("/do В нагрудном кармане лежат бланки повесток.")
@@ -1792,7 +1764,7 @@ end
 
 function cmd_arrest(id)
     if id == "" then
-         sampAddChatMessage("Введи айди игрока:: {FFFFFF}/arrest [ID].",0x318CE7FF -1)
+         sampAddChatMessage("Введи айди игрока: {FFFFFF}/arrest [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me нажав на тангету, сообщил диспетчеру о провезенном преступники ...")
@@ -1829,7 +1801,7 @@ end
 
 function cmd_unmask(id)
     if id == nil or id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/unmask [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/unmask [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me держа подозреваемого, левой рукой насильно сдирает маску с человека")
@@ -2133,7 +2105,7 @@ end
 
 function cmd_eject(id)
     if id == "" then
-        sampAddChatMessage("Введи айди игрока:: {FFFFFF}/eject [ID].",0x318CE7FF -1)
+        sampAddChatMessage("Введи айди игрока: {FFFFFF}/eject [ID].",0x318CE7FF -1)
     else
         lua_thread.create(function()
             sampSendChat("/me открыл дверь авто, после выбросил человека из авто")
@@ -2159,19 +2131,19 @@ end
 
 function cmd_tencodes(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Список активных тен-кодов MVD HELPER 5.0 BETA", "10-1 - Встреча всех офицеров на дежурстве (включая локацию и код).\n10-3 - Радиомолчание (для срочных сообщений).\n10-4 - Принято.\n10-5 - Повторите последнее сообщение.\n10-6 - Не принято/неверно/нет.\n10-7 - Ожидайте.\n10-8 - В настоящее время занят/не доступен.\n10-14 - Запрос транспортировки (включая локацию и цель транспортировки).\n10-15 - Подозреваемые арестованы (включая кол-во подозреваемых, локацию).\n10-18 - Требуется поддержка дополнительных юнитов.\n10-20 - Локация.\n10-21 - Сообщение о статусе и местонахождении, описание ситуации.\n10-22 - Направляйтесь в 'локация' (обращение к конкретному офицеру).\n10-27 - Меняю маркировку патруля (включая старую и новую маркировку).\n10-46 - Провожу обыск.\n10-55 - Траффик стоп.\n10-66 - Остановка повышенного риска (если известно, что подозреваемый в авто вооружен/совершил преступление. Если остановка произошла после погони).\n10-88 - Теракт/ЧС.\n10-99 - Ситуация урегулирована\n10-100 Временно недоступен для вызовов\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
+        sampShowDialog(1,"Список активных тен-кодов MVD HELPER 5.0", "10-1 - Встреча всех офицеров на дежурстве (включая локацию и код).\n10-3 - Радиомолчание (для срочных сообщений).\n10-4 - Принято.\n10-5 - Повторите последнее сообщение.\n10-6 - Не принято/неверно/нет.\n10-7 - Ожидайте.\n10-8 - В настоящее время занят/не доступен.\n10-14 - Запрос транспортировки (включая локацию и цель транспортировки).\n10-15 - Подозреваемые арестованы (включая кол-во подозреваемых, локацию).\n10-18 - Требуется поддержка дополнительных юнитов.\n10-20 - Локация.\n10-21 - Сообщение о статусе и местонахождении, описание ситуации.\n10-22 - Направляйтесь в 'локация' (обращение к конкретному офицеру).\n10-27 - Меняю маркировку патруля (включая старую и новую маркировку).\n10-46 - Провожу обыск.\n10-55 - Траффик стоп.\n10-66 - Остановка повышенного риска (если известно, что подозреваемый в авто вооружен/совершил преступление. Если остановка произошла после погони).\n10-88 - Теракт/ЧС.\n10-99 - Ситуация урегулирована\n10-10 Временно недоступен для вызовов\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
         end)
         end
 
 function cmd_marks(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Маркировки на авто MVD HELPER 5.0 BETA", "ADAM [A] Маркировка юнита, состоящего из двух офицеров.\nLINCOLN [L] Маркировка юнита, состоящего из одного офицера.\nAIR [AIR] Маркировка воздушного юнита, в составе двух офицеров\nAir Support Division [ASD] Маркировка юнита воздушной поддержки.\nMARY [M] Маркировка мото-патруля.\nHENRY [H] Маркировка высоко - скоростного юнита, состоящего из одного или двух офицер.\nCHARLIE [C] Маркировка группы захвата.\nROBERT [R] Маркировка отдела детективов.\nSUPERVISOR [SV] Маркировка руководящего состава (STAFF).\nDavid [D] Маркировка спец.отдела\nКаждый офицер при выходе в патруль, обязан поставить маркировку на свой крузер (/vdesc)\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
+        sampShowDialog(1,"Маркировки на авто MVD HELPER 5.0", "ADAM [A] Маркировка юнита, состоящего из двух офицеров.\nLINCOLN [L] Маркировка юнита, состоящего из одного офицера.\nAIR [AIR] Маркировка воздушного юнита, в составе двух офицеров\nAir Support Division [ASD] Маркировка юнита воздушной поддержки.\nMARY [M] Маркировка мото-патруля.\nHENRY [H] Маркировка высоко - скоростного юнита, состоящего из одного или двух офицер.\nCHARLIE [C] Маркировка группы захвата.\nROBERT [R] Маркировка отдела детективов.\nSUPERVISOR [SV] Маркировка руководящего состава (STAFF).\nDavid [D] Маркировка спец.отдела\nКаждый офицер при выходе в патруль, обязан поставить маркировку на свой крузер (/vdesc)\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
          end)
          end
 
 function cmd_sitcodes(id)
         lua_thread.create(function()
-        sampShowDialog(1,"Ситуационные коды MVD HELPER 5.0 BETA", "CODE 0 - Офицер ранен.\nCODE 1 - Офицер в бедственном положении.\nCODE 2 - Обычный вызов с низким приоритетом. Без включения сирен и спец.сигналов, соблюдая ПДД.\nCODE 2 HIGH - Приоритетный вызов. Всё так же без включения сирен и спец.сигналов, соблюдая ПДД.\nCODE 3 - Срочный вызов. Использование сирен и спец.сигналов, игнорирование некоторых пунктов ПДД.\nCODE 4 - Помощь не требуется.\nCODE 4 ADAM - Помощь не требуется в данный момент времени. Офицеры находящиеся по близости должны быть готовы оказать помощь.\nCODE 7 - Перерыв на обед.\nCODE 30 - Срабатывание 'тихой' сигнализации на месте происшествия.\nCODE 30 RINGER - Срабатывание 'громкой' сигнализации на месте происшествия.\nCODE 37 - Обнаружение угнанного транспортного средства. Необходимо указать номер, описание автомобиля, направление движения.\nАвтор:t.me/Sashe4ka_ReZoN", "Закрыть", "Exit", 0)
+        sampShowDialog(1,"Ситуационные коды MVD HELPER 5.0", "CODE 0 - Офицер ранен.\nCODE 1 - Офицер в бедственном положении.\nCODE 2 - Обычный вызов с низким приоритетом. Без включения сирен и спец.сигналов, соблюдая ПДД.\nCODE 2 HIGH - Приоритетный вызов. Всё так же без включения сирен и спец.сигналов, соблюдая ПДД.\nCODE 3 - Срочный вызов. Использование сирен и спец.сигналов, игнорирование некоторых пунктов ПДД.\nCODE 4 - Помощь не требуется.\nCODE 4 ADAM - Помощь не требуется в данный момент времени. Офицеры находящиеся по близости должны быть готовы оказать помощь.\nCODE 7 - Перерыв на обед.\nCODE 30 - Срабатывание 'тихой' сигнализации на месте происшествия.\nCODE 30 RINGER - Срабатывание 'громкой' сигнализации на месте происшествия.\nCODE 37 - Обнаружение угнанного транспортного средства. Необходимо указать номер, описание автомобиля, направление движения.\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
          end)
          end
 
@@ -2397,7 +2369,8 @@ local secondFrame = imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
         imgui.Begin(u8"Выдача розыска", windowTwo)
-        imgui.InputInt(u8 'ID игрока с которым будете взаимодействовать', id,10)
+        imgui.InputInt(u8 'ID игрока с которым будете взаимодействовать', id, 10)
+        
         for i = 1, #tableUk["Text"] do
             if imgui.Button(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i])) then
                 lua_thread.create(function()
@@ -3064,3 +3037,230 @@ function sampev.onSendChat(cmd)
     return{mainIni.Accent.accent .. ' ' .. cmd}
   end
 end
+
+local fastMenu = imgui.OnFrame(function()
+	return state.renderFastMenu[0]
+end, function(player)
+	if state.fastMenuPlayerId and sampIsPlayerConnected(state.fastMenuPlayerId) then
+		imgui.SetNextWindowSize(imgui.ImVec2(400 * MDS, 250 * MDS), imgui.Cond.FirstUseEver)
+		imgui.SetNextWindowPos(
+			imgui.ImVec2(state.fastMenuPos.x, state.fastMenuPos.y + 250 / 2 * MDS),
+			imgui.Cond.FirstUseEver,
+			imgui.ImVec2(0.5, 0.5)
+		)
+        
+        local player_nickname = sampGetPlayerNickname(state.fastMenuPlayerId)
+        id = imgui.new.int(state.fastMenuPlayerId)
+		
+		imgui.Begin(u8("Действия над игроком ") .. player_nickname, state.renderFastMenu)
+		if imgui.Button(u8 'Приветствие') then
+            lua_thread.create(function()
+                sampSendChat("Доброго времени суток, я «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
+                wait(1500)
+                sampSendChat("/do Удостоверение в руках.")
+                wait(1500)
+                sampSendChat("/me показал своё удостоверение человеку на против")
+                wait(1500)
+                sampSendChat("/do «" .. nickname .. "».")
+                wait(1500)
+                sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
+                wait(1500)
+                sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
+            end)
+        end
+        if imgui.Button(u8 'Найти игрока') then
+            lua_thread.create(function()
+                sampSendChat("/do КПК в левом кармане.")
+                wait(1500)
+                sampSendChat("/me достал левой рукой КПК из кармана")
+                wait(1500)
+                sampSendChat("/do КПК в левой руке.")
+                wait(1500)
+                sampSendChat("/me включил КПК и зашел в базу данных Полиции")
+                wait(1500)
+                sampSendChat("/me открыл дело номер " .. id .. " преступника")
+                wait(1500)
+                sampSendChat("/do Данные преступника получены.")
+                wait(1500)
+                sampSendChat("/me подключился к камерам слежения штата")
+                wait(1500)
+                sampSendChat("/do На навигаторе появился маршрут.")
+                wait(1500)
+                sampSendChat("/pursuit " .. id)
+            end)
+        end
+        if imgui.Button(u8 'Арест') then
+            lua_thread.create(function()
+                sampSendChat("/me взял ручку из кармана рубашки, затем открыл бардачок и взял оттуда бланк протокола")
+                wait(1500)
+                sampSendChat("/do Бланк протокола и ручка в руках.")
+                wait(1500)
+                sampSendChat("/me заполняет описание внешности нарушителя")
+                wait(1500)
+                sampSendChat("/me заполняет характеристику о нарушителе")
+                wait(1500)
+                sampSendChat("/me заполняет данные о нарушении")
+                wait(1500)
+                sampSendChat("/me проставил дату и подпись")
+                wait(1500)
+                sampSendChat("/me положил ручку в карман рубашки")
+                wait(1500)
+                sampSendChat("/do Ручка в кармане рубашки.")
+                wait(1500)
+                sampSendChat("/me передал бланк составленного протокола в участок")
+                wait(1500)
+                sampSendChat("/me передал преступника в Управление Полиции под стражу")
+                wait(1500)
+                sampSendChat("/arrest")
+                sampAddChatMessage("Встаньте на чекпоинт",0x8B00FF)
+            end)
+        end
+        if imgui.Button(u8 'Надеть наручники') then
+            lua_thread.create(function()
+                sampSendChat("/do Наручники висят на поясе.")
+                wait(1500)
+                sampSendChat("/me снял с держателя наручники")
+                wait(1500)
+                sampSendChat("/do Наручники в руках.")
+                wait(1500)
+                sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
+                wait(1500)
+                sampSendChat("/do Преступник скован.")
+                wait(1500)
+                sampSendChat("/cuff " .. id)
+            end)
+        end
+        if imgui.Button(u8 'Снять наручники') then
+            lua_thread.create(function()
+                sampSendChat("/do Ключ от наручников в кармане.")
+                wait(1500)
+                sampSendChat("/me движением правой руки достал из кармана ключ и открыл наручники")
+                wait(1500)
+                sampSendChat("/do Преступник раскован.")
+                wait(1500)
+                sampSendChat("/uncuff " .. id)
+            end)
+        end
+        if imgui.Button(u8 'Вести за собой') then
+            lua_thread.create(function()
+                sampSendsChat("/me заломил правую руку нарушителю")
+                wait(1500)
+                sampSendChat("/me ведет нарушителя за собой")
+                wait(1500)
+                sampSendChat("/gotome " .. id)
+            end)
+        end
+        if imgui.Button(u8 'Перестать вести за собой') then
+            lua_thread.create(function()
+                sampSendChat("/me отпустил правую руку преступника")
+                wait(1500)
+                sampSendChat("/do Преступник свободен.")
+                wait(1500)
+                sampSendChat("/ungotome " .. id)
+            end)
+        end
+        if imgui.Button(u8 'В машину(автоматически на 3-е место)') then
+            lua_thread.create(function()
+                sampSendChat("/do Двери в машине закрыты.")
+                wait(1500)
+                sampSendChat("/me открыл заднюю дверь в машине")
+                wait(1500)
+                sampSendChat("/me посадил преступника в машину")
+                wait(1500)
+                sampSendChat("/me заблокировал двери")
+                wait(1500)
+                sampSendChat("/do Двери заблокированы.")
+                wait(1500)
+                sampSendChat("/incar " .. id .. "3")
+            end)
+        end
+        if imgui.Button(u8 'Обыск') then
+            lua_thread.create(function()
+                sampSendChat("/me нырнув руками в карманы, вытянул оттуда белые перчатки и натянул их на руки")
+                wait(1500)
+                sampSendChat("/do Перчатки надеты.")
+                wait(1500)
+                sampSendChat("/me проводит руками по верхней части тела")
+                wait(1500)
+                sampSendChat("/me проверяет карманы/me проводит руками по ногам")
+                wait(1500)
+                sampSendChat("/frisk " .. id)
+            end)
+        end
+        if imgui.Button(u8 'Вытащить из авто') then
+            lua_thread.create(function()
+                sampSendChat("/me сняв дубинку с поясного держателя разбил стекло в транспорте")
+                wait(1500)
+                sampSendChat("/do Стекло разбито.")
+                wait(1500)
+                sampSendChat("/me схватив за плечи человека ударил его после чего надел наручники")
+                wait(1500)
+                sampSendChat("/pull " .. id)
+                wait(1500)
+                sampSendChat("/cuff " .. id)
+            end)
+        end
+        if imgui.Button(u8 'Выдача розыска') then
+            windowTwo[0] = not windowTwo[0]
+        end
+		imgui.End()
+	end
+end)
+
+local binderWindowFrame = imgui.OnFrame(
+    function() return binderWindow[0] end,
+    function()
+        return true
+    end,
+    function(player)
+        imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
+        imgui.Begin(u8"Создание бинда", binderWindow)
+        imgui.InputText(u8'Введите команду(без/)', inputComName, 10)
+        imgui.InputTextMultiline(u8'Введите текст', inputComText, 255)
+        if imgui.Button(u8'Сохранить') then
+            local comName = u8:decode(ffi.string(inputComName))
+            local comText = u8:decode(ffi.string(inputComText))
+            local linesArray = {}
+            for line in comText:gmatch("[^\r\n]+") do
+                table.insert(linesArray, line)
+            end
+            
+            Binds = #tableBinder
+            tableBinder[comName] = {}
+            for i = 1, #linesArray do
+                table.insert(tableBinder[comName], linesArray[i])
+            end
+            encodedTable = encodeJson(tableBinder)
+            local file = io.open("binder.json", "w")
+            file:write(encodedTable)
+            file:flush()
+            file:close()
+            sampRegisterChatCommand (comName, function()
+            	lua_thread.create(function()
+					for I = 1, #linesArray do
+						sampSendChat (linesArray [I])
+						wait(1500)
+					end
+				end)
+            end)
+        end
+		imgui.End()
+    end
+)
+
+function table.find(t, v)
+    for k, vv in pairs(t) do
+       if vv == v then return k end
+    end
+    return nil
+ end
+ 
+ function deleteBindFunc(key)
+ 	tableBinder[key] = nil
+                        encodedTable = encodeJson(tableBinder)
+            local file = io.open("binder.json", "w")
+            file:write(encodedTable)
+            file:flush()
+            file:close()
+ end
