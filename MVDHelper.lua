@@ -1229,55 +1229,7 @@ end
 )
 
 function main()
-                if autogun[0] then
-                    
-                    lua_thread.create(function()
-                        while true do
-                            wait(0)
-                            if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
-                                local gun = getCurrentCharWeapon(PLAYER_PED)
-                                if gun == 3 then
-                                    sampSendChat("/me достал дубинку с поясного держателя")
-                                elseif gun == 16 then
-                                    sampSendChat("/me взял с пояса гранату")
-                                elseif gun == 17 then
-                                    sampSendChat("/me взял гранату слезоточивого газа с пояса")
-                                elseif gun == 23 then
-                                    sampSendChat("/me достал тайзер с кобуры, убрал предохранитель")
-                                elseif gun == 22 then
-                                    sampSendChat("/me достал пистолет Colt-45, снял предохранитель")
-                                elseif gun == 24 then
-                                    sampSendChat("/me достал Desert Eagle с кобуры, убрал предохранитель")
-                                elseif gun == 25 then
-                                    sampSendChat("/me достал чехол со спины, взял дробовик и убрал предохранитель")
-                                elseif gun == 26 then
-                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал Обрезы")
-                                elseif gun == 27 then
-                                    sampSendChat("/me достал дробовик Spas, снял предохранитель")
-                                elseif gun == 28 then
-                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал УЗИ")
-                                elseif gun == 29 then
-                                    sampSendChat("/me достал чехол со спины, взял МП5 и убрал предохранитель")
-                                elseif gun == 30 then
-                                    sampSendChat("/me достал карабин AK-47 со спины")
-                                elseif gun == 31 then
-                                    sampSendChat("/me достал карабин М4 со спины")
-                                elseif gun == 32 then
-                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал TEC-9")
-                                elseif gun == 33 then
-                                    sampSendChat("/me достал винтовку без прицела из военной сумки")
-                                elseif gun == 34 then
-                                    sampSendChat("/me достал Снайперскую винтовку с военной сумки")
-                                elseif gun == 43 then
-                                    sampSendChat("/me достал фотокамеру из рюкзака")
-                                elseif gun == 0 then
-                                    sampSendChat("/me поставил предохранитель, убрал оружие")
-                                end
-                                lastgun = gun
-                            end
-                        end
-                    end)
-                    end
+                
     if statsCheck == false then
     end
     sampRegisterChatCommand('mvd', openwindow)
