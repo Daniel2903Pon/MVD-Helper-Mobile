@@ -740,6 +740,8 @@ elseif tab == 8 then -- если значение tab == 8
                         sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
                         wait(1500)
                         sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
+                        wait(1500)
+                        sampSendChat("/showbadge ")
                     end)
                 end
                 if imgui.Button(u8 'Найти игрока') then
@@ -1382,7 +1384,7 @@ end
                 imgui.Text(u8'Обновление 4.7 - Добавлена Команда /traf пофикшены баги,авто акцент и измененны некоторые отыгровки')
                 imgui.Text(u8'Обновление 4.8 - MoonMonet, автоматическое обновление')
                 imgui.Text(u8'Обновление 4.9 - Возможность импорта Умного розыска для большинства серверов. Фикс багов.')
-                imgui.Text(u8'Обновление 5.0 - Исправлена ошибка в тен-кодах. Добавленно окошко быстрого взаимодействия. Кликните два раза по игроку(иногда не работает)б\n        Биндер. Выдача розыска по команде(/su id). Сохранение некоторых настроек вов кладке Дополнительно')
+                imgui.Text(u8'Обновление 5.0 - Исправлена ошибка в тен-кодах. Добавленно окошко быстрого взаимодействия. Кликните два раза по игроку(иногда не работает)б\n Биндер. Выдача розыска по команде(/su id). Сохранение некоторых настроек вов кладке Дополнительно')
                 if imgui.Button(u8'Обновить(возможно зависание игры на 10-15 секунд)') then
             		updateScript(mvdUrl, mvdPath)
             	end
@@ -1401,33 +1403,43 @@ end
                     
                     elseif server == 'Mobile III' then
                         updateScript(smartUkUrl['m3'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 3 успешно установлен!", 0x8B00FF)
                     
                     elseif server == 'Phoenix' then
-                        updateScript(smartUkUrl['phenix'], smartUkPath)
+                        updateScript(smartUkUrl['phoenix'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
                                         
                     elseif server == 'Tucson' then
                         updateScript(smartUkUrl['tucson'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Tucson успешно установлен!", 0x8B00FF)
                                         
                     elseif server == 'Saintrose' then
-                        updateScript(smartUkUrl['phenix'], smartUkPath)
-                                        
+                        updateScript(smartUkUrl['saintrose'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Saintrose успешно установлен!", 0x8B00FF)
+                                    
                     elseif server == 'Mesa' then
                         updateScript(smartUkUrl['mesa'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mesa успешно установлен!", 0x8B00FF)
                                         
                     elseif server == 'Red-Rock' then
                         updateScript(smartUkUrl['red'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Red Rock успешно установлен!", 0x8B00FF)
                                                             
                     elseif server == 'Prescott' then
                         updateScript(smartUkUrl['press'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Prescott успешно установлен!", 0x8B00FF)
                                                             
                     elseif server == 'Winslow' then
                         updateScript(smartUkUrl['winslow'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Winslow успешно установлен!", 0x8B00FF)
                                                                                 
                     elseif server == 'Payson' then
                         updateScript(smartUkUrl['payson'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Payson успешно установлен!", 0x8B00FF)
                                                                                 
                     elseif server == 'Gilbert' then
                         updateScript(smartUkUrl['gilbert'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Gilbert успешно установлен!", 0x8B00FF)
                     
                     elseif server == 'Casa-Grande' then
                         updateScript(smartUkUrl['casa'], smartUkPath)
@@ -1435,6 +1447,7 @@ end
                                                                                 
                     elseif server == 'Page' then
                         updateScript(smartUkUrl['page'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Page успешно установлен!", 0x8B00FF)
                                                                                 
                     elseif server == 'Sun-City' then
                         updateScript(smartUkUrl['sunCity'], smartUkPath)
@@ -1442,18 +1455,23 @@ end
                                                                                 
                     elseif server == 'Wednesday' then
                         updateScript(smartUkUrl['wednesday'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Wednesday успешно установлен!", 0x8B00FF)
                                                                                                     
                     elseif server == 'Yava' then
                         updateScript(smartUkUrl['yava'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Yava успешно установлен!", 0x8B00FF)
                                                                                                     
                     elseif server == 'Faraway' then
                         updateScript(smartUkUrl['faraway'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Faraway успешно установлен!", 0x8B00FF)
                                                                                                     
                     elseif server == 'Bumble Bee' then
                         updateScript(smartUkUrl['bumble'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Bumble успешно установлен!", 0x8B00FF)
                                                                                                     
                     elseif server == 'Christmas' then
                         updateScript(smartUkUrl['christmas'], smartUkPath)
+                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Christmas успешно установлен!", 0x8B00FF)
                     
                     else
                         sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
@@ -2537,21 +2555,17 @@ function cmd_secret_fbi(id)
 	end)
 end
 
-function cmd_traf(id)
-    if id == "" then
-             sampAddChatMessage("Введи айди игрока: {FFFFFF}/traf [ID].", 0x318CE7FF)
-    else
+function cmd_traf()
         lua_thread.create(function()
             sampSendChat("/do Мегафон в бардачке.")
-            wait(1200)
+            wait(1500)
             sampSendChat("/me достаёт мегафон с бардачка после чего включает его")
-            wait(1200)
+            wait(1700)
             sampSendChat("/m Водитель авто остановитесь на обочине и заглушите двигатель, держите руки на руле.")
-            wait(1200)
+            wait(1700)
             sampSendChat("/me убирает мегафон в бардачок")
         end)
     end
-end
 
 function cmd_time()
     lua_thread.create(function()
@@ -2562,30 +2576,30 @@ function cmd_time()
     end)
 end
 
-function cmd_finger_person(id)
-	lua_thread.create(function ()
+function cmd_finger_person()
+	lua_thread.create(function()
 		sampSendChat("/do За спиной агента находится небольшая спец. сумка.")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/me снял спец. сумку со спины, после положил её на ровную поверхность")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/do В спец. сумке имеется: пудра и кисточка для её нанесения, спец. плёнка.")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/me взял баночку с пудрой, открыв её аккуратно наносит пудру на пальцы человека напротив")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/do Пальцы человека напротив покрыты пудрой.")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/me достал из спец. сумки специальную плёнку, затем приклеивает её на пальцы человеку")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/do Отпечаток фиксируется на плёнке.")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/me аккуратно сняв плёнку с пальцев человека, помещает ее в спец. пакетик")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/do В спец. пакетике находится плёнка с пальцев человека.")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/me положил спец. пакетик в задний карман брюк, берёт в руки баночку с пудрой ...")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/me ... и кисточку, убирает их в спец. сумку, после закрывает её")
-		wait(1500)
+		wait(2300)
 		sampSendChat("/do Спец. пакетик лежит в заднем кармане брюк, спец. сумка закрыта.")
 	end)
 end
@@ -2599,25 +2613,25 @@ end
 function cmd_grim()
     lua_thread.create(function ()
     sampSendChat("/do В шкафчике стоит набор для профессионального грима.")
-    wait(1500)
+    wait(2300)
     sampSendChat("/me открыл шкафчик и достав из него набор для грима, поставил его на шкафчик и открыл")
-    wait(1500)
+    wait(2300)
     sampSendChat("/do Набор для грима открыт.")
-    wait(1500)
+    wait(2300)
     sampSendChat("/do Над шкафчиком весит зеркало.")
-    wait(1500)
+    wait(2300)
     sampSendChat("/me рассматривая набор, взял большую кисть и окунув её в тёмный цвет, начал наносить его на лицо, смотря в зеркало")
-    wait(1500)
+    wait(2300)
     sampSendChat("/me взяв тонкую кисточку, окунул её в румян и начал наносить на лицо")
-   wait(1500)
+   wait(2300)
    sampSendChat("/me нарисовав на лице скулы, окунул кисточку в тёмную тень и нанёс их на лицо")
-   wait(1500)
+   wait(2300)
    sampSendChat("/me взял кисть и окунув её в тёмную пудру и нанёс её на лицо")
-   wait(1500)
+   wait(2300)
    sampSendChat("/me положил кисти в отсек для инструментов и закрыл набор")
-   wait(1500)
+   wait(2300)
    sampSendChat("/me убрал набор в шкафчик и закрыл его")
-   wait(1500)
+   wait(2300)
    sampSendChat("/do На лице нанесён грим.")
        end)
 end
@@ -3327,15 +3341,6 @@ local suppWindowFrame = imgui.OnFrame(
     end
 )
 
-function sampev.onSendChat(cmd)
-  if  mainIni.Accent.autoAccent then
-    if cmd == ')' or cmd == '(' or cmd ==  '))' or cmd == '((' or cmd == 'xD' or cmd == ':D' or cmd == ':d' or cmd == 'XD' then
-      return{cmd}
-    end
-    return{mainIni.Accent.accent .. ' ' .. cmd}
-  end
-end
-
 local fastMenu = imgui.OnFrame(function()
 	return state.renderFastMenu[0]
 end, function(player)
@@ -3355,16 +3360,18 @@ end, function(player)
 		if imgui.Button(u8 'Приветствие') then
             lua_thread.create(function()
                 sampSendChat("Доброго времени суток, я «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
-                wait(1500)
+                wait(2300)
                 sampSendChat("/do Удостоверение в руках.")
-                wait(1500)
+                wait(2300)
                 sampSendChat("/me показал своё удостоверение человеку на против")
-                wait(1500)
+                wait(2300)
                 sampSendChat("/do «" .. nickname .. "».")
-                wait(1500)
+                wait(2300)
                 sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
-                wait(1500)
+                wait(2300)
                 sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
+                wait(2300)
+                sampSendChat('/showbadge '..id)
             end)
         end
         if imgui.Button(u8 'Найти игрока') then
@@ -3377,7 +3384,7 @@ end, function(player)
                 wait(1500)
                 sampSendChat("/me включил КПК и зашел в базу данных Полиции")
                 wait(1500)
-                sampSendChat("/me открыл дело номер " .. player_id .. " преступника")
+                sampSendChat("/me открыл дело номер " .. id .. " преступника")
                 wait(1500)
                 sampSendChat("/do Данные преступника получены.")
                 wait(1500)
@@ -3565,3 +3572,12 @@ function table.find(t, v)
             file:flush()
             file:close()
  end
+
+ function sampev.onSendChat(cmd)
+    if  mainIni.Accent.autoAccent then
+      if cmd == ')' or cmd == '(' or cmd ==  '))' or cmd == '((' or cmd == 'xD' or cmd == ':D' or cmd == ':d' or cmd == 'XD' then
+        return{cmd}
+      end
+      return{mainIni.Accent.accent .. ' ' .. cmd}
+    end
+  end
