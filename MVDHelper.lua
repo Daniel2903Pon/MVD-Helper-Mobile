@@ -1,9 +1,24 @@
+require 'moonloader'
+local imgui = require('mimgui')
+local encoding = require 'encoding'
+encoding.default = 'CP1251'
+u8 = encoding.UTF8
+
+local AI_PAGE = {}
+
+local ToU32 = imgui.ColorConvertFloat4ToU32
+
+local page = 1
+
+local window = imgui.new.bool()
+
 script_name("MVD Helper Mobile")
 
-script_version("5.0")
-script_author("@Sashe4ka_ReZoN @daniel29032012")
+script_version("5.0.2")
+script_author("@Sashe4ka_ReZoN @daniel29032012 @Theopka")
 
 MDS = MONET_DPI_SCALE or 1
+
 local http = require("socket.http")
 local ltn12 = require("ltn12")
 local imgui = require 'mimgui'
@@ -11,40 +26,82 @@ local ffi = require 'ffi'
 local inicfg = require("inicfg")
 local faicons = require('fAwesome6')
 local sampev = require('lib.samp.events')
-doubleclickped = require("src.doubleclickped")
-
+local mainIni = inicfg.load({
+    Accent = {
+        accent = '[Молдавский акцент]: '
+    },
+    Info = {
+        org = u8'Вы не состоите в ПД',
+        dl = u8'Вы не состоите в ПД',
+        rang_n = 0
+    },
+    theme = {
+        themeta = "standart",
+        selected = 0,
+        moonmonet = 759410733
+    },
+    settings = {
+        autoRpGun = true,
+        poziv = false,
+        autoAccent = false,
+        standartBinds = true,
+        Jone = true,
+        ObuchalName = "Мастурбек"
+    }
+}, "mvdhelper.ini")
 local mmloaded, monet = pcall(require, "MoonMonet")
+function explode_argb(argb)
+    local a = bit.band(bit.rshift(argb, 24), 0xFF)
+    local r = bit.band(bit.rshift(argb, 16), 0xFF)
+    local g = bit.band(bit.rshift(argb, 8), 0xFF)
+    local b = bit.band(argb, 0xFF)
+    return a, r, g, b
+end
+function ARGBtoRGB(color)
+    return bit.band(color, 0xFFFFFF)
+end
+function rgb2hex(r, g, b)
+    local hex = string.format("#%02X%02X%02X", r, g, b)
+    return hex
+end
+function ColorAccentsAdapter(color)
+    local a, r, g, b = explode_argb(color)
+    local ret = {a = a, r = r, g = g, b = b}
+    function ret:apply_alpha(alpha)
+        self.a = alpha
+        return self
+    end
+    function ret:as_u32()
+        return join_argb(self.a, self.b, self.g, self.r)
+    end
+    function ret:as_vec4()
+        return imgui.ImVec4(self.r / 255, self.g / 255, self.b / 255, self.a / 255)
+    end
+    function ret:as_argb()
+        return join_argb(self.a, self.r, self.g, self.b)
+    end
+    function ret:as_rgba()
+        return join_argb(self.r, self.g, self.b, self.a)
+    end
+    function ret:as_chat()
+        return string.format("%06X", ARGBtoRGB(join_argb(self.a, self.r, self.g, self.b)))
+    end
+    return ret
+end
+function msg(text)
+	gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
+    local a, r, g, b = explode_argb(gen_color.accent1.color_300)
+	curcolor = '{'..rgb2hex(r, g, b)..'}'
+    curcolor1 = '0x'..('%X'):format(gen_color.accent1.color_300)
+	sampAddChatMessage("[MVD Helper]: {FFFFFF}" .. text, curcolor1)
+end
 
+local joneV = imgui.new.bool(mainIni.settings.Jone)
 if not mmloaded then
     print("MoonMonet doesn`t found. Script will work without it.")
 end
 
 function isMonetLoader() return MONET_VERSION ~= nil end
-local function mimguiState()
-	local state = {}
-	state.renderFastMenu = imgui.new.bool(false)
-	state.fastMenuPlayerId = nil
-	state.fastMenuPos = imgui.ImVec2(0, 0)
-    
-
-	--- @type table<number, Menu>
-	state.menus = {}
-	return state
-end
-state = mimguiState()
-
-doubleclickped.onDoubleClickedPed = function(ped, x, y)
-	
-	
-
-	local res, id = sampGetPlayerIdByCharHandle(ped)
-
-	if res then
-		state.fastMenuPlayerId = id
-		state.fastMenuPos = imgui.ImVec2(x, y)
-		state.renderFastMenu[0] = true
-	end
-end
 
 local servers = {
 	["80.66.82.162"] = { number = -1, name = "Mobile I"},
@@ -120,9 +177,6 @@ local smartUkUrl = {
     christmas = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Crihstmas.json"
 }
 
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Скрипт успешно загрузился", 0x8B00FF)
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Автор: t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon",0x8B00FF)
-sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Чтобы посмотреть комманды,введите /mvd and /mvds ",0x8B00FF)
 
 local renderWindow = new.bool()
 local sizeX, sizeY = getScreenResolution()
@@ -140,11 +194,11 @@ local arr = os.date("*t")
 local poziv = imgui.new.char(255)
 local pozivn = imgui.new.bool()
 local suppWindow = imgui.new.bool()
-windowTwo = imgui.new.bool()
-setUkWindow = imgui.new.bool()
-addUkWindow = imgui.new.bool()
-importUkWindow = imgui.new.bool()
-binderWindow = imgui.new.bool()
+local windowTwo = imgui.new.bool()
+local setUkWindow = imgui.new.bool()
+local addUkWindow = imgui.new.bool()
+local importUkWindow = imgui.new.bool()
+local binderWindow = imgui.new.bool()
 local newUkInput = imgui.new.char(255)
 local newUkUr = imgui.new.int(0)
 local car = faicons('CAR')
@@ -155,10 +209,8 @@ local radio = faicons('user')
 local pen = faicons('pen')
 local sliders = faicons('sliders')
 local userSecret = faicons('user-secret')
-leaderPanel = imgui.new.bool()
+local leaderPanel = imgui.new.bool()
 local spawn = true
-local deleteBinderName = 0
-
 
 local function downloadFile(url, path)
 
@@ -180,56 +232,49 @@ local function downloadFile(url, path)
   end
 end
 
-    sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Проверка наличия обновлений...", 0x8B00FF)
+    msg("{FFFFFF} Проверка наличия обновлений...", 0x8B00FF)
     local currentVersionFile = io.open(mvdPath, "r")
     local currentVersion = currentVersionFile:read("*a")
     currentVersionFile:close()
     local response = http.request(mvdUrl)
     if response and response ~= currentVersion then
-    	sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} У вас не актуальная версия! Для обновления перейдите во вкладку Инфо", 0x8B00FF)
+    	msg("{FFFFFF} У вас не актуальная версия! Для обновления перейдите во вкладку Инфо", 0x8B00FF)
     else
-    	sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} У вас актуальная версия скрипта.", 0x8B00FF)
+    	msg("{FFFFFF} У вас актуальная версия скрипта.", 0x8B00FF)
     end
     
 local function updateScript(scriptUrl, scriptPath)
-    sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Проверка наличия обновлений...", 0x8B00FF)
+    msg("{FFFFFF} Проверка наличия обновлений...", 0x8B00FF)
 	local response = http.request(scriptUrl)
     if response and response ~= currentVersion then
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Доступна новая версия скрипта! Обновление...", 0x8B00FF)
+        msg("{FFFFFF} Доступна новая версия скрипта! Обновление...", 0x8B00FF)
         
         local success = downloadFile(scriptUrl, scriptPath)
         if success then
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Скрипт успешно обновлен.", 0x8B00FF)
+            msg("{FFFFFF} Скрипт успешно обновлен.", 0x8B00FF)
             thisScript():reload()
         else
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Не удалось обновить скрипт.", 0x8B00FF)
+            msg("{FFFFFF} Не удалось обновить скрипт.", 0x8B00FF)
         end
     else
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Скрипт уже является последней версией.", 0x8B00FF)
+        msg("{FFFFFF} Скрипт уже является последней версией.", 0x8B00FF)
     end
 end
 
-local mainIni = inicfg.load({
-    Accent = {
-        accent = '[Молдавский акцент]: '
-    },
-    Info = {
-        org = 'Вы не состоите в ПД',
-        dl = 'Вы не состоите в ПД',
-        rang_n = 0
-    },
-    theme = {
-        themeta = "blue",
-        selected = 0,
-        moonmonet = 759410733
-    },
-    settings = {
-        autoRpGun = true,
-        poziv = false,
-        autoAccent = false,
-        standartBinds = true
-    }
-}, "mvdhelper.ini")
+function checkValue(path)
+    local file = io.open(path, "r")
+    if file then
+        local value = file:read("*all")
+        file:close()
+        return value
+    else
+        return nil
+    end
+end
+if checkValue("confing/Binder.json") ~= nil then
+    downloadFile("https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/refs/heads/main/Binder.json", "confing/Binder.json")
+end
+
 local autogun = new.bool(mainIni.settings.autoRpGun)
 -- Умный розыск
 local file = io.open("smartUk.json", "r") -- Открываем файл в режиме чтения
@@ -245,19 +290,10 @@ else
     tableUk = decodeJson(a) -- Читаем нашу JSON-Таблицу
 end
 
---Биндер
-local binder = io.open("binder.json", "r")
-if not binder then
-    binder ='{"hi": ["Доброго времени суток, я «звание» «Имя Фамилия».","/do Удостоверение в руках."]}'
-
-    local binderFile = io.open("binder.json", "w")
-    binderFile:write(encodeJson(binder))
-    binderFile:close()
-else
-    local b = binder:read("*a")
-    binder:close()
-    tableBinder = decodeJson(b)
-end
+local selected_theme = imgui.new.int(mainIni.theme.selected)
+local theme_a = {u8'Стандартная', 'MoonMonet'}
+local theme_t = {u8'standart', 'moonmonet'}
+local items = imgui.new['const char*'][#theme_a](theme_a)
 
 local standartBindsBox = new.bool(mainIni.settings.standartBinds)
 local statsCheck = false
@@ -270,1309 +306,1565 @@ local org_tag = u8'Вы не состоите в ПД'
 local dol = 'Вы не состоите в ПД'
 local dl = u8'Вы не состоите в ПД'
 local rang_n = 0
-local selected_theme = imgui.new.int(mainIni.theme.selected)
-local theme_a = {u8'Стандартная', u8'Красная', u8'Зелёная',u8'Синяя', u8'Фиолетовая', 'MoonMonet'}
-local theme_t = {u8'standart', u8'red', u8'green', u8'blue', 'purple', 'moonmonet'}
-local items = imgui.new['const char*'][#theme_a](theme_a)
+
 local nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))
-local autoScrinArest = new.bool()
 
-local sliderBuf = new.int() -- буфер для тестового слайдера
 
-local function join_argb(a, r, g, b)
-    local argb = b  -- b
-    argb = bit.bor(argb, bit.lshift(g, 8))  -- g
-    argb = bit.bor(argb, bit.lshift(r, 16)) -- r
-    argb = bit.bor(argb, bit.lshift(a, 24)) -- a
-    return argb
-end
-local function explode_argb(argb)
-    local a = bit.band(bit.rshift(argb, 24), 0xFF)
-    local r = bit.band(bit.rshift(argb, 16), 0xFF)
-    local g = bit.band(bit.rshift(argb, 8), 0xFF)
-    local b = bit.band(argb, 0xFF)
-    return a, r, g, b
-end
-local function ARGBtoRGB(color)
-    return bit.band(color, 0xFFFFFF)
-end
-function rgb2hex(r, g, b)
-    local hex = string.format("#%02X%02X%02X", r, g, b)
-    return hex
-end
-function ColorAccentsAdapter(color)
-    local a, r, g, b = explode_argb(color)
-    local ret = {a = a, r = r, g = g, b = b}
-    function ret:apply_alpha(alpha)
-        self.a = alpha
-        return self
+--Биндер успешно спизженый у Богдана(он разрешил)
+require "lib.moonloader"
+require 'encoding'.default = 'CP1251'
+local u8 = require 'encoding'.UTF8
+
+local settings = {}
+local default_settings = {
+	commands = {
+		{},
+	},
+}
+local configDirectory = getWorkingDirectory() .. "/config"
+local path = configDirectory .. "/Binder.json"
+
+function load_settings()
+    if not doesDirectoryExist(configDirectory) then
+        createDirectory(configDirectory)
     end
-    function ret:as_u32()
-        return join_argb(self.a, self.b, self.g, self.r)
-    end
-    function ret:as_vec4()
-        return imgui.ImVec4(self.r / 255, self.g / 255, self.b / 255, self.a / 255)
-    end
-    function ret:as_argb()
-        return join_argb(self.a, self.r, self.g, self.b)
-    end
-    function ret:as_rgba()
-        return join_argb(self.r, self.g, self.b, self.a)
-    end
-    function ret:as_chat()
-        return string.format("%06X", ARGBtoRGB(join_argb(self.a, self.r, self.g, self.b)))
-    end
-    return ret
-end
-
-function standarttheme()
-    imgui.SwitchContext()
-    --==[ STYLE ]==--
-    imgui.GetStyle().WindowPadding = imgui.ImVec2(5, 5)
-    imgui.GetStyle().FramePadding = imgui.ImVec2(5, 5)
-    imgui.GetStyle().ItemSpacing = imgui.ImVec2(5, 5)
-    imgui.GetStyle().ItemInnerSpacing = imgui.ImVec2(2, 2)
-    imgui.GetStyle().TouchExtraPadding = imgui.ImVec2(0, 0)
-    imgui.GetStyle().IndentSpacing = 0
-    imgui.GetStyle().ScrollbarSize = 10
-    imgui.GetStyle().GrabMinSize = 10
-    --==[ BORDER ]==--
-    imgui.GetStyle().WindowBorderSize = 1
-    imgui.GetStyle().ChildBorderSize = 1
-    imgui.GetStyle().PopupBorderSize = 1
-    imgui.GetStyle().FrameBorderSize = 1
-    imgui.GetStyle().TabBorderSize = 1
-     --==[ ROUNDING ]==--
-    imgui.GetStyle().WindowRounding = 5
-    imgui.GetStyle().ChildRounding = 5
-    imgui.GetStyle().FrameRounding = 5
-    imgui.GetStyle().PopupRounding = 5
-    imgui.GetStyle().ScrollbarRounding = 5
-    imgui.GetStyle().GrabRounding = 5
-    imgui.GetStyle().TabRounding = 5
-     --==[ ALIGN ]==--
-    imgui.GetStyle().WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
-    imgui.GetStyle().ButtonTextAlign = imgui.ImVec2(0.5, 0.5)
-    imgui.GetStyle().SelectableTextAlign = imgui.ImVec2(0.5, 0.5)
-     --==[ COLORS ]==--
-    imgui.GetStyle().Colors[imgui.Col.Text]                   = imgui.ImVec4(1.00, 1.00, 1.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextDisabled]           = imgui.ImVec4(0.50, 0.50, 0.50, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.WindowBg]               = imgui.ImVec4(0.07, 0.07, 0.07, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ChildBg]                = imgui.ImVec4(0.07, 0.07, 0.07, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PopupBg]                = imgui.ImVec4(0.07, 0.07, 0.07, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Border]                 = imgui.ImVec4(0.25, 0.25, 0.26, 0.54)
-    imgui.GetStyle().Colors[imgui.Col.BorderShadow]           = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBg]                = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgHovered]         = imgui.ImVec4(0.25, 0.25, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgActive]          = imgui.ImVec4(0.25, 0.25, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBg]                = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgActive]          = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgCollapsed]       = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.MenuBarBg]              = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarBg]            = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrab]          = imgui.ImVec4(0.00, 0.00, 0.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabHovered]   = imgui.ImVec4(0.41, 0.41, 0.41, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabActive]    = imgui.ImVec4(0.51, 0.51, 0.51, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.CheckMark]              = imgui.ImVec4(1.00, 1.00, 1.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrab]             = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrabActive]       = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Button]                 = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonHovered]          = imgui.ImVec4(0.21, 0.20, 0.20, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonActive]           = imgui.ImVec4(0.41, 0.41, 0.41, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Header]                 = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.HeaderHovered]          = imgui.ImVec4(0.20, 0.20, 0.20, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.HeaderActive]           = imgui.ImVec4(0.47, 0.47, 0.47, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Separator]              = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorHovered]       = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorActive]        = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGrip]             = imgui.ImVec4(1.00, 1.00, 1.00, 0.25)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripHovered]      = imgui.ImVec4(1.00, 1.00, 1.00, 0.67)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripActive]       = imgui.ImVec4(1.00, 1.00, 1.00, 0.95)
-    imgui.GetStyle().Colors[imgui.Col.Tab]                    = imgui.ImVec4(0.12, 0.12, 0.12, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TabHovered]             = imgui.ImVec4(0.28, 0.28, 0.28, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TabActive]              = imgui.ImVec4(0.30, 0.30, 0.30, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TabUnfocused]           = imgui.ImVec4(0.07, 0.10, 0.15, 0.97)
-    imgui.GetStyle().Colors[imgui.Col.TabUnfocusedActive]     = imgui.ImVec4(0.14, 0.26, 0.42, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLines]              = imgui.ImVec4(0.61, 0.61, 0.61, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLinesHovered]       = imgui.ImVec4(1.00, 0.43, 0.35, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogram]          = imgui.ImVec4(0.90, 0.70, 0.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogramHovered]   = imgui.ImVec4(1.00, 0.60, 0.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextSelectedBg]         = imgui.ImVec4(1.00, 0.00, 0.00, 0.35)
-    imgui.GetStyle().Colors[imgui.Col.DragDropTarget]         = imgui.ImVec4(1.00, 1.00, 0.00, 0.90)
-    imgui.GetStyle().Colors[imgui.Col.NavHighlight]           = imgui.ImVec4(0.26, 0.59, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.NavWindowingHighlight]  = imgui.ImVec4(1.00, 1.00, 1.00, 0.70)
-    imgui.GetStyle().Colors[imgui.Col.NavWindowingDimBg]      = imgui.ImVec4(0.80, 0.80, 0.80, 0.20)
-    imgui.GetStyle().Colors[imgui.Col.ModalWindowDimBg]       = imgui.ImVec4(0.00, 0.00, 0.00, 0.70)
-end
-
-function redtheme()
-    local ImVec4 = imgui.ImVec4
-    imgui.SwitchContext()
-    imgui.GetStyle().Colors[imgui.Col.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextDisabled]           = ImVec4(0.50, 0.50, 0.50, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.WindowBg]               = ImVec4(0.06, 0.06, 0.06, 0.94)
-    imgui.GetStyle().Colors[imgui.Col.ChildBg]                = ImVec4(1.00, 1.00, 1.00, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.PopupBg]                = ImVec4(0.08, 0.08, 0.08, 0.94)
-    imgui.GetStyle().Colors[imgui.Col.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
-    imgui.GetStyle().Colors[imgui.Col.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBg]                = ImVec4(0.48, 0.16, 0.16, 0.54)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgHovered]         = ImVec4(0.98, 0.26, 0.26, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgActive]          = ImVec4(0.98, 0.26, 0.26, 0.67)
-    imgui.GetStyle().Colors[imgui.Col.TitleBg]                = ImVec4(0.04, 0.04, 0.04, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgActive]          = ImVec4(0.48, 0.16, 0.16, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgCollapsed]       = ImVec4(0.00, 0.00, 0.00, 0.51)
-    imgui.GetStyle().Colors[imgui.Col.MenuBarBg]              = ImVec4(0.14, 0.14, 0.14, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabActive]    = ImVec4(0.51, 0.51, 0.51, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.CheckMark]              = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrab]             = ImVec4(0.88, 0.26, 0.24, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrabActive]       = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Button]                 = ImVec4(0.98, 0.26, 0.26, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.ButtonHovered]          = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonActive]           = ImVec4(0.98, 0.06, 0.06, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Header]                 = ImVec4(0.98, 0.26, 0.26, 0.31)
-    imgui.GetStyle().Colors[imgui.Col.HeaderHovered]          = ImVec4(0.98, 0.26, 0.26, 0.80)
-    imgui.GetStyle().Colors[imgui.Col.HeaderActive]           = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Separator]              = ImVec4(0.43, 0.43, 0.50, 0.50)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorHovered]       = ImVec4(0.75, 0.10, 0.10, 0.78)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorActive]        = ImVec4(0.75, 0.10, 0.10, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGrip]             = ImVec4(0.98, 0.26, 0.26, 0.25)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripHovered]      = ImVec4(0.98, 0.26, 0.26, 0.67)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripActive]       = ImVec4(0.98, 0.26, 0.26, 0.95)
-    imgui.GetStyle().Colors[imgui.Col.Tab]                    = ImVec4(0.98, 0.26, 0.26, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.TabHovered]             = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TabActive]              = ImVec4(0.98, 0.06, 0.06, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TabUnfocused]           = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TabUnfocusedActive]     = ImVec4(0.98, 0.26, 0.26, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLines]              = ImVec4(0.61, 0.61, 0.61, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLinesHovered]       = ImVec4(1.00, 0.43, 0.35, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogram]          = ImVec4(0.90, 0.70, 0.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogramHovered]   = ImVec4(1.00, 0.60, 0.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextSelectedBg]         = ImVec4(0.98, 0.26, 0.26, 0.35)
-end
-
-function greentheme()
-    local ImVec4 = imgui.ImVec4
-    imgui.SwitchContext()
-    imgui.GetStyle().Colors[imgui.Col.Text]                   = ImVec4(0.90, 0.90, 0.90, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextDisabled]           = ImVec4(0.60, 0.60, 0.60, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.WindowBg]               = ImVec4(0.08, 0.08, 0.08, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ChildBg]                = ImVec4(0.10, 0.10, 0.10, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PopupBg]                = ImVec4(0.08, 0.08, 0.08, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Border]                 = ImVec4(0.70, 0.70, 0.70, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBg]                = ImVec4(0.15, 0.15, 0.15, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgHovered]         = ImVec4(0.19, 0.19, 0.19, 0.71)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgActive]          = ImVec4(0.34, 0.34, 0.34, 0.79)
-    imgui.GetStyle().Colors[imgui.Col.TitleBg]                = ImVec4(0.00, 0.69, 0.33, 0.80)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgActive]          = ImVec4(0.00, 0.74, 0.36, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgCollapsed]       = ImVec4(0.00, 0.69, 0.33, 0.50)
-    imgui.GetStyle().Colors[imgui.Col.MenuBarBg]              = ImVec4(0.00, 0.80, 0.38, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarBg]            = ImVec4(0.16, 0.16, 0.16, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrab]          = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabHovered]   = ImVec4(0.00, 0.82, 0.39, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabActive]    = ImVec4(0.00, 1.00, 0.48, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.CheckMark]              = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrab]             = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrabActive]       = ImVec4(0.00, 0.77, 0.37, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Button]                 = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonHovered]          = ImVec4(0.00, 0.82, 0.39, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonActive]           = ImVec4(0.00, 0.87, 0.42, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Header]                 = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.HeaderHovered]          = ImVec4(0.00, 0.76, 0.37, 0.57)
-    imgui.GetStyle().Colors[imgui.Col.HeaderActive]           = ImVec4(0.00, 0.88, 0.42, 0.89)
-    imgui.GetStyle().Colors[imgui.Col.Separator]              = ImVec4(1.00, 1.00, 1.00, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorHovered]       = ImVec4(1.00, 1.00, 1.00, 0.60)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorActive]        = ImVec4(1.00, 1.00, 1.00, 0.80)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGrip]             = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripHovered]      = ImVec4(0.00, 0.76, 0.37, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripActive]       = ImVec4(0.00, 0.86, 0.41, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLines]              = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLinesHovered]       = ImVec4(0.00, 0.74, 0.36, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogram]          = ImVec4(0.00, 0.69, 0.33, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogramHovered]   = ImVec4(0.00, 0.80, 0.38, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextSelectedBg]         = ImVec4(0.00, 0.69, 0.33, 0.72)
-end
-
-function bluetheme()
-    local ImVec4 = imgui.ImVec4
-    imgui.SwitchContext()
-    imgui.GetStyle().Colors[imgui.Col.WindowBg]               = ImVec4(0.08, 0.08, 0.08, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBg]                = ImVec4(0.16, 0.29, 0.48, 0.54)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgHovered]         = ImVec4(0.26, 0.59, 0.98, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgActive]          = ImVec4(0.26, 0.59, 0.98, 0.67)
-    imgui.GetStyle().Colors[imgui.Col.TitleBg]                = ImVec4(0.04, 0.04, 0.04, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgActive]          = ImVec4(0.16, 0.29, 0.48, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgCollapsed]       = ImVec4(0.00, 0.00, 0.00, 0.51)
-    imgui.GetStyle().Colors[imgui.Col.CheckMark]              = ImVec4(0.26, 0.59, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrab]             = ImVec4(0.24, 0.52, 0.88, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrabActive]       = ImVec4(0.26, 0.59, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Button]                 = ImVec4(0.26, 0.59, 0.98, 0.40)
-    imgui.GetStyle().Colors[imgui.Col.ButtonHovered]          = ImVec4(0.26, 0.59, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ButtonActive]           = ImVec4(0.06, 0.53, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Header]                 = ImVec4(0.26, 0.59, 0.98, 0.31)
-    imgui.GetStyle().Colors[imgui.Col.HeaderHovered]          = ImVec4(0.26, 0.59, 0.98, 0.80)
-    imgui.GetStyle().Colors[imgui.Col.HeaderActive]           = ImVec4(0.26, 0.59, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Separator]              = ImVec4(0.43, 0.43, 0.50, 0.50)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorHovered]       = ImVec4(0.26, 0.59, 0.98, 0.78)
-    imgui.GetStyle().Colors[imgui.Col.SeparatorActive]        = ImVec4(0.26, 0.59, 0.98, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGrip]             = ImVec4(0.26, 0.59, 0.98, 0.25)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripHovered]      = ImVec4(0.26, 0.59, 0.98, 0.67)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripActive]       = ImVec4(0.26, 0.59, 0.98, 0.95)
-    imgui.GetStyle().Colors[imgui.Col.TextSelectedBg]         = ImVec4(0.26, 0.59, 0.98, 0.35)
-    imgui.GetStyle().Colors[imgui.Col.Text]                   = ImVec4(1.00, 1.00, 1.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextDisabled]           = ImVec4(0.50, 0.50, 0.50, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.WindowBg]               = ImVec4(0.06, 0.53, 0.98, 0.70)
-    imgui.GetStyle().Colors[imgui.Col.ChildBg]                = ImVec4(0.10, 0.10, 0.10, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PopupBg]                = ImVec4(0.06, 0.53, 0.98, 0.70)
-    imgui.GetStyle().Colors[imgui.Col.Border]                 = ImVec4(0.43, 0.43, 0.50, 0.50)
-    imgui.GetStyle().Colors[imgui.Col.BorderShadow]           = ImVec4(0.00, 0.00, 0.00, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.MenuBarBg]              = ImVec4(0.14, 0.14, 0.14, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarBg]            = ImVec4(0.02, 0.02, 0.02, 0.53)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrab]          = ImVec4(0.31, 0.31, 0.31, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabHovered]   = ImVec4(0.41, 0.41, 0.41, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabActive]    = ImVec4(0.51, 0.51, 0.51, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLines]              = ImVec4(0.61, 0.61, 0.61, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLinesHovered]       = ImVec4(1.00, 0.43, 0.35, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogram]          = ImVec4(0.90, 0.70, 0.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogramHovered]   = ImVec4(1.00, 0.60, 0.00, 1.00)
-end
-
-function purpletheme()
-    local ImVec4 = imgui.ImVec4
-    imgui.GetStyle().FramePadding = imgui.ImVec2(3.5, 3.5)
-    imgui.GetStyle().FrameRounding = 3
-    imgui.GetStyle().ChildRounding = 2
-    imgui.GetStyle().WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
-    imgui.GetStyle().WindowRounding = 2
-    imgui.GetStyle().ItemSpacing = imgui.ImVec2(5.0, 4.0)
-    imgui.GetStyle().ScrollbarSize = 13.0
-    imgui.GetStyle().ScrollbarRounding = 0
-    imgui.GetStyle().GrabMinSize = 8.0
-    imgui.GetStyle().GrabRounding = 1.0
-    imgui.GetStyle().WindowPadding = imgui.ImVec2(4.0, 4.0)
-    imgui.GetStyle().ButtonTextAlign = imgui.ImVec2(0.0, 0.5)
-
-    imgui.GetStyle().Colors[imgui.Col.WindowBg] = imgui.ImVec4(0.14, 0.12, 0.16, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ChildBg] = imgui.ImVec4(0.30, 0.20, 0.39, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.PopupBg] = imgui.ImVec4(0.05, 0.05, 0.10, 0.90)
-    imgui.GetStyle().Colors[imgui.Col.Border] = imgui.ImVec4(0.89, 0.85, 0.92, 0.30)
-    imgui.GetStyle().Colors[imgui.Col.BorderShadow] = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBg] = imgui.ImVec4(0.30, 0.20, 0.39, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 0.68)
-    imgui.GetStyle().Colors[imgui.Col.FrameBgActive] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TitleBg] = imgui.ImVec4(0.41, 0.19, 0.63, 0.45)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgCollapsed] = imgui.ImVec4(0.41, 0.19, 0.63, 0.35)
-    imgui.GetStyle().Colors[imgui.Col.TitleBgActive] = imgui.ImVec4(0.41, 0.19, 0.63, 0.78)
-    imgui.GetStyle().Colors[imgui.Col.MenuBarBg] = imgui.ImVec4(0.30, 0.20, 0.39, 0.57)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarBg] = imgui.ImVec4(0.30, 0.20, 0.39, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrab] = imgui.ImVec4(0.41, 0.19, 0.63, 0.31)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 0.78)
-    imgui.GetStyle().Colors[imgui.Col.ScrollbarGrabActive] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.CheckMark] = imgui.ImVec4(0.56, 0.61, 1.00, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrab] = imgui.ImVec4(0.41, 0.19, 0.63, 0.24)
-    imgui.GetStyle().Colors[imgui.Col.SliderGrabActive] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Button] = imgui.ImVec4(0.41, 0.19, 0.63, 0.44)
-    imgui.GetStyle().Colors[imgui.Col.ButtonHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 0.86)
-    imgui.GetStyle().Colors[imgui.Col.ButtonActive] = imgui.ImVec4(0.64, 0.33, 0.94, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.Header] = imgui.ImVec4(0.41, 0.19, 0.63, 0.76)
-    imgui.GetStyle().Colors[imgui.Col.HeaderHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 0.86)
-    imgui.GetStyle().Colors[imgui.Col.HeaderActive] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGrip] = imgui.ImVec4(0.41, 0.19, 0.63, 0.20)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 0.78)
-    imgui.GetStyle().Colors[imgui.Col.ResizeGripActive] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotLines] = imgui.ImVec4(0.89, 0.85, 0.92, 0.63)
-    imgui.GetStyle().Colors[imgui.Col.PlotLinesHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogram] = imgui.ImVec4(0.89, 0.85, 0.92, 0.63)
-    imgui.GetStyle().Colors[imgui.Col.PlotHistogramHovered] = imgui.ImVec4(0.41, 0.19, 0.63, 1.00)
-    imgui.GetStyle().Colors[imgui.Col.TextSelectedBg] = imgui.ImVec4(0.41, 0.19, 0.63, 0.43)
-end
-
-function apply_monet()
-	imgui.SwitchContext()
-	local style = imgui.GetStyle()
-	local colors = style.Colors
-	local clr = imgui.Col
-	local ImVec4 = imgui.ImVec4
-	local generated_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
-	colors[clr.Text] = ColorAccentsAdapter(generated_color.accent2.color_50):as_vec4()
-	colors[clr.TextDisabled] = ColorAccentsAdapter(generated_color.neutral1.color_600):as_vec4()
-	colors[clr.WindowBg] = ColorAccentsAdapter(generated_color.accent2.color_900):as_vec4()
-	colors[clr.ChildBg] = ColorAccentsAdapter(generated_color.accent2.color_800):as_vec4()
-	colors[clr.PopupBg] = ColorAccentsAdapter(generated_color.accent2.color_700):as_vec4()
-	colors[clr.Border] = ColorAccentsAdapter(generated_color.accent1.color_200):apply_alpha(0xcc):as_vec4()
-	colors[clr.Separator] = ColorAccentsAdapter(generated_color.accent1.color_200):apply_alpha(0xcc):as_vec4()
-	colors[clr.BorderShadow] = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
-	colors[clr.FrameBg] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x60):as_vec4()
-	colors[clr.FrameBgHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x70):as_vec4()
-	colors[clr.FrameBgActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x50):as_vec4()
-	colors[clr.TitleBg] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0xcc):as_vec4()
-	colors[clr.TitleBgCollapsed] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0x7f):as_vec4()
-	colors[clr.TitleBgActive] = ColorAccentsAdapter(generated_color.accent2.color_700):as_vec4()
-	colors[clr.MenuBarBg] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x91):as_vec4()
-	colors[clr.ScrollbarBg] = imgui.ImVec4(0,0,0,0)
-	colors[clr.ScrollbarGrab] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x85):as_vec4()
-	colors[clr.ScrollbarGrabHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.ScrollbarGrabActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
-	colors[clr.CheckMark] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
-	colors[clr.SliderGrab] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
-	colors[clr.SliderGrabActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x80):as_vec4()
-	colors[clr.Button] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
-	colors[clr.ButtonHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.ButtonActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
-	colors[clr.Tab] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
-	colors[clr.TabActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
-	colors[clr.TabHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.Header] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
-	colors[clr.HeaderHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.HeaderActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
-	colors[clr.ResizeGrip] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0xcc):as_vec4()
-	colors[clr.ResizeGripHovered] = ColorAccentsAdapter(generated_color.accent2.color_700):as_vec4()
-	colors[clr.ResizeGripActive] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0xb3):as_vec4()
-	colors[clr.PlotLines] = ColorAccentsAdapter(generated_color.accent2.color_600):as_vec4()
-	colors[clr.PlotLinesHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.PlotHistogram] = ColorAccentsAdapter(generated_color.accent2.color_600):as_vec4()
-	colors[clr.PlotHistogramHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.TextSelectedBg] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
-	colors[clr.ModalWindowDimBg] = ColorAccentsAdapter(generated_color.accent1.color_200):apply_alpha(0x26):as_vec4()
-end
-
-function apply_n_t()
-    if mainIni.theme.theme == 'standart' then
-    	standarttheme()
-	elseif mainIni.theme.theme == 'red' then
-        redtheme()
-	elseif mainIni.theme.theme == 'green' then
-		greentheme()
-	elseif mainIni.theme.theme == 'blue' then
-    	bluetheme()
-	elseif mainIni.theme.theme == 'purple' then
-    	purpletheme()
-	elseif mainIni.theme.theme == 'moonmonet' and mmloaded then
-		gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
-    	local a, r, g, b = explode_argb(gen_color.accent1.color_300)
-		curcolor = '{'..rgb2hex(r, g, b)..'}'
-    	curcolor1 = '0x'..('%X'):format(gen_color.accent1.color_300)
-        apply_monet()
-    end
-end
-
-imgui.OnFrame(
-    function() return renderWindow[0] end,
-    function()
-        return true
-    end,
-    function(player)
-        imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-        imgui.SetNextWindowSize(imgui.ImVec2(1700, 700), imgui.Cond.FirstUseEver)
-        imgui.Begin(thisScript().name .. " " .. thisScript().version .. " ", renderWindow)
-        imgui.SetCursorPosY(50)
-        imgui.Text(u8'MVD Helper 5.0 \n для Arizona Mobile', imgui.SetCursorPosX(50))
-        if imgui.Button(settings .. u8' Настройки', imgui.ImVec2(280, 50)) then
-            tab = 1
-        elseif imgui.Button(list .. u8' Биндер', imgui.ImVec2(280, 50)) then
-            tab = 2
-        
-        elseif imgui.Button(list .. u8' Основное', imgui.ImVec2(280, 50)) then
-            tab = 8
-
-        elseif imgui.Button(radio .. u8' Рация депортамента', imgui.ImVec2(280, 50)) then
-            tab = 3
-
-        elseif imgui.Button(userSecret .. u8' Для СС', imgui.ImVec2(280, 50)) then
-            tab = 4
-
-        elseif imgui.Button(pen .. u8' Шпаргалки', imgui.ImVec2(280, 50)) then
-            tab = 5
-
-        elseif imgui.Button(sliders .. u8' Дополнительно', imgui.ImVec2(280, 50)) then
-            tab = 6
-
-        elseif imgui.Button(info .. u8' Инфа', imgui.ImVec2(280, 50)) then
-            tab = 7
-        end
-        imgui.SetCursorPos(imgui.ImVec2(300, 50))
-        if imgui.BeginChild('Name##'..tab, imgui.ImVec2(), true) then -- [Для декора] Создаём чайлд в который поместим содержимое
-            -- == [Основное] Содержимое вкладок == --
-            if tab == 1 then -- если значение tab == 1
-                imgui.Text(u8'Ваш ник: '.. nickname)
-                imgui.Text(u8'Ваша организация: '.. mainIni.Info.org)
-                imgui.Text(u8'Ваша должность: '.. mainIni.Info.dl)
-                if imgui.Combo(u8'Темы', selected_theme, items, #theme_a) then
-                	themeta = theme_t[selected_theme[0]+1]
-	            	mainIni.theme.theme = themeta
-	            	mainIni.theme.selected = selected_theme[0]
-		            inicfg.save(mainIni, 'mvdhelper.ini')
-
-                    apply_n_t()
-	            end
-            	imgui.Text(u8'Цвет MoonMonet - ')
-				imgui.SameLine()
-                if mmloaded then
-                    if imgui.ColorEdit3('## COLOR', mmcolor, imgui.ColorEditFlags.NoInputs) then
-                        r,g,b = mmcolor[0] * 255, mmcolor[1] * 255, mmcolor[2] * 255
-                        argb = join_argb(0, r, g, b)
-                        mainIni.theme.moonmonet = argb
-                        inicfg.save(mainIni, 'mvdhelper.ini')
-                        apply_n_t()
-                    end
-                else
-                    imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8'MoonMonet библиотека не обнаружена! Для использования данной функции необходима библиотека MoonMonet.')
-                end
-                if imgui.Button(u8'УК') then
-                    setUkWindow[0] = not setUkWindow[0]
-                end
-
-elseif tab == 8 then -- если значение tab == 8
-                imgui.InputInt(u8 'ID игрока с которым будете взаимодействовать', id, 10)
-                if imgui.Button(u8 'Приветствие') then
-                    lua_thread.create(function()
-                        sampSendChat("Доброго времени суток, я «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
-                        wait(1500)
-                        sampSendChat("/do Удостоверение в руках.")
-                        wait(1500)
-                        sampSendChat("/me показал своё удостоверение человеку на против")
-                        wait(1500)
-                        sampSendChat("/do «" .. nickname .. "».")
-                        wait(1500)
-                        sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
-                        wait(1500)
-                        sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
-                        wait(1500)
-                        sampSendChat("/showbadge ")
-                    end)
-                end
-                if imgui.Button(u8 'Найти игрока') then
-                    lua_thread.create(function()
-                        sampSendChat("/do КПК в левом кармане.")
-                        wait(1500)
-                        sampSendChat("/me достал левой рукой КПК из кармана")
-                        wait(1500)
-                        sampSendChat("/do КПК в левой руке.")
-                        wait(1500)
-                        sampSendChat("/me включил КПК и зашел в базу данных Полиции")
-                        wait(1500)
-                        sampSendChat("/me открыл дело номер " .. id[0] .. " преступника")
-                        wait(1500)
-                        sampSendChat("/do Данные преступника получены.")
-                        wait(1500)
-                        sampSendChat("/me подключился к камерам слежения штата")
-                        wait(1500)
-                        sampSendChat("/do На навигаторе появился маршрут.")
-                        wait(1500)
-                        sampSendChat("/pursuit " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Арест') then
-                    lua_thread.create(function()
-                        sampSendChat("/me взял ручку из кармана рубашки, затем открыл бардачок и взял оттуда бланк протокола")
-                        wait(1500)
-                        sampSendChat("/do Бланк протокола и ручка в руках.")
-                        wait(1500)
-                        sampSendChat("/me заполняет описание внешности нарушителя")
-                        wait(1500)
-                        sampSendChat("/me заполняет характеристику о нарушителе")
-                        wait(1500)
-                        sampSendChat("/me заполняет данные о нарушении")
-                        wait(1500)
-                        sampSendChat("/me проставил дату и подпись")
-                        wait(1500)
-                        sampSendChat("/me положил ручку в карман рубашки")
-                        wait(1500)
-                        sampSendChat("/do Ручка в кармане рубашки.")
-                        wait(1500)
-                        sampSendChat("/me передал бланк составленного протокола в участок")
-                        wait(1500)
-                        sampSendChat("/me передал преступника в Управление Полиции под стражу")
-                        wait(1500)
-                        sampSendChat("/arrest")
-                        sampAddChatMessage("Встаньте на чекпоинт",0x8B00FF)
-                    end)
-                end
-                if imgui.Button(u8 'Надеть наручники') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Наручники висят на поясе.")
-                        wait(1500)
-                        sampSendChat("/me снял с держателя наручники")
-                        wait(1500)
-                        sampSendChat("/do Наручники в руках.")
-                        wait(1500)
-                        sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
-                        wait(1500)
-                        sampSendChat("/do Преступник скован.")
-                        wait(1500)
-                        sampSendChat("/cuff " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Снять наручники') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Ключ от наручников в кармане.")
-                        wait(1500)
-                        sampSendChat("/me движением правой руки достал из кармана ключ и открыл наручники")
-                        wait(1500)
-                        sampSendChat("/do Преступник раскован.")
-                        wait(1500)
-                        sampSendChat("/uncuff " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Вести за собой') then
-                    lua_thread.create(function()
-                        ampSendsChat("/me заломил правую руку нарушителю")
-                        wait(1500)
-                        sampSendChat("/me ведет нарушителя за собой")
-                        wait(1500)
-                        sampSendChat("/gotome " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Перестать вести за собой') then
-                    lua_thread.create(function()
-                        sampSendChat("/me отпустил правую руку преступника")
-                        wait(1500)
-                        sampSendChat("/do Преступник свободен.")
-                        wait(1500)
-                        sampSendChat("/ungotome " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'В машину(автоматически на 3-е место)') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Двери в машине закрыты.")
-                        wait(1500)
-                        sampSendChat("/me открыл заднюю дверь в машине")
-                        wait(1500)
-                        sampSendChat("/me посадил преступника в машину")
-                        wait(1500)
-                        sampSendChat("/me заблокировал двери")
-                        wait(1500)
-                        sampSendChat("/do Двери заблокированы.")
-                        wait(1500)
-                        sampSendChat("/incar " .. id[0] .. "3")
-                    end)
-                end
-                if imgui.Button(u8 'Обыск') then
-                    lua_thread.create(function()
-                        sampSendChat("/me нырнув руками в карманы, вытянул оттуда белые перчатки и натянул их на руки")
-                        wait(1500)
-                        sampSendChat("/do Перчатки надеты.")
-                        wait(1500)
-                        sampSendChat("/me проводит руками по верхней части тела")
-                        wait(1500)
-                        sampSendChat("/me проверяет карманы")
-                                        wait(1500)
-				sampSendChat ("/me проводит руками по ногам")
-                        wait(1500)
-                        sampSendChat("/frisk " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Мегафон') then
-                    lua_thread.create(function()
-                        sampSendChat("/do Мегафон в бардачке.")
-                        wait(1500)
-                        sampSendChat("/me достал мегафон с бардачка после чего включил его")
-                        wait(1500)
-                        sampSendChat("/m Водитель авто, остановитесь и заглушите двигатель, держите руки на руле.")
-                    end)
-                end
-                if imgui.Button(u8 'Вытащить из авто') then
-                    lua_thread.create(function()
-                        sampSendChat("/me сняв дубинку с поясного держателя разбил стекло в транспорте")
-                        wait(1500)
-                        sampSendChat("/do Стекло разбито.")
-                        wait(1500)
-                        sampSendChat("/me схватив за плечи человека ударил его после чего надел наручники")
-                        wait(1500)
-                        sampSendChat("/pull " .. id[0])
-                        wait(1500)
-                        sampSendChat("/cuff " .. id[0])
-                    end)
-                end
-                if imgui.Button(u8 'Выдача розыска') then
-                    windowTwo[0] = not windowTwo[0]
-                end
-            elseif tab == 2 then -- если значение 
-                -- для удобства зададим ширину каждой колонки в начале
-                local w = {
-                    first = 150,
-                    second = 250,
-                }
-                
-                if mainIni.settings.standartBinds ~= true then
-					if imgui.Button(u8'Включить стандартные отыгровки') then
-                	mainIni.settings.standartBinds = true
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                	sampRegisterChatCommand("showpass", cmd_showpass)
-    sampRegisterChatCommand("showlic", cmd_showlic)
-    sampRegisterChatCommand("showskill", cmd_showskill)
-    sampRegisterChatCommand("showmc", cmd_showmc)
-    sampRegisterChatCommand("pull", cmd_pull)
-    sampRegisterChatCommand("invite", cmd_invite)
-    sampRegisterChatCommand("uninvite", cmd_uninvite)
-    sampRegisterChatCommand("cuff",cmd_cuff)
-    sampRegisterChatCommand("uncuff",cmd_uncuff)
-    sampRegisterChatCommand("gotome",cmd_gotome)
-    sampRegisterChatCommand("ungotome",cmd_ungotome)
-    sampRegisterChatCommand("frisk", cmd_frisk)
-    sampRegisterChatCommand("showbadge", cmd_showbadge)
-    sampRegisterChatCommand("tencodes",cmd_tencodes)
-    sampRegisterChatCommand("marks",cmd_marks)
-    sampRegisterChatCommand("sitcodes",cmd_sitcodes)
-    sampRegisterChatCommand("mask", cmd_mask)
-    sampRegisterChatCommand("arm", cmd_arm)
-    sampRegisterChatCommand("drug", cmd_drug)
-    sampRegisterChatCommand("asu", cmd_asu)
-    sampRegisterChatCommand("arrest", cmd_arrest)
-    sampRegisterChatCommand("stop", cmd_stop)
-    sampRegisterChatCommand("giverank",cmd_giverank)
-    sampRegisterChatCommand("unmask",cmd_unmask)
-    sampRegisterChatCommand("miranda",cmd_miranda)
-    sampRegisterChatCommand("bodyon",cmd_bodyon)
-    sampRegisterChatCommand("bodyoff",cmd_bodyoff)
-    sampRegisterChatCommand("ticket",cmd_ticket)
-    sampRegisterChatCommand("pursuit",cmd_pursuit)
-    sampRegisterChatCommand("drugtestno",cmd_drugtestno)
-    sampRegisterChatCommand("drugtestyes",cmd_drugtestyes)
-    sampRegisterChatCommand("vzatka",cmd_vzatka)
-    sampRegisterChatCommand("bomb",cmd_bomb)
-    sampRegisterChatCommand("probiv",cmd_probiv)
-    sampRegisterChatCommand("dismiss",cmd_dismiss)
-    sampRegisterChatCommand("demoute",cmd_demoute)
-    sampRegisterChatCommand("cure",cmd_cure)
-    sampRegisterChatCommand("zsu",cmd_zsu)
-    sampRegisterChatCommand("find",cmd_find)
-    sampRegisterChatCommand("incar",cmd_incar)
-    sampRegisterChatCommand("eject",cmd_eject)
-    sampRegisterChatCommand("pog",cmd_pog)
-    sampRegisterChatCommand("pas",cmd_pas)
-    sampRegisterChatCommand("clear",cmd_clear)
-    sampRegisterChatCommand("take",cmd_take)
-    sampRegisterChatCommand("gcuff",cmd_gcuff)
-    sampRegisterChatCommand("fbi.pravda", cmd_pravda_fbi)
-    sampRegisterChatCommand("fbi.secret", cmd_secret_fbi)
-    sampRegisterChatCommand("finger.p", cmd_finger_person)
-    sampRegisterChatCommand("podmoga", cmd_warn)
-
-    sampRegisterChatCommand("stop", cmd_stop)
-    sampRegisterChatCommand("grim", cmd_grim)
-    sampRegisterChatCommand("eks", cmd_eks)
-    sampRegisterChatCommand("traf", cmd_traf)
-    sampRegisterChatCommand("agenda", cmd_agenda)
-    sampRegisterChatCommand("time",cmd_time)
-    end
-                else
-                	if imgui.Button(u8'Выключить стандартные отыгровки') then
-                	mainIni.settings.standartBinds = false
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                    thisScript():reload()
-                    end
-                end
-                -- == Первая строка
-                imgui.Columns(3) -- 3 количество столбцов
-                imgui.Text(u8'Команда') imgui.SetColumnWidth(-1, w.first) -- первый столбик
-                imgui.NextColumn()
-                imgui.Text(u8'Текст') imgui.SetColumnWidth(-1, w.second) -- второй столбик
-                imgui.NextColumn()
-                imgui.Text(u8'Удаление') imgui.SetColumnWidth(-1, 200) -- либо можете самостоятельно вписывать
-                imgui.Columns(1)
-                imgui.Separator()
-                local keysToDelete = {}
-
-                for key, value in pairs(tableBinder) do
-    imgui.Columns(3)
-    imgui.Text(u8(key)) 
-    imgui.SetColumnWidth(-1, w.first)
-    imgui.NextColumn()
-    imgui.Text(u8(tableBinder[key][1])) 
-    imgui.SetColumnWidth(-1, w.second)
-    imgui.NextColumn()
-    
-    if imgui.Button(u8'Удалить ' .. key) then
-        
-        tableBinder[key] = nil
-        encodedTable = encodeJson(tableBinder)
-            local file = io.open("binder.json", "w")
-            file:write(encodedTable)
-            file:flush()
+    if not doesFileExist(path) then
+        settings = default_settings
+		print('[Binder] Файл с настройками не найден, использую стандартные настройки!')
+    else
+        local file = io.open(path, 'r')
+        if file then
+            local contents = file:read('*a')
             file:close()
+			if #contents == 0 then
+				settings = default_settings
+				print('[Binder] Не удалось открыть файл с настройками, использую стандартные настройки!')
+			else
+				local result, loaded = pcall(decodeJson, contents)
+				if result then
+					settings = loaded
+					for category, _ in pairs(default_settings) do
+						if settings[category] == nil then
+							settings[category] = {}
+						end
+						for key, value in pairs(default_settings[category]) do
+							if settings[category][key] == nil then
+								settings[category][key] = value
+							end
+						end
+					end
+					print('[Binder] Настройки успешно загружены!')
+				else
+					print('[Binder] Не удалось открыть файл с настройками, использую стандартные настройки!')
+				end
+			end
+        else
+            settings = default_settings
+			print('[Binder] Не удалось открыть файл с настройками, использую стандартные настройки!')
+        end
     end
-    
-    
-    imgui.Columns(1)
-    imgui.Separator()
+end
+function save_settings()
+    local file, errstr = io.open(path, 'w')
+    if file then
+        local result, encoded = pcall(encodeJson, settings)
+        file:write(result and encoded or "")
+        file:close()
+        return result
+    else
+        print('[Binder] Не удалось сохранить настройки хелпера, ошибка: ', errstr)
+        return false
+    end
 end
 
+load_settings()
 
-                if imgui.Button(u8"Добавить") then
-                    binderWindow[0] = not binderWindow[0]
-                end
+function isMonetLoader() return MONET_VERSION ~= nil end
+if MONET_DPI_SCALE == nil then MONET_DPI_SCALE = 1.0 end
 
-            elseif tab == 3 then -- если значение tab == 3
-                imgui.InputText(u8 'Фракция с которой будете взаимодействовать', otherorg, 255)
-                otherdeporg = u8:decode(ffi.string(otherorg))
-                imgui.Checkbox(u8 'Закрытый канал', zk)
-                if imgui.Button(u8 'Вызов на связь') then
-                    if zk[0] then
-                        sampSendChat("/d [" .. mainIni.Info.org .. "] з.к [" .. otherdeporg .. "] На связь!")
-                    else
-                        sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [" .. otherdeporg .. "] На связь!")
-                    end
-                end
-                if imgui.Button(u8 'Откат') then
-                    sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [Информация] Тех. Неполадки!")
-                end
-            elseif tab == 4 then
-                if imgui.CollapsingHeader(u8'Биндер') then
-                    if imgui.CollapsingHeader(u8'Лекции') then
-                        if imgui.Button(u8'Арест и задержание') then
-                            lua_thread.create(function()
-                                sampSendChat("Здравствуйте уважаемые сотрудники нашего департамента!")
-                                wait(1500)
-                                sampSendChat("Сейчас будет проведена лекция на тему арест и задержание преступников.")
-                                wait(1500)
-                                sampSendChat("Для начала объясню различие между задержанием и арестом.")
-                                wait(1500)
-                                sampSendChat("Задержание - это кратковременное лишение свободы лица, подозреваемого в совершении преступления.")
-                                wait(1500)
-                                sampSendChat("В свою очередь, арест - это вид уголовного наказания, заключающегося в содержании совершившего преступление..")
-                                wait(1500)
-                                sampSendChat("..и осуждённого по приговору суда в условиях строгой изоляции от общества.")
-                                wait(1500)
-                                sampSendChat("Вам разрешено задерживать лица на период 48 часов с момента их задержания.")
-                                wait(1500)
-                                sampSendChat("Если в течение 48 часов вы не предъявите доказательства вины, вы обязаны отпустить гражданина.")
-                                wait(1500)
-                                sampSendChat("Обратите внимание, гражданин может подать на вас иск за незаконное задержание.")
-                                wait(1500)
-                                sampSendChat("Во время задержания вы обязаны провести первичный обыск на месте задержания и вторичный у капота своего автомобиля.")
-                                wait(1500)
-                                sampSendChat("Все найденные вещи положить в 'ZIP-lock', или в контейнер для вещ. доков, Все личные вещи преступника кладутся в мешок для личных вещей задержанного")
-                                wait(1500)
-                                sampSendChat("На этом данная лекция подходит к концу. У кого-то имеются вопросы?")
-                            end)
-                        end
-                        if imgui.Button("Суббординация") then
-                            lua_thread.create(function()
-                                sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
-                                wait(1500)
-                                sampSendChat(" Приветствую вас на лекции о субординации")
-                                wait(1500)
-                                sampSendChat(" Для начала расскажу, что такое субординация")
-                                wait(1500)
-                                sampSendChat(" Субординация - правила подчинения младших по званию к старшим по званию, уважение, отношение к ним")
-                                wait(1500)
-                                sampSendChat(" То есть младшие сотрудники должны выполнять приказы начальства")
-                                wait(1500)
-                                sampSendChat(" Кто ослушается  получит выговор, сперва устный")
-                                wait(1500)
-                                sampSendChat(" Вы должны с уважением относится к начальству на 'Вы'")
-                                wait(1500)
-                                sampSendChat(" Не нарушайте правила и не нарушайте субординацию дабы не получить наказание")
-                                wait(1500)
-                                sampSendChat(" Лекция окончена спасибо за внимание!")
-                            end)
-                        end
-                        if imgui.Button(u8"Суббординация") then
-                            lua_thread.create(function()
-                                sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
-                                wait(1500)
-                                sampSendChat(" Приветствую вас на лекции о субординации")
-                                wait(1500)
-                                sampSendChat(" Для начала расскажу, что такое субординация")
-                                wait(1500)
-                                sampSendChat(" Субординация - правила подчинения младших по званию к старшим по званию, уважение, отношение к ним")
-                                wait(1500)
-                                sampSendChat(" То есть младшие сотрудники должны выполнять приказы начальства")
-                                wait(1500)
-                                sampSendChat(" Кто ослушается  получит выговор, сперва устный")
-                                wait(1500)
-                                sampSendChat(" Вы должны с уважением относится к начальству на 'Вы'")
-                                wait(1500)
-                                sampSendChat(" Не нарушайте правила и не нарушайте субординацию дабы не получить наказание")
-                                wait(1500)
-                                sampSendChat(" Лекция окончена спасибо за внимание!")
-                            end)
-                        end
-                        if imgui.Button(u8"Правила поведения в строю.") then
-                            lua_thread.create(function()
-                                sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
-                                wait(1500)
-                                sampSendChat(" Приветствую вас на лекции правила поведения в строю")
-                                wait(1500)
-                                sampSendChat(" /b Запрещены разговоры в любые чаты (in ic, /r, /n, /fam, /sms,)")
-                                wait(1500)
-                                sampSendChat(" Запрещено пользоваться мобильными телефонами")
-                                wait(1500)
-                                sampSendChat(" Запрещено доставать оружие")
-                                wait(1500)
-                                sampSendChat(" Запрещено открывать огонь без приказа")
-                                wait(1500)
-                                sampSendChat(" /b Запрещено уходить в AFK более чем на 30 секунд")
-                                wait(1500)
-                                sampSendChat(" Запрещено самовольно покидать строй не предупредив об этом старший состав")
-                                wait(1500)
-                                sampSendChat(" /b Запрещены любые движения в строю (/anim) Исключение: ст. состав")
-                                wait(1500)
-                                sampSendChat(" /b Запрещено использование сигарет [/smoke в строю]")
-                            end)
-                        end
-                        if imgui.Button(u8'Допрос') then
-                            lua_thread.create(function()
-                                sampSendChat(" Здравствуйте уважаемые сотрудники департамента сегодня, я проведу лекцию на тему Допрос подозреваемого.")
-                                wait(1500)
-                                sampSendChat(" Сотрудник ПД обязан сначала поприветствовать, представиться;")
-                                wait(1500)
-                                sampSendChat(" Сотрудник ПД обязан попросить документы вызванного, спросить, где работает, звание, должность, место жительства;")
-                                wait(1500)
-                                sampSendChat(" Сотрудник ПД обязан спросить, что он делал (назвать промежуток времени, где он что-то нарушил, по которому он был вызван);")
-                                wait(1500)
-                                sampSendChat(" Если подозреваемый был задержан за розыск, старайтесь узнать за что он получил розыск;")
-                                wait(1500)
-                                sampSendChat(" В конце допроса полицейский выносит вердикт вызванному.")
-                                wait(1500)
-                                sampSendChat(" При оглашении вердикта, необходимо предельно точно огласить вину допрашиваемого (Рассказать ему причину, за что он будет посажен);")
-                                wait(1500)
-                                sampSendChat(" При вынесении вердикта, не стоит забывать о отягчающих и смягчающих факторах (Раскаяние, адекватное поведение, признание вины или ложь, неадекватное поведение, провокации, представление полезной информации и тому подобное).")
-                                wait(1500)
-                                sampSendChat(" На этом лекция подошла к концу, если у кого-то есть вопросы, отвечу на любой по данной лекции (Если задали вопрос, то нужно ответить на него)")
-                            end)
-                        end
-                        if imgui.Button(u8"Правила поведения до и во время облавы на наркопритон.") then
-                            lua_thread.create(function()
-                                sampSendChat(" Добрый день, сейчас я проведу вам лекцию на тему Правила поведения до и во время облавы на наркопритон")
-                                wait(1500)
-                                sampSendChat(" В строю, перед облавой, вы должны внимательно слушать то, что говорят вам Агенты")
-                                wait(1500)
-                                sampSendChat(" Убедительная просьба, заранее убедиться, что при себе у вас имеются балаклавы")
-                                wait(1500)
-                                sampSendChat(" По пути к наркопритону, подъезжая к опасному району, все обязаны их одеть")
-                                wait(1500)
-                                sampSendChat(" Приехав на территорию притона, нужно поставить оцепление так, чтобы загородить все возможные пути к созревающим кустам Конопли")
-                                wait(1500)
-                                sampSendChat(" Очень важным замечанием является то, что никому, кроме агентов, запрещено подходить к кустам, а тем более их собирать")
-                                wait(1500)
-                                sampSendChat(" Нарушение данного пункта строго наказывается, вплоть до увольнение")
-                                wait(1500)
-                                sampSendChat(" Так же приехав на место, мы не устраиваем пальбу по всем, кого видим")
-                                wait(1500)
-                                sampSendChat(" Открывать огонь по постороннему разрешается только в том случае, если он нацелился на вас оружием, начал атаковать вас или собирать созревшие кусты")
-                                wait(1500)
-                                sampSendChat(" Как только спец. операция заканчивается, все оцепление убирается")
-                                wait(1500)
-                                sampSendChat(" На этом лекция окончена, всем спасибо")
-                            end)
-                        end
-                        if imgui.Button(u8"Правило миранды.") then
-                            lua_thread.create(function()
-                                sampSendChat("Правило Миранды — юридическое требование в США")
-                                wait(1500)
-                                sampSendChat("Согласно которому во время задержания задерживаемый должен быть уведомлен о своих правах.")
-                                wait(1500)
-                                sampSendChat("Это правило зачитываются задержанному, а читает её кто сам задержал его.")
-                                wait(1500)
-                                sampSendChat("Это фраза говорится, когда вы надели на задержанного наручники.")
-                                wait(1500)
-                                sampSendChat("Цитирую саму фразу:")
-                                wait(1500)
-                                sampSendChat("- Вы имеете право хранить молчание.")
-                                wait(1500)
-                                sampSendChat("- Всё, что вы скажете, может и будет использовано против вас в суде.")
-                                wait(1500)
-                                sampSendChat("- Ваш адвокат может присутствовать при допросе.")
-                                wait(1500)
-                                sampSendChat("- Если вы не можете оплатить услуги адвоката, он будет предоставлен вам государством.")
-                                wait(1500)
-                                sampSendChat("- Вы понимаете свои права?")
-                            end)
-                        end
-                        if imgui.Button(u8"Первая Помощь.") then
-                            lua_thread.create(function()
-                                sampSendChat("Для начала определимся что с пострадавшим")
-                                wait(1500)
-                                sampSendChat("Если, у пострадавшего кровотечение, то необходимо остановить поток крови жгутом")
-                                wait(1500)
-                                sampSendChat("Если ранение небольшое достаточно достать набор первой помощи и перевязать рану бинтом")
-                                wait(1500)
-                                sampSendChat("Если в ране пуля, и рана не глубокая, Вы должны вызвать скорую либо вытащить ее скальпелем, скальпель также находится в аптечке первой помощи")
-                                wait(1500)
-                                sampSendChat("Если человек без сознания вам нужно ... ")
-                                wait(1500)
-                                sampSendChat(" ... достать из набор первой помощи вату и спирт, затем намочить вату спиртом ... ")
-                                wait(1500)
-                                sampSendChat(" ... и провести ваткой со спиртом около носа пострадавшего, в этом случае, он должен очнуться")
-                                wait(1500)
-                                sampSendChat("На этом лекция окончена. У кого-то есть вопросы по данной лекции?") wait(1500)
-                            end)
-                        end
-                    end
-                end
-                if rang_n > 8 then
-                    if imgui.Button(u8'Панель лидера/заместителя') then
-                        leaderPanel[0] = not leaderPanel[0]
-                    end
-                end
-            elseif tab == 5 then
-                if imgui.CollapsingHeader(u8 'УК') then
-                    for i = 1, #tableUk["Text"] do
-                        imgui.Text(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i]))
-                    end
-                end
-                if imgui.CollapsingHeader(u8 'Тен-коды') then
-                    imgui.Text(u8"10-1 - Встреча всех офицеров на дежурстве (указывая локацию и код).")
-                    imgui.Text(u8"10-2 - Вышел в патруль.")
-                    imgui.Text(u8"10-2R: Закончил патруль.")
-                    imgui.Text(u8"10-3 - Радиомолчание (указывая длительность).")
-                    imgui.Text(u8"10-4 - Принято.")
-                    imgui.Text(u8"10-5 - Повторите.")
-                    imgui.Text(u8"10-6 - Не принято/неверно/нет.")
-                    imgui.Text(u8"10-7 - Ожидайте.")
-                    imgui.Text(u8"10-8 - Недоступен.")
-                    imgui.Text(u8"10-14 - Запрос транспортировки (указывая локацию и цель транспортировки).")
-                    imgui.Text(u8"10-15 - Подозреваемые арестованы (указывая количество подозреваемых и локацию).")
-                    imgui.Text(u8"10-18 - Требуется поддержка дополнительных юнитов.")
-                    imgui.Text(u8"10-20 - Локация.")
-                    imgui.Text(u8"10-21 - Описание ситуации.")
-                    imgui.Text(u8"10-22 - Направляюсь в ....")
-                    imgui.Text(u8"10-27 - Смена маркировки патруля (указывая старую маркировку и новую).")
-                    imgui.Text(u8"10-30 - Дорожно-транспортное происшествие.")
-                    imgui.Text(u8"10-40 - Большое скопление людей (более 4).")
-                    imgui.Text(u8"10-41 - Нелегальная активность.")
-                    imgui.Text(u8"10-46 - Провожу обыск.")
-                    imgui.Text(u8"10-55 - Обычный Траффик Стоп.")
-                    imgui.Text(u8"10-57 VICTOR - Погоня за автомобилем (указывая модель авто, цвет авто, количество человек внутри, локацию, направление движения).")
-                    imgui.Text(u8"10-57 FOXTROT - Пешая погоня (указывая внешность подозреваемого, оружие (при наличии информации о вооружении), локация, направление движения).")
-                    imgui.Text(u8"10-60 - Информация об автомобиле (указывая модель авто, цвет, количество человек внутри).")
-                    imgui.Text(u8"10-61 - Информация о пешем подозреваемом (указывая расу, одежду).")
-                    imgui.Text(u8"10-66 - Траффик Стоп повышеного риска.")
-                    imgui.Text(u8"10-70 - Запрос поддержки (в отличии от 10-18 необходимо указать количество юнитов и код).")
-                    imgui.Text(u8"10-71 - Запрос медицинской поддержки.")
-                    imgui.Text(u8"10-99 - Ситуация урегулирована.")
-                    imgui.Text(u8"10-10 - Нарушение юрисдикции ")
-                end
-                if imgui.CollapsingHeader(u8 'Маркировки патрулей') then
-                    imgui.CenterText('Маркировки патрульных автомобилей')
-                    imgui.Text(u8"* ADAM (A) - маркировка патруля с двумя офицерами на крузер")
-                    imgui.Text(u8"* LINCOLN (L) - маркировки патруля с одним офицером на крузер")
-                    imgui.Text(u8"* LINCOLN 10/20/30/40/50/60 - маркировка супервайзера")
-                    imgui.CenterText('Маркировки других транспортных средств')
-                    imgui.Text(u8"* MARY (M) - маркировка мотоциклетного патруля")
-                    imgui.Text(u8"* AIR (AIR) - маркировка юнита Air Support Division")
-                    imgui.Text(u8"* AIR-100 - маркировка супервайзера Air Support Division")
-                    imgui.Text(u8"* AIR-10 - маркировка спасательного юнита Air Support Division")
-                    imgui.Text(u8"* EDWARD (E) - маркировка Tow Unit")
-                end
+local ffi = require 'ffi'
 
-            elseif tab == 6 then
-                imgui.Checkbox(u8 'Авто отыгровка оружия', autogun)
-                if autogun[0] then
-                    mainIni.settings.autoRpGun = true
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                    lua_thread.create(function()
-                        while true do
-                            wait(0)
-                            if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
-                                local gun = getCurrentCharWeapon(PLAYER_PED)
-                                if gun == 3 then
-                                    sampSendChat("/me достал дубинку с поясного держателя")
-                                elseif gun == 16 then
-                                    sampSendChat("/me взял с пояса гранату")
-                                elseif gun == 17 then
-                                    sampSendChat("/me взял гранату слезоточивого газа с пояса")
-                                elseif gun == 23 then
-                                    sampSendChat("/me достал тайзер с кобуры, убрал предохранитель")
-                                elseif gun == 22 then
-                                    sampSendChat("/me достал пистолет Colt-45, снял предохранитель")
-                                elseif gun == 24 then
-                                    sampSendChat("/me достал Desert Eagle с кобуры, убрал предохранитель")
-                                elseif gun == 25 then
-                                    sampSendChat("/me достал чехол со спины, взял дробовик и убрал предохранитель")
-                                elseif gun == 26 then
-                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал Обрезы")
-                                elseif gun == 27 then
-                                    sampSendChat("/me достал дробовик Spas, снял предохранитель")
-                                elseif gun == 28 then
-                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал УЗИ")
-                                elseif gun == 29 then
-                                    sampSendChat("/me достал чехол со спины, взял МП5 и убрал предохранитель")
-                                elseif gun == 30 then
-                                    sampSendChat("/me достал карабин AK-47 со спины")
-                                elseif gun == 31 then
-                                    sampSendChat("/me достал карабин М4 со спины")
-                                elseif gun == 32 then
-                                    sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал TEC-9")
-                                elseif gun == 33 then
-                                    sampSendChat("/me достал винтовку без прицела из военной сумки")
-                                elseif gun == 34 then
-                                    sampSendChat("/me достал Снайперскую винтовку с военной сумки")
-                                elseif gun == 43 then
-                                    sampSendChat("/me достал фотокамеру из рюкзака")
-                                elseif gun == 0 then
-                                    sampSendChat("/me поставил предохранитель, убрал оружие")
-                                end
-                                lastgun = gun
-                            end
-                        end
-                    end)
-                else
-                    mainIni.settings.autoRpGun = false
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                end
-                imgui.Checkbox(u8'Авто-доклад патруля каждые 10 минут(включать при начале)/]. Всего 30 минут', patrul)
-                imgui.InputText(u8'Ник вашего напарника(на англиском)', partner, 255)
-                partnerNick = u8:decode(ffi.string(partner))
-                imgui.Checkbox(u8'Позывной при докладах', pozivn)
-                imgui.InputText(u8'Ваш позывной', poziv, 255)
-                pozivnoi = u8:decode(ffi.string(poziv))
-                if patrul[0] and pozivn[0] then
-                    poziv[0] = false
-                    patrul[0] = false
-                    lua_thread.create(function()
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Выхожу в патруль. Напарник - " .. partnerNick .. ". Доступен.")
-                        wait(599999)
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Продолжаю патруль с " .. partnerNick .. ". Состояние стабильное. Доступен")
-                        wait(599999)
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Продолжаю патруль с " .. partnerNick .. ". Состояние стабильное. Доступен")
-                        wait(599999)
-                        sampSendChat("/r " .. nickname .. " [" .. pozivnoi .. "]. Заканчиваю патруль с " .. partnerNick .. ".")
-                    end)
-                elseif patrul[0] then
-                    lua_thread.create(function()
-                        patrul[0] = false
-                        sampSendChat("/r " .. nickname .. ". Выхожу в патруль. Напарник - " .. partnerNick .. ". Доступен.")
-                        wait(599999)
-                        sampSendChat("/r " .. nickname .. ". Продолжаю патруль с " .. partnerNick .. ". Состояние стабильное. Доступен")
-                        wait(599999)
-                        sampSendChat("/r " .. nickname .. ". Продолжаю патруль с " .. partnerNick .. ". Состояние стабильное. Доступен")
-                        wait(599999)
-                        sampSendChat("/r " .. nickname .. ". Заканчиваю патруль с " .. partnerNick .. ".")
-                    end)
+local message_color = 0x00CCFF
+local message_color_hex = '{00CCFF}'
 
-                end
-                imgui.Checkbox(u8'Авто-Акцент', AutoAccentBool)
-                if AutoAccentBool[0] then
-                    AutoAccentCheck = true
-                    mainIni.settings.autoAccent = true
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                else
-                    mainIni.settings.autoAccent = false
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                end
-                imgui.InputText(u8'Акцент', AutoAccentInput, 255)
-                AutoAccentText = u8:decode(ffi.string(AutoAccentInput))
-                mainIni.Accent.accent = AutoAccentText
-                inicfg.save(mainIni, "mvdhelper.ini")
-                if imgui.Button(u8'Вспомогательное окошко') then
-                	suppWindow[0] = not suppWindow [0]
+local fa = require('fAwesome6_solid')
+local imgui = require('mimgui')
+local sizeX, sizeY = getScreenResolution()
+local new = imgui.new
+local MainWindow = new.bool()
+local BinderWindow = new.bool()
+local ComboTags = new.int()
+local item_list = {u8'Без аргумента', u8'{arg} - принимает что угодно, буквы/цифры/символы', u8'{arg_id} - принимает только ID игрока', u8'{arg_id} {arg2} - принимает 2 аругмента: ID игрока и второе что угодно'}
+local ImItems = imgui.new['const char*'][#item_list](item_list)
+local change_cmd_bool = false
+local change_cmd = ''
+local change_description = ''
+local change_text = ''
+local change_arg = ''
+local slider = new.float(0)
 
+local isActiveCommand = false
+
+local tagReplacements = {
+	my_id = function() return select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)) end,
+    my_nick = function() return sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))) end,
+	my_ru_nick = function() return TranslateNick(sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))) end,
+	get_time = function ()
+		return os.date("%H:%M:%S")
+	end,
+}
+local binder_tags_text = [[
+{my_id} - Ваш игровой ID
+{my_nick} - Ваш игровой Nick
+{my_ru_nick} - Ваше Имя и Фамилия указанные в хелпере
+
+{get_time} - Получить текущее время
+
+{get_nick({arg_id})} - получить Nick игрока из аргумента ID игрока
+{get_rp_nick({arg_id})}  - получить Nick игрока без символа _ из аргумента ID игрока
+{get_ru_nick({arg_id})}  - получить Nick игрока на кирилице из аргумента ID игрока
+]]
+
+
+
+function registerCommandsFrom(array)
+	for _, command in ipairs(array) do
+		if command.enable and not command.deleted then
+			register_command(command.cmd, command.arg, command.text, tonumber(command.waiting))
+		end
+	end
+end
+function register_command(chat_cmd, cmd_arg, cmd_text, cmd_waiting)
+	sampRegisterChatCommand(chat_cmd, function(arg)
+		if not isActiveCommand then
+			local arg_check = false
+			local modifiedText = cmd_text
+			if cmd_arg == '{arg}' then
+				if arg and arg ~= '' then
+					modifiedText = modifiedText:gsub('{arg}', arg or "")
+					arg_check = true
+				else
+					msg('[Binder] {ffffff}Используйте ' .. message_color_hex .. '/' .. chat_cmd .. ' [аргумент]', message_color)
+					play_error_sound()
 				end
+			elseif cmd_arg == '{arg_id}' then
+				if isParamSampID(arg) then
+					arg = tonumber(arg)
+					modifiedText = modifiedText:gsub('%{get_nick%(%{arg_id%}%)%}', sampGetPlayerNickname(arg) or "")
+					modifiedText = modifiedText:gsub('%{get_rp_nick%(%{arg_id%}%)%}', sampGetPlayerNickname(arg):gsub('_',' ') or "")
+					modifiedText = modifiedText:gsub('%{get_ru_nick%(%{arg_id%}%)%}', TranslateNick(sampGetPlayerNickname(arg)) or "")
+					modifiedText = modifiedText:gsub('%{arg_id%}', arg or "")
+					arg_check = true
+				else
+					msg('[Binder] {ffffff}Используйте ' .. message_color_hex .. '/' .. chat_cmd .. ' [ID игрока]', message_color)
+					play_error_sound()
+				end
+			elseif cmd_arg == '{arg_id} {arg2}' then
+				if arg and arg ~= '' then
+					local arg_id, arg2 = arg:match('(%d+) (.+)')
+					if isParamSampID(arg_id) and arg2 then
+						arg_id = tonumber(arg_id)
+						modifiedText = modifiedText:gsub('%{get_nick%(%{arg_id%}%)%}', sampGetPlayerNickname(arg_id) or "")
+						modifiedText = modifiedText:gsub('%{get_rp_nick%(%{arg_id%}%)%}', sampGetPlayerNickname(arg_id):gsub('_',' ') or "")
+						modifiedText = modifiedText:gsub('%{get_ru_nick%(%{arg_id%}%)%}', TranslateNick(sampGetPlayerNickname(arg_id)) or "")
+						modifiedText = modifiedText:gsub('%{arg_id%}', arg_id or "")
+						modifiedText = modifiedText:gsub('%{arg2%}', arg2 or "")
+						arg_check = true
+					else
+						msg('[Binder] {ffffff}Используйте ' .. message_color_hex .. '/' .. chat_cmd .. ' [ID игрока] [аргумент]', message_color)
+						play_error_sound()
+					end
+				else
+					msg('[Binder] {ffffff}Используйте ' .. message_color_hex .. '/' .. chat_cmd .. ' [ID игрока] [аргумент]', message_color)
+					play_error_sound()
+				end
+			elseif cmd_arg == '' then
+				arg_check = true
+			end
+			if arg_check then
+				lua_thread.create(function()
+					isActiveCommand = true
+					local lines = {}
+					for line in string.gmatch(modifiedText, "[^&]+") do
+						table.insert(lines, line)
+					end
+					for _, line in ipairs(lines) do
+						if command_stop then 
+							command_stop = false 
+							isActiveCommand = false
+							msg('[Binder] {ffffff}Отыгровка команды /' .. chat_cmd .. " успешно остановлена!", message_color) 
+							return 
+						end
+						for tag, replacement in pairs(tagReplacements) do
+							-- local success, result = pcall(string.gsub, line, "{" .. tag .. "}", replacement())
+							-- if success then
+							-- 	line = result
+							-- end
+							line = line:gsub("{" .. tag .. "}", replacement())
+						end
+						sampSendChat(line)
+						wait(cmd_waiting * 1000)
+					end
+					isActiveCommand = false
+				end)
+			end
+		else
+			msg('[Binder] {ffffff}Дождитесь завершения отыгровки предыдущей команды!', message_color)
+		end
+	end)
+end
 
-                if imgui.Button(u8'Импорт умного розыска') then
-                    importUkWindow[0] = not importUkWindow[0]
-                end
-            elseif tab == 7 then
-                imgui.Text(u8'Версия: 5.0')
-                imgui.Text(u8'Разработчики: https://t.me/Sashe4ka_ReZoN, https://t.me/daniel2903_pon')
-                imgui.Text(u8'ТГ канал: t.me/lua_arz') 
-                imgui.Text(u8'Поддержать: Временно не доступно') 
-                imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x')
-                imgui.Text(u8'Сделано При поддержке Arzfun Mobile(бесплатная админка) @ArizonaMobileFun')
-                imgui.Text(u8'Обновление 4.1 - Изменение интерфейса, добавление вкладок "Инфо" и "Для СС". Добавлен авто акцент. Фикс багов.')
-                imgui.Text(u8'Обновление 4.2 - Фикс авто определения. Доступ к панелии СС с любого ранга(Панель лидера также остается от 9 ранга).')
-                imgui.Text(u8'Обновление 4.3 - Фикс приветствия. Добавленно ФБР в список организаций')
-                imgui.Text(u8'Обновление 4.4 - Добавили лекции,Панель лидера(в разработке)')
-                imgui.Text(u8'Обновление 4.5 - Теперь можно поставить свой УК. Добавлена фиолетовая тема. Обновлен /mvds')
-                imgui.Text(u8'Обновление 4.6 - Фикс багов,Изменены некоторые отыгровки')
-                imgui.Text(u8'Обновление 4.7 - Добавлена Команда /traf пофикшены баги,авто акцент и измененны некоторые отыгровки')
-                imgui.Text(u8'Обновление 4.8 - MoonMonet, автоматическое обновление')
-                imgui.Text(u8'Обновление 4.9 - Возможность импорта Умного розыска для большинства серверов. Фикс багов.')
-                imgui.Text(u8'Обновление 5.0 - Исправлена ошибка в тен-кодах. Добавленно окошко быстрого взаимодействия. Кликните два раза по игроку(иногда не работает)б\n Биндер. Выдача розыска по команде(/su id). Сохранение некоторых настроек вов кладке Дополнительно')
-                if imgui.Button(u8'Обновить(возможно зависание игры на 10-15 секунд)') then
-            		updateScript(mvdUrl, mvdPath)
-            	end
-                if imgui.Button(u8'Скачать умный розыск для своего сервера') then
-                    if server == 'Phoenix' then
-                        updateScript(smartUkUrl['phenix'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
-                    
-                    elseif server == 'Mobile I' then
-                        updateScript(smartUkUrl['m1'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 1 успешно установлен!", 0x8B00FF)
-                    
-                    elseif server == 'Mobile II' then
-                        updateScript(smartUkUrl['m2'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 2 успешно установлен!", 0x8B00FF)
-                    
-                    elseif server == 'Mobile III' then
-                        updateScript(smartUkUrl['m3'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 3 успешно установлен!", 0x8B00FF)
-                    
-                    elseif server == 'Phoenix' then
-                        updateScript(smartUkUrl['phoenix'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
-                                        
-                    elseif server == 'Tucson' then
-                        updateScript(smartUkUrl['tucson'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Tucson успешно установлен!", 0x8B00FF)
-                                        
-                    elseif server == 'Saintrose' then
-                        updateScript(smartUkUrl['saintrose'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Saintrose успешно установлен!", 0x8B00FF)
-                                    
-                    elseif server == 'Mesa' then
-                        updateScript(smartUkUrl['mesa'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mesa успешно установлен!", 0x8B00FF)
-                                        
-                    elseif server == 'Red-Rock' then
-                        updateScript(smartUkUrl['red'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Red Rock успешно установлен!", 0x8B00FF)
-                                                            
-                    elseif server == 'Prescott' then
-                        updateScript(smartUkUrl['press'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Prescott успешно установлен!", 0x8B00FF)
-                                                            
-                    elseif server == 'Winslow' then
-                        updateScript(smartUkUrl['winslow'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Winslow успешно установлен!", 0x8B00FF)
-                                                                                
-                    elseif server == 'Payson' then
-                        updateScript(smartUkUrl['payson'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Payson успешно установлен!", 0x8B00FF)
-                                                                                
-                    elseif server == 'Gilbert' then
-                        updateScript(smartUkUrl['gilbert'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Gilbert успешно установлен!", 0x8B00FF)
-                    
-                    elseif server == 'Casa-Grande' then
-                        updateScript(smartUkUrl['casa'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Casa-Grande успешно установлен!", 0x8B00FF)
-                                                                                
-                    elseif server == 'Page' then
-                        updateScript(smartUkUrl['page'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Page успешно установлен!", 0x8B00FF)
-                                                                                
-                    elseif server == 'Sun-City' then
-                        updateScript(smartUkUrl['sunCity'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Sun-City успешно установлен!", 0x8B00FF)
-                                                                                
-                    elseif server == 'Wednesday' then
-                        updateScript(smartUkUrl['wednesday'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Wednesday успешно установлен!", 0x8B00FF)
-                                                                                                    
-                    elseif server == 'Yava' then
-                        updateScript(smartUkUrl['yava'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Yava успешно установлен!", 0x8B00FF)
-                                                                                                    
-                    elseif server == 'Faraway' then
-                        updateScript(smartUkUrl['faraway'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Faraway успешно установлен!", 0x8B00FF)
-                                                                                                    
-                    elseif server == 'Bumble Bee' then
-                        updateScript(smartUkUrl['bumble'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Bumble успешно установлен!", 0x8B00FF)
-                                                                                                    
-                    elseif server == 'Christmas' then
-                        updateScript(smartUkUrl['christmas'], smartUkPath)
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Christmas успешно установлен!", 0x8B00FF)
-                    
-                    else
-                        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
-                    end
-                end
-            end
-            -- == [Основное] Содержимое вкладок закончилось == --
-            imgui.EndChild()
-            imgui.End()
-        end
+imgui.OnInitialize(function()
+    decor() -- применяем декор часть
+    apply_n_t()
+
+    imgui.GetIO().IniFilename = nil
+    local config = imgui.ImFontConfig()
+    config.MergeMode = true
+    config.PixelSnapH = true
+    iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
+    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 20, config, iconRanges) -- solid - тип иконок, так же есть thin, regular, light и duotone
+	local tmp = imgui.ColorConvertU32ToFloat4(mainIni.theme['moonmonet'])
+	gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
+	mmcolor = imgui.new.float[3](tmp.z, tmp.y, tmp.x)
+    if doesFileExist('Jone.png') then -- находим необходимую картинку с названием example.png в папке moonloader/resource/
+        imhandle = imgui.CreateTextureFromFile('Jone.png') -- если найдена, то записываем в переменную хендл картинки
+    end
+end)
+
+local MainWindow = imgui.OnFrame(
+    function() return MainWindow[0] end,
+    function(player)
+	
+		imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(600 * MONET_DPI_SCALE, 425	* MONET_DPI_SCALE), imgui.Cond.FirstUseEver)
+		imgui.Begin(fa.TERMINAL..u8" Binder by MTG MODS - Главное меню", MainWindow, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize )
+	
+		if imgui.BeginChild('##1', imgui.ImVec2(589 * MONET_DPI_SCALE, 333 * MONET_DPI_SCALE), true) then
+			imgui.Columns(3)
+			imgui.CenterColumnText(u8"Команда")
+			imgui.SetColumnWidth(-1, 170 * MONET_DPI_SCALE)
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Описание")
+			imgui.SetColumnWidth(-1, 300 * MONET_DPI_SCALE)
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Действие")
+			imgui.SetColumnWidth(-1, 150 * MONET_DPI_SCALE)
+			imgui.Columns(1)
+			imgui.Separator()
+			imgui.Columns(3)
+			imgui.CenterColumnText(u8"/binder")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Открыть главное меню биндера")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Недоступно")
+			imgui.Columns(1)	
+			imgui.Separator()
+			imgui.Columns(3)
+			imgui.CenterColumnText(u8"/stop [Недоступен]")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Остановить любую отыгровку из биндера [Недоступен]")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Недоступно")
+			imgui.Columns(1)	
+			imgui.Separator()
+			for index, command in ipairs(settings.commands) do
+				if not command.deleted then
+					imgui.Columns(3)
+					if command.enable then
+						imgui.CenterColumnText('/' .. u8(command.cmd))
+						imgui.NextColumn()
+						imgui.CenterColumnText(u8(command.description))
+						imgui.NextColumn()
+					else
+						imgui.CenterColumnTextDisabled('/' .. u8(command.cmd))
+						imgui.NextColumn()
+						imgui.CenterColumnTextDisabled(u8(command.description))
+						imgui.NextColumn()
+					end
+					imgui.Text(' ')
+					imgui.SameLine()
+					if command.enable then
+						if imgui.SmallButton(fa.TOGGLE_ON .. '##'..command.cmd) then
+							command.enable = not command.enable
+							save_settings()
+							sampUnregisterChatCommand(command.cmd)
+						end
+						if imgui.IsItemHovered() then
+							imgui.SetTooltip(u8"Отключение команды /"..command.cmd)
+						end
+					else
+						if imgui.SmallButton(fa.TOGGLE_OFF .. '##'..command.cmd) then
+							command.enable = not command.enable
+							save_settings()
+							register_command(command.cmd, command.arg, command.text, tonumber(command.waiting))
+						end
+						if imgui.IsItemHovered() then
+							imgui.SetTooltip(u8"Включение команды /"..command.cmd)
+						end
+					end
+					imgui.SameLine()
+					if imgui.SmallButton(fa.PEN_TO_SQUARE .. '##'..command.cmd) then
+						change_description = command.description
+						input_description = imgui.new.char[256](u8(change_description))
+						change_arg = command.arg
+						if command.arg == '' then
+							ComboTags[0] = 0
+						elseif command.arg == '{arg}' then	
+							ComboTags[0] = 1
+						elseif command.arg == '{arg_id}' then
+							ComboTags[0] = 2
+						elseif command.arg == '{arg_id} {arg2}' then
+							ComboTags[0] = 3
+						end
+						change_cmd = command.cmd
+						input_cmd = imgui.new.char[256](u8(command.cmd))
+						change_text = command.text:gsub('&', '\n')		
+						input_text = imgui.new.char[8192](u8(change_text))
+						change_waiting = command.waiting
+						waiting_slider = imgui.new.float(tonumber(command.waiting))	
+						BinderWindow[0] = true
+					end
+					if imgui.IsItemHovered() then
+						imgui.SetTooltip(u8"Изменение команды /"..command.cmd)
+					end
+					imgui.SameLine()
+					if imgui.SmallButton(fa.TRASH_CAN .. '##'..command.cmd) then
+						imgui.OpenPopup(fa.TRIANGLE_EXCLAMATION .. u8' Предупреждение ##' .. command.cmd)
+					end
+					if imgui.IsItemHovered() then
+						imgui.SetTooltip(u8"Удаление команды /"..command.cmd)
+					end
+					if imgui.BeginPopupModal(fa.TRIANGLE_EXCLAMATION .. u8' Предупреждение ##' .. command.cmd, _, imgui.WindowFlags.NoResize ) then
+						imgui.CenterText(u8'Вы действительно хотите удалить команду /' .. u8(command.cmd) .. '?')
+						imgui.Separator()
+						if imgui.Button(fa.CIRCLE_XMARK .. u8' Нет, отменить', imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+							imgui.CloseCurrentPopup()
+						end
+						imgui.SameLine()
+						if imgui.Button(fa.TRASH_CAN .. u8' Да, удалить', imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+							command.enable = false
+							command.deleted = true
+							sampUnregisterChatCommand(command.cmd)
+							save_settings()
+							imgui.CloseCurrentPopup()
+						end
+						imgui.End()
+					end
+					imgui.Columns(1)
+					imgui.Separator()
+				end
+			end
+			imgui.EndChild()
+		end
+		if imgui.Button(fa.CIRCLE_PLUS .. u8' Создать новую команду##new_cmd',imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+			local new_cmd = {cmd = '', description = 'Новая команда созданная вами', text = '', arg = '', enable = true , waiting = '1.200', deleted = false }
+			table.insert(settings.commands, new_cmd)
+			change_description = new_cmd.description
+			input_description = imgui.new.char[256](u8(change_description))
+			change_arg = new_cmd.arg
+			ComboTags[0] = 0
+			change_cmd = new_cmd.cmd
+			input_cmd = imgui.new.char[256](u8(new_cmd.cmd))
+			change_text = new_cmd.text:gsub('&', '\n')
+			input_text = imgui.new.char[8192](u8(change_text))
+			change_waiting = 1.200
+			waiting_slider = imgui.new.float(1.200)	
+			BinderWindow[0] = true
+		end
+		if imgui.Button(fa.HEADSET .. u8' Discord сервер MTG MODS (Связь с автором и тех.поддержка)',imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+			openLink('https://discord.com/invite/qBPEYjfNhv')
+		end
+		imgui.End()
     end
 )
 
+imgui.OnFrame(
+    function() return BinderWindow[0] end,
+    function(player)
+		imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+		imgui.SetNextWindowSize(imgui.ImVec2(600 * MONET_DPI_SCALE, 425	* MONET_DPI_SCALE), imgui.Cond.FirstUseEver)
+		imgui.Begin(fa.TERMINAL..u8" Binder by MTG MODS - Редактирование команды /" .. change_cmd, BinderWindow, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize  )
+		if imgui.BeginChild('##binder_edit', imgui.ImVec2(589 * MONET_DPI_SCALE, 361 * MONET_DPI_SCALE), true) then
+			imgui.CenterText(fa.FILE_LINES .. u8' Описание команды:')
+			imgui.PushItemWidth(579 * MONET_DPI_SCALE)
+			imgui.InputText("##input_description", input_description, 256)
+			imgui.Separator()
+			imgui.CenterText(fa.TERMINAL .. u8' Команда для использования в чате (без /):')
+			imgui.PushItemWidth(579 * MONET_DPI_SCALE)
+			imgui.InputText("##input_cmd", input_cmd, 256)
+			imgui.Separator()
+			imgui.CenterText(fa.CODE .. u8' Аргументы которые принимает команда:')
+	    	imgui.Combo(u8'',ComboTags, ImItems, #item_list)
+	 	    imgui.Separator()
+	        imgui.CenterText(fa.FILE_WORD .. u8' Текстовый бинд команды:')
+			imgui.InputTextMultiline("##text_multiple", input_text, 8192, imgui.ImVec2(579 * MONET_DPI_SCALE, 173 * MONET_DPI_SCALE))
+		imgui.EndChild() end
+		if imgui.Button(fa.CIRCLE_XMARK .. u8' Отмена', imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+			BinderWindow[0] = false
+		end
+		imgui.SameLine()
+		if imgui.Button(fa.CLOCK .. u8' Задержка',imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+			imgui.OpenPopup(fa.CLOCK .. u8' Задержка (в секундах) ')
+		end
+		if imgui.BeginPopupModal(fa.CLOCK .. u8' Задержка (в секундах) ', _, imgui.WindowFlags.NoResize ) then
+			imgui.PushItemWidth(200 * MONET_DPI_SCALE)
+			imgui.SliderFloat(u8'##waiting', waiting_slider, 0.3, 5)
+			imgui.Separator()
+			if imgui.Button(fa.CIRCLE_XMARK .. u8' Отмена', imgui.ImVec2(imgui.GetMiddleButtonX(2), 0)) then
+				waiting_slider = imgui.new.float(tonumber(change_waiting))	
+				imgui.CloseCurrentPopup()
+			end
+			imgui.SameLine()
+			if imgui.Button(fa.FLOPPY_DISK .. u8' Сохранить', imgui.ImVec2(imgui.GetMiddleButtonX(2), 0)) then
+				imgui.CloseCurrentPopup()
+			end
+			imgui.End()
+		end
+		imgui.SameLine()
+		if imgui.Button(fa.TAGS .. u8' Тэги ', imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+			imgui.OpenPopup(fa.TAGS .. u8' Основные тэги для использования в биндере')
+		end
+		if imgui.BeginPopupModal(fa.TAGS .. u8' Основные тэги для использования в биндере', _, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize  + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.AlwaysAutoResize ) then
+			imgui.Text(u8(binder_tags_text))
+			imgui.Separator()
+			if imgui.Button(fa.CIRCLE_XMARK .. u8' Закрыть', imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+				imgui.CloseCurrentPopup()
+			end
+			imgui.End()
+		end
+		imgui.SameLine()
+		if imgui.Button(fa.FLOPPY_DISK .. u8' Сохранить', imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then	
+			if ffi.string(input_cmd):find('%W') or ffi.string(input_cmd) == '' or ffi.string(input_description) == '' or ffi.string(input_text) == '' then
+				imgui.OpenPopup(fa.TRIANGLE_EXCLAMATION .. u8' Ошибка сохранения команды!')
+			else
+				local new_arg = ''
+				if ComboTags[0] == 0 then
+					new_arg = ''
+				elseif ComboTags[0] == 1 then
+					new_arg = '{arg}'
+				elseif ComboTags[0] == 2 then
+					new_arg = '{arg_id}'
+				elseif ComboTags[0] == 3 then
+					new_arg = '{arg_id} {arg2}'
+				end
+				local new_waiting = waiting_slider[0]
+				local new_description = u8:decode(ffi.string(input_description))
+				local new_command = u8:decode(ffi.string(input_cmd))
+				local new_text = u8:decode(ffi.string(input_text)):gsub('\n', '&')
+				if binder_create_command_9_10 then
+					for _, command in ipairs(settings.commands_manage) do
+						if command.cmd == change_cmd and command.description == change_description and command.arg == change_arg and command.text:gsub('&', '\n') == change_text then
+							command.cmd = new_command
+							command.arg = new_arg
+							command.description = new_description
+							command.text = new_text
+							command.waiting = new_waiting
+							save_settings()
+							if command.arg == '' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' {ffffff}успешно сохранена!', message_color)
+							elseif command.arg == '{arg}' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' [аргумент] {ffffff}успешно сохранена!', message_color)
+							elseif command.arg == '{arg_id}' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' [ID игрока] {ffffff}успешно сохранена!', message_color)
+							elseif command.arg == '{arg_id} {arg2}' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' [ID игрока] [аргумент] {ffffff}успешно сохранена!', message_color)
+							end
+							sampUnregisterChatCommand(change_cmd)
+							register_command(command.cmd, command.arg, command.text, tonumber(command.waiting))
+							binder_create_command_9_10 = false
+							break
+						end
+					end
+				else
+					for _, command in ipairs(settings.commands) do
+						if command.cmd == change_cmd and command.description == change_description and command.arg == change_arg and command.text:gsub('&', '\n') == change_text then
+							command.cmd = new_command
+							command.arg = new_arg
+							command.description = new_description
+							command.text = new_text
+							command.waiting = new_waiting
+							save_settings()
+							if command.arg == '' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' {ffffff}успешно сохранена!', message_color)
+							elseif command.arg == '{arg}' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' [аргумент] {ffffff}успешно сохранена!', message_color)
+							elseif command.arg == '{arg_id}' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' [ID игрока] {ffffff}успешно сохранена!', message_color)
+							elseif command.arg == '{arg_id} {arg2}' then
+								msg('[Binder] {ffffff}Команда ' .. message_color_hex .. '/' .. new_command .. ' [ID игрока] [аргумент] {ffffff}успешно сохранена!', message_color)
+							end
+							sampUnregisterChatCommand(change_cmd)
+							register_command(command.cmd, command.arg, command.text, tonumber(command.waiting))
+							break
+						end
+					end
+				end
+				BinderWindow[0] = false
+			end
+		end
+		if imgui.BeginPopupModal(fa.TRIANGLE_EXCLAMATION .. u8' Ошибка сохранения команды!', _, imgui.WindowFlags.AlwaysAutoResize ) then
+			if ffi.string(input_cmd):find('%W') then
+				imgui.BulletText(u8" В команде можно использовать только англ. буквы и/или цифры!")
+			elseif ffi.string(input_cmd) == '' then
+				imgui.BulletText(u8" Команда не может быть пустая!")
+			end
+			if ffi.string(input_description) == '' then
+				imgui.BulletText(u8" Описание команды не может быть пустое!")
+			end
+			if ffi.string(input_text) == '' then
+				imgui.BulletText(u8" Бинд команды не может быть пустой!")
+			end
+			imgui.Separator()
+			if imgui.Button(fa.CIRCLE_XMARK .. u8' Закрыть', imgui.ImVec2(300 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+				imgui.CloseCurrentPopup()
+			end
+			imgui.End()
+		end	
+		imgui.End()
+    end
+)
+
+
+function imgui.CenterColumnText(text)
+    imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text).x / 2)
+    imgui.Text(text)
+end
+function imgui.CenterColumnTextDisabled(text)
+    imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text).x / 2)
+    imgui.TextDisabled(text)
+end
+function imgui.CenterColumnColorText(imgui_RGBA, text)
+    imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text).x / 2)
+	imgui.TextColored(imgui_RGBA, text)
+end
+function imgui.CenterColumnInputText(text,v,size)
+
+	if text:find('^(.+)##(.+)') then
+		local text1, text2 = text:match('(.+)##(.+)')
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - (imgui.CalcTextSize(text1).x / 2) - (imgui.CalcTextSize(v).x / 2 ))
+	elseif text:find('^##(.+)') then
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2) ) - (imgui.CalcTextSize(v).x / 2 ) )
+	else
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - (imgui.CalcTextSize(text).x / 2) - (imgui.CalcTextSize(v).x / 2 ))
+	end   
+	
+	if imgui.InputText(text,v,size) then
+		return true
+	else
+		return false
+	end
+	
+end
+function imgui.CenterColumnButton(text)
+
+	if text:find('(.+)##(.+)') then
+		local text1, text2 = text:match('(.+)##(.+)')
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text1).x / 2)
+	else
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text).x / 2)
+	end
+	
+    if imgui.Button(text) then
+		return true
+	else
+		return false
+	end
+end
+function imgui.CenterColumnSmallButton(text)
+
+	if text:find('(.+)##(.+)') then
+		local text1, text2 = text:match('(.+)##(.+)')
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text1).x / 2)
+	else
+		imgui.SetCursorPosX((imgui.GetColumnOffset() + (imgui.GetColumnWidth() / 2)) - imgui.CalcTextSize(text).x / 2)
+	end
+	
+    if imgui.SmallButton(text) then
+		return true
+	else
+		return false
+	end
+	
+end
+function imgui.CenterTextDisabled(text)
+    local width = imgui.GetWindowWidth()
+    local calc = imgui.CalcTextSize(text)
+    imgui.SetCursorPosX( width / 2 - calc.x / 2 )
+    imgui.TextDisabled(text)
+end
+function imgui.GetMiddleButtonX(count)
+    local width = imgui.GetWindowContentRegionWidth() -- ширины контекста окно
+    local space = imgui.GetStyle().ItemSpacing.x
+    return count == 1 and width or width/count - ((space * (count-1)) / count) -- вернется средние ширины по количеству
+end
+
+
+function openLink(link)
+	if isMonetLoader() then
+		local gta = ffi.load('GTASA')
+		ffi.cdef[[
+			void _Z12AND_OpenLinkPKc(const char* link);
+		]]
+		gta._Z12AND_OpenLinkPKc(link)
+	else
+		os.execute("explorer " .. link)
+	end
+end
+function play_error_sound()
+	if not isMonetLoader() and sampIsLocalPlayerSpawned() then
+		addOneOffSound(getCharCoordinates(PLAYER_PED), 1149)
+	end
+end
+local russian_characters = {
+    [168] = 'Ё', [184] = 'ё', [192] = 'А', [193] = 'Б', [194] = 'В', [195] = 'Г', [196] = 'Д', [197] = 'Е', [198] = 'Ж', [199] = 'З', [200] = 'И', [201] = 'Й', [202] = 'К', [203] = 'Л', [204] = 'М', [205] = 'Н', [206] = 'О', [207] = 'П', [208] = 'Р', [209] = 'С', [210] = 'Т', [211] = 'У', [212] = 'Ф', [213] = 'Х', [214] = 'Ц', [215] = 'Ч', [216] = 'Ш', [217] = 'Щ', [218] = 'Ъ', [219] = 'Ы', [220] = 'Ь', [221] = 'Э', [222] = 'Ю', [223] = 'Я', [224] = 'а', [225] = 'б', [226] = 'в', [227] = 'г', [228] = 'д', [229] = 'е', [230] = 'ж', [231] = 'з', [232] = 'и', [233] = 'й', [234] = 'к', [235] = 'л', [236] = 'м', [237] = 'н', [238] = 'о', [239] = 'п', [240] = 'р', [241] = 'с', [242] = 'т', [243] = 'у', [244] = 'ф', [245] = 'х', [246] = 'ц', [247] = 'ч', [248] = 'ш', [249] = 'щ', [250] = 'ъ', [251] = 'ы', [252] = 'ь', [253] = 'э', [254] = 'ю', [255] = 'я',
+}
+function string.rlower(s)
+    s = s:lower()
+    local strlen = s:len()
+    if strlen == 0 then return s end
+    s = s:lower()
+    local output = ''
+    for i = 1, strlen do
+        local ch = s:byte(i)
+        if ch >= 192 and ch <= 223 then -- upper russian characters
+            output = output .. russian_characters[ch + 32]
+        elseif ch == 168 then -- Ё
+            output = output .. russian_characters[184]
+        else
+            output = output .. string.char(ch)
+        end
+    end
+    return output
+end
+function string.rupper(s)
+    s = s:upper()
+    local strlen = s:len()
+    if strlen == 0 then return s end
+    s = s:upper()
+    local output = ''
+    for i = 1, strlen do
+        local ch = s:byte(i)
+        if ch >= 224 and ch <= 255 then -- lower russian characters
+            output = output .. russian_characters[ch - 32]
+        elseif ch == 184 then -- ё
+            output = output .. russian_characters[168]
+        else
+            output = output .. string.char(ch)
+        end
+    end
+    return output
+end
+function TranslateNick(name)
+	if name:match('%a+') then
+        for k, v in pairs({['ph'] = 'ф',['Ph'] = 'Ф',['Ch'] = 'Ч',['ch'] = 'ч',['Th'] = 'Т',['th'] = 'т',['Sh'] = 'Ш',['sh'] = 'ш', ['ea'] = 'и',['Ae'] = 'Э',['ae'] = 'э',['size'] = 'сайз',['Jj'] = 'Джейджей',['Whi'] = 'Вай',['lack'] = 'лэк',['whi'] = 'вай',['Ck'] = 'К',['ck'] = 'к',['Kh'] = 'Х',['kh'] = 'х',['hn'] = 'н',['Hen'] = 'Ген',['Zh'] = 'Ж',['zh'] = 'ж',['Yu'] = 'Ю',['yu'] = 'ю',['Yo'] = 'Ё',['yo'] = 'ё',['Cz'] = 'Ц',['cz'] = 'ц', ['ia'] = 'я', ['ea'] = 'и',['Ya'] = 'Я', ['ya'] = 'я', ['ove'] = 'ав',['ay'] = 'эй', ['rise'] = 'райз',['oo'] = 'у', ['Oo'] = 'У', ['Ee'] = 'И', ['ee'] = 'и', ['Un'] = 'Ан', ['un'] = 'ан', ['Ci'] = 'Ци', ['ci'] = 'ци', ['yse'] = 'уз', ['cate'] = 'кейт', ['eow'] = 'яу', ['rown'] = 'раун', ['yev'] = 'уев', ['Babe'] = 'Бэйби', ['Jason'] = 'Джейсон', ['liy'] = 'лий', ['ane'] = 'ейн', ['ame'] = 'ейм'}) do
+            name = name:gsub(k, v) 
+        end
+		for k, v in pairs({['B'] = 'Б',['Z'] = 'З',['T'] = 'Т',['Y'] = 'Й',['P'] = 'П',['J'] = 'Дж',['X'] = 'Кс',['G'] = 'Г',['V'] = 'В',['H'] = 'Х',['N'] = 'Н',['E'] = 'Е',['I'] = 'И',['D'] = 'Д',['O'] = 'О',['K'] = 'К',['F'] = 'Ф',['y`'] = 'ы',['e`'] = 'э',['A'] = 'А',['C'] = 'К',['L'] = 'Л',['M'] = 'М',['W'] = 'В',['Q'] = 'К',['U'] = 'А',['R'] = 'Р',['S'] = 'С',['zm'] = 'зьм',['h'] = 'х',['q'] = 'к',['y'] = 'и',['a'] = 'а',['w'] = 'в',['b'] = 'б',['v'] = 'в',['g'] = 'г',['d'] = 'д',['e'] = 'е',['z'] = 'з',['i'] = 'и',['j'] = 'ж',['k'] = 'к',['l'] = 'л',['m'] = 'м',['n'] = 'н',['o'] = 'о',['p'] = 'п',['r'] = 'р',['s'] = 'с',['t'] = 'т',['u'] = 'у',['f'] = 'ф',['x'] = 'x',['c'] = 'к',['``'] = 'ъ',['`'] = 'ь',['_'] = ' '}) do
+            name = name:gsub(k, v) 
+        end
+        return name
+    end
+	return name
+end
+function isParamSampID(id)
+	id = tonumber(id)
+	if id ~= nil and tostring(id):find('%d') and not tostring(id):find('%D') and string.len(id) >= 1 and string.len(id) <= 3 then
+		if id == select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)) then
+			return true
+		elseif sampIsPlayerConnected(id) then
+			return true
+		else
+			return false
+		end
+	else
+		return false
+	end
+end
+function imgui.ToggleButton(label, label_true, bool, a_speed)
+    local p  = imgui.GetCursorScreenPos()
+    local dl = imgui.GetWindowDrawList()
+ 
+    local bebrochka = false
+
+    local label      = label or ""                          -- Текст false
+    local label_true = label_true or ""                     -- Текст true
+    local h          = imgui.GetTextLineHeightWithSpacing() -- Высота кнопки
+    local w          = h * 1.7                              -- Ширина кнопки
+    local r          = h / 2                                -- Радиус кружка
+    local s          = a_speed or 0.2                       -- Скорость анимации
+ 
+    local function ImSaturate(f)
+        return f < 0.0 and 0.0 or (f > 1.0 and 1.0 or f)
+    end
+ 
+    local x_begin = bool[0] and 1.0 or 0.0
+    local t_begin = bool[0] and 0.0 or 1.0
+ 
+    if LastTime == nil then
+        LastTime = {}
+    end
+    if LastActive == nil then
+        LastActive = {}
+    end
+ 
+    if imgui.InvisibleButton(label, imgui.ImVec2(w, h)) then
+        bool[0] = not bool[0]
+        LastTime[label] = os.clock()
+        LastActive[label] = true
+        bebrochka = true
+    end
+
+    if LastActive[label] then
+        local time = os.clock() - LastTime[label]
+        if time <= s then
+            local anim = ImSaturate(time / s)
+            x_begin = bool[0] and anim or 1.0 - anim
+            t_begin = bool[0] and 1.0 - anim or anim
+        else
+            LastActive[label] = false
+        end
+    end
+ 
+    local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Цвет прямоугольника
+    local t_color  = imgui.ImVec4(1, 1, 1, x_begin) -- Цвет текста при false
+    local t2_color = imgui.ImVec4(1, 1, 1, t_begin) -- Цвет текста при true
+ 
+    dl:AddRectFilled(imgui.ImVec2(p.x, p.y), imgui.ImVec2(p.x + w, p.y + h), imgui.GetColorU32Vec4(bg_color), r)
+    dl:AddCircleFilled(imgui.ImVec2(p.x + r + x_begin * (w - r * 2), p.y + r), t_begin < 0.5 and x_begin * r or t_begin * r, imgui.GetColorU32Vec4(imgui.ImVec4(0.9, 0.9, 0.9, 1.0)), r + 5)
+    dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t_color), label_true)
+    dl:AddText(imgui.ImVec2(p.x + w + r, p.y + r - (r / 2) - (imgui.CalcTextSize(label).y / 4)), imgui.GetColorU32Vec4(t2_color), label)
+    return bebrochka
+end
 function main()
-                
-    if statsCheck == false then
-    end
-    sampRegisterChatCommand('mvd', openwindow)
+    if not isSampLoaded() or not isSampfuncsLoaded() then return end
+    while not isSampAvailable() do wait(100) end
+    sampRegisterChatCommand('mvd', function() window[0] = not window[0] end)
     sampRegisterChatCommand("su", cmd_su)
-    sampRegisterChatCommand("mvds",cmd_mvds)
-    if standartBindsBox[0] then
-    	sampRegisterChatCommand("showpass", cmd_showpass)
-    sampRegisterChatCommand("showlic", cmd_showlic)
-    sampRegisterChatCommand("showskill", cmd_showskill)
-    sampRegisterChatCommand("showmc", cmd_showmc)
-    sampRegisterChatCommand("pull", cmd_pull)
-    sampRegisterChatCommand("invite", cmd_invite)
-    sampRegisterChatCommand("uninvite", cmd_uninvite)
-    sampRegisterChatCommand("cuff",cmd_cuff)
-    sampRegisterChatCommand("uncuff",cmd_uncuff)
-    sampRegisterChatCommand("gotome",cmd_gotome)
-    sampRegisterChatCommand("ungotome",cmd_ungotome)
-    sampRegisterChatCommand("frisk", cmd_frisk)
-    sampRegisterChatCommand("showbadge", cmd_showbadge)
-    sampRegisterChatCommand("tencodes",cmd_tencodes)
-    sampRegisterChatCommand("marks",cmd_marks)
-    sampRegisterChatCommand("sitcodes",cmd_sitcodes)
-    sampRegisterChatCommand("mask", cmd_mask)
-    sampRegisterChatCommand("arm", cmd_arm)
-    sampRegisterChatCommand("drug", cmd_drug)
-    sampRegisterChatCommand("asu", cmd_asu)
-    sampRegisterChatCommand("arrest", cmd_arrest)
-    sampRegisterChatCommand("stop", cmd_stop)
-    sampRegisterChatCommand("giverank",cmd_giverank)
-    sampRegisterChatCommand("unmask",cmd_unmask)
-    sampRegisterChatCommand("miranda",cmd_miranda)
-    sampRegisterChatCommand("bodyon",cmd_bodyon)
-    sampRegisterChatCommand("bodyoff",cmd_bodyoff)
-    sampRegisterChatCommand("ticket",cmd_ticket)
-    sampRegisterChatCommand("pursuit",cmd_pursuit)
-    sampRegisterChatCommand("drugtestno",cmd_drugtestno)
-    sampRegisterChatCommand("drugtestyes",cmd_drugtestyes)
-    sampRegisterChatCommand("vzatka",cmd_vzatka)
-    sampRegisterChatCommand("bomb",cmd_bomb)
-    sampRegisterChatCommand("probiv",cmd_probiv)
-    sampRegisterChatCommand("dismiss",cmd_dismiss)
-    sampRegisterChatCommand("demoute",cmd_demoute)
-    sampRegisterChatCommand("cure",cmd_cure)
-    sampRegisterChatCommand("zsu",cmd_zsu)
-    sampRegisterChatCommand("find",cmd_find)
-    sampRegisterChatCommand("incar",cmd_incar)
-    sampRegisterChatCommand("eject",cmd_eject)
-    sampRegisterChatCommand("pog",cmd_pog)
-    sampRegisterChatCommand("pas",cmd_pas)
-    sampRegisterChatCommand("clear",cmd_clear)
-    sampRegisterChatCommand("take",cmd_take)
-    sampRegisterChatCommand("gcuff",cmd_gcuff)
-    sampRegisterChatCommand("fbi.pravda", cmd_pravda_fbi)
-    sampRegisterChatCommand("fbi.secret", cmd_secret_fbi)
-    sampRegisterChatCommand("finger.p", cmd_finger_person)
-    sampRegisterChatCommand("podmoga", cmd_warn)
+    sampRegisterChatCommand("stop", function() if isActiveCommand then command_stop = true else sampAddChatMessage('[Binder] {ffffff}Ошибка, сейчас нету активной отыгровки!', message_color) end end)
+    registerCommandsFrom(settings.commands)
     
-    sampRegisterChatCommand("stop", cmd_stop)
-    sampRegisterChatCommand("grim", cmd_grim)
-    sampRegisterChatCommand("eks", cmd_eks)
-    sampRegisterChatCommand("traf", cmd_traf)
-    sampRegisterChatCommand("agenda", cmd_agenda)
-    sampRegisterChatCommand("time",cmd_time)
+    while true do
+        wait(0)
     end
+end
+
+function cmd_su(p_id)
+    if p_id == "" then
+        msg("Введи айди игрока: {FFFFFF}/su [ID].",0x318CE7FF -1)
+    else
+    	id = tonumber(p_id)  -- Преобразуем строку в число
+        id = imgui.new.int(id)
+        windowTwo[0] = not windowTwo[0]
+    end
+end
+
+local ObuchalName = new.char[255](mainIni.settings.ObuchalName)
+
+imgui.OnFrame(function() return window[0] end, function(player)
+    imgui.SetNextWindowPos(imgui.ImVec2(500,500), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+    imgui.SetNextWindowSize(imgui.ImVec2(1700, 800), imgui.Cond.FirstUseEver)
+    imgui.Begin('##Window', window, imgui.WindowFlags.NoBackground + imgui.WindowFlags.NoTitleBar)
+
+    imgui.BeginChild('tabs', imgui.ImVec2(320, -1), true)
+    imgui.CenterText(u8('MVD Helper'))
+    imgui.Separator()
+    if imgui.PageButton(page == 1, ' ', u8'Настройки') then
+        page = 1
+    end
+    if imgui.PageButton(page == 2, ' ', u8'Биндер') then
+        page = 2
+    end
+    if imgui.PageButton(page == 8, ' ', u8'Основное') then
+        page = 8
+    end
+    if imgui.PageButton(page == 3, ' ', u8'Рация департамента') then
+        page = 3
+    end
+    if imgui.PageButton(page == 4, ' ', u8'Для СС') then
+        page = 4
+    end
+    if imgui.PageButton(page == 5, ' ', u8'Шпаргалки') then
+        page = 5
+    end
+    if imgui.PageButton(page == 6, ' ', u8'Дополнительно') then
+        page = 6
+    end
+    if imgui.PageButton(page == 7, ' ', u8'Инфа') then
+        page = 7
+    end
+    imgui.CenterText(u8(''))
+    imgui.CenterText(u8('v ' .. thisScript().version))
+    imgui.EndChild()
+    imgui.SameLine()
     
-    for key, value in pairs(tableBinder) do
-    local msgFunction = function()
-        lua_thread.create(function()
-            for _, msg in ipairs(value) do
-                sampSendChat(msg, -1)
+    imgui.BeginChild('workspace', imgui.ImVec2(-1, -1), true)
+    local size = imgui.GetWindowSize()
+    local pos = imgui.GetWindowPos()
+    
+
+    local tabSize = 40 - 10
+
+    imgui.SetCursorPos(imgui.ImVec2(size.x - tabSize - 5, 5))
+    if imgui.Button('X##..##Window::closebutton', imgui.ImVec2(tabSize, tabSize)) then if window then window[0] = false end end
+
+    imgui.SetCursorPosY(20)
+    if page == 1 then -- если значение tab == 1
+        imgui.Text(u8'Ваш ник: '.. nickname)
+        imgui.Text(u8'Ваша организация: '.. mainIni.Info.org)
+        imgui.Text(u8'Ваша должность: '.. mainIni.Info.dl)
+        if imgui.Button(u8' Настроить УК') then
+            setUkWindow[0] = not setUkWindow[0]
+        end
+        if imgui.Combo(u8'Темы', selected_theme, items, #theme_a) then
+            themeta = theme_t[selected_theme[0]+1]
+            mainIni.theme.themeta = themeta
+            mainIni.theme.selected = selected_theme[0]
+            inicfg.save(mainIni, 'mvdhelper.ini')
+            apply_n_t()
+        end
+        imgui.Text(u8'Цвет MoonMonet - ')
+        imgui.SameLine()
+        if imgui.ColorEdit3('## COLOR', mmcolor, imgui.ColorEditFlags.NoInputs) then
+            r,g,b = mmcolor[0] * 255, mmcolor[1] * 255, mmcolor[2] * 255
+            argb = join_argb(0, r, g, b)
+            mainIni.theme.moonmonet = argb
+            inicfg.save(mainIni, 'mvdhelper.ini')
+            apply_n_t()
+        end
+        imgui.ToggleButton(u8 'Авто отыгровка оружия', u8'Авто отыгровка оружия', autogun)
+        if autogun[0] then
+            mainIni.settings.autoRpGun = true
+            inicfg.save(mainIni, "mvdhelper.ini")
+            lua_thread.create(function()
+                while true do
+                    wait(0)
+                    if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
+                        local gun = getCurrentCharWeapon(PLAYER_PED)
+                        if gun == 3 then
+                            sampSendChat("/me достал дубинку с поясного держателя")
+                        elseif gun == 16 then
+                            sampSendChat("/me взял с пояса гранату")
+                        elseif gun == 17 then
+                            sampSendChat("/me взял гранату слезоточивого газа с пояса")
+                        elseif gun == 23 then
+                            sampSendChat("/me достал тайзер с кобуры, убрал предохранитель")
+                        elseif gun == 22 then
+                            sampSendChat("/me достал пистолет Colt-45, снял предохранитель")
+                        elseif gun == 24 then
+                            sampSendChat("/me достал Desert Eagle с кобуры, убрал предохранитель")
+                        elseif gun == 25 then
+                            sampSendChat("/me достал чехол со спины, взял дробовик и убрал предохранитель")
+                        elseif gun == 26 then
+                            sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал Обрезы")
+                        elseif gun == 27 then
+                            sampSendChat("/me достал дробовик Spas, снял предохранитель")
+                        elseif gun == 28 then
+                            sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал УЗИ")
+                        elseif gun == 29 then
+                            sampSendChat("/me достал чехол со спины, взял МП5 и убрал предохранитель")
+                        elseif gun == 30 then
+                            sampSendChat("/me достал карабин AK-47 со спины")
+                        elseif gun == 31 then
+                            sampSendChat("/me достал карабин М4 со спины")
+                        elseif gun == 32 then
+                            sampSendChat("/me резким движением обоих рук, снял военный рюкзак с плеч и достал TEC-9")
+                        elseif gun == 33 then
+                            sampSendChat("/me достал винтовку без прицела из военной сумки")
+                        elseif gun == 34 then
+                            sampSendChat("/me достал Снайперскую винтовку с военной сумки")
+                        elseif gun == 43 then
+                            sampSendChat("/me достал фотокамеру из рюкзака")
+                        elseif gun == 0 then
+                            sampSendChat("/me поставил предохранитель, убрал оружие")
+                        end
+                        lastgun = gun
+                    end
+                end
+            end)
+            
+        else
+            mainIni.settings.autoRpGun = false
+            inicfg.save(mainIni, "mvdhelper.ini")
+        end
+        
+        imgui.ToggleButton(u8'Авто-Акцент', u8'Авто-Акцент', AutoAccentBool)
+        if AutoAccentBool[0] then
+            AutoAccentCheck = true
+            mainIni.settings.autoAccent = true
+            inicfg.save(mainIni, "mvdhelper.ini")
+        else
+            mainIni.settings.autoAccent = false
+            inicfg.save(mainIni, "mvdhelper.ini")
+        end
+        imgui.InputText(u8'Акцент', AutoAccentInput, 255)
+        AutoAccentText = u8:decode(ffi.string(AutoAccentInput))
+        mainIni.Accent.accent = AutoAccentText
+        inicfg.save(mainIni, "mvdhelper.ini")
+        if imgui.Button(u8'Вспомогательное окошко') then
+            suppWindow[0] = not suppWindow [0]
+        end
+        imgui.ToggleButton (u8(mainIni.settings.ObuchalName) .. u8' работает', u8(mainIni.settings.ObuchalName) .. u8' отдыхает', joneV)
+        if joneV[0] then
+            mainIni.settings.Jone = true
+            inicfg.save(mainIni, "mvdhelper.ini")
+        else
+        	mainIni.settings.Jone = false
+            inicfg.save(mainIni, "mvdhelper.ini")
+        end
+        imgui.InputText(u8"Имя обучальщика", ObuchalName, 255)
+        Obuchal = u8:decode(ffi.string(ObuchalName))
+        mainIni.settings.ObuchalName = Obuchal
+        inicfg.save(mainIni, "mvdhelper.ini")
+        
+    elseif page == 8 then -- если значение tab == 8
+        imgui.InputInt(u8 'ID игрока с которым будете взаимодействовать', id, 10)
+        if imgui.Button(u8 'Приветствие') then
+            lua_thread.create(function()
+                sampSendChat("Доброго времени суток, я «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
                 wait(1500)
+                sampSendChat("/do Удостоверение в руках.")
+                wait(1500)
+                sampSendChat("/me показал своё удостоверение человеку на против")
+                wait(1500)
+                sampSendChat("/do «" .. nickname .. "».")
+                wait(1500)
+                sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
+                wait(1500)
+                sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
+                wait(1500)
+                sampSendChat("/showbadge ")
+            end)
+        end
+        if imgui.Button(u8 'Найти игрока') then
+            lua_thread.create(function()
+                sampSendChat("/do КПК в левом кармане.")
+                wait(1500)
+                sampSendChat("/me достал левой рукой КПК из кармана")
+                wait(1500)
+                sampSendChat("/do КПК в левой руке.")
+                wait(1500)
+                sampSendChat("/me включил КПК и зашел в базу данных Полиции")
+                wait(1500)
+                sampSendChat("/me открыл дело номер " .. id[0] .. " преступника")
+                wait(1500)
+                sampSendChat("/do Данные преступника получены.")
+                wait(1500)
+                sampSendChat("/me подключился к камерам слежения штата")
+                wait(1500)
+                sampSendChat("/do На навигаторе появился маршрут.")
+                wait(1500)
+                sampSendChat("/pursuit " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'Арест') then
+            lua_thread.create(function()
+                sampSendChat("/me взял ручку из кармана рубашки, затем открыл бардачок и взял оттуда бланк протокола")
+                wait(1500)
+                sampSendChat("/do Бланк протокола и ручка в руках.")
+                wait(1500)
+                sampSendChat("/me заполняет описание внешности нарушителя")
+                wait(1500)
+                sampSendChat("/me заполняет характеристику о нарушителе")
+                wait(1500)
+                sampSendChat("/me заполняет данные о нарушении")
+                wait(1500)
+                sampSendChat("/me проставил дату и подпись")
+                wait(1500)
+                sampSendChat("/me положил ручку в карман рубашки")
+                wait(1500)
+                sampSendChat("/do Ручка в кармане рубашки.")
+                wait(1500)
+                sampSendChat("/me передал бланк составленного протокола в участок")
+                wait(1500)
+                sampSendChat("/me передал преступника в Управление Полиции под стражу")
+                wait(1500)
+                sampSendChat("/arrest")
+                msg("Встаньте на чекпоинт",0x8B00FF)
+            end)
+        end
+        if imgui.Button(u8 'Надеть наручники') then
+            lua_thread.create(function()
+                sampSendChat("/do Наручники висят на поясе.")
+                wait(1500)
+                sampSendChat("/me снял с держателя наручники")
+                wait(1500)
+                sampSendChat("/do Наручники в руках.")
+                wait(1500)
+                sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
+                wait(1500)
+                sampSendChat("/do Преступник скован.")
+                wait(1500)
+                sampSendChat("/cuff " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'Снять наручники') then
+            lua_thread.create(function()
+                sampSendChat("/do Ключ от наручников в кармане.")
+                wait(1500)
+                sampSendChat("/me движением правой руки достал из кармана ключ и открыл наручники")
+                wait(1500)
+                sampSendChat("/do Преступник раскован.")
+                wait(1500)
+                sampSendChat("/uncuff " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'Вести за собой') then
+            lua_thread.create(function()
+                ampSendsChat("/me заломил правую руку нарушителю")
+                wait(1500)
+                sampSendChat("/me ведет нарушителя за собой")
+                wait(1500)
+                sampSendChat("/gotome " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'Перестать вести за собой') then
+            lua_thread.create(function()
+                sampSendChat("/me отпустил правую руку преступника")
+                wait(1500)
+                sampSendChat("/do Преступник свободен.")
+                wait(1500)
+                sampSendChat("/ungotome " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'В машину(автоматически на 3-е место)') then
+            lua_thread.create(function()
+                sampSendChat("/do Двери в машине закрыты.")
+                wait(1500)
+                sampSendChat("/me открыл заднюю дверь в машине")
+                wait(1500)
+                sampSendChat("/me посадил преступника в машину")
+                wait(1500)
+                sampSendChat("/me заблокировал двери")
+                wait(1500)
+                sampSendChat("/do Двери заблокированы.")
+                wait(1500)
+                sampSendChat("/incar " .. id[0] .. "3")
+            end)
+        end
+        if imgui.Button(u8 'Обыск') then
+            lua_thread.create(function()
+                sampSendChat("/me нырнув руками в карманы, вытянул оттуда белые перчатки и натянул их на руки")
+                wait(1500)
+                sampSendChat("/do Перчатки надеты.")
+                wait(1500)
+                sampSendChat("/me проводит руками по верхней части тела")
+                wait(1500)
+                sampSendChat("/me проверяет карманы")
+                                wait(1500)
+        sampSendChat ("/me проводит руками по ногам")
+                wait(1500)
+                sampSendChat("/frisk " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'Мегафон') then
+            lua_thread.create(function()
+                sampSendChat("/do Мегафон в бардачке.")
+                wait(1500)
+                sampSendChat("/me достал мегафон с бардачка после чего включил его")
+                wait(1500)
+                sampSendChat("/m Водитель авто, остановитесь и заглушите двигатель, держите руки на руле.")
+            end)
+        end
+        if imgui.Button(u8 'Вытащить из авто') then
+            lua_thread.create(function()
+                sampSendChat("/me сняв дубинку с поясного держателя разбил стекло в транспорте")
+                wait(1500)
+                sampSendChat("/do Стекло разбито.")
+                wait(1500)
+                sampSendChat("/me схватив за плечи человека ударил его после чего надел наручники")
+                wait(1500)
+                sampSendChat("/pull " .. id[0])
+                wait(1500)
+                sampSendChat("/cuff " .. id[0])
+            end)
+        end
+        if imgui.Button(u8 'Выдача розыска') then
+            windowTwo[0] = not windowTwo[0]
+        end
+    elseif page == 2 then -- если значение 
+        
+        -- для удобства зададим ширину каждой колонки в начале
+        local w = {
+            first = 150,
+            second = 250,
+        }
+        
+        
+        -- == Первая строка
+        		if imgui.BeginChild('##1', imgui.ImVec2(589 * MONET_DPI_SCALE, 333 * MONET_DPI_SCALE), true) then
+			imgui.Columns(3)
+			imgui.CenterColumnText(u8"Команда")
+			imgui.SetColumnWidth(-1, 170 * MONET_DPI_SCALE)
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Описание")
+			imgui.SetColumnWidth(-1, 300 * MONET_DPI_SCALE)
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Действие")
+			imgui.SetColumnWidth(-1, 150 * MONET_DPI_SCALE)
+			imgui.Columns(1)
+			imgui.Separator()
+			imgui.Columns(3)
+			imgui.CenterColumnText(u8"/binder")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Открыть главное меню биндера")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Недоступно")
+			imgui.Columns(1)	
+			imgui.Separator()
+			imgui.Columns(3)
+			imgui.CenterColumnText(u8"/stop")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Остановить любую отыгровку из биндера")
+			imgui.NextColumn()
+			imgui.CenterColumnText(u8"Недоступно")
+			imgui.Columns(1)	
+			imgui.Separator()
+			for index, command in ipairs(settings.commands) do
+				if not command.deleted then
+					imgui.Columns(3)
+					if command.enable then
+						imgui.CenterColumnText('/' .. u8(command.cmd))
+						imgui.NextColumn()
+						imgui.CenterColumnText(u8(command.description))
+						imgui.NextColumn()
+					else
+						imgui.CenterColumnTextDisabled('/' .. u8(command.cmd))
+						imgui.NextColumn()
+						imgui.CenterColumnTextDisabled(u8(command.description))
+						imgui.NextColumn()
+					end
+					imgui.Text(' ')
+					imgui.SameLine()
+					if command.enable then
+						if imgui.SmallButton(fa.TOGGLE_ON .. '##'..command.cmd) then
+							command.enable = not command.enable
+							save_settings()
+							sampUnregisterChatCommand(command.cmd)
+						end
+						if imgui.IsItemHovered() then
+							imgui.SetTooltip(u8"Отключение команды /"..command.cmd)
+						end
+					else
+						if imgui.SmallButton(fa.TOGGLE_OFF .. '##'..command.cmd) then
+							command.enable = not command.enable
+							save_settings()
+							register_command(command.cmd, command.arg, command.text, tonumber(command.waiting))
+						end
+						if imgui.IsItemHovered() then
+							imgui.SetTooltip(u8"Включение команды /"..command.cmd)
+						end
+					end
+					imgui.SameLine()
+					if imgui.SmallButton(fa.PEN_TO_SQUARE .. '##'..command.cmd) then
+						change_description = command.description
+						input_description = imgui.new.char[256](u8(change_description))
+						change_arg = command.arg
+						if command.arg == '' then
+							ComboTags[0] = 0
+						elseif command.arg == '{arg}' then	
+							ComboTags[0] = 1
+						elseif command.arg == '{arg_id}' then
+							ComboTags[0] = 2
+						elseif command.arg == '{arg_id} {arg2}' then
+							ComboTags[0] = 3
+						end
+						change_cmd = command.cmd
+						input_cmd = imgui.new.char[256](u8(command.cmd))
+						change_text = command.text:gsub('&', '\n')		
+						input_text = imgui.new.char[8192](u8(change_text))
+						change_waiting = command.waiting
+						waiting_slider = imgui.new.float(tonumber(command.waiting))	
+						BinderWindow[0] = true
+					end
+					if imgui.IsItemHovered() then
+						imgui.SetTooltip(u8"Изменение команды /"..command.cmd)
+					end
+					imgui.SameLine()
+					if imgui.SmallButton(fa.TRASH_CAN .. '##'..command.cmd) then
+						imgui.OpenPopup(fa.TRIANGLE_EXCLAMATION .. u8' Предупреждение ##' .. command.cmd)
+					end
+					if imgui.IsItemHovered() then
+						imgui.SetTooltip(u8"Удаление команды /"..command.cmd)
+					end
+					if imgui.BeginPopupModal(fa.TRIANGLE_EXCLAMATION .. u8' Предупреждение ##' .. command.cmd, _, imgui.WindowFlags.NoResize ) then
+						imgui.CenterText(u8'Вы действительно хотите удалить команду /' .. u8(command.cmd) .. '?')
+						imgui.Separator()
+						if imgui.Button(fa.CIRCLE_XMARK .. u8' Нет, отменить', imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+							imgui.CloseCurrentPopup()
+						end
+						imgui.SameLine()
+						if imgui.Button(fa.TRASH_CAN .. u8' Да, удалить', imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+							command.enable = false
+							command.deleted = true
+							sampUnregisterChatCommand(command.cmd)
+							save_settings()
+							imgui.CloseCurrentPopup()
+						end
+						imgui.End()
+					end
+					imgui.Columns(1)
+					imgui.Separator()
+				end
+			end
+			imgui.EndChild()
+		end
+		if imgui.Button(fa.CIRCLE_PLUS .. u8' Создать новую команду##new_cmd',imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+			local new_cmd = {cmd = '', description = 'Новая команда созданная вами', text = '', arg = '', enable = true , waiting = '1.200', deleted = false }
+			table.insert(settings.commands, new_cmd)
+			change_description = new_cmd.description
+			input_description = imgui.new.char[256](u8(change_description))
+			change_arg = new_cmd.arg
+			ComboTags[0] = 0
+			change_cmd = new_cmd.cmd
+			input_cmd = imgui.new.char[256](u8(new_cmd.cmd))
+			change_text = new_cmd.text:gsub('&', '\n')
+			input_text = imgui.new.char[8192](u8(change_text))
+			change_waiting = 1.200
+			waiting_slider = imgui.new.float(1.200)	
+			BinderWindow[0] = true
+		end
+    elseif page == 3 then -- если значение tab == 3
+        imgui.InputText(u8 'Фракция с которой будете взаимодействовать', otherorg, 255)
+        otherdeporg = u8:decode(ffi.string(otherorg))
+        imgui.ToggleButton(u8'Открытый канал', u8'Закрытый канал', zk)
+        if imgui.Button(u8 'Вызов на связь') then
+            if zk[0] then
+                sampSendChat("/d [" .. mainIni.Info.org .. "] з.к [" .. otherdeporg .. "] На связь!")
+            else
+                sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [" .. otherdeporg .. "] На связь!")
             end
-        end)
+        end
+        if imgui.Button(u8 'Откат') then
+            sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [Информация] Тех. Неполадки!")
+        end
+    elseif page == 4 then
+        if imgui.CollapsingHeader(u8'Лекции') then
+            if imgui.Button(u8'Арест и задержание') then
+                lua_thread.create(function()
+                    sampSendChat("Здравствуйте уважаемые сотрудники нашего департамента!")
+                    wait(1500)
+                    sampSendChat("Сейчас будет проведена лекция на тему арест и задержание преступников.")
+                    wait(1500)
+                    sampSendChat("Для начала объясню различие между задержанием и арестом.")
+                    wait(1500)
+                    sampSendChat("Задержание - это кратковременное лишение свободы лица, подозреваемого в совершении преступления.")
+                    wait(1500)
+                    sampSendChat("В свою очередь, арест - это вид уголовного наказания, заключающегося в содержании совершившего преступление..")
+                    wait(1500)
+                    sampSendChat("..и осуждённого по приговору суда в условиях строгой изоляции от общества.")
+                    wait(1500)
+                    sampSendChat("Вам разрешено задерживать лица на период 48 часов с момента их задержания.")
+                    wait(1500)
+                    sampSendChat("Если в течение 48 часов вы не предъявите доказательства вины, вы обязаны отпустить гражданина.")
+                    wait(1500)
+                    sampSendChat("Обратите внимание, гражданин может подать на вас иск за незаконное задержание.")
+                    wait(1500)
+                    sampSendChat("Во время задержания вы обязаны провести первичный обыск на месте задержания и вторичный у капота своего автомобиля.")
+                    wait(1500)
+                    sampSendChat("Все найденные вещи положить в 'ZIP-lock', или в контейнер для вещ. доков, Все личные вещи преступника кладутся в мешок для личных вещей задержанного")
+                    wait(1500)
+                    sampSendChat("На этом данная лекция подходит к концу. У кого-то имеются вопросы?")
+                end)
+            end
+            if imgui.Button(u8"Суббординация") then
+                lua_thread.create(function()
+                    sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
+                    wait(1500)
+                    sampSendChat(" Приветствую вас на лекции о субординации")
+                    wait(1500)
+                    sampSendChat(" Для начала расскажу, что такое субординация")
+                    wait(1500)
+                    sampSendChat(" Субординация - правила подчинения младших по званию к старшим по званию, уважение, отношение к ним")
+                    wait(1500)
+                    sampSendChat(" То есть младшие сотрудники должны выполнять приказы начальства")
+                    wait(1500)
+                    sampSendChat(" Кто ослушается  получит выговор, сперва устный")
+                    wait(1500)
+                    sampSendChat(" Вы должны с уважением относится к начальству на 'Вы'")
+                    wait(1500)
+                    sampSendChat(" Не нарушайте правила и не нарушайте субординацию дабы не получить наказание")
+                    wait(1500)
+                    sampSendChat(" Лекция окончена спасибо за внимание!")
+                end)
+            end
+            if imgui.Button(u8"Правила поведения в строю.") then
+                lua_thread.create(function()
+                    sampSendChat(" Уважаемые сотрудники Полицейского Департамента!")
+                    wait(1500)
+                    sampSendChat(" Приветствую вас на лекции правила поведения в строю")
+                    wait(1500)
+                    sampSendChat(" /b Запрещены разговоры в любые чаты (in ic, /r, /n, /fam, /sms,)")
+                    wait(1500)
+                    sampSendChat(" Запрещено пользоваться мобильными телефонами")
+                    wait(1500)
+                    sampSendChat(" Запрещено доставать оружие")
+                    wait(1500)
+                    sampSendChat(" Запрещено открывать огонь без приказа")
+                    wait(1500)
+                    sampSendChat(" /b Запрещено уходить в AFK более чем на 30 секунд")
+                    wait(1500)
+                    sampSendChat(" Запрещено самовольно покидать строй не предупредив об этом старший состав")
+                    wait(1500)
+                    sampSendChat(" /b Запрещены любые движения в строю (/anim) Исключение: ст. состав")
+                    wait(1500)
+                    sampSendChat(" /b Запрещено использование сигарет [/smoke в строю]")
+                end)
+            end
+            if imgui.Button(u8'Допрос') then
+                lua_thread.create(function()
+                    sampSendChat(" Здравствуйте уважаемые сотрудники департамента сегодня, я проведу лекцию на тему Допрос подозреваемого.")
+                    wait(1500)
+                    sampSendChat(" Сотрудник ПД обязан сначала поприветствовать, представиться;")
+                    wait(1500)
+                    sampSendChat(" Сотрудник ПД обязан попросить документы вызванного, спросить, где работает, звание, должность, место жительства;")
+                    wait(1500)
+                    sampSendChat(" Сотрудник ПД обязан спросить, что он делал (назвать промежуток времени, где он что-то нарушил, по которому он был вызван);")
+                    wait(1500)
+                    sampSendChat(" Если подозреваемый был задержан за розыск, старайтесь узнать за что он получил розыск;")
+                    wait(1500)
+                    sampSendChat(" В конце допроса полицейский выносит вердикт вызванному.")
+                    wait(1500)
+                    sampSendChat(" При оглашении вердикта, необходимо предельно точно огласить вину допрашиваемого (Рассказать ему причину, за что он будет посажен);")
+                    wait(1500)
+                    sampSendChat(" При вынесении вердикта, не стоит забывать о отягчающих и смягчающих факторах (Раскаяние, адекватное поведение, признание вины или ложь, неадекватное поведение, провокации, представление полезной информации и тому подобное).")
+                    wait(1500)
+                    sampSendChat(" На этом лекция подошла к концу, если у кого-то есть вопросы, отвечу на любой по данной лекции (Если задали вопрос, то нужно ответить на него)")
+                end)
+            end
+            if imgui.Button(u8"Правила поведения до и во время облавы на наркопритон.") then
+                lua_thread.create(function()
+                    sampSendChat(" Добрый день, сейчас я проведу вам лекцию на тему Правила поведения до и во время облавы на наркопритон")
+                    wait(1500)
+                    sampSendChat(" В строю, перед облавой, вы должны внимательно слушать то, что говорят вам Агенты")
+                    wait(1500)
+                    sampSendChat(" Убедительная просьба, заранее убедиться, что при себе у вас имеются балаклавы")
+                    wait(1500)
+                    sampSendChat(" По пути к наркопритону, подъезжая к опасному району, все обязаны их одеть")
+                    wait(1500)
+                    sampSendChat(" Приехав на территорию притона, нужно поставить оцепление так, чтобы загородить все возможные пути к созревающим кустам Конопли")
+                    wait(1500)
+                    sampSendChat(" Очень важным замечанием является то, что никому, кроме агентов, запрещено подходить к кустам, а тем более их собирать")
+                    wait(1500)
+                    sampSendChat(" Нарушение данного пункта строго наказывается, вплоть до увольнение")
+                    wait(1500)
+                    sampSendChat(" Так же приехав на место, мы не устраиваем пальбу по всем, кого видим")
+                    wait(1500)
+                    sampSendChat(" Открывать огонь по постороннему разрешается только в том случае, если он нацелился на вас оружием, начал атаковать вас или собирать созревшие кусты")
+                    wait(1500)
+                    sampSendChat(" Как только спец. операция заканчивается, все оцепление убирается")
+                    wait(1500)
+                    sampSendChat(" На этом лекция окончена, всем спасибо")
+                end)
+            end
+            if imgui.Button(u8"Правило миранды.") then
+                lua_thread.create(function()
+                    sampSendChat("Правило Миранды — юридическое требование в США")
+                    wait(1500)
+                    sampSendChat("Согласно которому во время задержания задерживаемый должен быть уведомлен о своих правах.")
+                    wait(1500)
+                    sampSendChat("Это правило зачитываются задержанному, а читает её кто сам задержал его.")
+                    wait(1500)
+                    sampSendChat("Это фраза говорится, когда вы надели на задержанного наручники.")
+                    wait(1500)
+                    sampSendChat("Цитирую саму фразу:")
+                    wait(1500)
+                    sampSendChat("- Вы имеете право хранить молчание.")
+                    wait(1500)
+                    sampSendChat("- Всё, что вы скажете, может и будет использовано против вас в суде.")
+                    wait(1500)
+                    sampSendChat("- Ваш адвокат может присутствовать при допросе.")
+                    wait(1500)
+                    sampSendChat("- Если вы не можете оплатить услуги адвоката, он будет предоставлен вам государством.")
+                    wait(1500)
+                    sampSendChat("- Вы понимаете свои права?")
+                end)
+            end
+            if imgui.Button(u8"Первая Помощь.") then
+                lua_thread.create(function()
+                    sampSendChat("Для начала определимся что с пострадавшим")
+                    wait(1500)
+                    sampSendChat("Если, у пострадавшего кровотечение, то необходимо остановить поток крови жгутом")
+                    wait(1500)
+                    sampSendChat("Если ранение небольшое достаточно достать набор первой помощи и перевязать рану бинтом")
+                    wait(1500)
+                    sampSendChat("Если в ране пуля, и рана не глубокая, Вы должны вызвать скорую либо вытащить ее скальпелем, скальпель также находится в аптечке первой помощи")
+                    wait(1500)
+                    sampSendChat("Если человек без сознания вам нужно ... ")
+                    wait(1500)
+                    sampSendChat(" ... достать из набор первой помощи вату и спирт, затем намочить вату спиртом ... ")
+                    wait(1500)
+                    sampSendChat(" ... и провести ваткой со спиртом около носа пострадавшего, в этом случае, он должен очнуться")
+                    wait(1500)
+                    sampSendChat("На этом лекция окончена. У кого-то есть вопросы по данной лекции?") wait(1500)
+                end)
+            end
+            
+        end
+        if rang_n > 8 then
+            
+            if imgui.Button(u8'Панель лидера/заместителя') then
+                leaderPanel[0] = not leaderPanel[0]
+            end
+        end
+    elseif page == 5 then
+        if imgui.CollapsingHeader(u8 'УК') then
+            for i = 1, #tableUk["Text"] do
+                imgui.Text(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i]))
+            end
+        end
+        if imgui.CollapsingHeader(u8 'Тен-коды') then
+            imgui.Text(u8"10-1 - Встреча всех офицеров на дежурстве (указывая локацию и код).")
+            imgui.Text(u8"10-2 - Вышел в патруль.")
+            imgui.Text(u8"10-2R: Закончил патруль.")
+            imgui.Text(u8"10-3 - Радиомолчание (указывая длительность).")
+            imgui.Text(u8"10-4 - Принято.")
+            imgui.Text(u8"10-5 - Повторите.")
+            imgui.Text(u8"10-6 - Не принято/неверно/нет.")
+            imgui.Text(u8"10-7 - Ожидайте.")
+            imgui.Text(u8"10-8 - Недоступен.")
+            imgui.Text(u8"10-14 - Запрос транспортировки (указывая локацию и цель транспортировки).")
+            imgui.Text(u8"10-15 - Подозреваемые арестованы (указывая количество подозреваемых и локацию).")
+            imgui.Text(u8"10-18 - Требуется поддержка дополнительных юнитов.")
+            imgui.Text(u8"10-20 - Локация.")
+            imgui.Text(u8"10-21 - Описание ситуации.")
+            imgui.Text(u8"10-22 - Направляюсь в ....")
+            imgui.Text(u8"10-27 - Смена маркировки патруля (указывая старую маркировку и новую).")
+            imgui.Text(u8"10-30 - Дорожно-транспортное происшествие.")
+            imgui.Text(u8"10-40 - Большое скопление людей (более 4).")
+            imgui.Text(u8"10-41 - Нелегальная активность.")
+            imgui.Text(u8"10-46 - Провожу обыск.")
+            imgui.Text(u8"10-55 - Обычный Траффик Стоп.")
+            imgui.Text(u8"10-57 VICTOR - Погоня за автомобилем (указывая модель авто, цвет авто, количество человек внутри, локацию, направление движения).")
+            imgui.Text(u8"10-57 FOXTROT - Пешая погоня (указывая внешность подозреваемого, оружие (при наличии информации о вооружении), локация, направление движения).")
+            imgui.Text(u8"10-60 - Информация об автомобиле (указывая модель авто, цвет, количество человек внутри).")
+            imgui.Text(u8"10-61 - Информация о пешем подозреваемом (указывая расу, одежду).")
+            imgui.Text(u8"10-66 - Траффик Стоп повышеного риска.")
+            imgui.Text(u8"10-70 - Запрос поддержки (в отличии от 10-18 необходимо указать количество юнитов и код).")
+            imgui.Text(u8"10-71 - Запрос медицинской поддержки.")
+            imgui.Text(u8"10-99 - Ситуация урегулирована.")
+            imgui.Text(u8"10-10 - Нарушение юрисдикции ")
+        end
+        if imgui.CollapsingHeader(u8 'Маркировки патрулей') then
+            imgui.CenterText('Маркировки патрульных автомобилей')
+            imgui.Text(u8"* ADAM (A) - маркировка патруля с двумя офицерами на крузер")
+            imgui.Text(u8"* LINCOLN (L) - маркировки патруля с одним офицером на крузер")
+            imgui.Text(u8"* LINCOLN 10/20/30/40/50/60 - маркировка супервайзера")
+            imgui.CenterText('Маркировки других транспортных средств')
+            imgui.Text(u8"* MARY (M) - маркировка мотоциклетного патруля")
+            imgui.Text(u8"* AIR (AIR) - маркировка юнита Air Support Division")
+            imgui.Text(u8"* AIR-100 - маркировка супервайзера Air Support Division")
+            imgui.Text(u8"* AIR-10 - маркировка спасательного юнита Air Support Division")
+            imgui.Text(u8"* EDWARD (E) - маркировка Tow Unit")
+        end
+
+    elseif page == 6 then
+        imgui.Text(u8'Версия: ' .. thisScript().version)
+        imgui.Text(u8'Разработчики: https://t.me/Sashe4ka_ReZoN, https://t.me/daniel2903_pon, https://t.me/Theopka')
+        imgui.Text(u8'ТГ канал: t.me/lua_arz') 
+        imgui.Text(u8'Поддержать: Временно не доступно') 
+        imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x, @Theopka')
+        imgui.Text(u8'5.1 - обновление интерфейса, новый биндер(взят у @MTG_mods), Обучальщик, убрана вкладка дополнительно(перенесено в настройки)')
     end
-
-    sampRegisterChatCommand(key, msgFunction)
+    imgui.EndChild()
+    imgui.End()
+end)
+      
+function DownloadUk()
+    if server == 'Phoenix' then
+        updateScript(smartUkUrl['phenix'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
+    
+    elseif server == 'Mobile I' then
+        updateScript(smartUkUrl['m1'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Mobile 1 успешно установлен!", 0x8B00FF)
+    
+    elseif server == 'Mobile II' then
+        updateScript(smartUkUrl['m2'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Mobile 2 успешно установлен!", 0x8B00FF)
+    
+    elseif server == 'Mobile III' then
+        updateScript(smartUkUrl['m3'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Mobile 3 успешно установлен!", 0x8B00FF)
+    
+    elseif server == 'Phoenix' then
+        updateScript(smartUkUrl['phoenix'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
+                        
+    elseif server == 'Tucson' then
+        updateScript(smartUkUrl['tucson'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Tucson успешно установлен!", 0x8B00FF)
+                        
+    elseif server == 'Saintrose' then
+        updateScript(smartUkUrl['saintrose'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Saintrose успешно установлен!", 0x8B00FF)
+                    
+    elseif server == 'Mesa' then
+        updateScript(smartUkUrl['mesa'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Mesa успешно установлен!", 0x8B00FF)
+                        
+    elseif server == 'Red-Rock' then
+        updateScript(smartUkUrl['red'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Red Rock успешно установлен!", 0x8B00FF)
+                                            
+    elseif server == 'Prescott' then
+        updateScript(smartUkUrl['press'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Prescott успешно установлен!", 0x8B00FF)
+                                            
+    elseif server == 'Winslow' then
+        updateScript(smartUkUrl['winslow'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Winslow успешно установлен!", 0x8B00FF)
+                                                                
+    elseif server == 'Payson' then
+        updateScript(smartUkUrl['payson'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Payson успешно установлен!", 0x8B00FF)
+                                                                
+    elseif server == 'Gilbert' then
+        updateScript(smartUkUrl['gilbert'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Gilbert успешно установлен!", 0x8B00FF)
+    
+    elseif server == 'Casa-Grande' then
+        updateScript(smartUkUrl['casa'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Casa-Grande успешно установлен!", 0x8B00FF)
+                                                                
+    elseif server == 'Page' then
+        updateScript(smartUkUrl['page'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Page успешно установлен!", 0x8B00FF)
+                                                                
+    elseif server == 'Sun-City' then
+        updateScript(smartUkUrl['sunCity'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Sun-City успешно установлен!", 0x8B00FF)
+                                                                
+    elseif server == 'Wednesday' then
+        updateScript(smartUkUrl['wednesday'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Wednesday успешно установлен!", 0x8B00FF)
+                                                                                    
+    elseif server == 'Yava' then
+        updateScript(smartUkUrl['yava'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Yava успешно установлен!", 0x8B00FF)
+                                                                                    
+    elseif server == 'Faraway' then
+        updateScript(smartUkUrl['faraway'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Faraway успешно установлен!", 0x8B00FF)
+                                                                                    
+    elseif server == 'Bumble Bee' then
+        updateScript(smartUkUrl['bumble'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Bumble успешно установлен!", 0x8B00FF)
+                                                                                    
+    elseif server == 'Christmas' then
+        updateScript(smartUkUrl['christmas'], smartUkPath)
+        msg("{FFFFFF} Умный розыск на Christmas успешно установлен!", 0x8B00FF)
+    
+    else
+        msg("{FFFFFF} К сожалению на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
+    end
 end
-end
-
 function sampev.onSendSpawn()
 	if spawn and isMonetLoader() then
 		spawn = false
 		sampSendChat('/stats')
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Скрипт успешно загрузился", 0x8B00FF)
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Автор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon",0x8B00FF)
-        sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF}Чтобы посмотреть комманды,введите /mvd и /mvds ",0x8B00FF)
+        msg("{FFFFFF}MVDHelper успешно загружен!", 0x8B00FF)
+        msg("{FFFFFF}Команда: /mvd",0x8B00FF)
         nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))
         if autogun[0] then
                     
@@ -1659,1017 +1951,10 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
     end
 end
 
-function openwindow()
-    renderWindow[0] = not renderWindow[0]
-end
-
-function decor()
-    -- == Декор часть == --
-    imgui.SwitchContext()
-    local ImVec4 = imgui.ImVec4
-    imgui.GetStyle().WindowPadding = imgui.ImVec2(5, 5)
-    imgui.GetStyle().FramePadding = imgui.ImVec2(5, 5)
-    imgui.GetStyle().ItemSpacing = imgui.ImVec2(5, 5)
-    imgui.GetStyle().ItemInnerSpacing = imgui.ImVec2(2, 2)
-    imgui.GetStyle().TouchExtraPadding = imgui.ImVec2(0, 0)
-    imgui.GetStyle().IndentSpacing = 0
-    imgui.GetStyle().ScrollbarSize = 10
-    imgui.GetStyle().GrabMinSize = 10
-    imgui.GetStyle().WindowBorderSize = 1
-    imgui.GetStyle().ChildBorderSize = 1
-    imgui.GetStyle().PopupBorderSize = 1
-    imgui.GetStyle().FrameBorderSize = 1
-    imgui.GetStyle().TabBorderSize = 1
-    imgui.GetStyle().WindowRounding = 8
-    imgui.GetStyle().ChildRounding = 8
-    imgui.GetStyle().FrameRounding = 8
-    imgui.GetStyle().PopupRounding = 8
-    imgui.GetStyle().ScrollbarRounding = 8
-    imgui.GetStyle().GrabRounding = 8
-    imgui.GetStyle().TabRounding = 8
-end
-
-imgui.OnInitialize(function()
-    decor() -- применяем декор часть
-    imgui.GetIO().IniFilename = nil
-    local config = imgui.ImFontConfig()
-    config.MergeMode = true
-    config.PixelSnapH = true
-    iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
-    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 20, config, iconRanges) -- solid - тип иконок, так же есть thin, regular, light и duotone
-	if mmloaded then
-        local tmp = imgui.ColorConvertU32ToFloat4(mainIni.theme['moonmonet'])
-        gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
-        mmcolor = imgui.new.float[3](tmp.z, tmp.y, tmp.x)
-    end
-	apply_n_t()
-end)
 
 function imgui.CenterText(text)
     imgui.SetCursorPosX(imgui.GetWindowWidth()/2-imgui.CalcTextSize(u8(text)).x/2)
-    imgui.Text(u8(text))
-end
-
-function cmd_su(p_id)
-    if p_id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/su [ID].",0x318CE7FF -1)
-    else
-    	id = tonumber(p_id)  -- Преобразуем строку в число
-        id = imgui.new.int(id)
-        windowTwo[0] = not windowTwo[0]
-    end
-end
-
-function cmd_showpass(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showpass [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me достал папку с документами")
-            wait(1500)
-            sampSendChat("/do Папка в руке.")
-            wait(1500)
-            sampSendChat("/me достал паспорт")
-            wait(1500)
-            sampSendChat("/do Паспорт в руке.")
-            wait(1500)
-            sampSendChat("/me передал паспорт человеку на против")
-            wait(1500)
-            sampSendChat("/showpass " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_showbadge(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showbadge [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me из внутреннего кармана достал удостоверение")
-            wait(1500)
-            sampSendChat("/me открыл документ в развёрнутом виде, показал содержимое человеку напротив")
-            wait(1500)
-            sampSendChat("/do Ниже находится печать правительства и подпись.")
-            wait(1500)
-            sampSendChat("/me закрыл документ , убрал его обратно в карман")
-            wait(1500)
-            sampSendChat ("/showbadge "..id.." ")
-        end)
-    end
-end
-
-function cmd_showlic(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showlic [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me достал папку с документами")
-            wait(1500)
-            sampSendChat("/do Папка в руке.")
-            wait(1500)
-            sampSendChat("/me достал лицензии")
-            wait(1500)
-            sampSendChat("/do Лицензии в руке.")
-            wait(1500)
-            sampSendChat("/me передал лицензии человеку на против")
-            wait(1500)
-            sampSendChat("/showlic " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_mvds(id)
-        lua_thread.create(function()
-        sampShowDialog(1,"Команды MVD HELPER 4.7", "/showlic -  Показывает ваши лицензии\n/showpass - Показывает ваш паспорт\n/showmc - Показывает вашу Мед. Карту\n/showskill - Показывает ваши навыки оружия\n/showbadge - Показать ваше удостоверение человеку\n/pull - Выкидывает чаловека из авто и оглушает\n/uninvite - Уволить человека из организации\n/invite - Принять человека в организацию\n/cuff - Надеть наручники\n/uncuff - Снять наручники\n/frisk - Обыскать человека\n/mask - Надеть маску\n/arm - Снять/Надеть бронижелет\n/asu - Выдать розыск\n/drug - Использовать наркотики\n/arrest - Метка для ареста человека\n/traf - 10-55 Траффик-Стоп\n/giverank - Выдать ранг человеку\n/unmask - Снять маску с преступника\n/miranda - Зачитать права\n/bodyon - Включить Боди-Камеру\n/bodyoff - Выключить Боди-Камеру\n/ticket - Выписать штраф\n/pursuit - Вести преследование за игроком\n/drugtestno - Тест на наркотики ( Отрицательный )\n/drugtestyes - Тест на наркотики ( Положительный )\n/vzatka - Рп Взятка\n/bomb - Разминирование бомбы\n/dismiss - Уволить человека из организации ( 6 ФБР )\n/demoute - Уволить человека из организации ( 9 ФБР )\n/cure - Вылечить друга которого положили\n/find - Отыгровка поиска преступника\n/incar - Посадить преступника в машину\n/tencodes - Тен Коды\n/marks - Марки Авто\n/sitcodes - Ситуационные Коды\n/zsu - Запрос в розыск\n/mask - Надеть маску\n/take - Забрать запрещёные вещи\n/gcuff - cuff + gotome\n/fbi.secret - документ о неразглашении деятельности ФБР\n/fbi.pravda - Документ о правдивости слов на допросе\n/finger.p - Снятие отпечатков пальцев человека\n/podmoga - Вызов подмоги в /r\n/grim - Нанесение грима\n/eks - Экспертиза оружие\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
-        end)
-        end
-
-
-function cmd_showskill(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showskill [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me достал папку с документами")
-            wait(1500)
-            sampSendChat("/do Папка в руке.")
-            wait(1500)
-            sampSendChat("/me достал выписку с тира")
-            wait(1500)
-            sampSendChat("/do Выписка в руке.")
-            wait(1500)
-            sampSendChat("/me передал выписку человеку на против")
-            wait(1500)
-            sampSendChat("/showskill " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_showmc(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/showmc [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me достал папку с документами")
-            wait(1500)
-            sampSendChat("/do Папка в руке.")
-            wait(1500)
-            sampSendChat("/me достал мед. карту")
-            wait(1500)
-            sampSendChat("/do Мед. карта в руке.")
-            wait(1500)
-            sampSendChat("/me передал мед. карту человеку на против")
-            wait(1500)
-            sampSendChat("/showmc " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_pull(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/pull [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/pull " .. id .. " ")
-            wait(1500)
-            sampSendChat("/me схватил дубинку с пояса, резким взмахом ее и начал бить по окну водителя")
-            wait(1500)
-            sampSendChat("/me разбив стекло, открыл дверь изнутри и схватил водителя за одежду ...")
-            wait(1500)
-            sampSendChat("/me ... после чего, выбросил подозреваемого на асфальт и заломал его руки")
-
-        end)
-    end
-end
-
-function cmd_invite(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/invite [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/do Под стойкой находится рюкзак.")
-            wait(1500)
-            sampSendChat("/do Форма в рюкзаке...")
-            wait(1500)
-            sampSendChat("/me сунул руку в рюкзак, после чего взял форму и бейджик в руки")
-            wait(1500)
-            sampSendChat("/me передаёт форму и бейджик")
-            wait(1500)
-            sampSendChat("/todo Идите переоденьтесь*указывая пальцем на дверь раздевалки")
-            wait(1500)
-            sampSendChat("/invite " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_uninvite(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/uninvite [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat ("/do На поясе закреплен КПК.")
-            wait(1500)
-            sampSendChat("/me снимает КПК с пояса и нажатием кнопки включает его.")
-            wait(1500)
-            sampSendChat ("/me заходит в базу сотрудников и выбирает нужного, после чего нажимает на кнопку *Уволить*.")
-            wait(1500)
-            sampSendChat ("/me выключает КПК и вешает обратно на пояс.")
-            wait(1500)
-            sampSendChat("/uninvite " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_cuff(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/cuff [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/do Наручники висят на поясе.")
-            wait(1500)
-            sampSendChat("/me снял с держателя наручники")
-            wait(1500)
-            sampSendChat("/do Наручники в руках.")
-            wait(1500)
-            sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
-            wait(1500)
-            sampSendChat("/do Преступник скован.")
-            wait(1500)
-            sampSendChat("/cuff "..id.." ")
-         end)
-      end
-   end
-
-function cmd_uncuff(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/uncuff [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/do Ключ от наручников в кармане.")
-            wait(1500)
-            sampSendChat("/me движением правой руки достал из кармана ключ и открыл наручники")
-            wait(1500)
-            sampSendChat("/do Преступник раскован.")
-            wait(1500)
-            sampSendChat("/uncuff "..id.." ")
-        end)
-     end
-  end
-
-function cmd_gotome(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/gotome [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me заломил правую руку нарушителю")
-            wait(1500)
-            sampSendChat("/me ведет нарушителя за собой")
-            wait(1500)
-            sampSendChat("/gotome "..id.." ")
-        end)
-     end
-  end
-
-function cmd_ungotome(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/ungotome [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me отпустил правую руку преступника")
-            wait(1500)
-            sampSendChat("/do Преступник свободен.")
-            wait(1500)
-            sampSendChat("/ungotome "..id.." ")
-        end)
-     end
-  end
-
-function cmd_gcuff(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/gcuff [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/do Наручники висят на поясе.")
-            wait(1500)
-            sampSendChat("/me снял с держателя наручники")
-            wait(1500)
-            sampSendChat("/do Наручники в руках.")
-            wait(1500)
-            sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
-            wait(1500)
-            sampSendChat("/do Преступник скован.")
-            wait(1500)
-            sampSendChat("/cuff "..id.." ")
-            wait(1500)
-            sampSendChat("/me заломил правую руку нарушителю")
-            wait(1500)
-            sampSendChat("/me ведет нарушителя за собой")
-            wait(1500)
-            sampSendChat("/gotome "..id.." ")
-        end)
-     end
-  end
-
-function cmd_frisk(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/frisk [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me надев резиновые перчатки, начал прощупывать гражданина по всему телу ...")
-            wait(1500)
-            sampSendChat("/do Перчатки надеты.")
-            wait(1500)
-            sampSendChat("/me проводит руками по верхней части тела")
-            wait(1500)
-            sampSendChat("/me ... за тем начал тщательно обыскивать гражданина, выкладывая всё для изучения")
-            wait(1500)
-            sampSendChat("/frisk " .. id .. " ")
-        end)
-    end
-end
-
-
-function cmd_pursuit(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/pursuit [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/do КПК в левом кармане.")
-            wait(1500)
-            sampSendChat("/me достал КПК из левого кармана")
-            wait(1500)
-            sampSendChat("/me включил КПК и зашел в базу данных Полиции")
-            wait(1500)
-            sampSendChat("/me открыл дело с данными преступника")
-            wait(1500)
-            sampSendChat("/do Данные преступника получены.")
-            wait(1500)
-            sampSendChat("/me подключился к камерам слежения штата")
-            wait(1500)
-            sampSendChat("/pursuit " .. id .. " ")
-        end)
-    end
-end
-
-function cmd_arm(id)
-        lua_thread.create(function()
-            sampSendChat("/armour")
-            wait(1500)
-            sampSendChat("/me сменил пластины в бронижелете")
-        end)
-    end
-
-    function cmd_agenda(id)
-        if id == "" then
-            sampAddChatMessage("Введи айди игрока: {FFFFFF}/agenda [ID].",0x318CE7FF -1)
-        else
-            lua_thread.create(function()
-                sampSendChat("/do В нагрудном кармане лежат бланки повесток.")
-                wait(1500)
-                sampSendChat("/me перекладывает паспорт в левую руку")
-                wait(1500)
-                sampSendChat("/me вытягивает из нагрудного кармана один бланк, разворачивает его и начинает заполнять")
-                wait(1500)
-                sampSendChat("/me переписывает все данные из паспорта, после чего ставит подпись")
-                wait(1500)
-                sampSendChat("/todo Вот, распишитесь*передавая бумаги человеку напротив")
-                wait(1500)
-                sampSendChat("/agenda " .. id .. " ")
-            end)
-        end
-    end
-
-function cmd_mask()
-lua_thread.create(function()
-            sampSendChat("/mask")
-            wait(1500)
-            sampSendChat("/me надел на руки перчатки, надел балаклаву на лицо")
-        end)
-    end
-
-function cmd_drug(id)
-    if id == "" then
-         sampAddChatMessage("Введи кол-во нарко [1-3]: {FFFFFF}/usedrugs [1-3].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me достал из кармана конфетку рошен")
-            wait(1200)
-            sampSendChat("/do Снял фантик, съел ее.")
-            sampSendChat("/usedrugs "..id.." ")
-        end)
-    end
-   end
-
-function cmd_asu(arg)
-lua_thread.create(function()
-    local arg1, arg2, arg3 = arg:match('(.+) (.+) (.+)')
-    if arg1 ~= nil and arg2 ~= nil and arg3 ~= nil then
-        sampSendChat('/su '..arg1..' '..arg2..' '..arg3..'')
-		wait(1000)
-		sampSendChat("/me снял рацию с грудного держателя и сообщил диспетчеру о нарушителе")
-        wait(1000)
-        sampSendChat("/do Спустя полминуты получил ответ от диспетчера.")
-        wait(1000)
-        sampSendChat("/todo 10-4, Конец связи.*повесив рацию на грудной держатель")
-    else
-		sampAddChatMessage("Введи айди игрока: {FFFFFF}/asu [ID] [Кол-во розыска] [Причина].", 0x318CE7FF -1)
-		end
-	end)
-end
-
-
-function cmd_arrest(id)
-    if id == "" then
-         sampAddChatMessage("Введи айди игрока: {FFFFFF}/arrest [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me нажав на тангету, сообщил диспетчеру о провезенном преступники ...")
-            wait(1500)
-            sampSendChat("/me запросил офицеров для сопровождения")
-            wait(1500)
-            sampSendChat("/do Департамент: Принято, ожидайте двух офицеров.")
-            wait(1500)
-            sampSendChat("/do Из участка выходят 2 офицера, после забирают преступника.")
-            sampSendChat("/arrest "..id.." ")
-        end)
-    end
-   end
-
-function cmd_giverank(arg)
-    lua_thread.create(function()
-        local arg1, arg2 = arg:match('(.+) (.+)')
-        if arg1 ~= nil and arg2 ~= nil then
-            sampSendChat('/giverank '..arg1..' '..arg2..'')
-            wait(1500)
-            sampSendChat("/do На поясе закреплен КПК.")
-            wait(1500)
-            sampSendChat("/me снимает КПК с пояса и нажатием кнопки включает его")
-            wait(1500)
-            sampSendChat("/me заходит в базу сотрудников и вводит изменения, после чего вешает КПК обратно на пояс")
-            wait(1500)
-            sampSendChat("/todo Новая форма в шкафчике*улыбаясь взглянув в сторону двери")
-            wait(1500)
-        else
-            sampAddChatMessage("Введи айди игрока:{FFFFFF}/giverank [ID] [Ранг 1-9].",0x318CE7FF -1)
-        end
-    end)
-end
-
-function cmd_unmask(id)
-    if id == nil or id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/unmask [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me держа подозреваемого, левой рукой насильно сдирает маску с человека")
-            wait(1500)
-            sampSendChat("/unmask "..id.." ")
-        end)
-    end
-end
-
-function cmd_miranda()
-lua_thread.create(function()
-            sampSendChat("Вы имеете право хранить молчание.")
-            wait(1500)
-            sampSendChat("Всё, что вы скажете, мы можем и будем использовать против вас в суде.")
-            wait(1500)
-            sampSendChat("Вы имеете право на адвоката и на один телефонный звонок.")
-            wait(1500)
-            sampSendChat("Если у вас нет адвоката, государство предоставит вам адвоката, увидеть которого вы сможете в зале суда.")
-            wait(1500)
-            sampSendChat("Вам понятны ваши права?")
-        end)
-     end
-
-function cmd_bodyon()
-
-        lua_thread.create(function()
-            sampSendChat("/do На груди  весит камера AXON BODY 3.")
-            wait(1500)
-            sampSendChat("/me легким движением руки протянулся к сенсору и нажал один раз для активации")
-            wait(1500)
-            sampSendChat("/do Боди камера издала звук и включилась.")
-        end)
-     end
-
-function cmd_bodyoff()
-
-lua_thread.create(function()
-            sampSendChat("/do На груди  весит камера AXON BODY 3.")
-            wait(1500)
-            sampSendChat("/me легким движением руки протянулся к сенсору и нажал один раз для деактивации")
-            wait(1500)
-            sampSendChat("/do Боди камера издала звук и выключилась")
-        end)
-     end
-
-
-function cmd_ticket(arg)
-    lua_thread.create(function()
-        local id, prichina, price = arg:match('(%d+)%s(%d+)%s(.)')
-        if id ~= nil and prichina ~= nil and price ~= nil then
-                sampSendChat("/me достав небольшой терминал, присоединил его к КПК и показал приёмник для карты")
-                wait(1500)
-                sampSendChat("/todo Вставьте сначала водительскую, затем кредитную карту в приёмник!*держа терминал")
-                wait(1500)
-                sampSendChat('/ticket '..id..' '..prichina..'  '..price..' ')
-         else
-      sampAddChatMessage("Введи айди игрока: {FFFFFF}/ticket [ID] [Сумма] [Причина].", 0x318CE7FF)
-      end
-     end)
-    end
-
-function cmd_pursuit(id)
-    if id == "" then
-         sampAddChatMessage("Введи айди игрока: {FFFFFF}/pursuit [ID].", 0x318CE7FF - 1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me положив руки на клавиатуру бортового компьютера, начал поиск по базе данных по имени")
-            wait(1500)
-            sampSendChat("/me найдя имя, проверил номер телефона и включил отслеживания по ГПС")
-            wait(1500)
-            sampSendChat("/pursuit "..id.." ")
-        end)
-     end
-  end
-
-function cmd_drugtestno()
-lua_thread.create(function()
-            sampSendChat("/me достал из подсумка набор Drug-test")
-            wait(1500)
-            sampSendChat("/me взял из набора пробирку с этиловым спиртом")
-            wait(1500)
-            sampSendChat("/me насыпал в пробирку найденое вещество")
-            wait(1500)
-            sampSendChat ("/me добавил в пробирку тест Имуно-Хром-10")
-            wait(1700)
-            sampSendChat("/me резкими движениями взбалтывает пробирку")
-            wait(1700)
-            sampSendChat("/do Тест дал отрицательный результат, вещество не является наркотиком.")
-        end)
-     end
-
-
-function cmd_drugtestyes()
-lua_thread.create(function()
-            sampSendChat("/me достал из подсумка набор Drug-test")
-            wait(1500)
-            sampSendChat("/me взял из набора пробирку с этиловым спиртом")
-            wait(1500)
-            sampSendChat("/me насыпал в пробирку найденое вещество")
-            wait(1500)
-            sampSendChat ("/me добавил в пробирку тест Имуно-Хром-10")
-            wait(1700)
-            sampSendChat("/me резкими движениями взбалтывает пробирку")
-            wait(1700)
-            sampSendChat("/do Тест дал положительный результат, вещество является наркотиком.")
-        end)
-     end
-
-function cmd_vzatka()
-lua_thread.create(function()
-         sampSendChat("/me смотрит на задержанного, достаёт с бардачка ручку и листочек.")
-         wait(1500)
-         sampSendChat("/me пишет на листочке сумму с шестью нулями, кидает на заднее сиденье.")
-         wait(1500)
-         sampSendChat("/do На листочке небрежно и коряво было написано: 5.000.000$.")
-      end)
-   end
-
-
-function cmd_bomb()
-lua_thread.create(function()
-         sampSendChat("/do Перед человеком находится бомба, на бомбе заведен таймер.")
-         wait(1500)
-         sampSendChat("/do На бронежилете закреплена небольшая сумка сапёра.")
-         wait(1500)
-         sampSendChat("/me открыв сумку потянулся за специальным КПК для разминирования бомб")
-         wait(1500)
-         sampSendChat("/me достал КПК из сумки включил его, сфотографировал на него бомбу и таймер, ...")
-         wait(1500)
-         sampSendChat("/me ... после связавшись с диспетчером переслал сделанные снимки")
-         wait(1500)
-         sampSendChat("/do [Диспетчер]: - Мы получили снимки, тип бомбы PR-256, оглашаю порядок действий.")
-         wait(1500)
-         sampSendChat("/do [Диспетчер]: - К данному типу бомбы можно подключиться по сети, действуйте.")
-         wait(1500)
-         sampSendChat("/me нажал в КПК кнопку search for the nearest device, после чего КПК начал поиск")
-         wait(1500)
-         sampSendChat("/do КПК выдал устройство INNPR-256NNI.")
-         wait(1500)
-         sampSendChat("/me подключился к устройству, после доложил об этом диспетчеру")
-         wait(1500)
-         sampSendChat("/do [Диспетчер]: - Да, вы подключились, теперь введите код 1-0-5-J-J-Q-G-2-2.")
-         wait(1500)
-         sampSendChat("/me начал вводить код названный диспетчером")
-         wait(1500)
-         sampSendChat("/do Таймер на бомбе остановился.")
-         wait(1500)
-         sampSendChat("/todo Получилось.*говоря по рации с диспетчером")
-         wait(1500)
-         sampSendChat("/do [Диспетчер]: - Ваша миссия завершена, везите бомбу в Офис, конец связи.")
-      end)
-   end
-
-
-function cmd_probiv()
-lua_thread.create(function()
-         sampSendChat("/do На поясе висит личный КПК сотрудника.")
-         wait(1500)
-         sampSendChat("/me снял с пояса КПК , начал пробивать человека...")
-         wait(1500)
-         sampSendChat("/me ... по его лицу, ID-карте , бейджику и жетону")
-         wait(1500)
-         sampSendChat("/do На экране КПК высветилась вся информация о человеке.")
-      end)
-   end
-
-function cmd_dismiss(arg)
-lua_thread.create(function()
-    local arg1, arg2 = arg:match('(.+) (.+)')
-    if arg1 ~= nil and arg2 ~= nil then
-   sampSendChat('/dismiss '..arg1..' '..arg2..'')
-   wait(1500)
-   sampSendChat("/do В правом кармане брюк находится КПК.")
-   wait (1500)
-   sampSendChat("/me достал КПК из правого кармана, затем начал пробивать по базе данных сотрудника через лицо, ID карту и жетон")
-   wait(1500)
-   sampSendChat("/do На экране КПК появилась полная информация о сотруднике.")
-   wait(1500)
-   sampSendChat("/me нажал на кнопку Уволить из Гос. Организации")
-   wait(1500)
-   sampSendChat ("/do Сотрудник был удален из списка 'Гос. Сотрудники'.")
-   wait(1500)
-   sampSendChat("/me убрал КПК обратно в правый карман")
-    else
-  sampAddChatMessage("Введи айди игрока:{FFFFFF} /dismiss [ID] [Причина].",0x318CE7FF -1)
-  end
- end)
-end
-
-function cmd_demoute(arg)
-lua_thread.create(function()
-    local arg1, arg2 = arg:match('(.+) (.+)')
-    if arg1 ~= nil and arg2 ~= nil then
-        sampSendChat('/demoute '..arg1..' '..arg2..'')
-         wait(1500)
-        sampSendChat("/do КПК лежит в нагрудном кармане.")
-         wait(1500)
-         sampSendChat("/me нырнул рукой в правый карман, после чего достал КПК")
-         wait(1500)
-         sampSendChat("/me открыл в КПК базу данных сотрудников Госсударственных структур, после чего нажал на кнопку Demoute")
-         wait(1500)
-         sampSendChat("/do Сотрудник успешно удален из базы данных госсударственных структур")
-    else
-  sampAddChatMessage("Введи айди игрока:{FFFFFF} /demoute [ID] [Причина].",0x318CE7FF -1)
-  end
- end)
-end
-
-function cmd_cure(id)
-    if id == "" then
-             sampAddChatMessage("Введи айди игрока: {FFFFFF}/cure [ID].", 0x318CE7FF)
-    else
-        lua_thread.create(function()
-             sampSendChat("/do В специальном подсумке на форме лежат: стерильные шприцы и ампула с адреналином.")
-             wait(1200)
-             sampSendChat("/me достал стерильный шприц с ампулой, аккуратно приоткрыл ампулу с адреналином")
-             wait(1200)
-             sampSendChat("/me набрал содержимое ампулы в шприц")
-             wait(1200)
-             sampSendChat("/me закатал рукав пострадавшего, после чего ввёл адреналин через шприц в вену, вдавив поршень")
-             wait(1200)
-             sampSendChat("/do Адреналин проник в организм пострадавшего.")
-             wait(1200)
-             sampSendChat("/me убрал использованный шприц в специальный подсумок")
-             wait(1200)
-             sampSendChat("/cure "..id.." ")
-         end)
-      end
-   end
-
-
-function cmd_find(id)
-    if id == "" then
-         sampAddChatMessage("Введи айди игрока: {FFFFFF}/find [ID].", 0x318CE7FF - 1)
-    else
-        lua_thread.create(function()
-         sampSendChat("/do КПК в левом кармане.")
-         wait(1500)
-         sampSendChat("/me достал левой рукой КПК из кармана")
-         wait(1500)
-         sampSendChat("/do КПК в левой руке.")
-         wait(1500)
-         sampSendChat("/me включил КПК и зашел в базу данных Полиции")
-         wait(1500)
-         sampSendChat("/me открыл дело с данными преступника")
-         wait(1500)
-         sampSendChat("/do Данные преступника получены.")
-         wait(1500)
-         sampSendChat("/me подключился к камерам слежения штата")
-         wait(1500)
-         sampSendChat ("/do На навигаторе появился маршрут.")
-         wait(1500)
-         sampSendChat("/find "..id.." ")
-      end)
-   end
-end
-
-function cmd_zsu(arg)
-lua_thread.create(function()
-    local arg1, arg2, arg3 = arg:match('(.+) (.+) (.+)')
-    if arg1 ~= nil and arg2 ~= nil and arg3 ~= nil then
-        sampSendChat('/r Запрашиваю обьявление в розыск дело N-'..arg1..'.')
-		wait(2500)
-		sampSendChat('/r По причине - ' ..arg3..'. '..arg2..' Степень.')
-    else
-		sampAddChatMessage("Введи айди игрока: {FFFFFF}/zsu [ID] [Кол-во розыска] [Причина].",0x318CE7FF -1)
-		end
-	end)
-end
-
-function cmd_incar(arg)
-lua_thread.create(function()
-    local arg1, arg2 = arg:match('(.+) (.+)')
-    if arg1 ~= nil and arg2 ~= nil then
-        sampSendChat('/incar '..arg1..' '..arg2..'')
-        wait(1500)
-        sampSendChat('/do Двери в машине закрыты.')
-        wait(1500)
-  sampSendChat('/me открыл заднюю дверь в машине')
-  wait(1500)
-  sampSendChat('/me посадил преступника в машину')
-  wait(1500)
-  sampSendChat('/me заблокировал двери')
-  wait(1500)
-  sampSendChat('/do Двери заблокированы.')
-   else
-  sampAddChatMessage("Введи айди игрока:{FFFFFF}/incar [ID] [Место 1-4].",0x318CE7FF -1)
-  end
- end)
-end
-
-function cmd_stop(id)
-    lua_thread.create(function()
-        sampSendChat("/do Мегафон в бардачке.")
-        wait(1500)
-        sampSendChat("/me достал мегафон с бардачка после чего включил его")
-        wait(1500)
-        sampSendChat("/m Гражданин прижмитесь к обочине!")
-    end)
-end
-
-function cmd_eject(id)
-    if id == "" then
-        sampAddChatMessage("Введи айди игрока: {FFFFFF}/eject [ID].",0x318CE7FF -1)
-    else
-        lua_thread.create(function()
-            sampSendChat("/me открыл дверь авто, после выбросил человека из авто")
-            wait(1500)
-            sampSendChat("/eject "..id.." ")
-            wait(1500)
-            sampSendChat("/me закрыл дверь авто")
-      end)
-   end
-end
-
-function cmd_pog(id)
-    if id == "" then
-         sampAddChatMessage("Введи айди игрока: {FFFFFF}/pog [ID].", 0x318CE7FF - 1)
-    else
-        lua_thread.create(function()
-         sampSendChat("/m Водитель, остановите транспортное средство, заглушите двигатель...")
-         wait(1500)
-         sampSendChat("/m Иначе я открою огонь по вашему транспорту!")
-      end)
-   end
-end
-
-function cmd_tencodes(id)
-        lua_thread.create(function()
-        sampShowDialog(1,"Список активных тен-кодов MVD HELPER 5.0", "10-1 - Встреча всех офицеров на дежурстве (включая локацию и код).\n10-3 - Радиомолчание (для срочных сообщений).\n10-4 - Принято.\n10-5 - Повторите последнее сообщение.\n10-6 - Не принято/неверно/нет.\n10-7 - Ожидайте.\n10-8 - В настоящее время занят/не доступен.\n10-14 - Запрос транспортировки (включая локацию и цель транспортировки).\n10-15 - Подозреваемые арестованы (включая кол-во подозреваемых, локацию).\n10-18 - Требуется поддержка дополнительных юнитов.\n10-20 - Локация.\n10-21 - Сообщение о статусе и местонахождении, описание ситуации.\n10-22 - Направляйтесь в 'локация' (обращение к конкретному офицеру).\n10-27 - Меняю маркировку патруля (включая старую и новую маркировку).\n10-46 - Провожу обыск.\n10-55 - Траффик стоп.\n10-66 - Остановка повышенного риска (если известно, что подозреваемый в авто вооружен/совершил преступление. Если остановка произошла после погони).\n10-88 - Теракт/ЧС.\n10-99 - Ситуация урегулирована\n10-10 Временно недоступен для вызовов\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
-        end)
-        end
-
-function cmd_marks(id)
-        lua_thread.create(function()
-        sampShowDialog(1,"Маркировки на авто MVD HELPER 5.0", "ADAM [A] Маркировка юнита, состоящего из двух офицеров.\nLINCOLN [L] Маркировка юнита, состоящего из одного офицера.\nAIR [AIR] Маркировка воздушного юнита, в составе двух офицеров\nAir Support Division [ASD] Маркировка юнита воздушной поддержки.\nMARY [M] Маркировка мото-патруля.\nHENRY [H] Маркировка высоко - скоростного юнита, состоящего из одного или двух офицер.\nCHARLIE [C] Маркировка группы захвата.\nROBERT [R] Маркировка отдела детективов.\nSUPERVISOR [SV] Маркировка руководящего состава (STAFF).\nDavid [D] Маркировка спец.отдела\nКаждый офицер при выходе в патруль, обязан поставить маркировку на свой крузер (/vdesc)\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
-         end)
-         end
-
-function cmd_sitcodes(id)
-        lua_thread.create(function()
-        sampShowDialog(1,"Ситуационные коды MVD HELPER 5.0", "CODE 0 - Офицер ранен.\nCODE 1 - Офицер в бедственном положении.\nCODE 2 - Обычный вызов с низким приоритетом. Без включения сирен и спец.сигналов, соблюдая ПДД.\nCODE 2 HIGH - Приоритетный вызов. Всё так же без включения сирен и спец.сигналов, соблюдая ПДД.\nCODE 3 - Срочный вызов. Использование сирен и спец.сигналов, игнорирование некоторых пунктов ПДД.\nCODE 4 - Помощь не требуется.\nCODE 4 ADAM - Помощь не требуется в данный момент времени. Офицеры находящиеся по близости должны быть готовы оказать помощь.\nCODE 7 - Перерыв на обед.\nCODE 30 - Срабатывание 'тихой' сигнализации на месте происшествия.\nCODE 30 RINGER - Срабатывание 'громкой' сигнализации на месте происшествия.\nCODE 37 - Обнаружение угнанного транспортного средства. Необходимо указать номер, описание автомобиля, направление движения.\nАвтор:t.me/Sashe4ka_ReZoN, t.me/daniel2903_pon", "Закрыть", "Exit", 0)
-         end)
-         end
-
-function cmd_pas(arg)
- lua_thread.create(function()
-  if tonumber(arg) == nil then
-  sampAddChatMessage("Введи айди игрока : {FFFFFF}/pas [ID].", 0x318CE7FF -1)
-  else
-  id = arg
-  sampSendChat('Здравствуйте, надеюсь вас не беспокою.')
-  wait(1500)
-  sampSendChat('/do Слева на груди жетон полицейского, справа - именная нашивка с фамилией.')
-  wait(1500)
-  sampSendChat('/showbadge '..id)
-  wait(1500)
-  sampSendChat('Прошу предьявить документ удостоверяющий вашу личность.')
-  end
- end)
-end
-
-function cmd_clear(arg)
-  if tonumber(arg) == nil then
-   sampAddChatMessage("Введи айди игрока: {FFFFFF} /clear [ID].", 0x318CE7FF -1)
-  else
-  lua_thread.create(function()
-  id = arg
-  sampSendChat("/me нажав на тангенту, сообщил диспетчеру имя человека, который более не числился в розыске")
-  wait(1500)
-  sampSendChat('/clear '..id)
-  end)
- end
-end
-
-function cmd_take(id)
-    if id == "" then
-             sampAddChatMessage("Введи айди игрока: {FFFFFF}/take [ID].", 0x318CE7FF)
-    else
-        lua_thread.create(function()
-             sampSendChat("/do На руках оперативника надеты резиновые перчатки.")
-             wait(1500)
-             sampSendChat("/me после обыска изъял запрещённые вещи")
-             wait(1500)
-             sampSendChat("/do Пакетик для улик в кармане.")
-             wait(1500)
-             sampSendChat("/me достал пакетик для улик, после чего положил туда запрещённые вещи")
-             wait(1500)
-             sampSendChat("/me положил пакет с уликами в кармашек")
-             wait(1500)
-             sampSendChat("/do Пакет с уликами в кармане.")
-             wait(1500)
-             sampSendChat("/take "..id.." ")
-         end)
-      end
-   end
-
-function cmd_pravda_fbi(id)
-	lua_thread.create(function ()
-		sampSendChat("/do В допросной стоял шкафчик, он был закрыт на электронный замок.")
-		wait(1500)
-		sampSendChat("/me подошел к шкафчику, набрал код, открыв шкафчик взял от туда не прозрачную черную папку.")
-		wait(1500)
-		sampSendChat("/me подошел к столу, положил папку на него, открыв ее взял готовый лист формата A4 со штампами.")
-		wait(1500)
-		sampSendChat("/me положил перед задержанным, положил рядом ручку.")
-		wait(1500)
-		sampSendChat("/do Рядом лежал образец.")
-		wait(1500)
-		sampSendChat("/do В образце написано: 'Я Имя/Фамилия/Дата рождения' ")
-		wait(1500)
-		sampSendChat("/do 'Я несу полную ответственность за информацию которую я произнес при допросе…")
-		wait(1500)
-		sampSendChat("/do …в случае неподтверждения моих слов я готов нести уголовную ответственность.' ")
-		wait(1500)
-		sampSendChat("Заполняешь на чистом как по образцу, ниже ставишь подпись и дату.")
-	end)
-end
-
-function cmd_secret_fbi(id)
-	lua_thread.create(function ()
-		sampSendChat("/do На столе лежит документ: \"Документ о неразглашении деятельности ФБР\"")
-		wait(1500)
-		sampSendChat("/do Рядом с документом аккуратно расположена ручка с золотой гравировкой \"ФБР\"")
-		wait(1500)
-		sampSendChat("/do В документе написано: \"Я, (Имя / Фамилия), клянусь держать втайне то, ...")
-		wait(1500)
-		sampSendChat("/do ... что видел, вижу, и буду видеть\"")
-		wait(1500)
-		sampSendChat("/do Ниже написано: \"Готов нести полную ответственность, и в случае своего неповиновения, ...")
-		wait(1500)
-		sampSendChat("/do ... готов быть арестованным и отстраненным от должности, при наличии таковой\"")
-		wait(1500)
-		sampSendChat("/do Еще ниже написано: \"Дата: ; Подпись: \"")
-	end)
-end
-
-function cmd_traf()
-        lua_thread.create(function()
-            sampSendChat("/do Мегафон в бардачке.")
-            wait(1500)
-            sampSendChat("/me достаёт мегафон с бардачка после чего включает его")
-            wait(1700)
-            sampSendChat("/m Водитель авто остановитесь на обочине и заглушите двигатель, держите руки на руле.")
-            wait(1700)
-            sampSendChat("/me убирает мегафон в бардачок")
-        end)
-    end
-
-function cmd_time()
-    lua_thread.create(function()
-    sampSendChat("/me поднял руку и посмотрел на часы бренда  Rolex")
-    wait(2300)
-    sampSendChat("/time")
-    sampSendChat('/do На часах '..os.date('%H:%M:%S'))
-    end)
-end
-
-function cmd_finger_person()
-	lua_thread.create(function()
-		sampSendChat("/do За спиной агента находится небольшая спец. сумка.")
-		wait(2300)
-		sampSendChat("/me снял спец. сумку со спины, после положил её на ровную поверхность")
-		wait(2300)
-		sampSendChat("/do В спец. сумке имеется: пудра и кисточка для её нанесения, спец. плёнка.")
-		wait(2300)
-		sampSendChat("/me взял баночку с пудрой, открыв её аккуратно наносит пудру на пальцы человека напротив")
-		wait(2300)
-		sampSendChat("/do Пальцы человека напротив покрыты пудрой.")
-		wait(2300)
-		sampSendChat("/me достал из спец. сумки специальную плёнку, затем приклеивает её на пальцы человеку")
-		wait(2300)
-		sampSendChat("/do Отпечаток фиксируется на плёнке.")
-		wait(2300)
-		sampSendChat("/me аккуратно сняв плёнку с пальцев человека, помещает ее в спец. пакетик")
-		wait(2300)
-		sampSendChat("/do В спец. пакетике находится плёнка с пальцев человека.")
-		wait(2300)
-		sampSendChat("/me положил спец. пакетик в задний карман брюк, берёт в руки баночку с пудрой ...")
-		wait(2300)
-		sampSendChat("/me ... и кисточку, убирает их в спец. сумку, после закрывает её")
-		wait(2300)
-		sampSendChat("/do Спец. пакетик лежит в заднем кармане брюк, спец. сумка закрыта.")
-	end)
-end
-
-function cmd_warn()
-	lua_thread.create(function ()
-		sampSendChat("/r  Мне требуется подмога. Найдите меня по жучку  ")
-	end)
-end
-
-function cmd_grim()
-    lua_thread.create(function ()
-    sampSendChat("/do В шкафчике стоит набор для профессионального грима.")
-    wait(2300)
-    sampSendChat("/me открыл шкафчик и достав из него набор для грима, поставил его на шкафчик и открыл")
-    wait(2300)
-    sampSendChat("/do Набор для грима открыт.")
-    wait(2300)
-    sampSendChat("/do Над шкафчиком весит зеркало.")
-    wait(2300)
-    sampSendChat("/me рассматривая набор, взял большую кисть и окунув её в тёмный цвет, начал наносить его на лицо, смотря в зеркало")
-    wait(2300)
-    sampSendChat("/me взяв тонкую кисточку, окунул её в румян и начал наносить на лицо")
-   wait(2300)
-   sampSendChat("/me нарисовав на лице скулы, окунул кисточку в тёмную тень и нанёс их на лицо")
-   wait(2300)
-   sampSendChat("/me взял кисть и окунув её в тёмную пудру и нанёс её на лицо")
-   wait(2300)
-   sampSendChat("/me положил кисти в отсек для инструментов и закрыл набор")
-   wait(2300)
-   sampSendChat("/me убрал набор в шкафчик и закрыл его")
-   wait(2300)
-   sampSendChat("/do На лице нанесён грим.")
-       end)
-end
-
-function cmd_eks()
-    lua_thread.create(function ()
-    sampSendChat ("/do В кармане пиджака лежат резиновые перчатки.")
-wait(1500)
-sampSendChat ("/me правой рукой достал из кармана перчатки и надел их на кисти рук")
-wait(1500)
-sampSendChat("/do На столе лежит оружие, полоска и лист белой бумаги, две стойки с пробирками.")
-wait(1500)
-sampSendChat("/me осмотрел оружие и аккуратно разобрал его на отдельные части")
-wait(1500)
-sampSendChat("/me взял в руки затвор и полоску бумаги, поместил полоску в задний срез патронника")
-wait(1500)
-sampSendChat("/me убрал полоску бумаги из затвора")
-wait(1500)
-sampSendChat("/do На полоске бумаги остались следы нагара от не сгоревшего пороха.")
-wait(1500)
-sampSendChat("/me вытряхнул частицы с полоски на лист бумаги")
-wait(1500)
-sampSendChat("/me взял пробирку со стойки и пересыпал содержимое с листа в пробирку")
-wait(1500)
-sampSendChat("/me закрыл пробирку и поставил на другую стойку")
-wait(1500)
-sampSendChat("/me взял в руки крышку ствольной коробки и просмотрел серийный номер оружия")
-wait(1500)
-sampSendChat("/me включил компьютер и открыл базу данных, в поисковую строку ввёл номер оружия")
-wait(1500)
-sampSendChat("/do На экране высветилась информация об оружии и владельце.")
-wait(1500)
-sampSendChat("/me положил крышку ствольной коробки обратно на стол")
-wait(1500)
-sampSendChat("/me собрал оружие в целое, достал из ящика прозрачный спец.пакет и поместил в него оружие")
-wait(1500)
-sampSendChat("/me взял со стола фломастер и пометил им спец.пакет, убрал фломастер в ящик и закрыл его")
-       end)
+    imgui.Text(text)
 end
 
 local secondFrame = imgui.OnFrame(
@@ -2794,7 +2079,11 @@ local setUkFrame = imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(900, 700), imgui.Cond.FirstUseEver)
         imgui.Begin(u8"Настройка умного розыска", setUkWindow)
-            if imgui.BeginChild('Name', imgui.ImVec2(0, imgui.GetWindowSize().y - 36 - imgui.GetCursorPosY() - imgui.GetStyle().FramePadding.y * 2), true) then
+
+        if imgui.Button(u8'Скачать умный розыск для своего сервера') then
+            DownloadUk()
+        end    
+        if imgui.BeginChild('Name', imgui.ImVec2(0, imgui.GetWindowSize().y - 36 - imgui.GetCursorPosY() - imgui.GetStyle().FramePadding.y * 2), true) then
                 for i = 1, #tableUk["Text"] do
                     imgui.Text(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i]))
                     Uk = #tableUk["Text"]
@@ -2854,15 +2143,15 @@ local importUkFrame = imgui.OnFrame(
         imgui.Begin(u8"Импорт умного розыска", addUkWindow)
         if imgui.Button(u8'Phoenix') then
             updateScript(smartUkUrl['phenix'], smartUkPath)
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
-        
+            msg("{FFFFFF} Умный розыск на Phoenix успешно установлен!", 0x8B00FF)
+       
         elseif imgui.Button(u8'Mobile I') then
             updateScript(smartUkUrl['m1'], smartUkPath)
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 1 успешно установлен!", 0x8B00FF)
+            msg("{FFFFFF} Умный розыск на Mobile 1 успешно установлен!", 0x8B00FF)
         
         elseif imgui.Button(u8'Mobile II') then
             updateScript(smartUkUrl['m2'], smartUkPath)
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Mobile 2 успешно установлен!", 0x8B00FF)
+            msg("{FFFFFF} Умный розыск на Mobile 2 успешно установлен!", 0x8B00FF)
         
         elseif imgui.Button(u8'Mobile III') then
             updateScript(smartUkUrl['m3'], smartUkPath)
@@ -2896,14 +2185,14 @@ local importUkFrame = imgui.OnFrame(
         
         elseif imgui.Button(u8'Casa-Grande') then
             updateScript(smartUkUrl['casa'], smartUkPath)
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Casa-Grande успешно установлен!", 0x8B00FF)
+            msg("{FFFFFF} Умный розыск на Casa-Grande успешно установлен!", 0x8B00FF)
                                                                     
         elseif imgui.Button(u8'Page') then
             updateScript(smartUkUrl['page'], smartUkPath)
                                                                     
         elseif imgui.Button(u8'Sun-City') then
             updateScript(smartUkUrl['sunCity'], smartUkPath)
-            sampAddChatMessage("[Sashe4ka Police Helper]: {FFFFFF} Умный розыск на Sun-City успешно установлен!", 0x8B00FF)
+            msg("{FFFFFF} Умный розыск на Sun-City успешно установлен!", 0x8B00FF)
                                                                     
         elseif imgui.Button(u8'Wednesday') then
             updateScript(smartUkUrl['wednesday'], smartUkPath)
@@ -3340,181 +2629,7 @@ local suppWindowFrame = imgui.OnFrame(
 		imgui.End()
     end
 )
-
-local fastMenu = imgui.OnFrame(function()
-	return state.renderFastMenu[0]
-end, function(player)
-	if state.fastMenuPlayerId and sampIsPlayerConnected(state.fastMenuPlayerId) then
-		imgui.SetNextWindowSize(imgui.ImVec2(400 * MDS, 250 * MDS), imgui.Cond.FirstUseEver)
-		imgui.SetNextWindowPos(
-			imgui.ImVec2(state.fastMenuPos.x, state.fastMenuPos.y + 250 / 2 * MDS),
-			imgui.Cond.FirstUseEver,
-			imgui.ImVec2(0.5, 0.5)
-		)
-        
-        local player_nickname = sampGetPlayerNickname(state.fastMenuPlayerId)
-        player_id = state.fastMenuPlayerId
-        id = imgui.new.int(player_id)
-		
-		imgui.Begin(u8("Действия над игроком ") .. player_nickname, state.renderFastMenu)
-		if imgui.Button(u8 'Приветствие') then
-            lua_thread.create(function()
-                sampSendChat("Доброго времени суток, я «" .. nickname .. "» «" ..  u8:decode(mainIni.Info.dl) .."».")
-                wait(2300)
-                sampSendChat("/do Удостоверение в руках.")
-                wait(2300)
-                sampSendChat("/me показал своё удостоверение человеку на против")
-                wait(2300)
-                sampSendChat("/do «" .. nickname .. "».")
-                wait(2300)
-                sampSendChat("/do «" .. u8:decode(mainIni.Info.dl) .. "» " .. mainIni.Info.org .. ".")
-                wait(2300)
-                sampSendChat("Предъявите ваши документы, а именно паспорт. Не беспокойтесь, это всего лишь проверка.")
-                wait(2300)
-                sampSendChat('/showbadge '..id)
-            end)
-        end
-        if imgui.Button(u8 'Найти игрока') then
-            lua_thread.create(function()
-                sampSendChat("/do КПК в левом кармане.")
-                wait(1500)
-                sampSendChat("/me достал левой рукой КПК из кармана")
-                wait(1500)
-                sampSendChat("/do КПК в левой руке.")
-                wait(1500)
-                sampSendChat("/me включил КПК и зашел в базу данных Полиции")
-                wait(1500)
-                sampSendChat("/me открыл дело номер " .. id .. " преступника")
-                wait(1500)
-                sampSendChat("/do Данные преступника получены.")
-                wait(1500)
-                sampSendChat("/me подключился к камерам слежения штата")
-                wait(1500)
-                sampSendChat("/do На навигаторе появился маршрут.")
-                wait(1500)
-                sampSendChat("/pursuit " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'Арест') then
-            lua_thread.create(function()
-                sampSendChat("/me взял ручку из кармана рубашки, затем открыл бардачок и взял оттуда бланк протокола")
-                wait(1500)
-                sampSendChat("/do Бланк протокола и ручка в руках.")
-                wait(1500)
-                sampSendChat("/me заполняет описание внешности нарушителя")
-                wait(1500)
-                sampSendChat("/me заполняет характеристику о нарушителе")
-                wait(1500)
-                sampSendChat("/me заполняет данные о нарушении")
-                wait(1500)
-                sampSendChat("/me проставил дату и подпись")
-                wait(1500)
-                sampSendChat("/me положил ручку в карман рубашки")
-                wait(1500)
-                sampSendChat("/do Ручка в кармане рубашки.")
-                wait(1500)
-                sampSendChat("/me передал бланк составленного протокола в участок")
-                wait(1500)
-                sampSendChat("/me передал преступника в Управление Полиции под стражу")
-                wait(1500)
-                sampSendChat("/arrest")
-                sampAddChatMessage("Встаньте на чекпоинт",0x8B00FF)
-            end)
-        end
-        if imgui.Button(u8 'Надеть наручники') then
-            lua_thread.create(function()
-                sampSendChat("/do Наручники висят на поясе.")
-                wait(1500)
-                sampSendChat("/me снял с держателя наручники")
-                wait(1500)
-                sampSendChat("/do Наручники в руках.")
-                wait(1500)
-                sampSendChat("/me резким движением обеих рук, надел наручники на преступника")
-                wait(1500)
-                sampSendChat("/do Преступник скован.")
-                wait(1500)
-                sampSendChat("/cuff " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'Снять наручники') then
-            lua_thread.create(function()
-                sampSendChat("/do Ключ от наручников в кармане.")
-                wait(1500)
-                sampSendChat("/me движением правой руки достал из кармана ключ и открыл наручники")
-                wait(1500)
-                sampSendChat("/do Преступник раскован.")
-                wait(1500)
-                sampSendChat("/uncuff " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'Вести за собой') then
-            lua_thread.create(function()
-                sampSendChat("/me заломил правую руку нарушителю")
-                wait(1500)
-                sampSendChat("/me ведет нарушителя за собой")
-                wait(1500)
-                sampSendChat("/gotome " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'Перестать вести за собой') then
-            lua_thread.create(function()
-                sampSendChat("/me отпустил правую руку преступника")
-                wait(1500)
-                sampSendChat("/do Преступник свободен.")
-                wait(1500)
-                sampSendChat("/ungotome " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'В машину(автоматически на 3-е место)') then
-            lua_thread.create(function()
-                sampSendChat("/do Двери в машине закрыты.")
-                wait(1500)
-                sampSendChat("/me открыл заднюю дверь в машине")
-                wait(1500)
-                sampSendChat("/me посадил преступника в машину")
-                wait(1500)
-                sampSendChat("/me заблокировал двери")
-                wait(1500)
-                sampSendChat("/do Двери заблокированы.")
-                wait(1500)
-                sampSendChat("/incar " .. player_id .. "3")
-            end)
-        end
-        if imgui.Button(u8 'Обыск') then
-            lua_thread.create(function()
-                sampSendChat("/me нырнув руками в карманы, вытянул оттуда белые перчатки и натянул их на руки")
-                wait(1500)
-                sampSendChat("/do Перчатки надеты.")
-                wait(1500)
-                sampSendChat("/me проводит руками по верхней части тела")
-                wait(1500)
-                sampSendChat("/me проверяет карманы")
-                wait(1500)
-				sampSendChat ("/me проводит руками по ногам")
-                wait(1500)
-                sampSendChat("/frisk " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'Вытащить из авто') then
-            lua_thread.create(function()
-                sampSendChat("/me сняв дубинку с поясного держателя разбил стекло в транспорте")
-                wait(1500)
-                sampSendChat("/do Стекло разбито.")
-                wait(1500)
-                sampSendChat("/me схватив за плечи человека ударил его после чего надел наручники")
-                wait(1500)
-                sampSendChat("/pull " .. player_id)
-                wait(1500)
-                sampSendChat("/cuff " .. player_id)
-            end)
-        end
-        if imgui.Button(u8 'Выдача розыска') then
-            windowTwo[0] = not windowTwo[0]
-        end
-		imgui.End()
-	end
-end)
-
+      
 local binderWindowFrame = imgui.OnFrame(
     function() return binderWindow[0] end,
     function()
@@ -3574,10 +2689,280 @@ function table.find(t, v)
  end
 
  function sampev.onSendChat(cmd)
-    if  mainIni.Accent.autoAccent then
+    if  mainIni.settings.autoAccent then
       if cmd == ')' or cmd == '(' or cmd ==  '))' or cmd == '((' or cmd == 'xD' or cmd == ':D' or cmd == ':d' or cmd == 'XD' then
         return{cmd}
       end
-      return{mainIni.Accent.accent .. ' ' .. cmd}
+      cmd = mainIni.Accent.accent .. ' ' .. cmd
+      return{cmd}
     end
+    return{cmd}
   end
+
+imgui.PageButton = function(bool, icon, name, but_wide)
+    but_wide = but_wide or 290
+    local duration = 0.25
+    local DL = imgui.GetWindowDrawList()
+    local p1 = imgui.GetCursorScreenPos()
+    local p2 = imgui.GetCursorPos()
+    local col = imgui.GetStyle().Colors[imgui.Col.ButtonActive]
+      
+    if not AI_PAGE[name] then
+        AI_PAGE[name] = { clock = nil }
+    end
+    local pool = AI_PAGE[name]
+
+    imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.00, 0.00, 0.00, 0.00))
+    imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImVec4(0.00, 0.00, 0.00, 0.00))
+    imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImVec4(0.00, 0.00, 0.00, 0.00))
+    local result = imgui.InvisibleButton(name, imgui.ImVec2(but_wide, 55))
+    if result and not bool then
+        pool.clock = os.clock()
+    end
+    local pressed = imgui.IsItemActive()
+    imgui.PopStyleColor(3)
+    if bool then
+        if pool.clock and (os.clock() - pool.clock) < duration then
+            local wide = (os.clock() - pool.clock) * (but_wide / duration)
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2((p1.x + 290) - wide, p1.y + 55), 0x10FFFFFF, 15, 10)
+               DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 5, p1.y + 55), ToU32(col))
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + wide, p1.y + 55), ToU32(imgui.ImVec4(col.x, col.y, col.z, 0.6)), 15, 10)
+        else
+            DL:AddRectFilled(imgui.ImVec2(p1.x, (pressed and p1.y + 3 or p1.y)), imgui.ImVec2(p1.x + 5, (pressed and p1.y + 32 or p1.y + 55)), ToU32(col))
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 290, p1.y + 55), ToU32(imgui.ImVec4(col.x, col.y, col.z, 0.6)), 15, 10)
+        end
+    else
+        if imgui.IsItemHovered() then
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 290, p1.y + 55), 0x10FFFFFF, 15, 10)
+        end
+    end
+    imgui.SameLine(10); imgui.SetCursorPosY(p2.y + 8)
+    if bool then
+        imgui.Text((' '):rep(3) .. icon)
+        imgui.SameLine(60)
+        imgui.Text(name)
+    else
+        imgui.TextColored(imgui.ImVec4(0.60, 0.60, 0.60, 1.00), (' '):rep(3) .. icon)
+        imgui.SameLine(60)
+        imgui.TextColored(imgui.ImVec4(0.60, 0.60, 0.60, 1.00), name)
+    end
+    imgui.SetCursorPosY(p2.y + 70)
+    return result
+end
+
+function apply_n_t()
+    if mainIni.theme.themeta == 'standart' then
+    	DarkTheme()
+	elseif mainIni.theme.themeta == 'moonmonet' then
+		gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
+    	local a, r, g, b = explode_argb(gen_color.accent1.color_300)
+		curcolor = '{'..rgb2hex(r, g, b)..'}'
+    	curcolor1 = '0x'..('%X'):format(gen_color.accent1.color_300)
+        apply_monet()
+	end
+end
+
+function decor()
+    imgui.SwitchContext()
+	local style = imgui.GetStyle()
+    style.WindowPadding = imgui.ImVec2(15, 15)
+    style.WindowRounding = 10.0
+    style.ChildRounding = 25.0
+    style.FramePadding = imgui.ImVec2(8, 7)
+    style.FrameRounding = 8.0
+    style.ItemSpacing = imgui.ImVec2(8, 8)
+    style.ItemInnerSpacing = imgui.ImVec2(10, 6)
+    style.IndentSpacing = 25.0
+    style.ScrollbarSize = 20.0
+    style.ScrollbarRounding = 12.0
+    style.GrabMinSize = 10.0
+    style.GrabRounding = 6.0
+    style.PopupRounding = 8
+    style.WindowTitleAlign = imgui.ImVec2(0.5, 0.5)
+    style.ButtonTextAlign = imgui.ImVec2(0.5, 0.5)
+    style.ChildBorderSize = 1.0
+end
+function apply_monet()
+    imgui.SwitchContext()
+	local style = imgui.GetStyle()
+	local colors = style.Colors
+	local clr = imgui.Col
+	local ImVec4 = imgui.ImVec4
+	local generated_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
+	colors[clr.Text] = ColorAccentsAdapter(generated_color.accent2.color_50):as_vec4()
+	colors[clr.TextDisabled] = ColorAccentsAdapter(generated_color.neutral1.color_600):as_vec4()
+	colors[clr.WindowBg] = ColorAccentsAdapter(generated_color.accent2.color_900):as_vec4()
+	colors[clr.ChildBg] = ColorAccentsAdapter(generated_color.accent2.color_800):as_vec4()
+	colors[clr.PopupBg] = ColorAccentsAdapter(generated_color.accent2.color_700):as_vec4()
+	colors[clr.Border] = ColorAccentsAdapter(generated_color.accent1.color_200):apply_alpha(0xcc):as_vec4()
+	colors[clr.Separator] = ColorAccentsAdapter(generated_color.accent1.color_200):apply_alpha(0xcc):as_vec4()
+	colors[clr.BorderShadow] = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
+	colors[clr.FrameBg] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x60):as_vec4()
+	colors[clr.FrameBgHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x70):as_vec4()
+	colors[clr.FrameBgActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x50):as_vec4()
+	colors[clr.TitleBg] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0xcc):as_vec4()
+	colors[clr.TitleBgCollapsed] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0x7f):as_vec4()
+	colors[clr.TitleBgActive] = ColorAccentsAdapter(generated_color.accent2.color_700):as_vec4()
+	colors[clr.MenuBarBg] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x91):as_vec4()
+	colors[clr.ScrollbarBg] = imgui.ImVec4(0,0,0,0)
+	colors[clr.ScrollbarGrab] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x85):as_vec4()
+	colors[clr.ScrollbarGrabHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.ScrollbarGrabActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
+	colors[clr.CheckMark] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
+	colors[clr.SliderGrab] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
+	colors[clr.SliderGrabActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0x80):as_vec4()
+	colors[clr.Button] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
+	colors[clr.ButtonHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.ButtonActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
+	colors[clr.Tab] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
+	colors[clr.TabActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
+	colors[clr.TabHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.Header] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xcc):as_vec4()
+	colors[clr.HeaderHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.HeaderActive] = ColorAccentsAdapter(generated_color.accent1.color_600):apply_alpha(0xb3):as_vec4()
+	colors[clr.ResizeGrip] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0xcc):as_vec4()
+	colors[clr.ResizeGripHovered] = ColorAccentsAdapter(generated_color.accent2.color_700):as_vec4()
+	colors[clr.ResizeGripActive] = ColorAccentsAdapter(generated_color.accent2.color_700):apply_alpha(0xb3):as_vec4()
+	colors[clr.PlotLines] = ColorAccentsAdapter(generated_color.accent2.color_600):as_vec4()
+	colors[clr.PlotLinesHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.PlotHistogram] = ColorAccentsAdapter(generated_color.accent2.color_600):as_vec4()
+	colors[clr.PlotHistogramHovered] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.TextSelectedBg] = ColorAccentsAdapter(generated_color.accent1.color_600):as_vec4()
+	colors[clr.ModalWindowDimBg] = ColorAccentsAdapter(generated_color.accent1.color_200):apply_alpha(0x26):as_vec4()
+end
+
+function DarkTheme() -- https://www.blast.hk/threads/25442/post-973165
+    imgui.SwitchContext()
+    local style = imgui.GetStyle()
+    -- Цвета
+    style.Colors[imgui.Col.Text]                   = imgui.ImVec4(0.90, 0.85, 0.85, 1.00)
+    style.Colors[imgui.Col.TextDisabled]           = imgui.ImVec4(0.50, 0.50, 0.50, 1.00)
+    style.Colors[imgui.Col.WindowBg]               = imgui.ImVec4(0.15, 0.03, 0.03, 1.00)
+    style.Colors[imgui.Col.ChildBg]                = imgui.ImVec4(0.18, 0.05, 0.05, 1.00)
+    style.Colors[imgui.Col.PopupBg]                = imgui.ImVec4(0.15, 0.03, 0.03, 1.00)
+    style.Colors[imgui.Col.Border]                 = imgui.ImVec4(0.50, 0.10, 0.10, 1.00)
+    style.Colors[imgui.Col.BorderShadow]           = imgui.ImVec4(0.00, 0.00, 0.00, 0.00)
+    style.Colors[imgui.Col.FrameBg]                = imgui.ImVec4(0.25, 0.07, 0.07, 1.00)
+    style.Colors[imgui.Col.FrameBgHovered]         = imgui.ImVec4(0.25, 0.08, 0.08, 1.00)
+    style.Colors[imgui.Col.FrameBgActive]          = imgui.ImVec4(0.30, 0.10, 0.10, 1.00)
+    style.Colors[imgui.Col.TitleBg]                = imgui.ImVec4(0.20, 0.05, 0.05, 1.00)
+    style.Colors[imgui.Col.TitleBgCollapsed]       = imgui.ImVec4(0.15, 0.03, 0.03, 1.00)
+    style.Colors[imgui.Col.TitleBgActive]          = imgui.ImVec4(0.25, 0.07, 0.07, 1.00)
+    style.Colors[imgui.Col.MenuBarBg]              = imgui.ImVec4(0.20, 0.05, 0.05, 1.00)
+    style.Colors[imgui.Col.ScrollbarBg]            = imgui.ImVec4(0.15, 0.03, 0.03, 1.00)
+    style.Colors[imgui.Col.ScrollbarGrab]          = imgui.ImVec4(0.50, 0.10, 0.10, 1.00)
+    style.Colors[imgui.Col.ScrollbarGrabHovered]   = imgui.ImVec4(0.60, 0.12, 0.12, 1.00)
+    style.Colors[imgui.Col.ScrollbarGrabActive]    = imgui.ImVec4(0.70, 0.15, 0.15, 1.00)
+    style.Colors[imgui.Col.CheckMark]              = imgui.ImVec4(0.90, 0.15, 0.15, 1.00)
+    style.Colors[imgui.Col.SliderGrab]             = imgui.ImVec4(0.90, 0.25, 0.25, 1.00)
+    style.Colors[imgui.Col.SliderGrabActive]       = imgui.ImVec4(0.90, 0.25, 0.25, 1.00)
+    style.Colors[imgui.Col.Button]                 = imgui.ImVec4(0.25, 0.07, 0.07, 1.00)
+    style.Colors[imgui.Col.ButtonHovered]          = imgui.ImVec4(0.80, 0.20, 0.20, 1.00)
+    style.Colors[imgui.Col.ButtonActive]           = imgui.ImVec4(0.90, 0.25, 0.25, 1.00)
+    style.Colors[imgui.Col.Header]                 = imgui.ImVec4(0.25, 0.07, 0.07, 1.00)
+    style.Colors[imgui.Col.HeaderHovered]          = imgui.ImVec4(0.80, 0.20, 0.20, 1.00)
+    style.Colors[imgui.Col.HeaderActive]           = imgui.ImVec4(0.90, 0.25, 0.25, 1.00)
+    style.Colors[imgui.Col.Separator]              = imgui.ImVec4(0.50, 0.10, 0.10, 1.00)
+    style.Colors[imgui.Col.SeparatorHovered]       = imgui.ImVec4(0.60, 0.12, 0.12, 1.00)
+    style.Colors[imgui.Col.SeparatorActive]        = imgui.ImVec4(0.70, 0.15, 0.15, 1.00)
+    style.Colors[imgui.Col.ResizeGrip]             = imgui.ImVec4(0.25, 0.07, 0.07, 1.00)
+    style.Colors[imgui.Col.ResizeGripHovered]      = imgui.ImVec4(0.80, 0.20, 0.20, 1.00)
+    style.Colors[imgui.Col.ResizeGripActive]       = imgui.ImVec4(0.90, 0.25, 0.25, 1.00)
+    style.Colors[imgui.Col.PlotLines]              = imgui.ImVec4(0.80, 0.10, 0.10, 1.00)
+    style.Colors[imgui.Col.PlotLinesHovered]       = imgui.ImVec4(0.90, 0.15, 0.15, 1.00)
+    style.Colors[imgui.Col.PlotHistogram]          = imgui.ImVec4(0.80, 0.10, 0.10, 1.00)
+    style.Colors[imgui.Col.PlotHistogramHovered]   = imgui.ImVec4(0.90, 0.15, 0.15, 1.00)
+    style.Colors[imgui.Col.TextSelectedBg]         = imgui.ImVec4(0.90, 0.15, 0.15, 1.00)
+    style.Colors[imgui.Col.ModalWindowDimBg]       = imgui.ImVec4(0.20, 0.05, 0.05, 0.80)
+    style.Colors[imgui.Col.Tab]                    = imgui.ImVec4(0.25, 0.07, 0.07, 1.00)
+    style.Colors[imgui.Col.TabHovered]             = imgui.ImVec4(0.80, 0.20, 0.20, 1.00)
+    style.Colors[imgui.Col.TabActive]              = imgui.ImVec4(0.90, 0.25, 0.25, 1.00)
+end
+function join_argb(a, r, g, b)
+    local argb = b  -- b
+    argb = bit.bor(argb, bit.lshift(g, 8))  -- g
+    argb = bit.bor(argb, bit.lshift(r, 16)) -- r
+    argb = bit.bor(argb, bit.lshift(a, 24)) -- a
+    return argb
+end
+
+--Наш дарагой Джончек
+local newFrame = imgui.OnFrame(
+    function() return joneV[0] end,
+    function(player)
+        local resX, resY = getScreenResolution()
+        local sizeX, sizeY = 1500, 300
+        imgui.SetNextWindowPos(imgui.ImVec2(resX/2, resY - 200), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(sizeX, sizeY), imgui.Cond.FirstUseEver)
+        imgui.Begin('Jone', joneV, imgui.WindowFlags.NoDecoration)
+        imgui.Image(imhandle, imgui.ImVec2(200, 200))
+        imgui.SetCursorPosX(250)
+        imgui.SetCursorPosY(25)
+        if window [0] then
+            imgui.SetWindowFocus()
+        	if page == 1 then -- если значение tab == 1
+                imgui.SetWindowFocus()
+                imgui.Text(u8"Отлично! И так, я помогу тебе обучится работать с МВД хелпером!")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Для начала начнем с того, что МВД хелпер разработан для Mobile устройств")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"С целью облегчить работу в МЮ.")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"На этой страничке есть кнопка настройки УК. Там ты можешь скачать для себя УК и настроить его!")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Еще тут есть выбор темы. Ты можешь выбрать MoonMonet и настроить свой цвет!")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 8 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"Это - страничка быстрого взаимодействия.")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Так же это окошко открывается при двойном нажатии на игрока(работает коряво)")
+                imgui.SetCursorPosX(250)                
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 2 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"А это - одна из самых выжных вкладок!")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Это биндер, в котором ты можешь создавать свои команды, а так же изменять готовые!")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 3 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"Это - вкладка гос. волны")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Тут ты можешь связываться с другими организациями\nФункций покачто мало, но они будут доабвляться!")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 4 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"Это - вкладка для старшего состава, она тоже будет дорабатываться")        
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 5 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"А это шпаргалки с УК, тен-кодами и т.д.")        
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 6 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"Тоже не менее важная вкладка - доп. настройки")        
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Что тут есть ты сам видешь внизу.")
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Встретимся в следующей вкладке!")
+            elseif page == 7 then
+                imgui.SetWindowFocus()
+                imgui.Text(u8"Это - последняя вкладка. Тут находится инф-я о МВД хелпере")        
+                imgui.SetCursorPosX(250)
+                imgui.Text(u8"Ну что, пришло время прощаться. Наше обучение подошло к концу.\nТы можешь меня выключить/включить в это вкладке, удачи!")
+            end
+        else
+        	imgui.Text(u8"Привет! Я " .. u8(mainIni.settings.ObuchalName) .. u8". Я помогу тебе научится работать с хелпером.")
+        	imgui.SetCursorPosX(250)
+        	imgui.Text(u8"Для начала открой меню через команду в чате /mvd")
+        	imgui.End()
+        end
+    end
+)
+
