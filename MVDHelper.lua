@@ -14,7 +14,7 @@ local window = imgui.new.bool()
 
 script_name("MVD Helper Mobile")
 
-script_version("5.1")
+script_version("5.0.2")
 script_author("@Sashe4ka_ReZoN @daniel29032012 @Theopka")
 
 MDS = MONET_DPI_SCALE or 1
@@ -1087,10 +1087,12 @@ imgui.OnFrame(function() return window[0] end, function(player)
     if imgui.PageButton(page == 5, ' ', u8'Шпаргалки') then
         page = 5
     end
-    if imgui.PageButton(page == 6, ' ', u8'Инфа') then
+    if imgui.PageButton(page == 6, ' ', u8'Дополнительно') then
         page = 6
     end
-    
+    if imgui.PageButton(page == 7, ' ', u8'Инфа') then
+        page = 7
+    end
     imgui.CenterText(u8(''))
     imgui.CenterText(u8('v ' .. thisScript().version))
     imgui.EndChild()
@@ -1758,12 +1760,12 @@ imgui.OnFrame(function() return window[0] end, function(player)
 
     elseif page == 6 then
         imgui.Text(u8'Версия: ' .. thisScript().version)
-        imgui.Text(u8'Разработчики: https://t.me/Sashe4ka_ReZoN, https://t.me/daniel2903_pon, https://t.me/Theopka')
+        imgui.Text(u8'Создатель: @Sashe4ka_ReZoN')
+        imgui.Text(u8'Разработчик: @daniel2903_pon')
         imgui.Text(u8'ТГ канал: t.me/lua_arz') 
         imgui.Text(u8'Поддержать: Временно не доступно') 
-        imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x, @Theopka')
-        imgui.Text(u8'5.1 - обновление интерфейса, новый биндер(взят у @MTG_mods), Обучальщик, убрана вкладка дополнительно(перенесено в настройки)')
-        if imgui.Button(u8" Обновить") then updateScript(mvdUrl, mvdPath) end
+        imgui.Text(u8'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x,')
+        imgui.Text(u8'5.1 - обновление интерфейса, новый биндер, Обучальщик, убрана вкладка дополнительно(перенесено в настройки)')
     end
     imgui.EndChild()
     imgui.End()
