@@ -1,7 +1,7 @@
 script_name("MVD Helper Mobile")
 
 script_version("5.3")
-script_author("@Sashe4ka_ReZoN @daniel29032012 @makson4ck2")
+script_authors("@Sashe4ka_ReZoN", "@daniel29032012", "@makson4ck2", "@osp_x")
 
 require('moonloader')
 local encoding = require('encoding')
@@ -45,7 +45,7 @@ local ToU32 = imgui.ColorConvertFloat4ToU32
 local page = 1
 local window = imgui.new.bool()
 local helper_path = script.this.path
-MDS = MONET_DPI_SCALE or 1
+local MDS = MONET_DPI_SCALE or 1
 function explode_argb(argb)
     local a = bit.band(bit.rshift(argb, 24), 0xFF)
     local r = bit.band(bit.rshift(argb, 16), 0xFF)
@@ -528,11 +528,13 @@ imgui.OnInitialize(function()
     config.MergeMode = true
     config.PixelSnapH = true
     iconRanges = imgui.new.ImWchar[3](faicons.min_range, faicons.max_range, 0)
-    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 20, config,
+    imgui.GetIO().Fonts:AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85('solid'), 14 * MDS, config,
         iconRanges) -- solid - тип иконок, так же есть thin, regular, light и duotone
     local tmp = imgui.ColorConvertU32ToFloat4(mainIni.theme['moonmonet'])
     gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
     mmcolor = imgui.new.float[3](tmp.z, tmp.y, tmp.x)
+
+    imgui.GetStyle():ScaleAllSizes(MDS)
 end)
 
 function downloadToFile(url, path, callback, progressInterval)
@@ -615,53 +617,55 @@ function downloadToFile(url, path, callback, progressInterval)
         checkStatus()
     end)
 end
+
 local effil = require('effil')
 function asyncHttpRequest(method, url, args, resolve, reject)
-    local request_thread = effil.thread(function (method, url, args)
-       local requests = require('requests')
-       local result, response = pcall(requests.request, method, url, effil.dump(args))
-       if result then
-          response.json, response.xml = nil, nil
-          return true, response
-       else
-          return false, response
-       end
+    local request_thread = effil.thread(function(method, url, args)
+        local requests = require('requests')
+        local result, response = pcall(requests.request, method, url, effil.dump(args))
+        if result then
+            response.json, response.xml = nil, nil
+            return true, response
+        else
+            return false, response
+        end
     end)(method, url, args)
     -- Если запрос без функций обработки ответа и ошибок.
     if not resolve then resolve = function() end end
     if not reject then reject = function() end end
     -- Проверка выполнения потока
     lua_thread.create(function()
-       local runner = request_thread
-       while true do
-          local status, err = runner:status()
-          if not err then
-             if status == 'completed' then
-                local result, response = runner:get()
-                if result then
-                   resolve(response)
-                else
-                   reject(response)
+        local runner = request_thread
+        while true do
+            local status, err = runner:status()
+            if not err then
+                if status == 'completed' then
+                    local result, response = runner:get()
+                    if result then
+                        resolve(response)
+                    else
+                        reject(response)
+                    end
+                    return
+                elseif status == 'canceled' then
+                    return reject(status)
                 end
-                return
-             elseif status == 'canceled' then
-                return reject(status)
-             end
-          else
-             return reject(err)
-          end
-          wait(0)
-       end
+            else
+                return reject(err)
+            end
+            wait(0)
+        end
     end)
- end
+end
+
 -- Departament
 local dephistory = {}
 local orgname = imgui.new.char[255]()
 local departsettings = {
-	myorgname = new.char[255](),
-	toorgname = new.char[255](),
-	frequency = new.char[255](),
-	myorgtext = new.char[255](),
+    myorgname = new.char[255](),
+    toorgname = new.char[255](),
+    frequency = new.char[255](),
+    myorgtext = new.char[255](),
 }
 -- https://www.blast.hk/threads/13380/post-1517490
 local md5 = require "md5"
@@ -720,14 +724,14 @@ function imgui.ImageURL:get_cache(url)
         end
 
         if cache["Data"] ~= nil then
-               image_data = cache["Data"]
-           end
-           if cache["Last-Modified"] ~= nil then
-               cached_headers["If-Modified-Since"] = cache["Last-Modified"]
-           end
-           if cache["Etag"] ~= nil then
-               cached_headers["If-None-Match"] = cache["Etag"]
-           end
+            image_data = cache["Data"]
+        end
+        if cache["Last-Modified"] ~= nil then
+            cached_headers["If-Modified-Since"] = cache["Last-Modified"]
+        end
+        if cache["Etag"] ~= nil then
+            cached_headers["If-None-Match"] = cache["Etag"]
+        end
 
         file:close()
     end
@@ -785,7 +789,7 @@ function imgui.ImageURL:render(url, size, preload, ...)
     if img.status == st.INIT then
         imgui.ImageURL:download(url, preload)
     end
-        
+
     if img.image ~= nil then
         imgui.Image(img.image, size, ...)
     else
@@ -1237,10 +1241,11 @@ function imgui.CenterTextDisabled(text)
 end
 
 function imgui.GetMiddleButtonX(count)
-    local width = imgui.GetWindowContentRegionWidth()                              -- ширины контекста окно
+    local width = imgui.GetWindowContentRegionWidth() -- ширины контекста окно
     local space = imgui.GetStyle().ItemSpacing.x
     return count == 1 and width or
-    width / count - ((space * (count - 1)) / count)                                -- вернется средние ширины по количеству
+        width / count -
+        ((space * (count - 1)) / count)             -- вернется средние ширины по количеству
 end
 
 function openLink(link)
@@ -1487,37 +1492,33 @@ end
 
 local ObuchalName = new.char[255](u8(mainIni.settings.ObuchalName))
 
+local pages = {
+    { icon = faicons("GEAR"), title = u8 "Настройки", index = 1 },
+    { icon = faicons("BOOK"), title = u8 "Биндер", index = 2 },
+    { icon = faicons("HOUSE"), title = u8 "Основное", index = 8 },
+    { icon = faicons("TOWER_BROADCAST"), title = u8 "Рация департамента", index = 3 },
+    { icon = faicons("USER_SHIELD"), title = u8 "Для СС", index = 4 },
+    { icon = faicons("RECTANGLE_LIST"), title = u8 "Шпаргалки", index = 5 },
+    { icon = faicons("CIRCLE_INFO"), title = u8 "Инфо", index = 6 }
+}
+
+
 imgui.OnFrame(function() return window[0] end, function(player)
-    imgui.SetNextWindowPos(imgui.ImVec2(500, 500), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-    imgui.SetNextWindowSize(imgui.ImVec2(1700, 800), imgui.Cond.FirstUseEver)
+    imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+    imgui.SetNextWindowSize(imgui.ImVec2(850 * MDS, 430 * MDS), imgui.Cond.FirstUseEver)
     imgui.Begin('##Window', window, imgui.WindowFlags.NoBackground + imgui.WindowFlags.NoTitleBar)
 
-    imgui.BeginChild('tabs', imgui.ImVec2(320, -1), true)
-    imgui.CenterText(u8('MVD Helper'))
+    imgui.BeginChild('tabs', imgui.ImVec2(173 * MDS, -1), true)
+    imgui.CenterText(u8('MVD Helper v' .. thisScript().version))
     imgui.Separator()
-    if imgui.PageButton(page == 1, ' ', u8 'Настройки') then
-        page = 1
+
+    for _, pageData in ipairs(pages) do
+        imgui.SetCursorPosX(0)
+        if imgui.PageButton(page == pageData.index, pageData.icon, pageData.title, 173 * MDS - imgui.GetStyle().FramePadding.x * 2, 35 * MDS) then
+            page = pageData.index
+        end
     end
-    if imgui.PageButton(page == 2, ' ', u8 'Биндер') then
-        page = 2
-    end
-    if imgui.PageButton(page == 8, ' ', u8 'Основное') then
-        page = 8
-    end
-    if imgui.PageButton(page == 3, ' ', u8 'Рация департамента') then
-        page = 3
-    end
-    if imgui.PageButton(page == 4, ' ', u8 'Для СС') then
-        page = 4
-    end
-    if imgui.PageButton(page == 5, ' ', u8 'Шпаргалки') then
-        page = 5
-    end
-    if imgui.PageButton(page == 6, ' ', u8 'Инфо') then
-        page = 6
-    end
-    imgui.CenterText(u8(''))
-    imgui.CenterText(u8('v ' .. thisScript().version))
+
     imgui.EndChild()
     imgui.SameLine()
 
@@ -1806,24 +1807,17 @@ imgui.OnFrame(function() return window[0] end, function(player)
             windowTwo[0] = not windowTwo[0]
         end
     elseif page == 2 then -- если значение
-        -- для удобства зададим ширину каждой колонки в начале
-        local w = {
-            first = 150,
-            second = 250,
-        }
-
-
         -- == Первая строка
-        if imgui.BeginChild('##1', imgui.ImVec2(600 * MONET_DPI_SCALE, 333 * MONET_DPI_SCALE), true) then
+        if imgui.BeginChild('##1', imgui.ImVec2(600 * MDS, 333 * MDS), true) then
             imgui.Columns(3)
             imgui.CenterColumnText(u8 "Команда")
-            imgui.SetColumnWidth(-1, 170 * MONET_DPI_SCALE)
+            imgui.SetColumnWidth(-1, 170 * MDS)
             imgui.NextColumn()
             imgui.CenterColumnText(u8 "Описание")
-            imgui.SetColumnWidth(-1, 300 * MONET_DPI_SCALE)
+            imgui.SetColumnWidth(-1, 300 * MDS)
             imgui.NextColumn()
             imgui.CenterColumnText(u8 "Действие")
-            imgui.SetColumnWidth(-1, 150 * MONET_DPI_SCALE)
+            imgui.SetColumnWidth(-1, 150 * MDS)
             imgui.Columns(1)
             imgui.Separator()
             imgui.Columns(3)
@@ -1956,60 +1950,67 @@ imgui.OnFrame(function() return window[0] end, function(player)
             BinderWindow[0] = true
         end
     elseif page == 3 then -- если значение tab == 3
-        imgui.BeginChild('##depbuttons',imgui.ImVec2(225,300),true, imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoScrollWithMouse)
-			imgui.PushItemWidth(200)
-			imgui.TextColoredRGB(u8'Тэг вашей организации',1)
-			imgui.PushItemWidth(200)
-			if imgui.InputText('##myorgnamedep', orgname, 255) then
-				departsettings.myorgname = u8:decode(str(orgname))
-			end
-			imgui.TextColoredRGB(u8'Тэг с кем связываетесь')
-			imgui.PushItemWidth(200)
-			imgui.InputText('##toorgnamedep', otherorg, 255)
-			imgui.Separator()
-			if imgui.Button(u8'Рация упала.',imgui.ImVec2(200,35)) then
-				if #str(departsettings.myorgname) > 0 then
-					sampSendChat('/d ['..u8:decode(str(departsettings.myorgname))..'] - [Всем]: Рация упала.')
-				else
-					msg('У Вас что-то не указано.')
-				end
-			end
-			imgui.Separator()
-			imgui.TextColoredRGB(u8'Частота (не Обязательно)')
-			imgui.PushItemWidth(200)
-			imgui.InputText('##frequencydep',departsettings.frequency, 255)
-			imgui.PopItemWidth()
-			
-		imgui.EndChild()
+        imgui.BeginChild('##depbuttons',
+            imgui.ImVec2((imgui.GetWindowWidth() * 0.35) - imgui.GetStyle().FramePadding.x * 2, 0), true,
+            imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoScrollWithMouse)
+        imgui.PushItemWidth(200)
+        imgui.TextColoredRGB(u8 'Тэг вашей организации', 1)
+        imgui.PushItemWidth(200)
+        if imgui.InputText('##myorgnamedep', orgname, 255) then
+            departsettings.myorgname = u8:decode(str(orgname))
+        end
+        imgui.TextColoredRGB(u8 'Тэг с кем связываетесь')
+        imgui.PushItemWidth(200)
+        imgui.InputText('##toorgnamedep', otherorg, 255)
+        imgui.Separator()
+        if imgui.Button(u8 'Рация упала.', imgui.ImVec2(200, 35)) then
+            if #str(departsettings.myorgname) > 0 then
+                sampSendChat('/d [' .. u8:decode(str(departsettings.myorgname)) .. '] - [Всем]: Рация упала.')
+            else
+                msg('У Вас что-то не указано.')
+            end
+        end
+        imgui.Separator()
+        imgui.TextColoredRGB(u8 'Частота (не Обязательно)')
+        imgui.PushItemWidth(200)
+        imgui.InputText('##frequencydep', departsettings.frequency, 255)
+        imgui.PopItemWidth()
 
-		imgui.SameLine()
+        imgui.EndChild()
 
-		imgui.BeginChild('##deptext',imgui.ImVec2(480,265),true,imgui.WindowFlags.NoScrollbar)
-			imgui.SetScrollY(imgui.GetScrollMaxY())
-			imgui.TextColoredRGB(u8'История сообщений департамента {808080}(?)')
-			imgui.Hint('mytagfind depart','Если в чате департамента будет тэг \''..u8:decode(str(departsettings.myorgname))..'\'\nв этот список добавится это сообщение\nРабота не стабильна')
-			imgui.Separator()
-			for k,v in pairs(dephistory) do
-				imgui.TextWrapped(u8(v))
-			end
-		imgui.EndChild()
-		imgui.SetCursorPos(imgui.ImVec2(250,295))
-		imgui.PushItemWidth(368)
-		imgui.InputText('##myorgtextdep', departsettings.myorgtext, 255)
-		imgui.PopItemWidth()
-		imgui.SameLine()
-		if imgui.Button(u8'Отправить',imgui.ImVec2(100,30)) then
-		  if #str(departsettings.myorgname) > 0 then
-				if #str(departsettings.frequency) == 0 then
-					sampSendChat(('/d [%s] - [%s] %s'):format(u8:decode(str(departsettings.myorgname)),u8:decode(str(otherorg)),u8:decode(str(departsettings.myorgtext))))
-				else
-					sampSendChat(('/d [%s] - %s - [%s] %s'):format(u8:decode(str(departsettings.myorgname)), u8:decode(str(departsettings.frequency)), u8:decode(str(otherorg)), u8:decode(str(departsettings.myorgtext))))
-				end
-				imgui.StrCopy(departsettings.myorgtext, '')
-				else
-				  msg('У вас что-то не указано!')
-		  end
-		end
+        imgui.SameLine()
+
+        imgui.BeginChild('##deptext', imgui.ImVec2(-1, -1), true, imgui.WindowFlags.NoScrollbar)
+        imgui.TextColoredRGB(u8 'История сообщений департамента {808080}(?)')
+        imgui.Hint('mytagfind depart',
+            'Если в чате департамента будет тэг \'' ..
+            u8:decode(str(departsettings.myorgname)) .. '\'\nв этот список добавится это сообщение\nРабота не стабильна')
+        imgui.Separator()
+        imgui.BeginChild('##deptextlist',
+            imgui.ImVec2(-1, imgui.GetWindowSize().y - 30 * MDS - imgui.GetStyle().FramePadding.y * 2 - imgui.GetCursorPosY()), false)
+        for k, v in pairs(dephistory) do
+            imgui.TextWrapped(u8(v))
+        end
+        imgui.EndChild()
+        imgui.SetNextItemWidth(imgui.GetWindowWidth() - 100 * MDS - imgui.GetStyle().FramePadding.x * 2)
+        imgui.InputText('##myorgtextdep', departsettings.myorgtext, 255)
+        imgui.SameLine()
+        if imgui.Button(u8 'Отправить', imgui.ImVec2(0, 30 * MDS)) then
+            if #str(departsettings.myorgname) > 0 then
+                if #str(departsettings.frequency) == 0 then
+                    sampSendChat(('/d [%s] - [%s] %s'):format(u8:decode(str(departsettings.myorgname)),
+                        u8:decode(str(otherorg)), u8:decode(str(departsettings.myorgtext))))
+                else
+                    sampSendChat(('/d [%s] - %s - [%s] %s'):format(u8:decode(str(departsettings.myorgname)),
+                        u8:decode(str(departsettings.frequency)), u8:decode(str(otherorg)),
+                        u8:decode(str(departsettings.myorgtext))))
+                end
+                imgui.StrCopy(departsettings.myorgtext, '')
+            else
+                msg('У вас что-то не указано!')
+            end
+        end
+        imgui.EndChild()
     elseif page == 4 then
         if imgui.CollapsingHeader(u8 'Лекции') then
             if imgui.Button(u8 'Арест и задержание') then
@@ -2205,38 +2206,39 @@ imgui.OnFrame(function() return window[0] end, function(player)
             showEditWindows[i] = false
             imgui.Text(note.title)
             imgui.SameLine()
-            if imgui.Button(u8"Открыть##" .. i) then
+            if imgui.Button(u8 "Открыть##" .. i) then
                 note_name = note.title
-				note_text = note.content
-				NoteWindow[0] = true
+                note_text = note.content
+                NoteWindow[0] = true
             end
             imgui.SameLine()
-            if imgui.Button(u8"Редактировать##" .. i) then
-              selectedNote = i
-              imgui.StrCopy(editNoteTitle, note.title)
-              imgui.StrCopy(editNoteContent, note.content)
-              imgui.OpenPopup(u8"Редактировать заметку")
-              showEditWindow[0] = true
+            if imgui.Button(u8 "Редактировать##" .. i) then
+                selectedNote = i
+                imgui.StrCopy(editNoteTitle, note.title)
+                imgui.StrCopy(editNoteContent, note.content)
+                imgui.OpenPopup(u8 "Редактировать заметку")
+                showEditWindow[0] = true
             end
             imgui.SameLine()
-            if imgui.Button(u8"Удалить##" .. i) then
+            if imgui.Button(u8 "Удалить##" .. i) then
                 table.remove(notes, i)
                 saveNotesToFile()
             end
         end
         imgui.Separator()
-        if imgui.Button(u8"Добавить новую заметку", imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+        if imgui.Button(u8 "Добавить новую заметку", imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
             imgui.StrCopy(newNoteTitle, "")
             imgui.StrCopy(newNoteContent, "")
-            imgui.OpenPopup(u8"Добавить новую заметку")
+            imgui.OpenPopup(u8 "Добавить новую заметку")
             showAddNotePopup[0] = true
         end
-        if imgui.BeginPopupModal(u8"Редактировать заметку", showEditWindow, imgui.WindowFlags.AlwaysAutoResize) then
-          imgui.Text(u8'Название заметки')
-            imgui.InputText(u8"##nazvanie", editNoteTitle, 256)
-            imgui.Text(u8"Текст заметки")
-            imgui.InputTextMultiline(u8"##2663737374", editNoteContent, 1024, imgui.ImVec2(579 * MONET_DPI_SCALE, 173 * MONET_DPI_SCALE))
-            if imgui.Button(u8"Сохранить", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
+        if imgui.BeginPopupModal(u8 "Редактировать заметку", showEditWindow, imgui.WindowFlags.AlwaysAutoResize) then
+            imgui.Text(u8 'Название заметки')
+            imgui.InputText(u8 "##nazvanie", editNoteTitle, 256)
+            imgui.Text(u8 "Текст заметки")
+            imgui.InputTextMultiline(u8 "##2663737374", editNoteContent, 1024,
+                imgui.ImVec2(579 * MONET_DPI_SCALE, 173 * MONET_DPI_SCALE))
+            if imgui.Button(u8 "Сохранить", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
                 notes[selectedNote].title = ffi.string(editNoteTitle)
                 notes[selectedNote].content = ffi.string(editNoteContent)
                 showEditWindow[0] = false
@@ -2245,18 +2247,18 @@ imgui.OnFrame(function() return window[0] end, function(player)
                 saveNotesToFile()
             end
             imgui.SameLine()
-            if imgui.Button(u8"Отменить", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
+            if imgui.Button(u8 "Отменить", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
                 showEditWindow[0] = false
                 imgui.CloseCurrentPopup()
             end
             imgui.EndPopup()
         end
-        if imgui.BeginPopupModal(u8"Добавить новую заметку", showAddNotePopup, imgui.WindowFlags.AlwaysAutoResize) then
-          imgui.Text(u8'Название новой заметки')
-            imgui.InputText(u8"##nazvanie2", newNoteTitle, 256)
-            imgui.Text(u8'Текст новой заметки')
-            imgui.InputTextMultiline(u8"##123123123", newNoteContent, 1024, imgui.ImVec2(-1, 100))
-            if imgui.Button(u8"Сохранить", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
+        if imgui.BeginPopupModal(u8 "Добавить новую заметку", showAddNotePopup, imgui.WindowFlags.AlwaysAutoResize) then
+            imgui.Text(u8 'Название новой заметки')
+            imgui.InputText(u8 "##nazvanie2", newNoteTitle, 256)
+            imgui.Text(u8 'Текст новой заметки')
+            imgui.InputTextMultiline(u8 "##123123123", newNoteContent, 1024, imgui.ImVec2(-1, 100))
+            if imgui.Button(u8 "Сохранить", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
                 table.insert(notes, { title = ffi.string(newNoteTitle), content = ffi.string(newNoteContent) })
                 imgui.StrCopy(newNoteTitle, "")
                 imgui.StrCopy(newNoteContent, "")
@@ -2265,10 +2267,10 @@ imgui.OnFrame(function() return window[0] end, function(player)
                 imgui.CloseCurrentPopup()
             end
             imgui.SameLine()
-            if imgui.Button(u8"Закрыть", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
+            if imgui.Button(u8 "Закрыть", imgui.ImVec2(imgui.GetMiddleButtonX(2), 36)) then
                 imgui.CloseCurrentPopup()
             end
-            if imgui.Button(u8"Удалить", imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+            if imgui.Button(u8 "Удалить", imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
                 imgui.StrCopy(newNoteTitle, "")
                 imgui.StrCopy(newNoteContent, "")
                 showAddNotePopup[0] = false
@@ -2292,14 +2294,14 @@ end)
 imgui.OnFrame(
     function() return NoteWindow[0] end,
     function(player)
-		imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-		imgui.Begin(note_name, NoteWindow, imgui.WindowFlags.AlwaysAutoResize )
-		imgui.Text(note_text:gsub('&','\n'))
-		imgui.Separator()
-		if imgui.Button(u8' Закрыть', imgui.ImVec2(imgui.GetMiddleButtonX(1), 25 * MONET_DPI_SCALE)) then
-			NoteWindow[0] = false
-		end
-		imgui.End()
+        imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.Begin(note_name, NoteWindow, imgui.WindowFlags.AlwaysAutoResize)
+        imgui.Text(note_text:gsub('&', '\n'))
+        imgui.Separator()
+        if imgui.Button(u8 ' Закрыть', imgui.ImVec2(imgui.GetMiddleButtonX(1), 25 * MONET_DPI_SCALE)) then
+            NoteWindow[0] = false
+        end
+        imgui.End()
     end
 )
 function DownloadUk()
@@ -3121,60 +3123,63 @@ function calculateZone(x, y, z)
     end
     return 'Пригород'
 end
+
 function imgui.TextColoredRGB(text, wrapped)
-	local style = imgui.GetStyle()
-	local colors = style.Colors
-	text = text:gsub('{(%x%x%x%x%x%x)}', '{%1FF}')
-	local render_func = wrapped and imgui_text_wrapped or function(clr, text)
-		if clr then imgui.PushStyleColor(ffi.C.ImGuiCol_Text, clr) end
-		imgui.TextUnformatted(text)
-		if clr then imgui.PopStyleColor() end
-	end
-	local split = function(str, delim, plain)
-		local tokens, pos, i, plain = {}, 1, 1, not (plain == false)
-		repeat
-			local npos, epos = string.find(str, delim, pos, plain)
-			tokens[i] = string.sub(str, pos, npos and npos - 1)
-			pos = epos and epos + 1
-			i = i + 1
-		until not pos
-		return tokens
-	end
+    local style = imgui.GetStyle()
+    local colors = style.Colors
+    text = text:gsub('{(%x%x%x%x%x%x)}', '{%1FF}')
+    local render_func = wrapped and imgui_text_wrapped or function(clr, text)
+        if clr then imgui.PushStyleColor(ffi.C.ImGuiCol_Text, clr) end
+        imgui.TextUnformatted(text)
+        if clr then imgui.PopStyleColor() end
+    end
+    local split = function(str, delim, plain)
+        local tokens, pos, i, plain = {}, 1, 1, not (plain == false)
+        repeat
+            local npos, epos = string.find(str, delim, pos, plain)
+            tokens[i] = string.sub(str, pos, npos and npos - 1)
+            pos = epos and epos + 1
+            i = i + 1
+        until not pos
+        return tokens
+    end
 
-	local color = colors[ffi.C.ImGuiCol_Text]
-	for _, w in ipairs(split(text, '\n')) do
-		local start = 1
-		local a, b = w:find('{........}', start)
-		while a do
-			local t = w:sub(start, a - 1)
-			if #t > 0 then
-				render_func(color, t)
-				imgui.SameLine(nil, 0)
-			end
+    local color = colors[ffi.C.ImGuiCol_Text]
+    for _, w in ipairs(split(text, '\n')) do
+        local start = 1
+        local a, b = w:find('{........}', start)
+        while a do
+            local t = w:sub(start, a - 1)
+            if #t > 0 then
+                render_func(color, t)
+                imgui.SameLine(nil, 0)
+            end
 
-			local clr = w:sub(a + 1, b - 1)
-			if clr:upper() == 'STANDART' then color = colors[ffi.C.ImGuiCol_Text]
-			else
-				clr = tonumber(clr, 16)
-				if clr then
-					local r = bit.band(bit.rshift(clr, 24), 0xFF)
-					local g = bit.band(bit.rshift(clr, 16), 0xFF)
-					local b = bit.band(bit.rshift(clr, 8), 0xFF)
-					local a = bit.band(clr, 0xFF)
-					color = imgui.ImVec4(r / 255, g / 255, b / 255, a / 255)
-				end
-			end
+            local clr = w:sub(a + 1, b - 1)
+            if clr:upper() == 'STANDART' then
+                color = colors[ffi.C.ImGuiCol_Text]
+            else
+                clr = tonumber(clr, 16)
+                if clr then
+                    local r = bit.band(bit.rshift(clr, 24), 0xFF)
+                    local g = bit.band(bit.rshift(clr, 16), 0xFF)
+                    local b = bit.band(bit.rshift(clr, 8), 0xFF)
+                    local a = bit.band(clr, 0xFF)
+                    color = imgui.ImVec4(r / 255, g / 255, b / 255, a / 255)
+                end
+            end
 
-			start = b + 1
-			a, b = w:find('{........}', start)
-		end
-		imgui.NewLine()
-		if #w >= start then
-			imgui.SameLine(nil, 0)
-			render_func(color, w:sub(start))
-		end
-	end
+            start = b + 1
+            a, b = w:find('{........}', start)
+        end
+        imgui.NewLine()
+        if #w >= start then
+            imgui.SameLine(nil, 0)
+            render_func(color, w:sub(start))
+        end
+    end
 end
+
 imgui.OnFrame(
     function() return suppWindow[0] end,
     function()
@@ -3272,18 +3277,19 @@ end
 
 function sampev.onServerMessage(color, message)
     if message:find('%[D%]') and color == 865730559 or color == 865665023 then
-		if message:find(u8:decode(departsettings.myorgname[0])) then
-			local tmsg = gsub(message, '%[D%] ','')
-			dephistory[#dephistory + 1] = tmsg
-		end
-		local color = imgui.ColorConvertU32ToFloat4(configuration.main_settings.DChatColor)
-		local r,g,b,a = color.x*255, color.y*255, color.z*255, color.w*255
-		return { join_argb(r, g, b, a), message }
-	end
+        if message:find(u8:decode(departsettings.myorgname[0])) then
+            local tmsg = gsub(message, '%[D%] ', '')
+            dephistory[#dephistory + 1] = tmsg
+        end
+        local color = imgui.ColorConvertU32ToFloat4(configuration.main_settings.DChatColor)
+        local r, g, b, a = color.x * 255, color.y * 255, color.z * 255, color.w * 255
+        return { join_argb(r, g, b, a), message }
+    end
 end
 
-imgui.PageButton = function(bool, icon, name, but_wide)
+imgui.PageButton = function(bool, icon, name, but_wide, but_high)
     but_wide = but_wide or 290
+    but_high = but_high or 55
     local duration = 0.25
     local DL = imgui.GetWindowDrawList()
     local p1 = imgui.GetCursorScreenPos()
@@ -3298,7 +3304,7 @@ imgui.PageButton = function(bool, icon, name, but_wide)
     imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(0.00, 0.00, 0.00, 0.00))
     imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImVec4(0.00, 0.00, 0.00, 0.00))
     imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImVec4(0.00, 0.00, 0.00, 0.00))
-    local result = imgui.InvisibleButton(name, imgui.ImVec2(but_wide, 55))
+    local result = imgui.InvisibleButton(name, imgui.ImVec2(but_wide, but_high))
     if result and not bool then
         pool.clock = os.clock()
     end
@@ -3307,19 +3313,20 @@ imgui.PageButton = function(bool, icon, name, but_wide)
     if bool then
         if pool.clock and (os.clock() - pool.clock) < duration then
             local wide = (os.clock() - pool.clock) * (but_wide / duration)
-            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2((p1.x + 290) - wide, p1.y + 55), 0x10FFFFFF, 15, 10)
-            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 5, p1.y + 55), ToU32(col))
-            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + wide, p1.y + 55),
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2((p1.x + but_wide) - wide, p1.y + but_high),
+                0x10FFFFFF, 15, 10)
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 5, p1.y + but_high), ToU32(col))
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + wide, p1.y + but_high),
                 ToU32(imgui.ImVec4(col.x, col.y, col.z, 0.6)), 15, 10)
         else
             DL:AddRectFilled(imgui.ImVec2(p1.x, (pressed and p1.y + 3 or p1.y)),
-                imgui.ImVec2(p1.x + 5, (pressed and p1.y + 32 or p1.y + 55)), ToU32(col))
-            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 290, p1.y + 55),
+                imgui.ImVec2(p1.x + 5, (pressed and p1.y + but_high - 23 or p1.y + but_high)), ToU32(col))
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + but_wide, p1.y + but_high),
                 ToU32(imgui.ImVec4(col.x, col.y, col.z, 0.6)), 15, 10)
         end
     else
         if imgui.IsItemHovered() then
-            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + 290, p1.y + 55), 0x10FFFFFF, 15, 10)
+            DL:AddRectFilled(imgui.ImVec2(p1.x, p1.y), imgui.ImVec2(p1.x + but_wide, p1.y + but_high), 0x10FFFFFF, 15, 10)
         end
     end
     imgui.SameLine(10); imgui.SetCursorPosY(p2.y + 8)
@@ -3332,9 +3339,10 @@ imgui.PageButton = function(bool, icon, name, but_wide)
         imgui.SameLine(60)
         imgui.TextColored(imgui.ImVec4(0.60, 0.60, 0.60, 1.00), name)
     end
-    imgui.SetCursorPosY(p2.y + 70)
+    imgui.SetCursorPosY(p2.y + but_high + 15)
     return result
 end
+
 
 function apply_n_t()
     if mainIni.theme.themeta == 'standart' then
@@ -3473,96 +3481,100 @@ function join_argb(a, r, g, b)
     argb = bit.bor(argb, bit.lshift(a, 24)) -- a
     return argb
 end
+
 function imgui.Hint(str_id, hint_text, color, no_center)
-	if str_id == nil or hint_text == nil then
-		return false
-	end
-	color = color or imgui.GetStyle().Colors[imgui.Col.PopupBg]
-	local p_orig = imgui.GetCursorPos()
-	local hovered = imgui.IsItemHovered()
-	imgui.SameLine(nil, 0)
+    if str_id == nil or hint_text == nil then
+        return false
+    end
+    color = color or imgui.GetStyle().Colors[imgui.Col.PopupBg]
+    local p_orig = imgui.GetCursorPos()
+    local hovered = imgui.IsItemHovered()
+    imgui.SameLine(nil, 0)
 
-	local animTime = 0.2
-	local show = true
+    local animTime = 0.2
+    local show = true
 
-	if not POOL_HINTS then POOL_HINTS = {} end
-	if not POOL_HINTS[str_id] then
-		POOL_HINTS[str_id] = {
-			status = false,
-			timer = 0
-		}
-	end
+    if not POOL_HINTS then POOL_HINTS = {} end
+    if not POOL_HINTS[str_id] then
+        POOL_HINTS[str_id] = {
+            status = false,
+            timer = 0
+        }
+    end
 
-	if hovered then
-		for k, v in pairs(POOL_HINTS) do
-			if k ~= str_id and imgui.GetTime() - v.timer <= animTime  then
-				show = false
-			end
-		end
-	end
+    if hovered then
+        for k, v in pairs(POOL_HINTS) do
+            if k ~= str_id and imgui.GetTime() - v.timer <= animTime then
+                show = false
+            end
+        end
+    end
 
-	if show and POOL_HINTS[str_id].status ~= hovered then
-		POOL_HINTS[str_id].status = hovered
-		POOL_HINTS[str_id].timer = imgui.GetTime()
-	end
+    if show and POOL_HINTS[str_id].status ~= hovered then
+        POOL_HINTS[str_id].status = hovered
+        POOL_HINTS[str_id].timer = imgui.GetTime()
+    end
 
-	local rend_window = function(alpha)
-		local size = imgui.GetItemRectSize()
-		local scrPos = imgui.GetCursorScreenPos()
-		local DL = imgui.GetWindowDrawList()
-		local center = imgui.ImVec2( scrPos.x - (size.x * 0.5), scrPos.y + (size.y * 0.5) - (alpha * 4) + 10 )
-		local a = imgui.ImVec2( center.x - 7, center.y - size.y - 4 )
-		local b = imgui.ImVec2( center.x + 7, center.y - size.y - 4)
-		local c = imgui.ImVec2( center.x, center.y - size.y + 3 )
-		local col = imgui.ColorConvertFloat4ToU32(imgui.ImVec4(color.x, color.y, color.z, alpha))
+    local rend_window = function(alpha)
+        local size = imgui.GetItemRectSize()
+        local scrPos = imgui.GetCursorScreenPos()
+        local DL = imgui.GetWindowDrawList()
+        local center = imgui.ImVec2(scrPos.x - (size.x * 0.5), scrPos.y + (size.y * 0.5) - (alpha * 4) + 10)
+        local a = imgui.ImVec2(center.x - 7, center.y - size.y - 4)
+        local b = imgui.ImVec2(center.x + 7, center.y - size.y - 4)
+        local c = imgui.ImVec2(center.x, center.y - size.y + 3)
+        local col = imgui.ColorConvertFloat4ToU32(imgui.ImVec4(color.x, color.y, color.z, alpha))
 
-		DL:AddTriangleFilled(a, b, c, col)
-		imgui.SetNextWindowPos(imgui.ImVec2(center.x, center.y - size.y - 3), imgui.Cond.Always, imgui.ImVec2(0.5, 1.0))
-		imgui.PushStyleColor(imgui.Col.PopupBg, color)
-		imgui.PushStyleColor(imgui.Col.Border, color)
-		imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(8, 8))
-		imgui.PushStyleVarFloat(imgui.StyleVar.WindowRounding, 6)
-		imgui.PushStyleVarFloat(imgui.StyleVar.Alpha, alpha)
+        DL:AddTriangleFilled(a, b, c, col)
+        imgui.SetNextWindowPos(imgui.ImVec2(center.x, center.y - size.y - 3), imgui.Cond.Always, imgui.ImVec2(0.5, 1.0))
+        imgui.PushStyleColor(imgui.Col.PopupBg, color)
+        imgui.PushStyleColor(imgui.Col.Border, color)
+        imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(8, 8))
+        imgui.PushStyleVarFloat(imgui.StyleVar.WindowRounding, 6)
+        imgui.PushStyleVarFloat(imgui.StyleVar.Alpha, alpha)
 
-		local max_width = function(text)
-			local result = 0
-			for line in gmatch(text, '[^\n]+') do
-				local len = imgui.CalcTextSize(line).x
-				if len > result then
-					result = len
-				end
-			end
-			return result
-		end
+        local max_width = function(text)
+            local result = 0
+            for line in gmatch(text, '[^\n]+') do
+                local len = imgui.CalcTextSize(line).x
+                if len > result then
+                    result = len
+                end
+            end
+            return result
+        end
 
-		local hint_width = max_width(u8(hint_text)) + (imgui.GetStyle().WindowPadding.x * 2)
-		imgui.SetNextWindowSize(imgui.ImVec2(hint_width, -1), imgui.Cond.Always)
-		imgui.Begin('##' .. str_id, _, imgui.WindowFlags.Tooltip + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar)
-			for line in gmatch(hint_text, '[^\n]+') do
-				if no_center then
-					imgui.TextColoredRGB(u8line)
-				else
-					imgui.TextColoredRGB(u8line, 1)
-				end
-			end
-		imgui.End()
+        local hint_width = max_width(u8(hint_text)) + (imgui.GetStyle().WindowPadding.x * 2)
+        imgui.SetNextWindowSize(imgui.ImVec2(hint_width, -1), imgui.Cond.Always)
+        imgui.Begin('##' .. str_id, _,
+            imgui.WindowFlags.Tooltip + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar +
+            imgui.WindowFlags.NoTitleBar)
+        for line in gmatch(hint_text, '[^\n]+') do
+            if no_center then
+                imgui.TextColoredRGB(u8line)
+            else
+                imgui.TextColoredRGB(u8line, 1)
+            end
+        end
+        imgui.End()
 
-		imgui.PopStyleVar(3)
-		imgui.PopStyleColor(2)
-	end
+        imgui.PopStyleVar(3)
+        imgui.PopStyleColor(2)
+    end
 
-	if show then
-		local between = imgui.GetTime() - POOL_HINTS[str_id].timer
-		if between <= animTime then
-			local alpha = hovered and ImSaturate(between / animTime) or ImSaturate(1 - between / animTime)
-			rend_window(alpha)
-		elseif hovered then
-			rend_window(1.00)
-		end
-	end
+    if show then
+        local between = imgui.GetTime() - POOL_HINTS[str_id].timer
+        if between <= animTime then
+            local alpha = hovered and ImSaturate(between / animTime) or ImSaturate(1 - between / animTime)
+            rend_window(alpha)
+        elseif hovered then
+            rend_window(1.00)
+        end
+    end
 
-	imgui.SetCursorPos(p_orig)
+    imgui.SetCursorPos(p_orig)
 end
+
 --Наш дарагой Джончек
 imgui.OnFrame(
     function() return joneV[0] end,
@@ -3572,7 +3584,8 @@ imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY - 200), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(sizeX, sizeY), imgui.Cond.FirstUseEver)
         imgui.Begin('Jone', joneV, imgui.WindowFlags.NoDecoration + imgui.WindowFlags.AlwaysAutoResize)
-        imgui.ImageURL("https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/Jone.png", imgui.ImVec2(200, 200), true)
+        imgui.ImageURL("https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/Jone.png",
+            imgui.ImVec2(200, 200), true)
         if window[0] then
             imgui.SetWindowFocus()
             if page == 1 then -- если значение tab == 1
