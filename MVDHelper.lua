@@ -4,7 +4,6 @@ script_version("5.3")
 script_author("@Sashe4ka_ReZoN @daniel29032012 @makson4ck2")
 
 require('moonloader')
-local imgui = require('mimgui')
 local encoding = require('encoding')
 encoding.default = 'CP1251'
 u8 = encoding.UTF8
@@ -13,6 +12,8 @@ local imgui = require('mimgui')
 local inicfg = require("inicfg")
 local faicons = require('fAwesome6')
 local sampev = require('lib.samp.events')
+local ffi = require 'ffi'
+local str = ffi.string
 
 local mainIni = inicfg.load({
     Accent = {
@@ -154,9 +155,7 @@ local u8 = encoding.UTF8
 local new = imgui.new
 
 -- Ссылки
-local mvdPath = script.this.filename
 local smartUkPath = getWorkingDirectory() .. "/smartUk.json"
-local mvdUrl = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/MVDHelper.lua"
 -- Смарт Ук
 local smartUkUrl = {
     m1 = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile1.json",
@@ -184,22 +183,12 @@ local smartUkUrl = {
 }
 
 
-local renderWindow = new.bool()
-local sizeX, sizeY = getScreenResolution()
 local id = imgui.new.int(0)
-local otherorg = imgui.new.char(255)
-local searchInput = imgui.new.char(255)
-local zk = new.bool()
-local tab = 1
+local otherorg = imgui.new.char[256]()
 local updateWin = imgui.new.bool(false)
-local patrul = new.bool()
-local partner = imgui.new.char(255)
 local inputComName = imgui.new.char(255)
 local inputComText = imgui.new.char(255)
-local chatrp = new.bool()
 local arr = os.date("*t")
-local poziv = imgui.new.char(255)
-local pozivn = imgui.new.bool()
 local suppWindow = imgui.new.bool()
 local windowTwo = imgui.new.bool()
 local setUkWindow = imgui.new.bool()
@@ -208,14 +197,6 @@ local importUkWindow = imgui.new.bool()
 local binderWindow = imgui.new.bool()
 local newUkInput = imgui.new.char(255)
 local newUkUr = imgui.new.int(0)
-local car = faicons('CAR')
-local list = faicons('list')
-local info = faicons('info')
-local settings = faicons('gear')
-local radio = faicons('user')
-local pen = faicons('pen')
-local sliders = faicons('sliders')
-local userSecret = faicons('user-secret')
 local leaderPanel = imgui.new.bool()
 local spawn = true
 function check_update()
@@ -309,15 +290,10 @@ local selected_theme = imgui.new.int(mainIni.theme.selected)
 local theme_a = { u8 'Стандартная', 'MoonMonet' }
 local theme_t = { u8 'standart', 'moonmonet' }
 local items = imgui.new['const char*'][#theme_a](theme_a)
-
-local standartBindsBox = new.bool(mainIni.settings.standartBinds)
-local statsCheck = false
 local AutoAccentBool = new.bool(mainIni.settings.autoAccent)
 local AutoAccentInput = new.char[255](u8(mainIni.Accent.accent))
 local org = u8 'Вы не состоите в ПД'
 local org_g = u8 'Вы не состоите в ПД'
-local ccity = u8 'Вы не состоите в ПД'
-local org_tag = u8 'Вы не состоите в ПД'
 local dol = 'Вы не состоите в ПД'
 local dl = u8 'Вы не состоите в ПД'
 local rang_n = 0
@@ -399,7 +375,6 @@ function isMonetLoader() return MONET_VERSION ~= nil end
 
 if MONET_DPI_SCALE == nil then MONET_DPI_SCALE = 1.0 end
 
-local ffi = require 'ffi'
 
 local message_color = 0x00CCFF
 local message_color_hex = '{00CCFF}'
@@ -419,7 +394,6 @@ local change_cmd = ''
 local change_description = ''
 local change_text = ''
 local change_arg = ''
-local slider = new.float(0)
 
 local isActiveCommand = false
 
@@ -680,7 +654,15 @@ function asyncHttpRequest(method, url, args, resolve, reject)
        end
     end)
  end
-
+-- Departament
+local dephistory = {}
+local orgname = imgui.new.char[255]()
+local departsettings = {
+	myorgname = new.char[255](),
+	toorgname = new.char[255](),
+	frequency = new.char[255](),
+	myorgtext = new.char[255](),
+}
 -- https://www.blast.hk/threads/13380/post-1517490
 local md5 = require "md5"
 local memory = require "memory"
@@ -1974,19 +1956,60 @@ imgui.OnFrame(function() return window[0] end, function(player)
             BinderWindow[0] = true
         end
     elseif page == 3 then -- если значение tab == 3
-        imgui.InputText(u8 'Фракция с которой будете взаимодействовать', otherorg, 255)
-        otherdeporg = u8:decode(ffi.string(otherorg))
-        imgui.ToggleButton(u8 'Открытый канал', u8 'Закрытый канал', zk)
-        if imgui.Button(u8 'Вызов на связь') then
-            if zk[0] then
-                sampSendChat("/d [" .. mainIni.Info.org .. "] з.к [" .. otherdeporg .. "] На связь!")
-            else
-                sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [" .. otherdeporg .. "] На связь!")
-            end
-        end
-        if imgui.Button(u8 'Откат') then
-            sampSendChat("/d [" .. mainIni.Info.org .. "] 91.8 [Информация] Тех. Неполадки!")
-        end
+        imgui.BeginChild('##depbuttons',imgui.ImVec2(225,300),true, imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoScrollWithMouse)
+			imgui.PushItemWidth(200)
+			imgui.TextColoredRGB(u8'Тэг вашей организации',1)
+			imgui.PushItemWidth(200)
+			if imgui.InputText('##myorgnamedep', orgname, 255) then
+				departsettings.myorgname = u8:decode(str(orgname))
+			end
+			imgui.TextColoredRGB(u8'Тэг с кем связываетесь')
+			imgui.PushItemWidth(200)
+			imgui.InputText('##toorgnamedep', otherorg, 255)
+			imgui.Separator()
+			if imgui.Button(u8'Рация упала.',imgui.ImVec2(200,35)) then
+				if #str(departsettings.myorgname) > 0 then
+					sampSendChat('/d ['..u8:decode(str(departsettings.myorgname))..'] - [Всем]: Рация упала.')
+				else
+					msg('У Вас что-то не указано.')
+				end
+			end
+			imgui.Separator()
+			imgui.TextColoredRGB(u8'Частота (не Обязательно)')
+			imgui.PushItemWidth(200)
+			imgui.InputText('##frequencydep',departsettings.frequency, 255)
+			imgui.PopItemWidth()
+			
+		imgui.EndChild()
+
+		imgui.SameLine()
+
+		imgui.BeginChild('##deptext',imgui.ImVec2(480,265),true,imgui.WindowFlags.NoScrollbar)
+			imgui.SetScrollY(imgui.GetScrollMaxY())
+			imgui.TextColoredRGB(u8'История сообщений департамента {808080}(?)')
+			imgui.Hint('mytagfind depart','Если в чате департамента будет тэг \''..u8:decode(str(departsettings.myorgname))..'\'\nв этот список добавится это сообщение\nРабота не стабильна')
+			imgui.Separator()
+			for k,v in pairs(dephistory) do
+				imgui.TextWrapped(u8(v))
+			end
+		imgui.EndChild()
+		imgui.SetCursorPos(imgui.ImVec2(250,295))
+		imgui.PushItemWidth(368)
+		imgui.InputText('##myorgtextdep', departsettings.myorgtext, 255)
+		imgui.PopItemWidth()
+		imgui.SameLine()
+		if imgui.Button(u8'Отправить',imgui.ImVec2(100,30)) then
+		  if #str(departsettings.myorgname) > 0 then
+				if #str(departsettings.frequency) == 0 then
+					sampSendChat(('/d [%s] - [%s] %s'):format(u8:decode(str(departsettings.myorgname)),u8:decode(str(otherorg)),u8:decode(str(departsettings.myorgtext))))
+				else
+					sampSendChat(('/d [%s] - %s - [%s] %s'):format(u8:decode(str(departsettings.myorgname)), u8:decode(str(departsettings.frequency)), u8:decode(str(otherorg)), u8:decode(str(departsettings.myorgtext))))
+				end
+				imgui.StrCopy(departsettings.myorgtext, '')
+				else
+				  msg('У вас что-то не указано!')
+		  end
+		end
     elseif page == 4 then
         if imgui.CollapsingHeader(u8 'Лекции') then
             if imgui.Button(u8 'Арест и задержание') then
@@ -2583,7 +2606,7 @@ local thirdFrame = imgui.OnFrame(
     end
 )
 
-local setUkFrame = imgui.OnFrame(
+imgui.OnFrame(
     function() return setUkWindow[0] end,
     function()
         return true
@@ -2621,7 +2644,7 @@ local setUkFrame = imgui.OnFrame(
     end
 )
 
-local addUkFrame = imgui.OnFrame(
+imgui.OnFrame(
     function() return addUkWindow[0] end,
     function()
         return true
@@ -3098,8 +3121,61 @@ function calculateZone(x, y, z)
     end
     return 'Пригород'
 end
+function imgui.TextColoredRGB(text, wrapped)
+	local style = imgui.GetStyle()
+	local colors = style.Colors
+	text = text:gsub('{(%x%x%x%x%x%x)}', '{%1FF}')
+	local render_func = wrapped and imgui_text_wrapped or function(clr, text)
+		if clr then imgui.PushStyleColor(ffi.C.ImGuiCol_Text, clr) end
+		imgui.TextUnformatted(text)
+		if clr then imgui.PopStyleColor() end
+	end
+	local split = function(str, delim, plain)
+		local tokens, pos, i, plain = {}, 1, 1, not (plain == false)
+		repeat
+			local npos, epos = string.find(str, delim, pos, plain)
+			tokens[i] = string.sub(str, pos, npos and npos - 1)
+			pos = epos and epos + 1
+			i = i + 1
+		until not pos
+		return tokens
+	end
 
-local suppWindowFrame = imgui.OnFrame(
+	local color = colors[ffi.C.ImGuiCol_Text]
+	for _, w in ipairs(split(text, '\n')) do
+		local start = 1
+		local a, b = w:find('{........}', start)
+		while a do
+			local t = w:sub(start, a - 1)
+			if #t > 0 then
+				render_func(color, t)
+				imgui.SameLine(nil, 0)
+			end
+
+			local clr = w:sub(a + 1, b - 1)
+			if clr:upper() == 'STANDART' then color = colors[ffi.C.ImGuiCol_Text]
+			else
+				clr = tonumber(clr, 16)
+				if clr then
+					local r = bit.band(bit.rshift(clr, 24), 0xFF)
+					local g = bit.band(bit.rshift(clr, 16), 0xFF)
+					local b = bit.band(bit.rshift(clr, 8), 0xFF)
+					local a = bit.band(clr, 0xFF)
+					color = imgui.ImVec4(r / 255, g / 255, b / 255, a / 255)
+				end
+			end
+
+			start = b + 1
+			a, b = w:find('{........}', start)
+		end
+		imgui.NewLine()
+		if #w >= start then
+			imgui.SameLine(nil, 0)
+			render_func(color, w:sub(start))
+		end
+	end
+end
+imgui.OnFrame(
     function() return suppWindow[0] end,
     function()
         return true
@@ -3192,6 +3268,18 @@ function sampev.onSendChat(cmd)
         return { cmd }
     end
     return { cmd }
+end
+
+function sampev.onServerMessage(color, message)
+    if message:find('%[D%]') and color == 865730559 or color == 865665023 then
+		if message:find(u8:decode(departsettings.myorgname[0])) then
+			local tmsg = gsub(message, '%[D%] ','')
+			dephistory[#dephistory + 1] = tmsg
+		end
+		local color = imgui.ColorConvertU32ToFloat4(configuration.main_settings.DChatColor)
+		local r,g,b,a = color.x*255, color.y*255, color.z*255, color.w*255
+		return { join_argb(r, g, b, a), message }
+	end
 end
 
 imgui.PageButton = function(bool, icon, name, but_wide)
@@ -3385,9 +3473,98 @@ function join_argb(a, r, g, b)
     argb = bit.bor(argb, bit.lshift(a, 24)) -- a
     return argb
 end
+function imgui.Hint(str_id, hint_text, color, no_center)
+	if str_id == nil or hint_text == nil then
+		return false
+	end
+	color = color or imgui.GetStyle().Colors[imgui.Col.PopupBg]
+	local p_orig = imgui.GetCursorPos()
+	local hovered = imgui.IsItemHovered()
+	imgui.SameLine(nil, 0)
 
+	local animTime = 0.2
+	local show = true
+
+	if not POOL_HINTS then POOL_HINTS = {} end
+	if not POOL_HINTS[str_id] then
+		POOL_HINTS[str_id] = {
+			status = false,
+			timer = 0
+		}
+	end
+
+	if hovered then
+		for k, v in pairs(POOL_HINTS) do
+			if k ~= str_id and imgui.GetTime() - v.timer <= animTime  then
+				show = false
+			end
+		end
+	end
+
+	if show and POOL_HINTS[str_id].status ~= hovered then
+		POOL_HINTS[str_id].status = hovered
+		POOL_HINTS[str_id].timer = imgui.GetTime()
+	end
+
+	local rend_window = function(alpha)
+		local size = imgui.GetItemRectSize()
+		local scrPos = imgui.GetCursorScreenPos()
+		local DL = imgui.GetWindowDrawList()
+		local center = imgui.ImVec2( scrPos.x - (size.x * 0.5), scrPos.y + (size.y * 0.5) - (alpha * 4) + 10 )
+		local a = imgui.ImVec2( center.x - 7, center.y - size.y - 4 )
+		local b = imgui.ImVec2( center.x + 7, center.y - size.y - 4)
+		local c = imgui.ImVec2( center.x, center.y - size.y + 3 )
+		local col = imgui.ColorConvertFloat4ToU32(imgui.ImVec4(color.x, color.y, color.z, alpha))
+
+		DL:AddTriangleFilled(a, b, c, col)
+		imgui.SetNextWindowPos(imgui.ImVec2(center.x, center.y - size.y - 3), imgui.Cond.Always, imgui.ImVec2(0.5, 1.0))
+		imgui.PushStyleColor(imgui.Col.PopupBg, color)
+		imgui.PushStyleColor(imgui.Col.Border, color)
+		imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(8, 8))
+		imgui.PushStyleVarFloat(imgui.StyleVar.WindowRounding, 6)
+		imgui.PushStyleVarFloat(imgui.StyleVar.Alpha, alpha)
+
+		local max_width = function(text)
+			local result = 0
+			for line in gmatch(text, '[^\n]+') do
+				local len = imgui.CalcTextSize(line).x
+				if len > result then
+					result = len
+				end
+			end
+			return result
+		end
+
+		local hint_width = max_width(u8(hint_text)) + (imgui.GetStyle().WindowPadding.x * 2)
+		imgui.SetNextWindowSize(imgui.ImVec2(hint_width, -1), imgui.Cond.Always)
+		imgui.Begin('##' .. str_id, _, imgui.WindowFlags.Tooltip + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar + imgui.WindowFlags.NoTitleBar)
+			for line in gmatch(hint_text, '[^\n]+') do
+				if no_center then
+					imgui.TextColoredRGB(u8line)
+				else
+					imgui.TextColoredRGB(u8line, 1)
+				end
+			end
+		imgui.End()
+
+		imgui.PopStyleVar(3)
+		imgui.PopStyleColor(2)
+	end
+
+	if show then
+		local between = imgui.GetTime() - POOL_HINTS[str_id].timer
+		if between <= animTime then
+			local alpha = hovered and ImSaturate(between / animTime) or ImSaturate(1 - between / animTime)
+			rend_window(alpha)
+		elseif hovered then
+			rend_window(1.00)
+		end
+	end
+
+	imgui.SetCursorPos(p_orig)
+end
 --Наш дарагой Джончек
-local newFrame = imgui.OnFrame(
+imgui.OnFrame(
     function() return joneV[0] end,
     function(player)
         local resX, resY = getScreenResolution()
@@ -3467,7 +3644,7 @@ imgui.OnFrame(
         imgui.Text(u8 'В нем есть новый функционал!')
         imgui.Separator()
         imgui.CenterText(u8('Список добавленых функций в версии ') .. u8(version) .. ':')
-        imgui.Text(u8(textnewupdate))
+        imgui.Text(textnewupdate)
         imgui.Separator()
         if imgui.Button(u8 'Не обновляться', imgui.ImVec2(250 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
             updateWin[0] = false
