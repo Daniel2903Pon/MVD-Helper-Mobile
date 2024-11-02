@@ -43,6 +43,7 @@ local mmloaded, monet = pcall(require, "MoonMonet")
 local AI_PAGE = {}
 local menu2 = 2
 local ToU32 = imgui.ColorConvertFloat4ToU32
+local u32 = imgui.ColorConvertFloat4ToU32
 local page = 1
 local window = imgui.new.bool()
 local helper_path = script.this.path
@@ -663,7 +664,7 @@ end
 local dephistory = {}
 local orgname = imgui.new.char[255]()
 local departsettings = {
-    myorgname = new.char[255](),
+    myorgname = new.char[255](u8'nil'),
     toorgname = new.char[255](),
     frequency = new.char[255](),
     myorgtext = new.char[255](),
@@ -1414,10 +1415,6 @@ function imgui.ToggleButton(label, label_true, bool, a_speed)
     local r          = h / 2                                -- Радиус кружка
     local s          = a_speed or 0.2                       -- Скорость анимации
 
-    local function ImSaturate(f)
-        return f < 0.0 and 0.0 or (f > 1.0 and 1.0 or f)
-    end
-
     local x_begin = bool[0] and 1.0 or 0.0
     local t_begin = bool[0] and 0.0 or 1.0
 
@@ -1437,13 +1434,6 @@ function imgui.ToggleButton(label, label_true, bool, a_speed)
 
     if LastActive[label] then
         local time = os.clock() - LastTime[label]
-        if time <= s then
-            local anim = ImSaturate(time / s)
-            x_begin = bool[0] and anim or 1.0 - anim
-            t_begin = bool[0] and 1.0 - anim or anim
-        else
-            LastActive[label] = false
-        end
     end
 
     local bg_color = imgui.ImVec4(x_begin * 0.13, x_begin * 0.9, x_begin * 0.13, imgui.IsItemHovered(0) and 0.7 or 0.9) -- Цвет прямоугольника
@@ -1969,7 +1959,7 @@ imgui.OnFrame(function() return window[0] end, function(player)
         imgui.Separator()
         if imgui.Button(u8 'Рация упала.', imgui.ImVec2(200, 35)) then
             if #str(departsettings.myorgname) > 0 then
-                sampSendChat('/d [' .. u8:decode(str(departsettings.myorgname)) .. '] - [Всем]: Рация упала.')
+                sampSendChat('/d [' .. (str(departsettings.myorgname)) .. '] - [Всем]: Рация упала.')
             else
                 msg('У Вас что-то не указано.')
             end
@@ -1987,13 +1977,13 @@ imgui.OnFrame(function() return window[0] end, function(player)
         imgui.BeginChild('##deptext', imgui.ImVec2(-1, -1), true, imgui.WindowFlags.NoScrollbar)
         imgui.TextColoredRGB(u8 'История сообщений департамента {808080}(?)')
         imgui.Hint('mytagfind depart',
-            'Если в чате департамента будет тэг \'' ..
-            u8:decode(str(departsettings.myorgname)) .. '\'\nв этот список добавится это сообщение\nРабота не стабильна')
+            u8'Если в чате департамента будет тэг \'' ..
+            (str(departsettings.myorgname)) .. u8'\'\nв этот список добавится это сообщение')
         imgui.Separator()
         imgui.BeginChild('##deptextlist',
             imgui.ImVec2(-1, imgui.GetWindowSize().y - 30 * MDS - imgui.GetStyle().FramePadding.y * 2 - imgui.GetCursorPosY()), false)
         for k, v in pairs(dephistory) do
-            imgui.TextWrapped(u8(v))
+            imgui.TextColoredRGB('{5975ff}'..(u8(v)))
         end
         imgui.EndChild()
         imgui.SetNextItemWidth(imgui.GetWindowWidth() - 100 * MDS - imgui.GetStyle().FramePadding.x * 2)
@@ -2002,12 +1992,10 @@ imgui.OnFrame(function() return window[0] end, function(player)
         if imgui.Button(u8 'Отправить', imgui.ImVec2(0, 30 * MDS)) then
             if #str(departsettings.myorgname) > 0 then
                 if #str(departsettings.frequency) == 0 then
-                    sampSendChat(('/d [%s] - [%s] %s'):format(u8:decode(str(departsettings.myorgname)),
+                    sampSendChat(('/d [%s] - [%s] %s'):format(str(departsettings.myorgname),
                         u8:decode(str(otherorg)), u8:decode(str(departsettings.myorgtext))))
                 else
-                    sampSendChat(('/d [%s] - %s - [%s] %s'):format(u8:decode(str(departsettings.myorgname)),
-                        u8:decode(str(departsettings.frequency)), u8:decode(str(otherorg)),
-                        u8:decode(str(departsettings.myorgtext))))
+                    sampSendChat(('/d [%s] - %s - [%s] %s'):format(str(departsettings.myorgname), u8:decode(str(departsettings.frequency)), u8:decode(str(otherorg)), u8:decode(str(departsettings.myorgtext))))
                 end
                 imgui.StrCopy(departsettings.myorgtext, '')
             else
@@ -2693,7 +2681,7 @@ imgui.OnFrame(
             imgui.Text(u8'Неизвестно')
         end
         imgui.Separator()
-        imgui.BeginChild('sobesvoprosi', imgui.ImVec2(-1, 150 * MONET_DPI_SCALE), true)
+        imgui.BeginChild('sobesvoprosi', imgui.ImVec2(-1, 143 * MONET_DPI_SCALE), true)
         if imgui.Button(u8" Начать собеседование", imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
             sampSendChat("Здравствуйте, вы пришли на собеседование?")
         end
@@ -3501,14 +3489,11 @@ function sampev.onSendChat(cmd)
 end
 
 function sampev.onServerMessage(color, message)
-    if message:find('%[D%]') and color == 865730559 or color == 865665023 then
-        if message:find(u8:decode(departsettings.myorgname[0])) then
-            local tmsg = gsub(message, '%[D%] ', '')
+    if message:find('%[D%]') then
+        if message:find('['..(str(departsettings.myorgname))..']') then
+            local tmsg = message
             dephistory[#dephistory + 1] = tmsg
         end
-        local color = imgui.ColorConvertU32ToFloat4(configuration.main_settings.DChatColor)
-        local r, g, b, a = color.x * 255, color.y * 255, color.z * 255, color.w * 255
-        return { join_argb(r, g, b, a), message }
     end
     if leaderPanel[0] then
       local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
@@ -3726,94 +3711,80 @@ function join_argb(a, r, g, b)
     argb = bit.bor(argb, bit.lshift(a, 24)) -- a
     return argb
 end
-
-function imgui.Hint(str_id, hint_text, color, no_center)
-    if str_id == nil or hint_text == nil then
-        return false
-    end
-    color = color or imgui.GetStyle().Colors[imgui.Col.PopupBg]
+function imgui.Hint(str_id, hint_text, no_trinagle, show_always, y_offset)
     local p_orig = imgui.GetCursorPos()
-    local hovered = imgui.IsItemHovered()
+    local hovered = show_always or imgui.IsItemHovered()
     imgui.SameLine(nil, 0)
 
     local animTime = 0.2
     local show = true
 
-    if not POOL_HINTS then POOL_HINTS = {} end
-    if not POOL_HINTS[str_id] then
-        POOL_HINTS[str_id] = {
+    if not allHints then allHints = {} end
+    if not allHints[str_id] then
+        allHints[str_id] = {
             status = false,
             timer = 0
         }
     end
 
     if hovered then
-        for k, v in pairs(POOL_HINTS) do
-            if k ~= str_id and imgui.GetTime() - v.timer <= animTime then
+        for k, v in pairs(allHints) do
+            if k ~= str_id and os.clock() - v.timer <= animTime  then
                 show = false
             end
         end
     end
 
-    if show and POOL_HINTS[str_id].status ~= hovered then
-        POOL_HINTS[str_id].status = hovered
-        POOL_HINTS[str_id].timer = imgui.GetTime()
+    if show and allHints[str_id].status ~= hovered then
+        allHints[str_id].status = hovered
+        allHints[str_id].timer = os.clock()
     end
 
     local rend_window = function(alpha)
-        local size = imgui.GetItemRectSize()
-        local scrPos = imgui.GetCursorScreenPos()
-        local DL = imgui.GetWindowDrawList()
-        local center = imgui.ImVec2(scrPos.x - (size.x * 0.5), scrPos.y + (size.y * 0.5) - (alpha * 4) + 10)
-        local a = imgui.ImVec2(center.x - 7, center.y - size.y - 4)
-        local b = imgui.ImVec2(center.x + 7, center.y - size.y - 4)
-        local c = imgui.ImVec2(center.x, center.y - size.y + 3)
-        local col = imgui.ColorConvertFloat4ToU32(imgui.ImVec4(color.x, color.y, color.z, alpha))
+	    local size = imgui.GetItemRectSize()
+	    local scrPos = imgui.GetCursorScreenPos()
+	    local DL = imgui.GetWindowDrawList()
+	    local center = imgui.ImVec2( scrPos.x - (size.x / 2), scrPos.y + (size.y / 2) - (alpha * 4) + (y_offset or 0) )
+        local a = imgui.ImVec2( center.x - 8, center.y - size.y - 1 )
+        local b = imgui.ImVec2( center.x + 8, center.y - size.y - 1)
+        local c = imgui.ImVec2( center.x, center.y - size.y + 7 )
 
-        DL:AddTriangleFilled(a, b, c, col)
-        imgui.SetNextWindowPos(imgui.ImVec2(center.x, center.y - size.y - 3), imgui.Cond.Always, imgui.ImVec2(0.5, 1.0))
-        imgui.PushStyleColor(imgui.Col.PopupBg, color)
-        imgui.PushStyleColor(imgui.Col.Border, color)
-        imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(8, 8))
+        if no_trinagle then
+        	imgui.SetNextWindowPos(imgui.ImVec2(center.x, center.y - size.y / 2), imgui.Cond.Always, imgui.ImVec2(0.5, 1.0))
+        else
+        	local bg_color = imgui.ImVec4(imgui.GetStyle().Colors[imgui.Col.PopupBg])
+        	bg_color.w = alpha
+
+        	DL:AddTriangleFilled(a, b, c, u32(bg_color))
+        	imgui.SetNextWindowPos(imgui.ImVec2(center.x, center.y - size.y - 3), imgui.Cond.Always, imgui.ImVec2(0.5, 1.0))
+        end
+        imgui.PushStyleColor(imgui.Col.Border, imgui.ImVec4(0, 0, 0, 0))
+        imgui.PushStyleColor(imgui.Col.Text, imgui.GetStyle().Colors[imgui.Col.WindowBg])
+        imgui.PushStyleColor(imgui.Col.WindowBg, imgui.GetStyle().Colors[imgui.Col.PopupBg])
+        imgui.PushStyleVarVec2(imgui.StyleVar.WindowPadding, imgui.ImVec2(5, 5))
         imgui.PushStyleVarFloat(imgui.StyleVar.WindowRounding, 6)
         imgui.PushStyleVarFloat(imgui.StyleVar.Alpha, alpha)
 
-        local max_width = function(text)
-            local result = 0
-            for line in gmatch(text, '[^\n]+') do
-                local len = imgui.CalcTextSize(line).x
-                if len > result then
-                    result = len
-                end
+        imgui.Begin('##' .. str_id, _, imgui.WindowFlags.Tooltip + imgui.WindowFlags.AlwaysAutoResize + imgui.WindowFlags.NoTitleBar)
+            for line in hint_text:gmatch('[^\n]+') do
+                imgui.Text(line)
             end
-            return result
-        end
-
-        local hint_width = max_width(u8(hint_text)) + (imgui.GetStyle().WindowPadding.x * 2)
-        imgui.SetNextWindowSize(imgui.ImVec2(hint_width, -1), imgui.Cond.Always)
-        imgui.Begin('##' .. str_id, _,
-            imgui.WindowFlags.Tooltip + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoScrollbar +
-            imgui.WindowFlags.NoTitleBar)
-        for line in gmatch(hint_text, '[^\n]+') do
-            if no_center then
-                imgui.TextColoredRGB(u8line)
-            else
-                imgui.TextColoredRGB(u8line, 1)
-            end
-        end
         imgui.End()
 
         imgui.PopStyleVar(3)
-        imgui.PopStyleColor(2)
+        imgui.PopStyleColor(3)
     end
 
     if show then
-        local between = imgui.GetTime() - POOL_HINTS[str_id].timer
+        local between = os.clock() - allHints[str_id].timer
         if between <= animTime then
-            local alpha = hovered and ImSaturate(between / animTime) or ImSaturate(1 - between / animTime)
+            local s = function(f) 
+                return f < 0.0 and 0.0 or (f > 1.0 and 1.0 or f)
+            end
+            local alpha = hovered and s(between / animTime) or s(1.00 - between / animTime)
             rend_window(alpha)
         elseif hovered then
-            rend_window(1.00)
+        	rend_window(1.00)
         end
     end
 
