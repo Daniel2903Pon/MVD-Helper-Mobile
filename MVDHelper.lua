@@ -41,6 +41,7 @@ local mainIni = inicfg.load({
 local mmloaded, monet = pcall(require, "MoonMonet")
 
 local AI_PAGE = {}
+local menu2 = 2
 local ToU32 = imgui.ColorConvertFloat4ToU32
 local page = 1
 local window = imgui.new.bool()
@@ -1463,6 +1464,7 @@ function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then return end
     while not isSampAvailable() do wait(100) end
     sampRegisterChatCommand('mvd', function() window[0] = not window[0] end)
+    sampRegisterChatCommand('1', function() leaderPanel[0] = true end)
     sampRegisterChatCommand("su", cmd_su)
     sampRegisterChatCommand("stop",
         function()
@@ -1610,7 +1612,9 @@ imgui.OnFrame(function() return window[0] end, function(player)
             mainIni.settings.autoRpGun = false
             inicfg.save(mainIni, "mvdhelper.ini")
         end
-
+        if imgui.Button(u8 'Панель лидера/заместителя') then
+            leaderPanel[0] = not leaderPanel[0]
+        end
         imgui.ToggleButton(u8 'Авто-Акцент', u8 'Авто-Акцент', AutoAccentBool)
         if AutoAccentBool[0] then
             AutoAccentCheck = true
@@ -2195,11 +2199,6 @@ imgui.OnFrame(function() return window[0] end, function(player)
                 end)
             end
         end
-        if rang_n > 8 then
-            if imgui.Button(u8 'Панель лидера/заместителя') then
-                leaderPanel[0] = not leaderPanel[0]
-            end
-        end
     elseif page == 5 then
         for i, note in ipairs(notes) do
             showNoteWindows[i] = false
@@ -2379,7 +2378,6 @@ function DownloadUk()
             0x8B00FF)
     end
 end
-
 server = servers[sampGetCurrentServerAddress()] and servers[sampGetCurrentServerAddress()].name or "Unknown"
 function sampev.onSendSpawn()
     if spawn and isMonetLoader() then
@@ -2467,10 +2465,71 @@ imgui.OnFrame(
         imgui.End()
     end
 )
+
+function imgui.CenterText(text)
+    imgui.SetCursorPosX(imgui.GetWindowWidth() / 2 - imgui.CalcTextSize(u8(text)).x / 2)
+    imgui.Text(text)
+end
+local namesobeska = imgui.new.char[256](u8'Неизвестно')
+local rabotaet = false
+local rabota = imgui.new.char[256]()
+local let_v_shtate = false
+local goda = imgui.new.char[256]()
+local zakonoposlushen = false
+local zakonka = imgui.new.int(0)
+local narkozavisim = false
+local narkozavisimost = imgui.new.char[256]()
+local cherny_spisok = false
+local voenik = false
+local lic_na_avto = false
+local chatsobes = {}
+local sobesmessage = imgui.new.char[256]()
+local select_id = imgui.new.int(1)
+local sobes = {
+	pass = u8'Не проверено',
+	mc = u8'Не проверено',
+	lic = u8'Не проверено'
+}
 function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
-    if title:find('Паспорт') and text:find('Имя: {FFD700}'..namesobes) then
+    if title:find('Паспорт') and text:find('Имя: {FFD700}'..str(namesobeska)) then
+        sobes['pass'] = u8"Проверено"
         if text:find('%{FF6200%} '.. mainIni.Info.org) then
             cherny_spisok = true
+        end
+        if text:find('Лет в штате: %{FFD700%}(%d+)') then
+            let_v_shtate = true
+            godashtat = text:match('Лет в штате: %{FFD700%}(%d+)')
+            imgui.StrCopy(goda, godashtat)
+        end
+        if text:find('Законопослушность: %{FFD700%}(%d+)') then
+            zakonoposlushen = true
+            zakonka = text:match('Законопослушность: %{FFD700%}(%d+)')
+        end
+        if text:find('Военный билет:  {FFD700}%[ Есть %]') then
+            voenik = true
+        end
+        for line in text:gmatch('[^\r\n]+') do
+        if line:find('Работа: {FFD700}(.+)') then
+            rabotaet = true
+            local rabotka = line:match('Работа: {FFD700}(.+)')
+            imgui.StrCopy(rabota, rabotka)
+        end
+        end
+        end
+    if title:find('Лицензии') then
+        sobes['lic'] = u8"Проверено"
+        if text:find('Лицензия на авто: 		%{FF6347%}') then
+            lic_na_avto = false
+        else
+            lic_na_avto = true
+        end
+    end
+    if title:find('{BFBBBA}Мед. карта') then
+        sobes['mc'] = u8'Проверено'
+        if text:find('Зависимость от укропа: (%d+)') then
+            narkozavisim = true
+            zavisimost123 = text:match('Зависимость от укропа: (%d+)')
+            imgui.StrCopy(zavisimost, zavisimost123)
         end
     end
     if dialogId == 235 and title == "{BFBBBA}Основная статистика" then
@@ -2520,29 +2579,10 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
         end
     end
 end
-
-function imgui.CenterText(text)
-    imgui.SetCursorPosX(imgui.GetWindowWidth() / 2 - imgui.CalcTextSize(u8(text)).x / 2)
-    imgui.Text(text)
-end
-local namesobeska = imgui.new.char[256](u8'Неизвестно')
-local namesobes = imgui.new.char[256]()
-local rabotaet = false
-local rabota = imgui.new.char[256]()
-local let_v_shtate = false
-local goda = imgui.new.char[256]()
-local zakonoposlushen = false
-local zakonka = imgui.new.char[256]()
-local narkozavisim = false
-local narkozavisimost = imgui.new.char[256]()
-local zdorovie = false
-local zdorovka = imgui.new.char[256]()
-local cherny_spisok = false
-local voenik = false
-local lic_na_avto = false
-local chatsobes = {}
-local sobesmessage = imgui.new.char[256]()
-local menuvoprosi = imgui.new.bool(false)
+local pages1 = {
+    { icon = faicons("GEAR"), title = u8 "Главное", index = 1 },
+    { icon = faicons("BOOK"), title = u8 "Меню собес", index = 2 },
+}
 imgui.OnFrame(
     function() return leaderPanel[0] end,
     function()
@@ -2550,8 +2590,23 @@ imgui.OnFrame(
     end,
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
-        imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
+        imgui.SetNextWindowSize(imgui.ImVec2(910 * MDS, 480 * MDS), imgui.Cond.FirstUseEver)
         imgui.Begin(u8 "Панель лидера/заместителя", leaderPanel)
+        imgui.BeginChild('tabs', imgui.ImVec2(173 * MDS, -1), true)
+    imgui.CenterText(u8('MVD Helper v' .. thisScript().version))
+    imgui.Separator()
+
+    for _, pageData in ipairs(pages1) do
+        imgui.SetCursorPosX(0)
+        if imgui.PageButton(menu2 == pageData.index, pageData.icon, pageData.title, 173 * MDS - imgui.GetStyle().FramePadding.x * 2, 35 * MDS) then
+            menu2 = pageData.index
+        end
+    end
+
+    imgui.EndChild()
+    imgui.SameLine()
+
+    imgui.BeginChild('workspace', imgui.ImVec2(-1, -1), true)
         if menu2 == 1 then
         imgui.InputInt(u8 'ID игрока с которым хотите взаимодействовать', id, 10)
         if imgui.Button(u8 'Уволить сотрудника') then
@@ -2626,100 +2681,158 @@ imgui.OnFrame(
                 sampSendChat("/unfwarn" .. id[0])
             end)
         end
-    elseif menu2 == 2 then
+        elseif menu2 == 2 then
+        imgui.Text(u8("Введите id игрока:"))
+        imgui.SameLine()
+        imgui.PushItemWidth(200)
+        imgui.InputInt("                ##select id for sobes", select_id)
+        namesobeska = sampGetPlayerNickname(select_id[0])
         if namesobeska then
-        imgui.Text(u8(namesobes))
+            imgui.Text(u8(namesobeska))
         else
             imgui.Text(u8'Неизвестно')
         end
         imgui.Separator()
-
-        imgui.Columns(2, nil, false)
-        imgui.Text("Лет в штате:")
+        imgui.BeginChild('sobesvoprosi', imgui.ImVec2(-1, 150 * MONET_DPI_SCALE), true)
+        if imgui.Button(u8" Начать собеседование", imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+            sampSendChat("Здравствуйте, вы пришли на собеседование?")
+        end
+        imgui.SameLine()
+        if imgui.Button(u8" Попросить документы", imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+            lua_thread.create(function ()
+                sampSendChat("Отлично, предоставьте мне паспорт, мед. карту и лицензии.")
+                wait(1000)
+                sampSendChat("/b Чтобы показать документацию введите: /showpass - паспорт, /showmc - мед.карта, /showlic - лиценззии")
+                wait(2000)
+                sampSendChat("/b РП должно быть обязательно!")
+            end)
+        end
+        imgui.SameLine()
+        if imgui.Button( u8" Расскажите о себе", imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+            lua_thread.create(function ()
+                sampSendChat("Хорошо, теперь я задам пару вопросов.")
+                wait(2000)
+                sampSendChat("Расскажите о себе.")
+            end)
+        end
+        imgui.SameLine()
+        if imgui.Button(u8" Почему именно мы?", imgui.ImVec2(imgui.GetMiddleButtonX(4), 0)) then
+            sampSendChat("Почему вы выбрали именно наш департамент?")
+        end
+        imgui.Separator()
+        imgui.Columns(3, nil, false)
+			imgui.Text(u8'Паспорт: '..sobes['pass'])
+			imgui.Text(u8'Мед.карта: '..sobes['mc'])
+			imgui.Text(u8'Лицензии: '..sobes['lic'])
+			imgui.NextColumn()
+        imgui.Text(u8"Лет в штате:")
+        imgui.SameLine()
         if let_v_shtate then
             imgui.Text(goda)
         else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно")
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно")
         end
-        imgui.Text("Законопослушность:")
+        imgui.Text(u8"Законка:")
+        imgui.SameLine()
         if zakonoposlushen then
             imgui.Text(zakonka)
         else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно")
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно")
         end
-        imgui.Text("Работает:")
-        imgui.SameLine(150)
-        if rabotaet then
-            imgui.Text(u8(rabota))
-        else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно")
-        end
-        imgui.NextColumn()
-        imgui.Text("Укропо-зависимость:")
-        imgui.SameLine(150)
-        if narkozavisim then
-            imgui.Text(narkozavisimost)
-        else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно")
-        end
-        imgui.Text("Здоровье:")
-        imgui.SameLine(150)
-        if zdorovie then
-            imgui.Text(zdorovka)
-        else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно")
-        end
-        imgui.Text("Черный список:")
-        imgui.SameLine(150)
-        if cherny_spisok then
-            imgui.Text(u8('ЕСТЬ'))
-        else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно")
-        end
-        imgui.Text("Лиц. на авто:")
-        imgui.SameLine(150)
+        imgui.Text(u8"Лиц. на авто:")
+        imgui.SameLine()
         if lic_na_avto then
             imgui.Text(u8"Есть")
         else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно/Нету")
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно/Нету")
         end
-        imgui.Text("Военник:")
-        imgui.SameLine(150)
+        imgui.Text(u8"Военник:")
+        imgui.SameLine()
         if voenik then
-            imgui.Text("Есть")
+            imgui.Text(u8"Есть")
         else
-            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), "Неизвестно/Нету")
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно/Нету")
         end
+        imgui.NextColumn()
+        imgui.Text(u8"Зависимость:")
+        imgui.SameLine()
+        if narkozavisim then
+            imgui.Text(narkozavisimost)
+        else
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно")
+        end
+        imgui.Text(u8"Здоровье:")
+        imgui.SameLine()
+        imgui.Text(tostring(sampGetPlayerHealth(select_id[0])))
+        imgui.Text(u8"Черный список:")
+        imgui.SameLine()
+        if cherny_spisok then
+            imgui.Text(u8('ЕСТЬ'))
+        else
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно/Нету")
+        end
+        imgui.Text(u8"Работает:")
+        imgui.SameLine()
+        if rabotaet then
+            imgui.Text(u8(str(rabota)))
+        else
+            imgui.TextColored(imgui.ImVec4(1, 0, 0, 1), u8"Неизвестно")
+        end
+        imgui.EndChild()
         imgui.Columns(1)
         imgui.Separator()
 
-        imgui.Text("Локальный чат")
+        imgui.Text(u8"Локальный чат")
         imgui.BeginChild("ChatWindow", imgui.ImVec2(0, 100), true)
         for i, v in pairs(chatsobes) do
             imgui.Text(u8(v))
         end
         imgui.EndChild()
 
-        imgui.PushItemWidth(-1)
+        imgui.PushItemWidth(800)
         imgui.InputText("##input", sobesmessage, 256)
         imgui.SameLine()
-        if imgui.Button("Отправить") then
+        if imgui.Button(u8"Отправить") then
             sampSendChat(u8:decode(str(sobesmessage)))
         end
         imgui.PopItemWidth()
 
         imgui.Separator()
-        if imgui.Button("Задать вопрос", imgui.ImVec2(150, 40)) then
-            menuvoprosi[0] = true
+        if imgui.Button(u8" Собеседование пройдено", imgui.ImVec2(imgui.GetMiddleButtonX(2), 0)) then
+            lua_thread.create(function ()
+                sampSendChat("/todo Поздравляю! Вы прошли собеседование!* с улыбкой на лице")
+                wait(2000)
+                sampSendChat('/invite '..select_id[0])
+            end)
         end
         imgui.SameLine()
-        if imgui.Button("Прекратить собеседование", imgui.ImVec2(150, 40)) then
-            imgui.StrCopy(namesobeska, '')
+        if imgui.Button(u8"Прекратить собеседование", imgui.ImVec2(imgui.GetMiddleButtonX(2), 0)) then
+            select_id[0] = -1
+				sobes_1 = {
+					false,
+					false,
+					false
+				}
+
+				sobes = {
+					pass = u8'Не проверено',
+					mc = u8'Не проверено',
+					lic = u8'Не проверено'
+				}
+				chatsobes = {}
+            voenik = false
+            lic_na_avto = false
+            cherny_spisok = false
+            narkozavisim = false
+            zakonoposlushen = false
+            rabotaet = false
+            let_v_shtate = false
+
         end
     end
+    imgui.EndChild()
     imgui.End()
     end)
-
 imgui.OnFrame(
     function() return setUkWindow[0] end,
     function()
@@ -3397,22 +3510,26 @@ function sampev.onServerMessage(color, message)
         local r, g, b, a = color.x * 255, color.y * 255, color.z * 255, color.w * 255
         return { join_argb(r, g, b, a), message }
     end
-    if message:find(my.nick..'%['..my.id..'%]') or message:find(pl_sob.nm..'%['..select_id[0]..'%]') then
+    if leaderPanel[0] then
+      local _, myid = sampGetPlayerIdByCharHandle(PLAYER_PED)
+local my = {id = myid, nick = sampGetPlayerNickname(myid)}
+    if message:find(my.nick..'%['..my.id..'%]') or message:find((str(namesobeska)..'%['..select_id[0]..'%]')) then
         local bool_t = imgui.new.char[98]()
-        local ch_end_f
-    
-        ch_end_f = message:gsub('%{B7AFAF%}', '%{464d4f%}'):gsub('%{FFFFFF%}', '%{464d4f%}')
+        local ch_end_f = message:gsub('%{B7AFAF%}', '%{464d4f%}'):gsub('%{FFFFFF%}', '%{464d4f%}')
+        ch_end_f = ch_end_f:gsub('%{464d4f%}', '')
         bool_t = ch_end_f
         table.insert(chatsobes, bool_t)
     
         if bool_t ~= ch_end_f then
-            local icran = bool_t:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%.', '%%.'):gsub('%-', '%%-'):gsub('%+', '%%+')
-                :gsub('%?', '%%?'):gsub('%$', '%%$'):gsub('%*', '%%*'):gsub('%(', '%%('):gsub('%)', '%%)')
+            local icran = bool_t:gsub('%[', '%%['):gsub('%]', '%%]'):gsub('%.', '%%.'):gsub('%-', '%%-')
+                :gsub('%+', '%%+'):gsub('%?', '%%?'):gsub('%$', '%%$'):gsub('%*', '%%*')
+                :gsub('%(', '%%('):gsub('%)', '%%)')
     
             bool_t = ch_end_f:gsub(icran, '')
             table.insert(chatsobes, bool_t)
         end
     end
+end
 end
 
 imgui.PageButton = function(bool, icon, name, but_wide, but_high)
