@@ -4918,14 +4918,14 @@ imgui.OnFrame(
             imgui.Separator()
             if imgui.Button(u8('Доклад'), imgui.ImVec2(100 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
                 lua_thread.create(function ()
-                    sampSendChat(my.nick .. ' на CONTROL. Продолжаю патруль')
+                    sampSendChat('/r' .. nickname .. ' на CONTROL. Продолжаю патруль')
                 end)
             end
             imgui.SameLine()
             if imgui.Button(u8('Завершить'), imgui.ImVec2(100 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
                 lua_thread.create(function ()
                     isPatrolActive = false
-                    sampSendChat(my.nick .. ' на CONTROL. Завершаю патруль')
+                    sampSendChat('/r' .. nickname .. ' на CONTROL. Завершаю патруль')
                     wait(1200)
                     sampSendChat('Патрулировал ' .. formatPatrolDuration(os.time() - startTime))
                     patrolDuration = 0
@@ -4936,7 +4936,7 @@ imgui.OnFrame(
         else
             
             if imgui.Button(u8(' Начать патруль'), imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
-                sampSendChat(my.nick .. ' на CONTROL. Начинаю патруль.')
+                sampSendChat('/r' .. nickname .. ' на CONTROL. Начинаю патруль.')
                 startPatrul()
             end
         end
@@ -4951,9 +4951,9 @@ imgui.OnFrame(
 		imgui.Begin("Мегафон дааа", megafon, imgui.WindowFlags.NoCollapse + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoTitleBar  + imgui.WindowFlags.NoBackground )
 		imgui.SameLine()
 		if imgui.Button(fa.BULLHORN,  imgui.ImVec2(75 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
-			sampSendChat('Водитель, снизьте скорость и прижмитесь к обочине.')
-            sampSendChat('После остановки заглушите двигатель, держите руки на руле и не выходите из транспорта.')
-            sampSendChat('В случае неподчинения по вам будет открыт огонь!')
+			sampSendChat('/m Водитель, снизьте скорость и прижмитесь к обочине.')
+            sampSendChat('/m После остановки заглушите двигатель, держите руки на руле и не выходите из транспорта.')
+            sampSendChat('/m В случае неподчинения по вам будет открыт огонь!')
 		end
 		imgui.End()
     end
