@@ -2,7 +2,7 @@
 -- Licensed under the MIT License.
 -- Copyright (c) 2017, BlastHack Team <blast.hk>
 
--- For information about iconv and lua-iconv see the 'iconv' directory
+-- Modified by MonetLoader to use built-in functions
 
 -------------------
 --- USAGE GUIDE ---
@@ -17,27 +17,35 @@ u8 = encoding.UTF8 -- get the UTF-8 converter
 local utf8_string = u8'text in cp1251' -- convert to UTF-8 from default encoding
 local utf8_string = u8:encode('text in cp1251') -- same as above
 local text = u8:decode(utf8_string) -- convert UTF-8 back to default encoding
-local utf8_from_ucs2be = u8(ucs2be_string, 'UCS-2BE') -- convert to UTF-8 from another encoding
-local text_latin1 = u8:decode(utf8_from_ucs2be, 'ISO-8859-1') -- decode UTF-8 to a non-default encoding
 ]]
 
-local iconv = require 'iconv'
-
 local encoding = {
-	default = 'ASCII'
+	default = 'UTF-8'
 }
 
 local aliases = {
-	UTF7 = 'UTF-7',
 	UTF8 = 'UTF-8',
-	UTF16 = 'UTF-16',
-	UTF32 = 'UTF-32'
+	CP1251 = 'CP-1251'
 }
 
 local function normalize_encoding_name(e)
 	e = string.upper(string.gsub(e, '_', '-'))
 	if aliases[e] then return aliases[e] end
 	return e
+end
+
+local function identity(text)
+	return text
+end
+
+local function get_encoder(to, from)
+	if to == 'UTF-8' and from == 'CP-1251' then
+		return monet_cp1251_to_utf8
+	elseif to == 'CP-1251' and from == 'UTF-8' then
+		return monet_utf8_to_cp1251
+	elseif to == from then
+		return identity
+	end
 end
 
 local converter = {}
@@ -52,29 +60,29 @@ function converter.new(enc)
 	}
 	function public:encode(str, enc)
 		if enc then enc = normalize_encoding_name(enc)
-		else enc = encoding.default
+		else enc = normalize_encoding_name(encoding.default)
 		end
 		local cd = private.encoder[enc]
 		if not cd then
-			cd = iconv.new(self.encoding .. '//IGNORE', enc)
+			cd = get_encoder(self.encoding, enc)
 			assert(cd)
 			private.encoder[enc] = cd
 		end
-		local encoded = cd:iconv(str)
+		local encoded = cd(str)
 		return encoded
 	end
 
 	function public:decode(str, enc)
 		if enc then enc = normalize_encoding_name(enc)
-		else enc = encoding.default
+		else enc = normalize_encoding_name(encoding.default)
 		end
 		local cd = private.decoder[enc]
 		if not cd then
-			cd = iconv.new(enc .. '//IGNORE', self.encoding)
+			cd = get_encoder(enc, self.encoding)
 			assert(cd)
 			private.decoder[enc] = cd
 		end
-		local decoded = cd:iconv(str)
+		local decoded = cd(str)
 		return decoded
 	end
 
