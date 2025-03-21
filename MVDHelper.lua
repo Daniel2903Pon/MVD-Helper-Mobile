@@ -47,6 +47,7 @@ local windowTwo        = imgui.new.bool(false)
 local setUkWindow      = imgui.new.bool(false)
 local addUkWindow      = imgui.new.bool(false)
 local importUkWindow   = imgui.new.bool(false)
+local binderWindow     = imgui.new.bool(false)
 local leaderPanel      = imgui.new.bool(false)
 
 --Конфиг
@@ -193,8 +194,6 @@ local serversList     = {
 local changingInfo    = false
 local orga            = imgui.new.char[255](u8(mainIni.Info.org))
 local dolzh           = imgui.new.char[255](u8(mainIni.Info.dl))
-local isVip           = false
-local usersVip        = {}
 local xsize           = imgui.new.int(mainIni.menuSettings.x)
 local ysize           = imgui.new.int(mainIni.menuSettings.y)
 local tabsize         = imgui.new.int(mainIni.menuSettings.tab)
@@ -245,6 +244,8 @@ local gunCommands     = {
     "/me достал фотокамеру из рюкзака",
     "/me поставил предохранитель, убрал оружие"
 }
+local newButtonText   = imgui.new.char[255]()
+local newButtonCommand= imgui.new.char[2555]()
 
 --MOONMONET
 function explode_argb(argb)
@@ -652,6 +653,10 @@ function register_command(chat_cmd, cmd_arg, cmd_text, cmd_waiting)
                             return
                         end
                         for tag, replacement in pairs(tagReplacements) do
+                            -- local success, result = pcall(string.gsub, line, "{" .. tag .. "}", replacement())
+                            -- if success then
+                            -- 	line = result
+                            -- end
                             line = line:gsub("{" .. tag .. "}", replacement())
                         end
                         sampSendChat(line)
@@ -1347,8 +1352,6 @@ function saveLog()
     end
 end
 
-loadLog()
-
 function addLogEntry(type, player, amount, duration)
     local entry = {
         time = os.date("%Y-%m-%d %H:%M:%S"),
@@ -1997,14 +2000,17 @@ function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then return end
     while not isSampAvailable() do wait(100) end
     while not sampIsLocalPlayerSpawned() do wait(100) end
-    nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
+    --nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(PLAYER_PED)))
     server = servers[sampGetCurrentServerAddress()] and servers[sampGetCurrentServerAddress()].name or "Unknown"
     myId = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
+    buttons = readButtons()
     loadNotesFromFile()
     timerMain()
     check_update()
-    checkVipStatus()
     loadCommands()
+    loadButtons()
+    loadLog()
+    checkUser()
     sampRegisterChatCommand('mvd', function()
         window[0] = not window[0]
     end)
@@ -2021,13 +2027,12 @@ function main()
                     '[Binder] {ffffff}Ошибка, сейчас нету активной отыгровки!', message_color)
             end 
     end)
-    sampRegisterChatCommand("autoz", cmd_z)
-
     registerCommandsFrom(settings.commands)
-    if isVip then
-        msg("Добро пожаловать, {ff0000}Vip {ffffff}пользоваель!")
-    end
     msg("Скрипт успешно загружен! Telegram-канал: @lua_arz. При поддержке arzfun.com")
+    if spawn then
+        sampSendChat("/stats")
+    end 
+    
     while true do
         wait(0)
         if not fastVzaimWindow[0] and not vzaimWindow[0] then
@@ -2037,82 +2042,8 @@ function main()
                 vzWindow[0] = false
             end
         end
-        if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
-            local gun = getCurrentCharWeapon(PLAYER_PED)
-            if gun == 3 then
-                sampSendChat(gunCommands[1])
-            elseif gun == 16 then
-                sampSendChat(gunCommands[2])
-            elseif gun == 17 then
-                sampSendChat(gunCommands[3])
-            elseif gun == 23 then
-                sampSendChat(gunCommands[4])
-            elseif gun == 22 then
-                sampSendChat(gunCommands[5])
-            elseif gun == 24 then
-                sampSendChat(gunCommands[6])
-            elseif gun == 25 then
-                sampSendChat(gunCommands[7])
-            elseif gun == 26 then
-                sampSendChat(gunCommands[8])
-            elseif gun == 27 then
-                sampSendChat(gunCommands[9])
-            elseif gun == 28 then
-                sampSendChat(gunCommands[10])
-            elseif gun == 29 then
-                sampSendChat(gunCommands[11])
-            elseif gun == 30 then
-                sampSendChat(gunCommands[12])
-            elseif gun == 31 then
-                sampSendChat(gunCommands[13])
-            elseif gun == 32 then
-                sampSendChat(gunCommands[14])
-            elseif gun == 33 then
-                sampSendChat(gunCommands[15])
-            elseif gun == 34 then
-                sampSendChat(gunCommands[16])
-            elseif gun == 43 then
-                sampSendChat(gunCommands[17])
-            elseif gun == 0 then
-                sampSendChat(gunCommands[18])
-            end
-            lastgun = gun
-        end
-        if search then
-            local res, handle = sampGetCharHandleBySampPlayerId(pid)
-            if res then
-                local x, y, z = getCharCoordinates(handle)
-                local mX, mY, mZ = getCharCoordinates(PLAYER_PED)
-                if getDistanceBetweenCoords3d(x, y, z, mX, mY, mZ) < 30 then
-                    sampSendChat(string.format('/z %d', pid))
-                    printStringNow('~b~trying send /z', 1500)
-                    wait(500)
-                end
-            end
-        end
     end
 end
-
-function cmd_z(id)
-    if id ~= nil then
-        search = not search
-        if search then
-            local playerId = tonumber(id)
-            if playerId ~= nil and sampIsPlayerConnected(playerId) then
-                pid = playerId
-                msg('Ищу игрока.') 
-            else
-                search = false
-                msg('Либо вы ввели неправильный аргумент, либо игрок не онлайн.') 
-            end
-        else
-            msg('Остановил поиск.') 
-        end
-    else
-
-    end
-end
-
 function timerMain()
     if cfg.statTimers.server ~= nil and cfg.statTimers.server ~= sampGetCurrentServerAddress() then
         msg('Вы зашли на свой не основной сервер. Скрипт отключён!')
@@ -2148,42 +2079,7 @@ function timerMain()
     lua_thread.create(time)
     lua_thread.create(autoSave)
 end
-function checkVipStatus()
-    local serv = server
-    if serv == "Unknown" then
-        serv = sampGetCurrentServerAddress() .. ":" .. select(2, sampGetCurrentServerAddress())
-    end
-    local dat = {
-        ['name'] = nickname,
-        ['server'] = serv
-    }
 
-    local header = {
-        ['Content-Type'] = 'application/x-www-form-urlencoded',
-        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0',
-    }
-    local url = "https://mvd.arzmod.com/test.php"
-    local r = requests.post(url, { data = dat, headers = header })
-    local id = r.text
-    local r1 = requests.post("https://mvd.arzmod.com/getUsers.php")
-    usersVip = cjson.decode(r1.text)
-    local foundUser = nil
-    for i, user in ipairs(usersVip) do
-        if user.id == id then
-            foundUser = user
-            break
-        end
-    end
-
-    if foundUser then
-        print(foundUser.Vip)
-        if foundUser.Vip == "1" then
-            isVip = true
-        end
-    else
-        print("User not found")
-    end
-end
 
 function httpRequest(method, request, args, handler) -- lua-requests
     if not copas.running then
@@ -2247,7 +2143,6 @@ local pages = {
     { icon = faicons("RECTANGLE_LIST"), title = "  Заметки", index = 5 },
     { icon = faicons("CIRCLE_INFO"), title = "  Инфо", index = 6 },
     { icon = faicons("GEAR"), title = "  Настройки", index = 1 },
-    { icon = faicons("crown"), title = " VIP", index = 9 }
 }
 
 imgui.OnFrame(function() return menuSizes[0] end, function(player)
@@ -2652,6 +2547,52 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
         if autogun[0] then
             mainIni.settings.autoRpGun = true
             inicfg.save(mainIni, "mvdhelper.ini")
+            lua_thread.create(function()
+                while true do
+                    wait(0)
+                    if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
+                        local gun = getCurrentCharWeapon(PLAYER_PED)
+                        if gun == 3 then
+                            sampSendChat(gunCommands[1])
+                        elseif gun == 16 then
+                            sampSendChat(gunCommands[2])
+                        elseif gun == 17 then
+                            sampSendChat(gunCommands[3])
+                        elseif gun == 23 then
+                            sampSendChat(gunCommands[4])
+                        elseif gun == 22 then
+                            sampSendChat(gunCommands[5])
+                        elseif gun == 24 then
+                            sampSendChat(gunCommands[6])
+                        elseif gun == 25 then
+                            sampSendChat(gunCommands[7])
+                        elseif gun == 26 then
+                            sampSendChat(gunCommands[8])
+                        elseif gun == 27 then
+                            sampSendChat(gunCommands[9])
+                        elseif gun == 28 then
+                            sampSendChat(gunCommands[10])
+                        elseif gun == 29 then
+                            sampSendChat(gunCommands[11])
+                        elseif gun == 30 then
+                            sampSendChat(gunCommands[12])
+                        elseif gun == 31 then
+                            sampSendChat(gunCommands[13])
+                        elseif gun == 32 then
+                            sampSendChat(gunCommands[14])
+                        elseif gun == 33 then
+                            sampSendChat(gunCommands[15])
+                        elseif gun == 34 then
+                            sampSendChat(gunCommands[16])
+                        elseif gun == 43 then
+                            sampSendChat(gunCommands[17])
+                        elseif gun == 0 then
+                            sampSendChat(gunCommands[18])
+                        end
+                        lastgun = gun
+                    end
+                end
+            end)
         else
             mainIni.settings.autoRpGun = false
             inicfg.save(mainIni, "mvdhelper.ini")
@@ -2730,16 +2671,16 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
         imgui.ToggleButton(u8 "Точка на конце /me НЕ стоит", u8 "Точка на конце /me стоит", tochkaMe)
     
     elseif page == 2 then -- Биндер
-        if imgui.BeginChild('##1', imgui.ImVec2(-1, 333 * MDS), true) then
+        if imgui.BeginChild('##1', imgui.ImVec2(589 * MONET_DPI_SCALE, 303 * MONET_DPI_SCALE), true) then
             imgui.Columns(3)
-            imgui.CenterColumnText(u8 "Команда")
-            imgui.SetColumnWidth(-1, 111 * MDS)
+            imgui.CenterColumnText(u8"Команда")
+            imgui.SetColumnWidth(-1, 170 * MONET_DPI_SCALE)
             imgui.NextColumn()
-            imgui.CenterColumnText(u8 "Описание")
-            imgui.SetColumnWidth(-1, 111 * MDS)
+            imgui.CenterColumnText(u8"Описание")
+            imgui.SetColumnWidth(-1, 300 * MONET_DPI_SCALE)
             imgui.NextColumn()
-            imgui.CenterColumnText(u8 "Действие")
-            imgui.SetColumnWidth(-1, 111 * MDS)
+            imgui.CenterColumnText(u8"Действие")
+            imgui.SetColumnWidth(-1, 150 * MONET_DPI_SCALE)
             imgui.Columns(1)
             imgui.Separator()
             imgui.Columns(3)
@@ -2871,10 +2812,69 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
             waiting_slider = imgui.new.float(1.200)
             BinderWindow[0] = true
         end
-        if imgui.Button(u8"Кнопки на экране") then
-            msg("Доступно только в VIP версии скрипта!")
+        if imgui.BeginChild("buttons", imgui.ImVec2(589 * MONET_DPI_SCALE, 150), true) then
+            imgui.Columns(3)
+            imgui.CenterColumnText(u8"Название кнопки")
+            imgui.SetColumnWidth(-1, 170 * MONET_DPI_SCALE)
+            imgui.NextColumn()
+            imgui.CenterColumnText(u8"Текст")
+            imgui.SetColumnWidth(-1, 300 * MONET_DPI_SCALE)
+            imgui.NextColumn()
+            imgui.CenterColumnText(u8"Действие")
+            imgui.SetColumnWidth(-1, 150 * MONET_DPI_SCALE)
+            imgui.Columns(1)
+            imgui.Separator()
+            
+            for name, command in pairs(buttons) do
+                imgui.Columns(3)
+                imgui.CenterColumnText(u8(name))
+                imgui.NextColumn()
+                imgui.CenterColumnText(u8(command[1]))
+                imgui.NextColumn()
+                imgui.Text(" ")
+                imgui.SameLine()
+                if imgui.SmallButton(fa.PEN_TO_SQUARE .. '##' .. name) then
+                    newButtonText = imgui.new.char[255](u8(name))
+                    newButtonCommand = imgui.new.char[255](u8(arrayToText(command)))
+                    imgui.OpenPopup(fa.CIRCLE_PLUS .. u8 ' Изменение кнопки на экране')            
+                end
+                if imgui.BeginPopupModal(fa.CIRCLE_PLUS .. u8 ' Изменение кнопки на экране', _, imgui.WindowFlags.NoResize) then
+                    imgui.InputText(u8"Название кнопки", newButtonText, 255)
+                    imgui.InputTextMultiline(u8"Текст", newButtonCommand, 2555)
+                    if imgui.Button(u8"Сохранить", imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
+                        deleteButton(name)
+                        addNewButton(u8:decode(ffi.string(newButtonText)), u8:decode(ffi.string(newButtonCommand)))
+                        imgui.CloseCurrentPopup()
+                    end
+                end
+                imgui.SameLine()
+                if imgui.SmallButton(fa.TRASH_CAN .. '##' .. name) then
+                    imgui.OpenPopup(fa.TRIANGLE_EXCLAMATION .. u8 ' Предупреждение ##' .. name)
+                end
+                if imgui.IsItemHovered() then
+                    imgui.SetTooltip(u8 "Удаление кнопки " .. name)
+                end
+                imgui.Columns(1)
+                imgui.Separator()
+                if imgui.BeginPopupModal(fa.TRIANGLE_EXCLAMATION .. u8 ' Предупреждение ##' .. name, _, imgui.WindowFlags.NoResize) then
+                    imgui.CenterText(u8 'Вы действительно хотите удалить кнопку ' .. u8(name) .. '?')
+                    imgui.Separator()
+                    if imgui.Button(fa.CIRCLE_XMARK .. u8 ' Нет, отменить', imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+                        imgui.CloseCurrentPopup()
+                    end
+                    imgui.SameLine()
+                    if imgui.Button(fa.TRASH_CAN .. u8 ' Да, удалить', imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
+                        deleteButton(name)
+                    end
+                    imgui.End()
+                end
+            end
+            imgui.EndChild()
         end
-        
+            if imgui.Button(fa.CIRCLE_PLUS .. u8" Новая кнопка") then
+                imgui.OpenPopup(fa.CIRCLE_PLUS .. u8 ' Создание новой кнопки на экране')            
+            end
+            
 
     elseif page == 3 then -- Рация депортамента
         imgui.BeginChild('##depbuttons',
@@ -2997,43 +2997,7 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
         imgui.Text(u8 'ТГ канал: t.me/lua_arz')
         imgui.Text(u8 'Поддержать: Временно не доступно')
         imgui.Text(u8 'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x, @Theopka')
-    elseif page == 9 then
-        imgui.PushFont(big)
-        if isVip == true then
-            imgui.SetCursorPosX(imgui.GetWindowWidth() / 2 - imgui.CalcTextSize(u8("Ваш VIP: Активен!")).x / 2)
-            imgui.CenterTextMain(u8"Ваш VIP: {ff0000}Активен!")
-        else
-            imgui.SetCursorPosX(imgui.GetWindowWidth() / 2 - imgui.CalcTextSize(u8("Ваш VIP: Отсутствует!")).x / 2)
-            imgui.CenterTextMain(u8"Ваш VIP: {ff0000}Отсутствует!")
-        end
-        imgui.PopFont()
-        imgui.CenterTextMain(u8"Преимущества, которые имеют VIP пользователи:")
-        imgui.CenterTextMain(u8"1. Первые получаете последние обновления.")
-        imgui.CenterTextMain(u8"2. Дополнительные возможности скрипта.")
-        imgui.CenterTextMain(u8"3. Частный telegram чат VIP пользователей.")
-        imgui.CenterTextMain(u8"4. Отображение в списке VIP пользователей.")
-        imgui.CenterTextMain(u8"Для покупки VIP обратитесь в тг @daniel2903_nepon")
-
-        imgui.BeginChild('##vipUsers', imgui.ImVec2(-1, 200 * MDS), true)
-            imgui.Columns(2)
-            imgui.TextColoredRGB(u8'Ник') 
-            imgui.SetColumnWidth(-1, 200 * MDS)
-            imgui.NextColumn()
-            imgui.TextColoredRGB(u8'Сервер') 
-            imgui.SetColumnWidth(-1, 200 * MDS)
-            imgui.Columns(1)
-            imgui.Separator()
-            for i, user in ipairs(usersVip) do
-                if user.Vip == "1" then
-                    imgui.Columns(2)
-                    imgui.TextColoredRGB('{ff0000}' .. user.nick) 
-                    imgui.NextColumn()
-                    imgui.TextColoredRGB('{ff0000}' .. user.Server) 
-                    imgui.Columns(1)
-                    imgui.Separator()
-                end
-            end
-        imgui.EndChild()
+    
     end
     imgui.EndChild()
     imgui.End()
@@ -3118,6 +3082,54 @@ function sampev.onSendSpawn()
         msg("{FFFFFF}MVDHelper успешно загружен!", 0x8B00FF)
         msg("{FFFFFF}Команда: /mvd", 0x8B00FF)
         nickname = sampGetPlayerNickname(select(2, sampGetPlayerIdByCharHandle(playerPed)))
+        if autogun[0] then
+            lua_thread.create(function()
+                while true do
+                    wait(0)
+                    if lastgun ~= getCurrentCharWeapon(PLAYER_PED) then
+                        local gun = getCurrentCharWeapon(PLAYER_PED)
+                        if gun == 3 then
+                            sampSendChat(gunCommands[1])
+                        elseif gun == 16 then
+                            sampSendChat(gunCommands[2])
+                        elseif gun == 17 then
+                            sampSendChat(gunCommands[3])
+                        elseif gun == 23 then
+                            sampSendChat(gunCommands[4])
+                        elseif gun == 22 then
+                            sampSendChat(gunCommands[5])
+                        elseif gun == 24 then
+                            sampSendChat(gunCommands[6])
+                        elseif gun == 25 then
+                            sampSendChat(gunCommands[7])
+                        elseif gun == 26 then
+                            sampSendChat(gunCommands[8])
+                        elseif gun == 27 then
+                            sampSendChat(gunCommands[9])
+                        elseif gun == 28 then
+                            sampSendChat(gunCommands[10])
+                        elseif gun == 29 then
+                            sampSendChat(gunCommands[11])
+                        elseif gun == 30 then
+                            sampSendChat(gunCommands[12])
+                        elseif gun == 31 then
+                            sampSendChat(gunCommands[13])
+                        elseif gun == 32 then
+                            sampSendChat(gunCommands[14])
+                        elseif gun == 33 then
+                            sampSendChat(gunCommands[15])
+                        elseif gun == 34 then
+                            sampSendChat(gunCommands[16])
+                        elseif gun == 43 then
+                            sampSendChat(gunCommands[17])
+                        elseif gun == 0 then
+                            sampSendChat(gunCommands[18])
+                        end
+                        lastgun = gun
+                    end
+                end
+            end)
+        end
     end
 end
 
@@ -3193,49 +3205,12 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
         spawncar_bool = false
         return false
     end
-    if title:find('Паспорт') and text:find('Имя: {FFD700}' .. str(namesobeska)) then
-        sobes['pass'] = u8 "Проверено"
-        if text:find('%{FF6200%} ' .. mainIni.Info.org) then
-            cherny_spisok = true
-        end
-        if text:find('Лет в штате: %{FFD700%}(%d+)') then
-            let_v_shtate = true
-            godashtat = text:match('Лет в штате: %{FFD700%}(%d+)')
-            imgui.StrCopy(goda, godashtat)
-        end
-        if text:find('Законопослушность: %{FFD700%}(%d+)') then
-            zakonoposlushen = true
-            zakonka = text:match('Законопослушность: %{FFD700%}(%d+)')
-        end
-        if text:find('Военный билет:  {FFD700}%[ Есть %]') then
-            voenik = true
-        end
-        for line in text:gmatch('[^\r\n]+') do
-            if line:find('Работа: {FFD700}(.+)') then
-                rabotaet = true
-                local rabotka = line:match('Работа: {FFD700}(.+)')
-                imgui.StrCopy(rabota, rabotka)
-            end
-        end
-    end
-    if title:find('Лицензии') then
-        sobes['lic'] = u8 "Проверено"
-        if text:find('Лицензия на авто: 		%{FF6347%}') then
-            lic_na_avto = false
-        else
-            lic_na_avto = true
-        end
-    end
-    if title:find('{BFBBBA}Мед. карта') then
-        sobes['mc'] = u8 'Проверено'
-        if text:find('Зависимость от укропа: (%d+)') then
-            narkozavisim = true
-            zavisimost123 = text:match('Зависимость от укропа: (%d+)')
-            imgui.StrCopy(zavisimost, zavisimost123)
-        end
-    end
+    
     if dialogId == 235 and title == "{BFBBBA}Основная статистика" then
         statsCheck = true
+        if string.find(text, "Имя:")then
+            nickname = string.match(text, "Имя: {B83434}%[(%D+)%]")
+        end
         if string.match(text, "Организация: {B83434}%[(%D+)%]") == "Полиция ЛВ" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "Полиция ЛС" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "Полиция СФ" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "SFa" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "LSa" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "RCSD" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "Областная полиция" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "ФБР" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "FBI" then
             org = string.match(text, "Организация: {B83434}%[(%D+)%]")
             if org ~= 'Не имеется' then dol = string.match(text, "Должность: {B83434}(%D+)%(%d+%)") end
@@ -4823,14 +4798,7 @@ imgui.OnFrame(
                     mainIni.settings.Jone = false
                     inicfg.save(mainIni, "mvdhelper.ini")
                 end
-            elseif page == 9 then
-                imgui.SetWindowFocus()
-                imgui.Text(u8 "Это - вкладка VIP. Тут ты можешь почитать какие приемущества дает VIP версия.\nДля покупки обратись в тг @daniel2903_nepon")
-                if imgui.Button(u8 'Выключить меня', imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
-                    joneV[0] = false
-                    mainIni.settings.Jone = false
-                    inicfg.save(mainIni, "mvdhelper.ini")
-                end
+            
             end
         else
             imgui.Text(u8 "Привет! Я " ..
@@ -5000,4 +4968,138 @@ function get_players_in_radius()
         end
     end
     return playersInRadius
+end
+
+--Экранные кнопки
+local buttonsJson = getWorkingDirectory() .. "/MVDHelper/buttons.json"
+local standartButtons = {
+    ['10-55'] = {'/m Водитель, снизьте скорость и прижмитесь к обочине.', '/m Держите руки на руле и заглушите двигатель'}
+}
+
+function readButtons()
+    local file = io.open(buttonsJson, "r")
+    if file then
+        local buttonsJson = file:read("*a")
+        file:close()
+        return decodeJson(buttonsJson)
+    else
+        local file = io.open(buttonsJson, "w")
+        file:write(encodeJson(standartButtons))
+        file:close()
+        return standartButtons
+    end
+end
+function addNewButton(name, text)
+    if not buttons then
+        buttons = readButtons()
+    end 
+    local linesArray = {}
+    for line in text:gmatch("[^\r\n]+") do
+        table.insert(linesArray, line)
+    end
+    buttons[name] = {}
+    for i = 1, #linesArray do
+        table.insert(buttons[name], linesArray[i])
+    end
+    local file = io.open(buttonsJson, "w")
+    file:write(encodeJson(buttons))
+    print(buttons)
+    file:close()
+end 
+
+function loadButtons()
+    if not buttons then
+        buttons = readButtons()
+    end
+    local _ = imgui.new.bool(true)
+    imgui.OnFrame(function() return _ end, function(player)
+        imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 8.5, sizeY / 2.1), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(250, 250), imgui.Cond.FirstUseEver)
+        imgui.Begin("pon", _, imgui.WindowFlags.NoTitleBar + imgui.WindowFlags.NoResize + imgui.WindowFlags.NoBackground + imgui.WindowFlags.NoMove)
+        for name, text in pairs(buttons) do
+            if imgui.Button(u8(name)) then
+                lua_thread.create(function()
+					for i = 1, #text do
+						sampSendChat (text[i])
+						wait(1500)
+					end
+				end)
+            end
+            imgui.SameLine()
+        end
+        
+        imgui.End()
+    end)
+end
+
+function deleteButton(name)
+    buttons[name] = nil
+    local file = io.open(buttonsJson, "w")
+    file:write(encodeJson(buttons))
+    print(buttons)
+    file:close()
+end
+
+function arrayToText(array)
+    local result = ""
+    for i = 1, #array do
+      result = result .. array[i]
+      if i < #array then
+        result = result .. "\n"
+      end
+    end
+    return result
+  end
+
+function getPlayerPass(json)
+    let_v_shtate    = true
+    local godashtat = json["level"]
+    zakonoposlushen = true
+    zakonka         = json["zakono"]
+    rabotaet        = true
+    local rabotka   = json["job"]
+    imgui.StrCopy(rabota, rabotka)
+    imgui.StrCopy(goda, godashtat)
+end
+
+
+
+function onReceivePacket(id, bs, ...) 
+    if id == 220 then
+        raknetBitStreamIgnoreBits(bs, 8) 
+        local type = raknetBitStreamReadInt8(bs)
+        if type == 84 then
+            local interfaceid = raknetBitStreamReadInt8(bs)
+            local subid = raknetBitStreamReadInt8(bs)
+            local len = raknetBitStreamReadInt16(bs) 
+            local encoded = raknetBitStreamReadInt8(bs)
+            local json = (encoded ~= 0) and raknetBitStreamDecodeString(bs, len + encoded) or raknetBitStreamReadString(bs, len)
+            if interfaceid ==104 and subid == 2 then
+                local json = decodeJson(json)
+                if json["level"] then
+                    sobes['pass'] = u8 "Проверено"
+                    getPlayerPass(json)
+                end
+            end
+        end
+    end
+end
+
+function checkUser()
+    local serv = server
+    if serv == "Unknown" then
+        serv = sampGetCurrentServerAddress() .. ":" .. select(2, sampGetCurrentServerAddress())
+    end
+    local dat = {
+        ['name'] = nickname,
+        ['server'] = serv
+    }
+
+    local header = {
+        ['Content-Type'] = 'application/x-www-form-urlencoded',
+        ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0',
+    }
+    local url = "https://mvd.arzmod.com/test.php"
+    requests.post(url, { data = dat, headers = header })
+
 end
