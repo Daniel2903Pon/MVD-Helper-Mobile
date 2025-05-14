@@ -336,6 +336,28 @@ end
 --MOONMONET END 
 
 --MTG mods binder START
+function downloadFile(url, path)
+    local response = requests.get(url)
+
+    if response.status_code == 200 then
+        local filepath = path
+        os.remove(filepath)
+        local f = assert(io.open(filepath, 'wb'))
+        f:write(response.text)
+        f:close()
+    else
+        print('Ошибка скачивания...')
+    end
+end
+function downloadBinder()
+    file = io.open(path, "w")
+    file:close()
+    file = io.open(path, "a+")
+    downloadFile("https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/refs/heads/main/Binder.json",
+        path)
+    msg('Устанавливается файл биндера, перезагрузка')
+    thisScript():reload()
+end
 local settings = {}
 local default_settings = {
     commands = {
@@ -4166,19 +4188,6 @@ end
 --Mimgui functions END
 
 -- Download files START
-function downloadFile(url, path)
-    local response = requests.get(url)
-
-    if response.status_code == 200 then
-        local filepath = path
-        os.remove(filepath)
-        local f = assert(io.open(filepath, 'wb'))
-        f:write(response.text)
-        f:close()
-    else
-        print('Ошибка скачивания...')
-    end
-end
 function DownloadUk()
     local serverLower = string.lower(server)
 
@@ -4191,15 +4200,7 @@ function DownloadUk()
         msg("{FFFFFF} К сожалению, на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
     end
 end
-function downloadBinder()
-    file = io.open(path, "w")
-    file:close()
-    file = io.open(path, "a+")
-    downloadFile("https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/refs/heads/main/Binder.json",
-        path)
-    msg('Устанавливается файл биндера, перезагрузка')
-    thisScript():reload()
-end
+
 --Download files END
 
 --Update START
