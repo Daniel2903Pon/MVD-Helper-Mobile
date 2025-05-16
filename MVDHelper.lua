@@ -2,10 +2,10 @@
 
 script_name("MVD Helper Mobile")
 
-script_version("5.6.1")
+script_version("5.6.2")
 script_authors("@Sashe4ka_ReZoN", "@daniel29032012", "@makson4ck2", "@osp_x")
 
---Библиотеки
+--Libs START
 require('moonloader')
 local copas            = require("copas")
 local encoding         = require 'encoding'
@@ -20,12 +20,14 @@ local monet            = require("MoonMonet")
 local effil            = require('effil')
 local md5              = require("md5")
 local memory           = require("memory") 
+--Libs END
 
 --Кодировка
 encoding.default       = 'CP1251'
 local u8               = encoding.UTF8
 
---Окна
+--Windows buffs START
+local startWindow      = imgui.new.bool(false)
 local fastVzaimWindow  = imgui.new.bool(false)
 local vzaimWindow      = imgui.new.bool(false)
 local megafon          = imgui.new.bool(false)
@@ -47,8 +49,10 @@ local importUkWindow   = imgui.new.bool(false)
 local BinderWindow     = imgui.new.bool(false)
 local leaderPanel      = imgui.new.bool(false)
 local MainWindow       = imgui.new.bool(false)
+--Windows buffs END
 
 --Конфиг
+local directIni = 'MVDHelper.ini'
 local mainIni = inicfg.load({
     Accent = {
         accent = '[Молдавский акцент]: '
@@ -117,15 +121,15 @@ local mainIni = inicfg.load({
         colorT = 4286677377,
     },
     menuSettings = {
-        x = 680,
-        y = 550,
-        tab = 160,
-        xpos = 59,
-        vtpos = 8,
+        x = 850,
+        y = 820,
+        tab = 370,
+        xpos = 90,
+        vtpos = 1,
         ChildRoundind = 10
     }
-}, "mvdhelper.ini")
-inicfg.save(mainIni, 'mvdhelper.ini')
+}, directIni)
+inicfg.save(mainIni, directIni)
 
 --Остальные переменные
 local new             = imgui.new
@@ -142,7 +146,7 @@ local isPatrolActive  = false
 local FrameTime       = imgui.new.int(10000)
 local MyGif           = nil
 local tochkaMe        = imgui.new.bool(false)
-local path            = getWorkingDirectory() .. "/config/Binder.json"
+local path            = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/Binder.json"
 local joneV           = imgui.new.bool(mainIni.settings.Jone)
 local id              = imgui.new.int(0)
 local otherorg        = imgui.new.char[256]()
@@ -172,6 +176,7 @@ local note_text       = nil
 local logs            = {}
 local dephistory      = {}
 local orgname         = imgui.new.char[255]()
+local deliting_script = false
 local departsettings  = {
     myorgname = new.char[255](u8 'nil'),
     toorgname = new.char[255](),
@@ -183,6 +188,7 @@ local serversList     = {
     "prescott", "winslow", "payson", "gilbert", "casa-grande", "page", "sun-city", "wednesday",
     "yava", "faraway", "bumble bee", "christmas", "brainburg", "sedona"
 }
+
 local servers = {
     ["80.66.82.162"]    = { number = -1, name = "Mobile I" },
     ["80.66.82.148"]    = { number = -2, name = "Mobile II" },
@@ -220,13 +226,47 @@ local servers = {
     ["185.169.132.105"] = { number = 1, name = "Phoenix" },
     ["185.169.134.4"]   = { number = 2, name = "Tucson" },
     ["185.169.132.106"] = { number = 2, name = "Tucson" },
+    ["mobile1_arizona-rp_com"]    = { number = -1, name = "Mobile I" },
+    ["mobile2_arizona-rp_com"]    = { number = -2, name = "Mobile II" },
+    ["mobile3_arizona-rp_com"]    = { number = -3, name = "Mobile III" },
+    ["chandler_arizona-rp_com"]   = { number = 4, name = "Chandler" },
+    ["scottdale_arizona-rp_com"]  = { number = 3, name = "Scottdale" },
+    ["brainburg_arizona-rp_com"]  = { number = 5, name = "Brainburg" },
+    ["saintrose_arizona-rp_com"]  = { number = 6, name = "Saint-Rose" },
+    ["mesa_arizona-rp_com"]       = { number = 7, name = "Mesa" },
+    ["redrock_arizona-rp_com"]    = { number = 8, name = "Red-Rock" },
+    ["yuma_arizona-rp_com"]       = { number = 9, name = "Yuma" },
+    ["surprise_arizona-rp_com"]   = { number = 10, name = "Surprise" },
+    ["prescott_arizona-rp_com"]   = { number = 11, name = "Prescott" },
+    ["glendale_arizona-rp_com"]   = { number = 12, name = "Glendale" },
+    ["kingman_arizona-rp_com"]    = { number = 13, name = "Kingman" },
+    ["winslow_arizona-rp_com"]    = { number = 14, name = "Winslow" },
+    ["payson_arizona-rp_com"]     = { number = 15, name = "Payson" },
+    ["gilbert_arizona-rp_com"]    = { number = 16, name = "Gilbert" },
+    ["showlow_arizona-rp_com"]    = { number = 17, name = "Show Low" },
+    ["casagrande_arizona-rp_com"] = { number = 18, name = "Casa-Grande" },
+    ["page_arizona-rp_com"]       = { number = 19, name = "Page" },
+    ["suncity_arizona-rp_com"]    = { number = 20, name = "Sun-City" },
+    ["queencreek_arizona-rp_com"] = { number = 21, name = "Queen-Creek" },
+    ["sedona_arizona-rp_com"]     = { number = 22, name = "Sedona" },
+    ["holiday_arizona-rp_com"]    = { number = 23, name = "Holiday" },
+    ["wednesday_arizona-rp_com"]  = { number = 24, name = "Wednesday" },
+    ["yava_arizona-rp_com"]       = { number = 25, name = "Yava" },
+    ["faraway_arizona-rp_com"]    = { number = 26, name = "Faraway" },
+    ["bumblebee_arizona-rp_com"]  = { number = 27, name = "Bumble Bee" },
+    ["christmas_arizona-rp_com"]  = { number = 28, name = "Christmas" },
+    ["mirage_arizona-rp_com"]     = { number = 29, name = "Mirage" },
+    ["love_arizona-rp_com"]       = { number = 30, name = "Love" },
+    ["phoenix_arizona-rp_com"]    = { number = 1, name = "Phoenix" },
+    ["tucson_arizona-rp_com"]     = { number = 2, name = "Tucson" },
+    ["drake_arizona-rp_com"]      = { number = 31, name = "Drake" },
 }
 local changingInfo    = false
 local ObuchalName     = new.char[255](u8(mainIni.settings.ObuchalName))
-local orga            = imgui.new.char[255](u8(mainIni.Info.org))
-local dolzh           = imgui.new.char[255](u8(mainIni.Info.dl))
+local orga            = imgui.new.char[255](mainIni.Info.org)
+local dolzh           = imgui.new.char[255](mainIni.Info.dl)
 local spawncar_bool   = false
-local jsonFile        = getWorkingDirectory() .. "/MVDHelper/gunCommands.json"
+local jsonFile        = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/gunCommands.json"
 local weapons         = {
     "Дубинка",
     "Граната",
@@ -276,6 +316,35 @@ local pages = {
     { icon = faicons("RECTANGLE_LIST"), title = "  Заметки", index = 5 },
     { icon = faicons("CIRCLE_INFO"), title = "  Инфо", index = 6 },
     { icon = faicons("GEAR"), title = "  Настройки", index = 1 },
+}
+local smartUkPath = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/smartUk.json"
+local smartUkUrl = {
+    ["mobile-i"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile1.json",
+    ["mobile-ii"]   = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile2.json",
+    ["mobile-iii"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile%203.json",
+    phoenix         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Phoenix.json",
+    tucson          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Tucson.json",
+    ["saint-rose"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Saint-Rose.json",
+    mesa            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mesa.json",
+    ["red-rock"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Red-Rock.json",
+    prescott        = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Prescott.json",
+    winslow         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Winslow.json",
+    payson          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Payson.json",
+    gilbert         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Gilbert.json",
+    ["casa-grande"] = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Casa-Grande.json",
+    page            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Page.json",
+    ["sun-city"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sun-City.json",
+    wednesday       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Wednesday.json",
+    yava            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Yava.json",
+    faraway         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Faraway.json",
+    ["bumble-bee"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Bumble%20Bee.json",
+    christmas       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Christmas.json",
+    brainburg       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Brainburg.json",
+    sedona          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sedona.json"
+}
+local buttonsJson = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/buttons.json"
+local standartButtons = {
+    ['10-55'] = {'/m Водитель, снизьте скорость и прижмитесь к обочине.', '/m Держите руки на руле и заглушите двигатель'}
 }
 
 --MOONMONET START
@@ -334,8 +403,19 @@ function ColorAccentsAdapter(color)
     return ret
 end
 --MOONMONET END 
-
---MTG mods binder START
+function msg(text, color) -- Custom message
+    if not color then
+        gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
+    else
+        gen_color = monet.buildColors(color, 1.0, true)
+    end 
+    local curcolor1 = '0x' .. ('%X'):format(gen_color.accent1.color_300)
+    sampAddChatMessage("[MVD Helper]: {FFFFFF}" .. text, curcolor1)
+end
+function saveIni()
+    inicfg.save(mainIni, directIni)
+    print("CFG saved")
+end
 function downloadFile(url, path)
     local response = requests.get(url)
 
@@ -358,20 +438,61 @@ function downloadBinder()
     msg('Устанавливается файл биндера, перезагрузка')
     thisScript():reload()
 end
-local settings = {}
-local default_settings = {
-    commands = {
-        {},
-    },
-}
-local configDirectory = getWorkingDirectory() .. "/config"
-
-function load_settings()
-    if not doesDirectoryExist(configDirectory) then
-        createDirectory(configDirectory)
+function loadCommands()
+    local file = io.open(jsonFile, "r")
+    if file then
+        local content = file:read("*a")
+        file:close()
+        local decodedJson = decodeJson(content)
+        if decodedJson then
+            gunCommands = decodedJson
+            print("Загружено из файла:", gunCommands)
+        else
+            msg("Ошибка декодирования JSON. Загружаю стандартные.")
+            saveCommands()
+        end
+    else
+        msg("Не удалось загрузить JSON файл с отыгровками оружий. Загружаю стандартные")
+        saveCommands()
     end
+end
+function saveCommands()
+    local file = io.open(jsonFile, "w")
+    if file then
+        file:write(encodeJson(gunCommands))
+        file:close()
+    else
+        msg("Не удалось открыть файл для записи!")
+    end
+end
+function readButtons()
+    local file = io.open(buttonsJson, "r")
+    if file then
+        local buttonsJson = file:read("*a")
+        file:close()
+        return decodeJson(buttonsJson)
+    else
+        local file = io.open(buttonsJson, "w")
+        file:write(encodeJson(standartButtons))
+        file:close()
+        return standartButtons
+    end
+end
+function load_settings()
+    if not doesDirectoryExist(getWorkingDirectory():gsub('\\','/') .. '/MVDHelper') then
+        createDirectory(getWorkingDirectory():gsub('\\','/') ..'/MVDHelper')
+    end
+    if not doesDirectoryExist(getWorkingDirectory():gsub('\\','/') .. '/arzfun') then
+        createDirectory(getWorkingDirectory():gsub('\\','/') ..'/arzfun')
+    end
+    local default_settings_binder = {
+        commands = {
+            {},
+        },
+    }
+    --Binder
     if not doesFileExist(path) then
-        settings = default_settings
+        settings = default_settings_binder
         downloadBinder()
         print('[Binder] Файл с настройками не найден, использую стандартные настройки!')
     else
@@ -380,17 +501,17 @@ function load_settings()
             local contents = file:read('*a')
             file:close()
             if #contents == 0 then
-                settings = default_settings
+                settings = default_settings_binder
                 print('[Binder] Не удалось открыть файл с настройками, использую стандартные настройки!')
             else
                 local result, loaded = pcall(decodeJson, contents)
                 if result then
                     settings = loaded
-                    for category, _ in pairs(default_settings) do
+                    for category, _ in pairs(default_settings_binder) do
                         if settings[category] == nil then
                             settings[category] = {}
                         end
-                        for key, value in pairs(default_settings[category]) do
+                        for key, value in pairs(default_settings_binder[category]) do
                             if settings[category][key] == nil then
                                 settings[category][key] = value
                             end
@@ -402,12 +523,30 @@ function load_settings()
                 end
             end
         else
-            settings = default_settings
+            settings = default_settings_binder
             downloadBinder()
             print('[Binder] Не удалось открыть файл с настройками, использую стандартные настройки!')
         end
     end
+    --Smart UK
+    local file = io.open(smartUkPath, "r") -- Открываем файл в режиме чтения
+    if not file then
+        tableUk = { Ur = { 6 }, Text = { "Нападение на полицейского 14.4" } }
+        file = io.open(smartUkPath, "w")
+        file:write(encodeJson(tableUk))
+        file:close()
+    else
+        a = file:read("*a")
+        file:close()
+        tableUk = decodeJson(a)
+    end
+    --RP guns
+    loadCommands()
+    --Window buttons
+    readButtons()
+    
 end
+--MTG mods binder START
 
 function save_settings()
     local file, errstr = io.open(path, 'w')
@@ -422,7 +561,6 @@ function save_settings()
     end
 end
 
-load_settings()
 function isMonetLoader() return MONET_VERSION ~= nil end
 
 if MONET_DPI_SCALE == nil then MONET_DPI_SCALE = 1.0 end
@@ -547,10 +685,6 @@ function register_command(chat_cmd, cmd_arg, cmd_text, cmd_waiting)
                             return
                         end
                         for tag, replacement in pairs(tagReplacements) do
-                            -- local success, result = pcall(string.gsub, line, "{" .. tag .. "}", replacement())
-                            -- if success then
-                            -- 	line = result
-                            -- end
                             line = line:gsub("{" .. tag .. "}", replacement())
                         end
                         sampSendChat(line)
@@ -579,15 +713,10 @@ end
 
 imgui.OnInitialize(function()
     MyGif = imgui.LoadFrames()
-    decor() -- применяем декор часть
+    decor()
     apply_n_t()
 
     imgui.GetIO().IniFilename = nil
-    if fsClock == nil then
-        local glyph_ranges = imgui.GetIO().Fonts:GetGlyphRangesCyrillic()
-        
-        -- fsClock = imgui.GetIO().Fonts:AddFontFromFileTTF(getFolderPath(0x14)..'\\trebucbd.ttf', 43, _, glyph_ranges)
-    end
     
     local config = imgui.ImFontConfig()
     config.MergeMode = true
@@ -603,86 +732,6 @@ imgui.OnInitialize(function()
     imgui.GetStyle():ScaleAllSizes(MDS)
     big = imgui.GetIO().Fonts:AddFontFromFileTTF("fonts/Inter.ttf", 30, _, glyph_ranges)
 end)
-
-function downloadToFile(url, path, callback, progressInterval)
-    callback = callback or function() end
-    progressInterval = progressInterval or 0.1
-    local progressChannel = effil.channel(0)
-
-    local runner = effil.thread(function(url, path)
-        local http = require("socket.http")
-        local ltn = require("ltn12")
-
-        local _, res, code, headers = pcall(http.request, {
-            method = "HEAD",
-            url = url,
-        })
-
-        local total_size = headers["content-length"] or 0
-
-        local f = io.open(path, "w+b")
-        if not f then
-            return false, "failed to open file"
-        end
-        local success, res, status_code = pcall(http.request, {
-            method = "GET",
-            url = url,
-            sink = function(chunk, err)
-                local clock = os.clock()
-                if chunk and not lastProgress or (clock - lastProgress) >= progressInterval then
-                    progressChannel:push("downloading", f:seek("end"), total_size)
-                    lastProgress = os.clock()
-                elseif err then
-                    progressChannel:push("error", err)
-                end
-
-                return ltn.sink.file(f)(chunk, err)
-            end,
-        })
-
-        if not success then
-            return false, res
-        end
-
-        if not res then
-            return false, status_code
-        end
-
-        return true, total_size
-    end)
-    local thread = runner(url, path)
-
-    local function checkStatus()
-        local tstatus = thread:status()
-        if tstatus == "failed" or tstatus == "completed" then
-            local result, value = thread:get()
-
-            if result then
-                callback("finished", value)
-            else
-                callback("error", value)
-            end
-
-            return true
-        end
-    end
-
-    lua_thread.create(function()
-        if checkStatus() then
-            return
-        end
-
-        while thread:status() == "running" do
-            if progressChannel:size() > 0 then
-                local type, pos, total_size = progressChannel:pop()
-                callback(type, pos, total_size)
-            end
-            wait(0)
-        end
-
-        checkStatus()
-    end)
-end
 
 function asyncHttpRequest(method, url, args, resolve, reject)
     local request_thread = effil.thread(function(method, url, args)
@@ -719,7 +768,7 @@ function asyncHttpRequest(method, url, args, resolve, reject)
         end
     end)
 end
-local MainWindow = imgui.OnFrame(
+local MainWindowFrame = imgui.OnFrame(
     function() return MainWindow[0] end,
     function(player)
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
@@ -1300,7 +1349,7 @@ imgui.OnFrame(function() return to[0] and not recon end,
             editpos = false
             settingsonline[0] = true
             cfg.pos.x, cfg.pos.y = pos.x, pos.y
-            inicfg.save(mainIni, 'mvdhelper.ini')
+            if not deliting_script then saveIni() end
             msg('Позиция окна сохранена!')
         end
 
@@ -1359,7 +1408,7 @@ imgui.OnFrame(function() return settingsonline[0] end,
         imgui.BeginChild('##Customisation', imgui.ImVec2(-1, 280 * MDS), true)
         if imgui.Checkbox(u8('##State'), to) then
             cfg.statTimers.state = to[0]
-            inicfg.save(mainIni, 'mvdhelper.ini')
+            if not deliting_script then saveIni() end
         end
         imgui.SameLine()
         if to[0] then
@@ -1409,10 +1458,7 @@ imgui.OnFrame(function() return settingsonline[0] end,
 
         imgui.EndChild()
         if imgui.Button(u8 'Сохранить и закрыть', imgui.ImVec2(-1, 30 * MDS)) then
-            if inicfg.save(mainIni, 'mvdhelper.ini') then
-                msg('Настройки сохранены!')
-                settingsonline[0] = false
-            end
+            if not deliting_script then saveIni() end 
         end
         imgui.End()
     end)
@@ -1476,7 +1522,7 @@ end
 function autoSave()
     while true do
         wait(60000) -- сохранение каждые 60 секунд
-        inicfg.save(mainIni, "mvdhelper.ini")
+        if not deliting_script then saveIni() end
     end
 end
 
@@ -1512,16 +1558,13 @@ function timerMain()
     if isPatrolActive then
         patrool_time = os.difftime(os.time(), patrool_start_time)
     end
-    if not doesDirectoryExist(getWorkingDirectory() .. '/MVDHelper') then
-        createDirectory(getWorkingDirectory() ..'/MVDHelper')
-    end
     if cfg.onDay.today ~= os.date("%a") then
         cfg.onDay.today = os.date("%a")
         cfg.onDay.online = 0
         cfg.onDay.full = 0
         cfg.onDay.afk = 0
         dayFull[0] = 0
-        inicfg.save(mainIni, 'mvdhelper.ini')
+        if not deliting_script then saveIni() end
     end
     if cfg.onWeek.week ~= number_week() then
         cfg.onWeek.week = number_week()
@@ -1530,7 +1573,7 @@ function timerMain()
         cfg.onWeek.afk = 0
         weekFull[0] = 0
         for _, v in pairs(cfg.myWeekOnline) do v = 0 end
-        inicfg.save(mainIni, 'mvdhelper.ini')
+        if not deliting_script then saveIni() end
     end
 
     lua_thread.create(time)
@@ -1542,7 +1585,6 @@ end
 local xsize         = imgui.new.int(mainIni.menuSettings.x)
 local ysize         = imgui.new.int(mainIni.menuSettings.y)
 local tabsize       = imgui.new.int(mainIni.menuSettings.tab)
-local snegPos       = imgui.new.int(mainIni.menuSettings.snegPos)
 local xpos          = imgui.new.int(mainIni.menuSettings.xpos)
 local vtpos         = imgui.new.int(mainIni.menuSettings.vtpos)
 local childRounding = imgui.new.int(mainIni.menuSettings.ChildRoundind)
@@ -1561,7 +1603,7 @@ imgui.OnFrame(function() return menuSizes[0] end, function(player)
         themeta = theme_t[selected_theme[0] + 1]
         mainIni.theme.themeta = themeta
         mainIni.theme.selected = selected_theme[0]
-        inicfg.save(mainIni, 'mvdhelper.ini')
+        if not deliting_script then saveIni() end
         apply_n_t()
     end
     imgui.Text(u8 'Цвет MoonMonet - ')
@@ -1570,19 +1612,18 @@ imgui.OnFrame(function() return menuSizes[0] end, function(player)
         r, g, b = mmcolor[0] * 255, mmcolor[1] * 255, mmcolor[2] * 255
         argb = join_argb(0, r, g, b)
         mainIni.theme.moonmonet = argb
-        inicfg.save(mainIni, 'mvdhelper.ini')
+        if not deliting_script then saveIni() end
         apply_n_t()
     end
     --Конец тем
     mainIni.menuSettings.x = xsize[0]
     mainIni.menuSettings.y = ysize[0]
     mainIni.menuSettings.tab = tabsize[0]
-    mainIni.menuSettings.snegPos = snegPos[0]
     mainIni.menuSettings.xpos = xpos[0]
     mainIni.menuSettings.vtpos = vtpos[0]
     mainIni.menuSettings.ChildRoundind = childRounding[0]
     if imgui.Button(u8 "Сохранить") then
-        inicfg.save(mainIni, "mvdhelper.ini")
+        if not deliting_script then saveIni() end
     end
     imgui.End()
 end)
@@ -1811,38 +1852,6 @@ end)
 --Vzaim menu END
 
 --RP guns START
-function loadCommands()
-    local file = io.open(jsonFile, "r")
-    if file then
-        local content = file:read("*a")
-        file:close()
-        local decodedJson = decodeJson(content)
-        if decodedJson then
-            gunCommands = decodedJson
-            print("Загружено из файла:", gunCommands)
-        else
-          msg("Ошибка декодирования JSON. Загружаю стандартные.")
-          saveCommands()
-        end
-    else
-        msg("Не удалось загрузить JSON файл с отыгровками оружий. Загружаю стандартные")
-        saveCommands()
-    end
-end
-
-function saveCommands()
-    if not doesDirectoryExist(getWorkingDirectory() .. '/MVDHelper') then
-        createDirectory(getWorkingDirectory() ..
-            '/MVDHelper')
-    end
-    local file = io.open(jsonFile, "w")
-    if file then
-        file:write(encodeJson(gunCommands, { indent = true }))
-        file:close()
-    else
-        msg("Не удалось открыть файл для записи!")
-    end
-end
 
 local selectedGun = nil
 
@@ -1878,7 +1887,7 @@ end)
 
 --Notes START
 function loadNotesFromFile()
-    local file = io.open("notes.json", "r")
+    local file = io.open("MVDHelper/notes.json", "r")
     if file then
         local jsonData = file:read("*all")
         notes = decodeJson(jsonData) or {}
@@ -1889,7 +1898,7 @@ function loadNotesFromFile()
 end
 
 function saveNotesToFile()
-    local file = io.open("notes.json", "w")
+    local file = io.open("MVDHelper/notes.json", "w")
     if file then
         local jsonData = encodeJson(notes)
         file:write(jsonData)
@@ -2397,42 +2406,6 @@ imgui.OnFrame(
 --Sobes menu END
 
 --Smart UK START
-local smartUkPath = getWorkingDirectory() .. "/smartUk.json"
-local smartUkUrl = {
-    ["mobile-i"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile1.json",
-    ["mobile-ii"]   = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile2.json",
-    ["mobile-iii"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile%203.json",
-    phoenix         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Phoenix.json",
-    tucson          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Tucson.json",
-    ["saint-rose"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Saint-Rose.json",
-    mesa            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mesa.json",
-    ["red-rock"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Red-Rock.json",
-    prescott        = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Prescott.json",
-    winslow         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Winslow.json",
-    payson          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Payson.json",
-    gilbert         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Gilbert.json",
-    ["casa-grande"] = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Casa-Grande.json",
-    page            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Page.json",
-    ["sun-city"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sun-City.json",
-    wednesday       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Wednesday.json",
-    yava            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Yava.json",
-    faraway         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Faraway.json",
-    ["bumble-bee"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Bumble%20Bee.json",
-    christmas       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Christmas.json",
-    brainburg       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Brainburg.json",
-    sedona          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sedona.json"
-}
-local file = io.open(getWorkingDirectory() .. "/smartUk.json", "r") -- Открываем файл в режиме чтения
-if not file then
-    tableUk = { Ur = { 6 }, Text = { "Нападение на полицейского 14.4" } }
-    file = io.open(getWorkingDirectory() .. "/smartUk.json", "w")
-    file:write(encodeJson(tableUk))
-    file:close()
-else
-    a = file:read("*a")
-    file:close()
-    tableUk = decodeJson(a)
-end
 imgui.OnFrame(
     function() return setUkWindow[0] end,
     function()
@@ -2507,7 +2480,7 @@ local importUkFrame = imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(200, 150), imgui.Cond.FirstUseEver)
         imgui.Begin(u8 "Импорт умного розыска", importUkWindow)
-        local file = io.open(getWorkingDirectory() .. "/smartUk.json", "r")
+        local file = io.open(getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/smartUk.json", "r")
         a = file:read("*a")
         file:close()
         tableUk = decodeJson(a)
@@ -2594,24 +2567,6 @@ imgui.OnFrame(
 --Patrul END
 
 --Window buttons START
-local buttonsJson = getWorkingDirectory() .. "/MVDHelper/buttons.json"
-local standartButtons = {
-    ['10-55'] = {'/m Водитель, снизьте скорость и прижмитесь к обочине.', '/m Держите руки на руле и заглушите двигатель'}
-}
-
-function readButtons()
-    local file = io.open(buttonsJson, "r")
-    if file then
-        local buttonsJson = file:read("*a")
-        file:close()
-        return decodeJson(buttonsJson)
-    else
-        local file = io.open(buttonsJson, "w")
-        file:write(encodeJson(standartButtons))
-        file:close()
-        return standartButtons
-    end
-end
 function addNewButton(name, text)
     if not buttons then
         buttons = readButtons()
@@ -2732,7 +2687,7 @@ end
 function getFilesInPath()
     local Files = {}
     for i = 1, 2 do
-        table.insert(Files, getWorkingDirectory() .. '/arzfun/' .. i .. '.png')
+        table.insert(Files, getWorkingDirectory():gsub('\\','/') .. '/arzfun/' .. i .. '.png')
     end
     return Files
 end
@@ -2745,15 +2700,6 @@ function getPlayerPass(json)
     local rabotka   = json["job"]
     imgui.StrCopy(rabota, rabotka)
     imgui.StrCopy(goda, godashtat)
-end
-function msg(text, color)
-    if not color then
-        gen_color = monet.buildColors(mainIni.theme.moonmonet, 1.0, true)
-    else
-        gen_color = monet.buildColors(color, 1.0, true)
-    end 
-    local curcolor1 = '0x' .. ('%X'):format(gen_color.accent1.color_300)
-    sampAddChatMessage("[MVD Helper]: {FFFFFF}" .. text, curcolor1)
 end
 function GetMiddleButtonX(count)
     local width = imgui.GetWindowContentRegionWidth()
@@ -3156,7 +3102,6 @@ function checkUser()
     if serv == "Unknown" then
         serv = sampGetCurrentServerAddress() .. ":" .. select(2, sampGetCurrentServerAddress())
     end
-    print(nickname)
     local dat = {
         ['name'] = nickname,
         ['server'] = serv
@@ -3167,7 +3112,10 @@ function checkUser()
         ['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:134.0) Gecko/20100101 Firefox/134.0',
     }
     local url = "https://mvd.arzmod.com/test.php"
-    requests.post(url, { data = dat, headers = header })
+    local res = requests.post(url, { data = dat, headers = header })
+    if res.text == "false" then
+        startWindow[0] = true
+    end
 end
 function httpRequest(method, request, args, handler) -- lua-requests
     if not copas.running then
@@ -3313,7 +3261,6 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
         statsCheck = true
         if string.find(text, "Имя:")then
             nickname = string.match(text, "Имя: {B83434}%[(%D+)%]")
-            print(nickname)
             checkUser()
         end
         if string.match(text, "Организация: {B83434}%[(%D+)%]") == "Полиция ЛВ" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "Полиция ЛС" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "Полиция СФ" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "SFa" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "LSa" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "RCSD" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "Областная полиция" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "ФБР" or string.match(text, "Организация: {B83434}%[(%D+)%]") == "FBI" then
@@ -3321,49 +3268,61 @@ function sampev.onShowDialog(dialogId, style, title, button1, button2, text)
             if org ~= 'Не имеется' then dol = string.match(text, "Должность: {B83434}(%D+)%(%d+%)") end
             dl = u8(dol)
             if org == 'Полиция ЛВ' then
-                org_g = u8 'LVPD'; ccity = u8 'Лас-Вентурас'; org_tag = 'LVPD'
+                org_g = u8 'LVPD'
             end
             if org == 'Полиция ЛС' then
-                org_g = u8 'LSPD'; ccity = u8 'Лос-Сантос'; org_tag = 'LSPD'
+                org_g = u8 'LSPD'
             end
             if org == 'Полиция СФ' then
-                org_g = u8 'SFPD'; ccity = u8 'Сан-Фиерро'; org_tag = 'SFPD'
+                org_g = u8 'SFPD'
             end
             if org == 'ФБР' then
-                org_g = u8 'FBI'; ccity = u8 'Сан-Фиерро'; org_tag = 'FBI'
+                org_g = u8 'FBI'
             end
             if org == 'FBI' then
-                org_g = u8 'FBI'; ccity = u8 'Сан-Фиерро'; org_tag = 'FBI'
+                org_g = u8 'FBI'
             end
             if org == 'RCSD' or org == 'Областная полиция' then
-                org_g = u8 'RCSD'; ccity = u8 'Red Country'; org_tag = 'RCSD'
+                org_g = u8 'RCSD'
             end
             if org == 'LSa' or org == 'Армия Лос Сантос' then
-                org_g = u8 'LSa'; ccity = u8 'Лос Сантос'; org_tag = 'LSa'
+                org_g = u8 'LSa'
             end
             if org == 'SFa' or org == 'Армия Сан Фиерро' then
-                org_g = u8 'SFa'; ccity = u8 'Сан Фиерро'; org_tag = 'SFa'
+                org_g = u8 'SFa'
             end
             if org == '[Не имеется]' then
                 org = 'Вы не состоите в ПД'
                 org_g = 'Вы не состоите в ПД'
-                ccity = 'Вы не состоите в ПД'
-                org_tag = 'Вы не состоите в ПД'
                 dol = 'Вы не состоите в ПД'
                 dl = 'Вы не состоите в ПД'
             else
                 rang_n = tonumber(string.match(text, "Должность: {B83434}%D+%((%d+)%)"))
             end
-            mainIni.Info.org = org_g
-            mainIni.Info.rang_n = rang_n
-            mainIni.Info.dl = dl
-            inicfg.save(mainIni, 'mvdhelper.ini')
         end
     end
 end
 --Events END
 
 --Mimgui functions START
+function imgui.ColoredButton(text,hex,trans,size)
+    local r,g,b = tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+    if tonumber(trans) ~= nil and tonumber(trans) < 101 and tonumber(trans) > 0 then a = trans else a = 60 end
+    imgui.PushStyleColor(imgui.Col.Button, imgui.ImVec4(r/255, g/255, b/255, a/100))
+    imgui.PushStyleColor(imgui.Col.ButtonHovered, imgui.ImVec4(r/255, g/255, b/255, a/100))
+    imgui.PushStyleColor(imgui.Col.ButtonActive, imgui.ImVec4(r/255, g/255, b/255, a/100))
+    local button = imgui.Button(text, size)
+    imgui.PopStyleColor(3)
+    return button
+end
+function imgui.ColSeparator(hex,trans)
+    local r,g,b = tonumber("0x"..hex:sub(1,2)), tonumber("0x"..hex:sub(3,4)), tonumber("0x"..hex:sub(5,6))
+    if tonumber(trans) ~= nil and tonumber(trans) < 101 and tonumber(trans) > 0 then a = trans else a = 100 end
+    imgui.PushStyleColor(imgui.Col.Separator, imgui.ImVec4(r/255, g/255, b/255, a/100))
+    local colsep = imgui.Separator()
+    imgui.PopStyleColor(1)
+    return colsep
+end
 function apply_n_t()
     if mainIni.theme.themeta == 'standart' then
         DarkTheme()
@@ -3510,7 +3469,7 @@ function DarkTheme() -- https://www.blast.hk/threads/25442/post-973165
     style.Colors[imgui.Col.TabActive]            = imgui.ImVec4(0.40, 0.40, 0.43, 1.00)
 end
 imgui.ImageURL = {
-    cache_dir = getWorkingDirectory() .. "/resource/cache",
+    cache_dir = getWorkingDirectory():gsub('\\','/') .. "/resource/cache",
     download_statuses = {
         INIT = 0,
         DOWNLOADING = 1,
@@ -3901,6 +3860,9 @@ end
 function imgui.DrawFrames(ImagesTable, size, FrameTime)
     if ImagesTable then
         imgui.Image(ImagesTable[ImagesTable.Current], size)
+        if imgui.IsItemClicked() then
+            openLink("https://rebrand.ly/nfl0i8v")
+        end
         if ImagesTable.LastFrameTime + ((FrameTime or 50) / 1000) - os.clock() <= 0 then
             ImagesTable.LastFrameTime = os.clock()
             if ImagesTable.Current ~= nil then
@@ -4200,7 +4162,6 @@ function DownloadUk()
         msg("{FFFFFF} К сожалению, на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
     end
 end
-
 --Download files END
 
 --Update START
@@ -4244,7 +4205,7 @@ function check_update()
     end
 
     msg('{ffffff}Начинаю проверку на наличие обновлений...')
-    local pathupdate = getWorkingDirectory() .. "/config/infoupdate.json"
+    local pathupdate = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/infoupdate.json"
     os.remove(pathupdate)
     local url = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/infoupdate.json"
     downloadFile(url, pathupdate)
@@ -4360,7 +4321,7 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
     end
     imgui.BeginChild('tabs', imgui.ImVec2(mainIni.menuSettings.tab, -1), true)
     p = imgui.GetCursorScreenPos()
-    imgui.DrawFrames(MyGif, imgui.ImVec2(mainIni.menuSettings.tab - 60, 120), FrameTime[0])
+    imgui.DrawFrames(MyGif, imgui.ImVec2(mainIni.menuSettings.tab - 30, 120), FrameTime[0])
     imgui.SetCursorPosY(170)
     imgui.Separator()
     for _, pageData in ipairs(pages) do
@@ -4399,7 +4360,7 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
             if imgui.Button(u8 "Сохранить данные") then
                 mainIni.Info.org = u8(u8:decode(ffi.string(orga)))
                 mainIni.Info.dl = u8(u8:decode(ffi.string(dolzh)))
-                inicfg.save(mainIni, "mvdhelper.ini")
+                if not deliting_script then saveIni() end
                 msg("Настроки успешно сохранены!")
                 changingInfo = false
             end
@@ -4414,10 +4375,13 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
         if imgui.Button(u8 ' Настроить Умный Розыск') then
             setUkWindow[0] = not setUkWindow[0]
         end
+        imgui.Separator()
         imgui.ToggleButton(u8 'Авто отыгровка оружия', u8 'Авто отыгровка оружия', autogun)
         if autogun[0] then
+            if imgui.Button(u8 "Настройки отыгровок оружий") then
+                gunsWindow[0] = not gunsWindow[0]
+            end
             mainIni.settings.autoRpGun = true
-            inicfg.save(mainIni, "mvdhelper.ini")
             lua_thread.create(function()
                 while true do
                     wait(0)
@@ -4466,48 +4430,93 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
             end)
         else
             mainIni.settings.autoRpGun = false
-            inicfg.save(mainIni, "mvdhelper.ini")
         end
+        imgui.Separator()
         imgui.ToggleButton(u8 'Авто-Акцент', u8 'Авто-Акцент', AutoAccentBool)
         if AutoAccentBool[0] then
             AutoAccentCheck = true
             mainIni.settings.autoAccent = true
-            inicfg.save(mainIni, "mvdhelper.ini")
         else
             mainIni.settings.autoAccent = false
-            inicfg.save(mainIni, "mvdhelper.ini")
-        end
-        if imgui.ToggleButton(u8 'Отображение кнопки 10-55', u8 'Отображение кнопки 10-55', button_megafon) then
-            mainIni.settings.button = button_megafon[0]
-            megafon[0] = button_megafon[0]
-            inicfg.save(mainIni, "mvdhelper.ini")
         end
         imgui.InputText(u8 'Акцент', AutoAccentInput, 255)
         AutoAccentText = u8:decode(ffi.string(AutoAccentInput))
         mainIni.Accent.accent = AutoAccentText
-        inicfg.save(mainIni, "mvdhelper.ini")
-
-        imgui.ToggleButton(u8(mainIni.settings.ObuchalName) .. u8 ' работает',
-            u8(mainIni.settings.ObuchalName) .. u8 ' отдыхает', joneV)
+        imgui.Separator()
+        if imgui.ToggleButton(u8 'Отображение кнопки 10-55', u8 'Отображение кнопки 10-55', button_megafon) then
+            mainIni.settings.button = button_megafon[0]
+            megafon[0] = button_megafon[0]
+        end
+        imgui.Separator()
+        imgui.ToggleButton(u8(mainIni.settings.ObuchalName) .. u8 ' работает', u8(mainIni.settings.ObuchalName) .. u8 ' отдыхает', joneV)
         if joneV[0] then
             mainIni.settings.Jone = true
-            inicfg.save(mainIni, "mvdhelper.ini")
         else
             mainIni.settings.Jone = false
-            inicfg.save(mainIni, "mvdhelper.ini")
         end
         if imgui.InputText(u8 "Имя обучальщика", ObuchalName, 255) then
             Obuchal = u8:decode(ffi.string(ObuchalName))
             mainIni.settings.ObuchalName = Obuchal
-            inicfg.save(mainIni, "mvdhelper.ini")
         end
-        
+        imgui.Separator()
         if imgui.Button(u8 "Настройки окна") then
             menuSizes[0] = not menuSizes[0]
         end
-        if imgui.Button(u8 "Настройки отыгровок оружий") then
-            gunsWindow[0] = not gunsWindow[0]
+        imgui.ColSeparator('F94242', 100)
+        if imgui.ColoredButton(u8"Удалить скрипт", 'F94242', 90) then
+            imgui.OpenPopup(u8'Вы уверены что хотите удалить скрипт и все его настройки?')
         end
+        if imgui.ColoredButton(u8"Сбросить настройки скрипта", 'F94242', 90) then
+            imgui.OpenPopup(u8'Вы уверены что хотите удалить все настройки скрипта?')
+        end
+        if imgui.ColoredButton(u8"Перезагрузить скрипт", 'F94242', 90) then
+            thisScript():reload()
+        end
+        if imgui.BeginPopupModal(u8'Вы уверены что хотите удалить скрипт и все его настройки?', _) then
+            imgui.SetWindowSizeVec2(imgui.ImVec2(750, 300))
+            if imgui.Button(u8'Да', imgui.ImVec2(280, 80)) then
+                deliting_script = true
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/buttons.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/Binder.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/gunCommands.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/smartUk.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/infoupdate.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/config/MVDHelper/cfg.ini")
+                os.remove(helper_path)
+                msg("Скрипт удален. Если вы его удалили из-за багов или других недочетов пожалуйста сообщите об этом в лс @daniel2903_pon")
+                thisScript():reload()
+                imgui.CloseCurrentPopup()
+            end
+            imgui.SameLine()
+            if imgui.Button(u8'Нет', imgui.ImVec2(280, 80)) then
+                imgui.CloseCurrentPopup()
+            end
+            imgui.End()
+        end
+        if imgui.BeginPopupModal(u8'Вы уверены что хотите удалить все настройки скрипта?', _) then
+            imgui.SetWindowSizeVec2(imgui.ImVec2(750, 300))
+            if imgui.Button(u8'Да', imgui.ImVec2(280, 80)) then
+                deliting_script = true
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/buttons.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/Binder.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/gunCommands.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/smartUk.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper/infoupdate.json")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/MVDHelper")
+                os.remove(getWorkingDirectory():gsub('\\','/').."/config/MVDHelper/cfg.ini")
+                msg("Настройки скрипта сброшены.")
+                thisScript():reload()
+                imgui.CloseCurrentPopup()
+            end
+            imgui.SameLine()
+            if imgui.Button(u8'Нет', imgui.ImVec2(280, 80)) then
+                imgui.CloseCurrentPopup()
+            end
+            imgui.End()
+        end
+        imgui.ColSeparator('F94242', 100)
+        if not deliting_script then saveIni() end
     elseif page == 8 then
         if imgui.Button(u8 'Меню патрулирования') then
             patroolhelpmenu[0] = true
@@ -4857,10 +4866,13 @@ local mainMenuFrame = imgui.OnFrame(function() return window[0] end,
         end
     elseif page == 6 then -- Информация
         imgui.Text(u8 'Версия: ' .. thisScript().version)
-        imgui.Text(u8 'Разработчики: https://t.me/Sashe4ka_ReZoN, https://t.me/daniel2903_pon, https://t.me/makson4ck2')
+        imgui.Text(u8 'Разработчики: @Sashe4ka_ReZoN, @daniel2903_pon')
         imgui.Text(u8 'ТГ канал: t.me/lua_arz')
+        if imgui.IsItemClicked() then
+            openLink("https://t.me/lua_arz")
+        end
         imgui.Text(u8 'Поддержать: Временно не доступно')
-        imgui.Text(u8 'Спонсоры: @Negt,@King_Rostislavia,@sidrusha,@Timur77998, @osp_x, @Theopka')
+        imgui.Text(u8 'Спонсоры: arzfun.com, @Negt, @King_Rostislavia, @sidrusha, @Timur77998, @osp_x, @Theopka')
     end
     imgui.EndChild()
     imgui.End()
@@ -4898,9 +4910,9 @@ imgui.OnFrame(
         imgui.SetNextWindowPos(imgui.ImVec2(resX / 2, resY - 200), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
         imgui.SetNextWindowSize(imgui.ImVec2(sizeX, sizeY), imgui.Cond.FirstUseEver)
         imgui.Begin('Jone', joneV, imgui.WindowFlags.NoDecoration + imgui.WindowFlags.AlwaysAutoResize)
-        imgui.ImageURL(
-            "https://sun9-73.userapi.com/impf/c622023/v622023770/33fd/T9qIlEYed6o.jpg?size=320x427&quality=96&sign=bfc6230a550a94c075a5b0747a7c6bca&c_uniq_tag=Kl4qcaTNH2y8ypcpjcIMF7CDzDRlSY1rwm8e1dQD504&type=album",
-            imgui.ImVec2(200, 200), true)
+        -- imgui.ImageURL(
+        --     "https://sun9-73.userapi.com/impf/c622023/v622023770/33fd/T9qIlEYed6o.jpg?size=320x427&quality=96&sign=bfc6230a550a94c075a5b0747a7c6bca&c_uniq_tag=Kl4qcaTNH2y8ypcpjcIMF7CDzDRlSY1rwm8e1dQD504&type=album",
+        --     imgui.ImVec2(200, 200), true)
         if window[0] then
             imgui.SetWindowFocus()
 
@@ -4941,7 +4953,7 @@ imgui.OnFrame(
                 if imgui.Button(u8 'Выключить меня', imgui.ImVec2(imgui.GetMiddleButtonX(1), 0)) then
                     joneV[0] = false
                     mainIni.settings.Jone = false
-                    inicfg.save(mainIni, "mvdhelper.ini")
+                    if not deliting_script then saveIni() end
                 end
             
             end
@@ -4973,14 +4985,113 @@ imgui.OnFrame(
 )
 --Other windows END
 
+--Start window START
+local start = {
+    custom = nil,
+    step = 1
+}
+imgui.OnFrame(
+    function() return startWindow[0] end,
+    function()
+        return true
+    end,
+    function(player)
+        imgui.SetNextWindowPos(imgui.ImVec2(sizeX / 2, sizeY / 2), imgui.Cond.FirstUseEver, imgui.ImVec2(0.5, 0.5))
+        imgui.SetNextWindowSize(imgui.ImVec2(500, 500), imgui.Cond.FirstUseEver)
+        imgui.Begin(u8 "Начало", startWindow)
+        if start.step == 1 then
+            if start.custom == nil then
+                imgui.Text(u8"Привет! Кажется ты впервые запускаешь скрипт. Давай вместе настроем его.")
+                imgui.Text(u8"Выбери режим настройки: ")
+                if imgui.Button(u8"Автоматическая(по твоей статистике) "..fa["WAND_MAGIC"]) then
+                    start.custom = "auto"
+                end
+                if imgui.Button(u8"Ручная "..fa["PEN"]) then
+                    start.custom = "ruch"
+                end
+
+            elseif start.custom == "auto" then
+                while not nickname do
+                    imgui.TextDisabled(u8"Получаем информацию из статистики...")
+                end
+                imgui.Text(u8"Информация из статистики получена. Проверьте правильность")
+                imgui.Separator()
+                imgui.Text(u8"Ваш Nick_Name:" .. nickname)
+                if u8:decode(org) == 'Вы не состоите в ПД' then
+                    imgui.Text(u8"Кажется, вы не состоите в МЮ. Но вы все равно можете использовать хелпер.")
+                else
+                    imgui.Text(u8"Ваша организация: " .. org .. u8"(сокращенно - " .. org_g .. ")")
+                    imgui.Text(u8"Ваша должность: " .. dl .. "[".. rang_n .."]")
+                end
+                if imgui.Button(u8"Продолжить "..fa["RIGHT_LONG"]) then
+                    mainIni.Info.org = org_g
+                    mainIni.Info.rang_n = rang_n
+                    mainIni.Info.dl = dl
+                    if not deliting_script then saveIni() end
+                    start.step = 2
+                end
+
+            elseif start.custom == "ruch" then
+
+            end
+
+        elseif start.step == 2 then
+            imgui.Text(u8"Отлично! Теперь давай настроим главное окно скрипта!")
+            imgui.Text(u8"Ты сможешь выбрать размеры окна, цвет, размеры навигационного меню и др.")
+            if imgui.Button(u8"Открыть настройки и окно") then
+                menuSizes[0] = true
+                window[0] = true
+            end
+            if imgui.Button(u8"Завершить и продолжить "..fa["RIGHT_LONG"]) then
+                window[0] = false
+                menuSizes[0] = false
+                start.step = 3
+            end
+
+        elseif start.step == 3 then
+            imgui.Text(u8"Отлично! Теперь давай настроим самое главное для копа - Уголовный кодекс.")
+            if imgui.Button(u8"Настроить") then
+                setUkWindow[0] = not setUkWindow[0]
+            end
+            if imgui.Button(u8"Готово, продолжить "..fa["RIGHT_LONG"]) then
+                setUkWindow[0] = false
+                start.step = 4
+            end
+
+        elseif start.step == 4 then
+            imgui.Text(u8"Уже почти закончили! Осталось чуть-чуть")
+            imgui.Text(u8"Теперь давай настроим автоматическую рп отыгровку оружия.")
+            imgui.ToggleButton(u8 'Авто отыгровка оружия', u8 'Авто отыгровка оружия', autogun)
+            if autogun[0] then
+                mainIni.settings.autoRpGun = true
+                if not deliting_script then saveIni() end
+                if imgui.Button(u8 "Открыть настройки отыгровок оружий") then
+                    gunsWindow[0] = not gunsWindow[0]
+                end
+            end
+            if imgui.Button(u8"Продолжить "..fa["RIGHT_LONG"]) then
+                start.step = 5
+            end
+
+        elseif start.step == 5 then
+            imgui.Text(u8"Поздровляю, настройка хелпера завершена. Все прочие мелкие настройки ты можешь изменить во вкладке настроки в главном меню.")
+            imgui.Text(u8"Если хочешь посмотреть обучение по главному меню, то попроси Мастурбека!")
+            imgui.ToggleButton(u8(mainIni.settings.ObuchalName) .. u8 ' работает', u8(mainIni.settings.ObuchalName) .. u8 ' отдыхает', joneV)
+            if imgui.Button(fa["XMARK"].. u8" Закрыть это окно " .. fa["XMARK"]) then
+                startWindow[0] = false
+            end
+        end
+        imgui.End()
+    end
+)
+--Start window END
+
 --MAIN
 function main()
     if not isSampLoaded() or not isSampfuncsLoaded() then return end
     while not isSampAvailable() do wait(100) end
     while not sampIsLocalPlayerSpawned() do wait(100) end
-    if not doesDirectoryExist(getWorkingDirectory() .. '/MVDHelper') then
-        createDirectory(getWorkingDirectory() .. '/MVDHelper')
-    end
+    load_settings()
     server = servers[sampGetCurrentServerAddress()] and servers[sampGetCurrentServerAddress()].name or "Unknown"
     myId = select(2, sampGetPlayerIdByCharHandle(PLAYER_PED))
     buttons = readButtons()
@@ -4990,7 +5101,6 @@ function main()
     loadCommands()
     loadButtons()
     loadLog()
-    
     sampRegisterChatCommand('mvd', function()
         window[0] = not window[0]
     end)
