@@ -50,7 +50,6 @@ local BinderWindow     = imgui.new.bool(false)
 local leaderPanel      = imgui.new.bool(false)
 local MainWindow       = imgui.new.bool(false)
 --Windows buffs END
-
 --Конфиг
 local directIni = 'MVDHelper.ini'
 local mainIni = inicfg.load({
@@ -127,6 +126,14 @@ local mainIni = inicfg.load({
         xpos = 90,
         vtpos = 1,
         ChildRoundind = 10
+    },
+    bodyCam = {
+        enabled = true,
+        posX = 500,
+        posY = 500,
+        rpBodycam = true,
+        timeBk = false,
+        videoRp = false,
     }
 }, directIni)
 inicfg.save(mainIni, directIni)
@@ -182,84 +189,6 @@ local departsettings  = {
     toorgname = new.char[255](),
     frequency = new.char[255](),
     myorgtext = new.char[255](),
-}
-local serversList     = {
-    "phoenix", "mobile i", "mobile ii", "mobile iii", "tucson", "saintrose", "mesa", "red-rock",
-    "prescott", "winslow", "payson", "gilbert", "casa-grande", "page", "sun-city", "wednesday",
-    "yava", "faraway", "bumble bee", "christmas", "brainburg", "sedona"
-}
-
-local servers = {
-    ["80.66.82.162"]    = { number = -1, name = "Mobile I" },
-    ["80.66.82.148"]    = { number = -2, name = "Mobile II" },
-    ["80.66.82.136"]    = { number = -3, name = "Mobile III" },
-    ["185.169.134.44"]  = { number = 4, name = "Chandler" },
-    ["185.169.134.43"]  = { number = 3, name = "Scottdale" },
-    ["185.169.134.45"]  = { number = 5, name = "Brainburg" },
-    ["185.169.134.5"]   = { number = 6, name = "Saint-Rose" },
-    ["185.169.132.107"] = { number = 6, name = "Saint-Rose" },
-    ["185.169.134.59"]  = { number = 7, name = "Mesa" },
-    ["185.169.134.61"]  = { number = 8, name = "Red-Rock" },
-    ["185.169.134.107"] = { number = 9, name = "Yuma" },
-    ["185.169.134.109"] = { number = 10, name = "Surprise" },
-    ["185.169.134.166"] = { number = 11, name = "Prescott" },
-    ["185.169.134.171"] = { number = 12, name = "Glendale" },
-    ["185.169.134.172"] = { number = 13, name = "Kingman" },
-    ["185.169.134.173"] = { number = 14, name = "Winslow" },
-    ["185.169.134.174"] = { number = 15, name = "Payson" },
-    ["80.66.82.191"]    = { number = 16, name = "Gilbert" },
-    ["80.66.82.190"]    = { number = 17, name = "Show Low" },
-    ["80.66.82.188"]    = { number = 18, name = "Casa-Grande" },
-    ["80.66.82.168"]    = { number = 19, name = "Page" },
-    ["80.66.82.159"]    = { number = 20, name = "Sun-City" },
-    ["80.66.82.200"]    = { number = 21, name = "Queen-Creek" },
-    ["80.66.82.144"]    = { number = 22, name = "Sedona" },
-    ["80.66.82.132"]    = { number = 23, name = "Holiday" },
-    ["80.66.82.128"]    = { number = 24, name = "Wednesday" },
-    ["80.66.82.113"]    = { number = 25, name = "Yava" },
-    ["80.66.82.82"]     = { number = 26, name = "Faraway" },
-    ["80.66.82.87"]     = { number = 27, name = "Bumble Bee" },
-    ["80.66.82.54"]     = { number = 28, name = "Christmas" },
-    ["80.66.82.39"]     = { number = 29, name = "Mirage" },
-    ["80.66.82.33"]     = { number = 30, name = "Love" },
-    ["185.169.134.3"]   = { number = 1, name = "Phoenix" },
-    ["185.169.132.105"] = { number = 1, name = "Phoenix" },
-    ["185.169.134.4"]   = { number = 2, name = "Tucson" },
-    ["185.169.132.106"] = { number = 2, name = "Tucson" },
-    ["mobile1_arizona-rp_com"]    = { number = -1, name = "Mobile I" },
-    ["mobile2_arizona-rp_com"]    = { number = -2, name = "Mobile II" },
-    ["mobile3_arizona-rp_com"]    = { number = -3, name = "Mobile III" },
-    ["chandler_arizona-rp_com"]   = { number = 4, name = "Chandler" },
-    ["scottdale_arizona-rp_com"]  = { number = 3, name = "Scottdale" },
-    ["brainburg_arizona-rp_com"]  = { number = 5, name = "Brainburg" },
-    ["saintrose_arizona-rp_com"]  = { number = 6, name = "Saint-Rose" },
-    ["mesa_arizona-rp_com"]       = { number = 7, name = "Mesa" },
-    ["redrock_arizona-rp_com"]    = { number = 8, name = "Red-Rock" },
-    ["yuma_arizona-rp_com"]       = { number = 9, name = "Yuma" },
-    ["surprise_arizona-rp_com"]   = { number = 10, name = "Surprise" },
-    ["prescott_arizona-rp_com"]   = { number = 11, name = "Prescott" },
-    ["glendale_arizona-rp_com"]   = { number = 12, name = "Glendale" },
-    ["kingman_arizona-rp_com"]    = { number = 13, name = "Kingman" },
-    ["winslow_arizona-rp_com"]    = { number = 14, name = "Winslow" },
-    ["payson_arizona-rp_com"]     = { number = 15, name = "Payson" },
-    ["gilbert_arizona-rp_com"]    = { number = 16, name = "Gilbert" },
-    ["showlow_arizona-rp_com"]    = { number = 17, name = "Show Low" },
-    ["casagrande_arizona-rp_com"] = { number = 18, name = "Casa-Grande" },
-    ["page_arizona-rp_com"]       = { number = 19, name = "Page" },
-    ["suncity_arizona-rp_com"]    = { number = 20, name = "Sun-City" },
-    ["queencreek_arizona-rp_com"] = { number = 21, name = "Queen-Creek" },
-    ["sedona_arizona-rp_com"]     = { number = 22, name = "Sedona" },
-    ["holiday_arizona-rp_com"]    = { number = 23, name = "Holiday" },
-    ["wednesday_arizona-rp_com"]  = { number = 24, name = "Wednesday" },
-    ["yava_arizona-rp_com"]       = { number = 25, name = "Yava" },
-    ["faraway_arizona-rp_com"]    = { number = 26, name = "Faraway" },
-    ["bumblebee_arizona-rp_com"]  = { number = 27, name = "Bumble Bee" },
-    ["christmas_arizona-rp_com"]  = { number = 28, name = "Christmas" },
-    ["mirage_arizona-rp_com"]     = { number = 29, name = "Mirage" },
-    ["love_arizona-rp_com"]       = { number = 30, name = "Love" },
-    ["phoenix_arizona-rp_com"]    = { number = 1, name = "Phoenix" },
-    ["tucson_arizona-rp_com"]     = { number = 2, name = "Tucson" },
-    ["drake_arizona-rp_com"]      = { number = 31, name = "Drake" },
 }
 local changingInfo    = false
 local ObuchalName     = new.char[255](u8(mainIni.settings.ObuchalName))
@@ -317,35 +246,131 @@ local pages = {
     { icon = faicons("CIRCLE_INFO"), title = "  Инфо", index = 6 },
     { icon = faicons("GEAR"), title = "  Настройки", index = 1 },
 }
+local serversList = {
+    "mobile-i", "mobile-ii", "mobile-iii", "phoenix", "tucson", "chandler", "scottdale", "brainburg",
+    "saint-rose", "mesa", "red-rock", "yuma", "surprise", "prescott", "glendale", "kingman",
+    "winslow", "payson", "gilbert", "show-low", "casa-grande", "page", "sun-city", "queen-creek",
+    "sedona", "holiday", "wednesday", "yava", "faraway", "bumble-bee", "christmas", "mirage",
+    "love", "drake"
+}
+
+
+local servers = {
+    ["80.66.82.162"]    = { number = -1, name = "Mobile I" },
+    ["80.66.82.148"]    = { number = -2, name = "Mobile II" },
+    ["80.66.82.136"]    = { number = -3, name = "Mobile III" },
+    ["185.169.134.44"]  = { number = 4, name = "Chandler" },
+    ["185.169.134.43"]  = { number = 3, name = "Scottdale" },
+    ["185.169.134.45"]  = { number = 5, name = "Brainburg" },
+    ["185.169.134.5"]   = { number = 6, name = "Saint-Rose" },
+    ["185.169.132.107"] = { number = 6, name = "Saint-Rose" },
+    ["185.169.134.59"]  = { number = 7, name = "Mesa" },
+    ["185.169.134.61"]  = { number = 8, name = "Red-Rock" },
+    ["185.169.134.107"] = { number = 9, name = "Yuma" },
+    ["185.169.134.109"] = { number = 10, name = "Surprise" },
+    ["185.169.134.166"] = { number = 11, name = "Prescott" },
+    ["185.169.134.171"] = { number = 12, name = "Glendale" },
+    ["185.169.134.172"] = { number = 13, name = "Kingman" },
+    ["185.169.134.173"] = { number = 14, name = "Winslow" },
+    ["185.169.134.174"] = { number = 15, name = "Payson" },
+    ["80.66.82.191"]    = { number = 16, name = "Gilbert" },
+    ["80.66.82.190"]    = { number = 17, name = "Show Low" },
+    ["80.66.82.188"]    = { number = 18, name = "Casa-Grande" },
+    ["80.66.82.168"]    = { number = 19, name = "Page" },
+    ["80.66.82.159"]    = { number = 20, name = "Sun-City" },
+    ["80.66.82.200"]    = { number = 21, name = "Queen-Creek" },
+    ["80.66.82.144"]    = { number = 22, name = "Sedona" },
+    ["80.66.82.132"]    = { number = 23, name = "Holiday" },
+    ["80.66.82.128"]    = { number = 24, name = "Wednesday" },
+    ["80.66.82.113"]    = { number = 25, name = "Yava" },
+    ["80.66.82.82"]     = { number = 26, name = "Faraway" },
+    ["80.66.82.87"]     = { number = 27, name = "Bumble Bee" },
+    ["80.66.82.54"]     = { number = 28, name = "Christmas" },
+    ["80.66.82.39"]     = { number = 29, name = "Mirage" },
+    ["80.66.82.33"]     = { number = 30, name = "Love" },
+    ["185.169.134.3"]   = { number = 1, name = "Phoenix" },
+    ["185.169.132.105"] = { number = 1, name = "Phoenix" },
+    ["185.169.134.4"]   = { number = 2, name = "Tucson" },
+    ["185.169.132.106"] = { number = 2, name = "Tucson" },
+    ["mobile1.arizona-rp.com"]    = { number = -1, name = "Mobile I" },
+    ["mobile2.arizona-rp.com"]    = { number = -2, name = "Mobile II" },
+    ["mobile3.arizona-rp.com"]    = { number = -3, name = "Mobile III" },
+    ["chandler.arizona-rp.com"]   = { number = 4, name = "Chandler" },
+    ["scottdale.arizona-rp.com"]  = { number = 3, name = "Scottdale" },
+    ["brainburg.arizona-rp.com"]  = { number = 5, name = "Brainburg" },
+    ["saintrose.arizona-rp.com"]  = { number = 6, name = "Saint-Rose" },
+    ["mesa.arizona-rp.com"]       = { number = 7, name = "Mesa" },
+    ["redrock.arizona-rp.com"]    = { number = 8, name = "Red-Rock" },
+    ["yuma.arizona-rp.com"]       = { number = 9, name = "Yuma" },
+    ["surprise.arizona-rp.com"]   = { number = 10, name = "Surprise" },
+    ["prescott.arizona-rp.com"]   = { number = 11, name = "Prescott" },
+    ["glendale.arizona-rp.com"]   = { number = 12, name = "Glendale" },
+    ["kingman.arizona-rp.com"]    = { number = 13, name = "Kingman" },
+    ["winslow.arizona-rp.com"]    = { number = 14, name = "Winslow" },
+    ["payson.arizona-rp.com"]     = { number = 15, name = "Payson" },
+    ["gilbert.arizona-rp.com"]    = { number = 16, name = "Gilbert" },
+    ["showlow.arizona-rp.com"]    = { number = 17, name = "Show Low" },
+    ["casagrande.arizona-rp.com"] = { number = 18, name = "Casa-Grande" },
+    ["page.arizona-rp.com"]       = { number = 19, name = "Page" },
+    ["suncity.arizona-rp.com"]    = { number = 20, name = "Sun-City" },
+    ["queencreek.arizona-rp.com"] = { number = 21, name = "Queen-Creek" },
+    ["sedona.arizona-rp.com"]     = { number = 22, name = "Sedona" },
+    ["holiday.arizona-rp.com"]    = { number = 23, name = "Holiday" },
+    ["wednesday.arizona-rp.com"]  = { number = 24, name = "Wednesday" },
+    ["yava.arizona-rp.com"]       = { number = 25, name = "Yava" },
+    ["faraway.arizona-rp.com"]    = { number = 26, name = "Faraway" },
+    ["bumblebee.arizona-rp.com"]  = { number = 27, name = "Bumble Bee" },
+    ["christmas.arizona-rp.com"]  = { number = 28, name = "Christmas" },
+    ["mirage.arizona-rp.com"]     = { number = 29, name = "Mirage" },
+    ["love.arizona-rp.com"]       = { number = 30, name = "Love" },
+    ["phoenix.arizona-rp.com"]    = { number = 1, name = "Phoenix" },
+    ["tucson.arizona-rp.com"]     = { number = 2, name = "Tucson" },
+    ["drake.arizona-rp.com"]      = { number = 31, name = "Drake" },
+}
+
 local smartUkPath = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/smartUk.json"
 local smartUkUrl = {
-    ["mobile-i"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile1.json",
-    ["mobile-ii"]   = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile2.json",
-    ["mobile-iii"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile%203.json",
-    phoenix         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Phoenix.json",
-    tucson          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Tucson.json",
-    ["saint-rose"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Saint-Rose.json",
-    mesa            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mesa.json",
-    ["red-rock"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Red-Rock.json",
-    prescott        = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Prescott.json",
-    winslow         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Winslow.json",
-    payson          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Payson.json",
-    gilbert         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Gilbert.json",
-    ["casa-grande"] = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Casa-Grande.json",
-    page            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Page.json",
-    ["sun-city"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sun-City.json",
-    wednesday       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Wednesday.json",
-    yava            = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Yava.json",
-    faraway         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Faraway.json",
-    ["bumble-bee"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Bumble%20Bee.json",
-    christmas       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Christmas.json",
-    brainburg       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Brainburg.json",
-    sedona          = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sedona.json"
+    ["mobile-i"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile1.json",
+    ["mobile-ii"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile2.json",
+    ["mobile-iii"]   = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mobile%203.json",
+    ["phoenix"]      = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Phoenix.json",
+    ["tucson"]       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Tucson.json",
+    ["chandler"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Chandler.json",
+    ["scottdale"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Scottdale.json",
+    ["brainburg"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Brainburg.json",
+    ["saint-rose"]   = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Saint-Rose.json",
+    ["mesa"]         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mesa.json",
+    ["red-rock"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Red-Rock.json",
+    ["yuma"]         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Yuma.json",
+    ["surprise"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Surprise.json",
+    ["prescott"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Prescott.json",
+    ["glendale"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Glendale.json",
+    ["kingman"]      = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Kingman.json",
+    ["winslow"]      = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Winslow.json",
+    ["payson"]       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Payson.json",
+    ["gilbert"]      = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Gilbert.json",
+    ["show-low"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Show%20Low.json",
+    ["casa-grande"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Casa-Grande.json",
+    ["page"]         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Page.json",
+    ["sun-city"]     = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sun-City.json",
+    ["queen-creek"]  = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Queen-Creek.json",
+    ["sedona"]       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Sedona.json",
+    ["holiday"]      = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Holiday.json",
+    ["wednesday"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Wednesday.json",
+    ["yava"]         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Yava.json",
+    ["faraway"]      = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Faraway.json",
+    ["bumble-bee"]   = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Bumble%20Bee.json",
+    ["christmas"]    = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Christmas.json",
+    ["mirage"]       = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Mirage.json",
+    ["love"]         = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Love.json",
+    ["drake"]        = "https://raw.githubusercontent.com/DanielBagdasarian/MVD-Helper-Mobile/main/smartUkLink/Drake.json"
 }
+
 local buttonsJson = getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/buttons.json"
 local standartButtons = {
     ['10-55'] = {'/m Водитель, снизьте скорость и прижмитесь к обочине.', '/m Держите руки на руле и заглушите двигатель'}
 }
+local search = false
 
 --MOONMONET START
 function join_argb(a, r, g, b)
@@ -2424,7 +2449,7 @@ imgui.OnFrame(
         end
         if imgui.BeginChild('Name', imgui.ImVec2(0, imgui.GetWindowSize().y - 36 - imgui.GetCursorPosY() - imgui.GetStyle().FramePadding.y * 2), true) then
             for i = 1, #tableUk["Text"] do
-                imgui.Text(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i]))
+                imgui.Text(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tostring(tableUk["Ur"][i])))
                 Uk = #tableUk["Text"]
             end
             imgui.EndChild()
@@ -2546,9 +2571,9 @@ imgui.OnFrame(
             if imgui.Button(u8('Завершить'), imgui.ImVec2(100 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
                 lua_thread.create(function()
                     isPatrolActive = false
-                    sampSendChat('/r' .. nickname .. ' на CONTROL. Завершаю патруль')
+                    sampSendChat('/r ' .. nickname .. ' на CONTROL. Завершаю патруль')
                     wait(1200)
-                    sampSendChat('Патрулировал ' .. formatPatrolDuration(os.time() - startTime))
+                    sampSendChat('/r Патрулировал ' .. formatPatrolDuration(os.time() - startTime))
                     patrolDuration = 0
                     patrool_start_time = 0
                     patroolhelpmenu[0] = false
@@ -2556,7 +2581,7 @@ imgui.OnFrame(
             end
         else
             if imgui.Button(u8(' Начать патруль'), imgui.ImVec2(200 * MONET_DPI_SCALE, 25 * MONET_DPI_SCALE)) then
-                sampSendChat('/r' .. nickname .. ' на CONTROL. Начинаю патруль.')
+                sampSendChat('/r ' .. nickname .. ' на CONTROL. Начинаю патруль.')
                 startPatrul()
             end
         end
@@ -3150,9 +3175,11 @@ end
 
 --Events START
 function sampev.onSendSpawn()
-    if spawn and isMonetLoader() then
+    if spawn then
         spawn = false
+        print(sampGetCurrentServerAddress(), sampGetCurrentServerAddress().name)
         server = servers[sampGetCurrentServerAddress()] and servers[sampGetCurrentServerAddress()].name or "Unknown"
+        print(server)
         sampSendChat('/stats')
         msg("{FFFFFF}MVDHelper успешно загружен!", 0x8B00FF)
         msg("{FFFFFF}Команда: /mvd", 0x8B00FF)
@@ -4158,8 +4185,12 @@ function DownloadUk()
     if url then
         downloadFile(url, smartUkPath)
         msg(string.format("{FFFFFF} Умный розыск на %s успешно установлен!", server), 0x8B00FF)
+        local file = io.open(getWorkingDirectory():gsub('\\','/') .. "/MVDHelper/smartUk.json", "r")
+        a = file:read("*a")
+        file:close()
+        tableUk = decodeJson(a)
     else
-        msg("{FFFFFF} К сожалению, на ваш сервер не найден умный розыск. Он будет добавлен в следующих обновлениях", 0x8B00FF)
+        msg("{FFFFFF} Произошла ошибка. Попробуйте скачать УК вручную(для любого сервера и выберите свой).", 0x8B00FF)
     end
 end
 --Download files END
@@ -5122,7 +5153,7 @@ function main()
     if spawn then
         sampSendChat("/stats")
     end 
-    
+    sampRegisterChatCommand("autoz", cmd_z)
     while true do
         wait(0)
         if not fastVzaimWindow[0] and not vzaimWindow[0] then
@@ -5132,5 +5163,41 @@ function main()
                 vzWindow[0] = false
             end
         end
+        if search then
+            local res, handle = sampGetCharHandleBySampPlayerId(pid)
+            if res then
+                local x, y, z = getCharCoordinates(handle)
+                local mX, mY, mZ = getCharCoordinates(PLAYER_PED)
+                if getDistanceBetweenCoords3d(x, y, z, mX, mY, mZ) < 30 then
+                    sampSendChat(string.format('/z %d', pid))
+                    printStringNow('~b~trying send /z', 1500)
+                    wait(500)
+                end
+            else
+                msg("Игрок должен быть в зоне стрима!")
+                search = false
+            end
+        end
+    end
+end
+
+--Auto /z
+function cmd_z(id)
+    if id ~= nil then
+        search = not search
+        if search then
+            local playerId = tonumber(id)
+            if playerId ~= nil and sampIsPlayerConnected(playerId) then
+                pid = playerId
+                msg('Ищу игрока.') 
+            else
+                search = false
+                msg('Либо вы ввели неправильный аргумент, либо игрок не онлайн.') 
+            end
+        else
+            msg('Остановил поиск.') 
+        end
+    else
+
     end
 end
