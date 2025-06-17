@@ -1,4 +1,4 @@
 {
-  "current_version": "5.7",
-  "update_info": "1. Добавлены все УК\n2. Вернули авто з"
+  "current_version": "5.7.1",
+  "update_info": "1. Фикс команды /su"
 }
