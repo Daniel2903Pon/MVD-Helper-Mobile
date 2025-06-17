@@ -2,7 +2,7 @@
 
 script_name("MVD Helper Mobile")
 
-script_version("5.7")
+script_version("5.7.1")
 script_authors("@Sashe4ka_ReZoN", "@daniel29032012", "@makson4ck2", "@osp_x")
 
 --Libs START
@@ -4325,13 +4325,13 @@ imgui.OnFrame(
         imgui.InputInt(u8 'ID игрока с которым будете взаимодействовать', id, 10)
 
         for i = 1, #tableUk["Text"] do
-            if imgui.Button(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tableUk["Ur"][i])) then
+            if imgui.Button(u8(tableUk["Text"][i] .. ' Уровень розыска: ' .. tostring(tableUk["Ur"][i]))) then
                 lua_thread.create(function()
                     sampSendChat("/do Рация висит на бронежелете.")
                     wait(1500)
                     sendMe(" сорвав с грудного держателя рацию, сообщил данные о сапекте")
                     wait(1500)
-                    sampSendChat("/su " .. id[0] .. " " .. tableUk["Ur"][i] .. " " .. tableUk["Text"][i])
+                    sampSendChat("/su " .. id[0] .. " " .. tostring(tableUk["Ur"][i]) .. " " .. tableUk["Text"][i])
                     wait(1500)
                     sampSendChat("/do Спустя время диспетчер объявил сапекта в федеральный розыск.")
                 end)
